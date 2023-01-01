@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript-syntax-learning 2-1</title>
+    <link
+      rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css"
+    />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body>
+    <h1>現代 Javascript 實務應用</h1>
+
+    <h2>2-1 物件實字</h2>
+    <h3>2-1-1 特性值指定簡化語法</h3>
+    <pre><code class="language-js">
+        // before ES6
+        let listeners = {}
+        function run(){}
+        let events = { 
+                listeners: listeners,
+                run: run 
+        }
+
+        // after ES6
+        let listeners = {}
+        function run(){}
+        let events = { listeners , run }
+    </code></pre>
+
+    <h3>2-1-2 運算取得的特性名稱</h3>
+    <pre><code class="language-js">
+    </code></pre>
+  </body>
+</html>
