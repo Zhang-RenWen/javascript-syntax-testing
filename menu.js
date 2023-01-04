@@ -6,7 +6,7 @@ const menu = [
       {
         id: "2-1",
         title: "2-1 物件實字",
-        href: "./chapter2/2-1.html",
+        href: `/chapter2/2-1.html`,
       },
       {
         id: "2-2",
