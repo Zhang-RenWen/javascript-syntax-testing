@@ -6,12 +6,12 @@ const menu = [
       {
         id: "2-1",
         title: "2-1 物件實字",
-        href: `/chapter2/2-1.html`,
+        href: `./2-1.html`,
       },
       {
         id: "2-2",
         title: "2-2 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
     ],
   },
@@ -22,12 +22,12 @@ const menu = [
       {
         id: "3-1",
         title: "3-1 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
       {
         id: "3-2",
         title: "3-2 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
     ],
   },
@@ -38,12 +38,12 @@ const menu = [
       {
         id: "3-1",
         title: "3-1 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
       {
         id: "3-2",
         title: "3-2 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
     ],
   },
@@ -54,12 +54,12 @@ const menu = [
       {
         id: "3-1",
         title: "3-1 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
       {
         id: "3-2",
         title: "3-2 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
     ],
   },
@@ -70,12 +70,12 @@ const menu = [
       {
         id: "3-1",
         title: "3-1 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
       {
         id: "3-2",
         title: "3-2 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
     ],
   },
@@ -86,12 +86,12 @@ const menu = [
       {
         id: "3-1",
         title: "3-1 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
       {
         id: "3-2",
         title: "3-2 物件實字",
-        href: "./chapter2/2-1.html",
+        href: "./2-1.html",
       },
     ],
   },
