@@ -10,8 +10,8 @@ const menu = [
       },
       {
         id: "2-2",
-        title: "2-2 物件實字",
-        href: "./2-1.html",
+        title: "2-2 箭頭函式",
+        href: "./2-2.html",
       },
     ],
   },

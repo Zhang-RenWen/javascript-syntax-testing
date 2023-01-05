@@ -93,6 +93,48 @@
         </code></pre>
 
         <h3>2-1-3 方法的定義</h3>
+        <pre><code class="language-js">
+          // before ES6
+    
+          var emitter = {
+            events:{},
+            on:function(type,fn){
+              if(this.events[type]===undefined){
+                this.events[type]=[]
+              }
+              this.events[type].push(fn)
+            },
+            emit:function(type,event){
+              if(this.events[type]===undefined){
+                return 
+              }
+              this.events[type].forEach(function(fn){
+                fn(event)
+              })
+            }
+          }
+
+          // after ES6
+          let emitter = {
+            events:{},
+            on(type,fn){
+              if(this.events[type]===undefined){
+                this.events[type]=[]
+              }
+              this.events[type].push(fn)
+            },
+            emit(type,event){
+              if(this.events[type]===undefined){
+                return 
+              }
+              this.events[type].forEach(function(fn){
+                fn(event)
+              })
+            }
+          }
+
+    
+        </code></pre>
       </section>
     </main>
   </body>
