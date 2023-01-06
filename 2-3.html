@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript-syntax-learning</title>
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link
+      rel="stylesheet"
+      href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body>
+    <nav>
+      <h1>現代 Javascript 實務應用</h1>
+    </nav>
+    <main>
+      <aside></aside>
+      <section>
+        <h2>2-3 解構賦值</h2>
+        <h3>2-3-1 物件解構賦值</h3>
+        <pre><code class="language-js">
+          var character = {
+            name: 'Bruce',
+            pseudonym: 'Batman',
+            metadata:{
+              age:34,
+              gender:'male'
+            },
+            weapons:['gas pellet','bat-mobile','bat-cuffs']
+          }
+
+          // before ES6
+          var pseudonym = character.pseudonym
+          var name = character.name
+          // after ES6
+          let { pseudonym , name} = character
+
+          // 別名
+          let { pseudonym: alias } = character
+          console.log(alias) // 'Batman'
+
+          // 巢狀取值
+          let { metadata: { gender }} = character
+          console.log(gender) // 'male'
+
+          // 存取一個不存在的值會拿到 undefined
+          console.log(character.boot) // undefined
+          console.log(character['boot]') // undefined
+          let { boot } = character
+          console.log(boot) // undefined
+
+          // 從一個不存在的值存取東西會報 Exception
+          var nothing = null
+          var missing = nothing.missing // Exception
+          var { missing } = nothing  // Exception
+          var { boots:{ size }} = character // Exception
+
+          // 設定初始值
+          var { boots = { size:10 }} = character
+          console.log(boot) // { size:10 }
+          
+
+
+
+
+        </code></pre>
+      </section>
+    </main>
+  </body>
+  <script src="./menu.js"></script>
+</html>

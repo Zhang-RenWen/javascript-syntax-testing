@@ -13,6 +13,11 @@ const menu = [
         title: "2-2 箭頭函式",
         href: "./2-2.html",
       },
+      {
+        id: "2-3",
+        title: "2-3 解構賦值",
+        href: "./2-3.html",
+      },
     ],
   },
   {
