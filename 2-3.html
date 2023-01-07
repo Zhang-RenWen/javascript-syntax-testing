@@ -66,10 +66,37 @@
           var { boots = { size:10 }} = character
           console.log(boot) // { size:10 }
           
+        </code></pre>
 
+        <h3>2-3-2 陣列解構賦值</h3>
+        <pre><code class="language-js">
+          // 抽取陣列值
+          var coordinates = [12 , -7]
+          var [ x , y ] = coordinates
+          console.log( x , y ) // 12 , -7
 
+          //  抽取過程省略不需要用到的值
+          var name = ['James', 'L.' , 'Htt']
+          var [firstName,,lastName] = name
+          console.log( firstName , lastName ) // 'James' , 'Htt'
 
+          // 可以設定初始值
+          var name = ['James', 'L.' , 'Htt']
+          var [firstName = 'John' , , lastName = 'Dio'] = name 
+          console.log( firstName , lastName ) // 'John' , 'Htt'
 
+          // 交換變數值
+          // before ES6
+          var left = 5
+          var right = 7
+          var temp = left 
+          left = right 
+          right = temp 
+
+          // after ES6
+          var left = 5
+          var right = 7
+          [left,right] = [right,left]
         </code></pre>
       </section>
     </main>
