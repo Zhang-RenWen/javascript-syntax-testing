@@ -98,6 +98,35 @@
           var right = 7
           [left,right] = [right,left]
         </code></pre>
+
+        <h3>2-3-3 函式參數指定初始值</h3>
+        <pre><code class="language-js"></code>
+          // 一般函式
+          function powerOf( base , exponent = 2 ) {
+            return Math.pow( base , exponent)
+          }
+
+
+          // 箭頭函式
+          var double = (input = 0) => input * 2
+          
+          // 部分使用初始值
+          function sumOf( a = 1 , b = 2 , c = 3){
+            return a + b + c
+          }
+          console.log(sumOf(undefined , undefined , 4)) // 1+2+4 = 7
+
+          // 設定初始物件
+          var defaultOption = { brand: 'Volkswagen' , make: 1999 }
+          function carFactory( option = defaultOption ) {
+            console.log(carFactory.brand)
+            console.log(carFactory.make)
+          }
+
+          carFactory() // 'Volkswagen' , 1999
+          carFactory({ make: 2000}) // undefined , 2000
+
+        </code></pre>
       </section>
     </main>
   </body>
