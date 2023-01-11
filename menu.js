@@ -21,7 +21,7 @@ const menu = [
       {
         id: "2-4",
         title: "2-4 其餘參數和展開運算子",
-        href: "#",
+        href: "./2-4.html",
       },
       {
         id: "2-5",

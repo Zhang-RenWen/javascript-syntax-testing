@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript-syntax-learning</title>
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link
+      rel="stylesheet"
+      href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body>
+    <nav>
+      <h1>現代 Javascript 實務應用</h1>
+    </nav>
+    <main>
+      <aside></aside>
+      <section>
+        <h2>2-4 其餘參數和展開運算子</h2>
+        ES6以前函式對不定量參數操作較為複雜。必須透過 arguments 類陣列。
+        通常透過 Array.prototype.slice.call(arguments) 來將 arguments
+        轉換為陣列。 以下列例子作為展示：
+        <pre><code class="language-js">
+        function join(){
+            var list = Array.prototype.slice.call(arguments)
+            return list.join(', ')
+        }
+        join('first','second','third') // 'first, second, third'
+        </code></pre>
+
+        ES6 後有更好的解決辦法
+        <h3>2-4-1 其餘參數</h3>
+        <pre><code class="language-js">
+        function join(...list){
+            return list.join(', ');
+        }
+        join('first','second','third') // 'first, second, third'
+        </code></pre>
+        注意事項 1 - 其餘參數之前已命名的參數不會被包含進list中
+        <pre><code class="language-js">
+        function join( separator , ...list){
+            return list.join('separator');
+        }
+        join('; ','first','second','third') // 'first; second; third'
+        </code></pre>
+        注意事項 2 - 箭頭函示中使用其餘參數必須要加小括號
+        <pre><code class="language-js">
+        var getArguments =  ...list => return list // Uncaught SyntaxError: Unexpected 
+
+        // 加上箭頭函式的運用
+        var sumAll = (...numbers) => numbers.reduce((total, number) => total + number)
+        sumAll(1,2,3,5,0,-1) // 10
+
+        // 上面舉例的 sumAll 比較以下 ES5 的版本較難以閱讀，尤其對於不習慣使用 reduce 的開發者而言。
+        // 可讀性跟簡潔性之間的取捨之後的章節會說明。
+
+        function sumAll(){
+            var numbers = Array.prototype.slice.call(arguments)
+            return numbers.reduce(function(total,next){
+                return total + next
+            })
+        }
+        sumAll(1,2,3,5,0,-1) // 10
+        </code></pre>
+      </section>
+    </main>
+  </body>
+  <script src="./menu.js"></script>
+</html>
