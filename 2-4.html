@@ -69,6 +69,27 @@
         }
         sumAll(1,2,3,5,0,-1) // 10
         </code></pre>
+        <h3>2-4-2 展開運算子</h3>
+        可迭代性在 ES6 中是種協議，允許將任何物件轉換成可迭代性質。
+        將可迭代物件，轉換為陣列。 比如：
+        <pre><code class="language-js">
+          function cast(){
+            return [...arguments];
+          }
+          cast('a', 'b','c'); // ['a','b','c']
+        </code></pre>
+        可以將字串分割：
+        <pre><code class="language-js">
+          [...'ab c'];  // ['a','b','','c']
+        </code></pre>
+        展開運算子陣列左右也可加入其他元素合併
+        <pre><code class="language-js">
+          ['left',...'abc','right'];  // ['left','a','b','c','right']
+        </code></pre>
+        展開嵌套陣列
+        <pre><code class="language-js">
+          [1,...[2,3],4,...[5],6,7];  // [1,2,3,4,5,6,7]
+        </code></pre>
       </section>
     </main>
   </body>
