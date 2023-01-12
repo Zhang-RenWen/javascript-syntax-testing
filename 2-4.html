@@ -90,6 +90,34 @@
         <pre><code class="language-js">
           [1,...[2,3],4,...[5],6,7];  // [1,2,3,4,5,6,7]
         </code></pre>
+        遞移回傳 (shifting) 與展開( Spreading )。
+        當想獲取陣列第一個或第二個元素時通常使用.shift方法。 如此一來問題有2個,
+        1.難以快速閱讀理解。 2.修改掉原本的陣列。在 ES6 中增強描述性
+        <pre><code class="language-js">
+          // before ES6
+          vat list = ['a', 'b', 'c', 'd', 'e']
+          var first = list.shift() // 'a'
+          var second = list.shift() // 'b'
+          console.log(list) // ['c', 'd', 'e']
+
+          // after Es6
+          var [first, second, ...other] = ['a', 'b', 'c', 'd', 'e']
+          console.log(other) // ['c', 'd', 'e']
+        </code></pre>
+
+        <h2>彙整使用情境總表</h2>
+        <table>
+          <tr>
+            <th>使用情境</th>
+            <th>ES5</th>
+            <th>ES6</th>
+          </tr>
+          <tr>
+            <td>陣列拼接</td>
+            <td>[ 1 , 2 ].concat(more)</td>
+            <td>[ 1 , 2 , ...more]</td>
+          </tr>
+        </table>
       </section>
     </main>
   </body>

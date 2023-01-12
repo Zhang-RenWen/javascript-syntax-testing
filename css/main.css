@@ -22,3 +22,16 @@ section {
   width: calc(100% - 352px);
   height: 600px;
 }
+
+table {
+  border-collapse: collapse;
+}
+th {
+  background-color: rgb(218, 218, 218);
+}
+tr,
+th,
+td {
+  border: #ccc 1px solid;
+  padding: 0.5em;
+}
