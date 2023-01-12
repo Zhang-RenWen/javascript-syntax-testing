@@ -26,7 +26,7 @@ const menu = [
       {
         id: "2-5",
         title: "2-5 字串樣板",
-        href: "#",
+        href: "2-5.html",
       },
       {
         id: "2-6",
