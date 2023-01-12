@@ -48,7 +48,38 @@
 
         <h3>2-5-2 多行文字字串樣板</h3>
         <pre><code class="language-js">
+        // before ES6
+        var escaped = 
+          'The first line \n\
+           A second line \n\
+           Then a third line'
 
+        var joined = ['The first line', 'The second line', 'The third line'].join('\n')
+
+
+        // after ES6
+        var multiLine = 
+        `The first line
+        he second line
+        he third line
+        `
+        </code></pre>
+        以往生成 html 需要用迴圈迭代的方式產生字串還要拼接起來，最終產生 html
+        內容。 ES6 中則可以使用表達式運算生成後的值直接帶入。
+        代碼輸出後可能會出現非預期的換行字元，
+        所以還需要實作工具函式將回傳文字結果去除換行字元。
+        <pre><code class="language-js">
+            function unindent(text){
+                return text
+                .split('\n')
+                .map(line=>line.slice(4))
+                .join('\n')
+                .trim()
+            }
+        </code></pre>
+
+        <h3>2-5-3 標籤樣板</h3>
+        <pre><code class="language-js">
         </code></pre>
       </section>
     </main>
