@@ -69,17 +69,67 @@
         代碼輸出後可能會出現非預期的換行字元，
         所以還需要實作工具函式將回傳文字結果去除換行字元。
         <pre><code class="language-js">
-            function unindent(text){
-                return text
-                .split('\n')
-                .map(line=>line.slice(4))
-                .join('\n')
-                .trim()
+         function unindent(text){
+            return text
+            .split('\n')
+            .map(line=>line.slice(4))
+            .join('\n')
+            .trim()
             }
         </code></pre>
 
         <h3>2-5-3 標籤樣板</h3>
+        忽略跳脫字元
         <pre><code class="language-js">
+        var text = String.raw`"\n" is taken literally.
+        It'll be escaped instead of interpreted.`
+        console.log(text)
+        // "\n" is taken literally.
+        // It'll be escaped instead of interpreted.`
+        </code></pre>
+
+        使用前綴函式解析樣板參數
+        <pre><code class="language-js">
+        function tag(parts, ...values){
+            // parts 為字串模板拆解後所有固定文字組成的的陣列
+            // values 展開後每一個獨立參數為字串模板中的各個變數值
+            return parts.reduce((all, part, index) => all + values[index-1] + part)
+        }
+        var name = 'Maurice'
+        var emotion = 'thrilled'
+        var text = tag`Hello, ${ name }. I am ${ emotion } to meet you !`
+        console.log(text)
+        // Hello, Maurice. I am thrilled to meet you !
+
+        </code></pre>
+
+        其他應用舉例(模板內變數值強轉大寫)
+        <pre><code class="language-js">
+         function upper(parts, ...values){
+            return parts.reduce((all, part, index)=> all + values[index - 1].toUpperCase() + part)
+         }
+         var name = 'Maurice'
+         var emotion = 'thrilled'
+         var text = upper`Hello, ${ name }. I am ${ emotion } to meet you !`
+         console.log(text)
+         // Hello, MAURICE. I am THRILLED to meet you !
+        </code></pre>
+
+        處理輸入文字防止 XSS 攻擊
+        <pre><code class="language-js language-html">
+        function removeIframe(string){
+            return string.replace(/(<iframe.*?>.*?<\/iframe>)/g,"")
+        }
+        function sanitized(parts, ...values){
+            return parts.reduce((all, part, index) =>
+            all + removeIframe(values[index - 1]) + part
+            )
+        }
+        var comment = `<iframe src="/"></iframe>`
+        var html = `<div>${comment}</div>`
+        var htmlClear = sanitized`<div>${comment}</div>`
+        console.log(html, htmlClear)
+        // <div></div>
         </code></pre>
       </section>
     </main>
