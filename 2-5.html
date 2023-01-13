@@ -116,20 +116,23 @@
         </code></pre>
 
         處理輸入文字防止 XSS 攻擊
-        <pre><code class="language-js language-html">
+        <pre><code class="language-js">
         function removeIframe(string){
-            return string.replace(/(<iframe.*?>.*?<\/iframe>)/g,"")
+            return string.replace(/(&lt;iframe.*?&gt;.*?&lt;\/iframe&gt;)/g,"")
         }
         function sanitized(parts, ...values){
             return parts.reduce((all, part, index) =>
             all + removeIframe(values[index - 1]) + part
             )
         }
-        var comment = `<iframe src="/"></iframe>`
-        var html = `<div>${comment}</div>`
-        var htmlClear = sanitized`<div>${comment}</div>`
+        
+        var comment = `&lt;iframe&gt; src="/"&gt;&lt;/iframe&gt;`
+        var html = `&lt;div>${comment}&lt;/div>`
+        var htmlClear = sanitized`&lt;div&gt;${comment}&lt;/div&gt;`
         console.log(html, htmlClear)
-        // <div></div>
+        // &lt;div&gt;&lt;iframe&gt; src="/"&gt;&lt;/iframe&gt;&lt;/div&gt; , &lt;div&gt;&lt;/div&gt;
+        
+        
         </code></pre>
       </section>
     </main>
