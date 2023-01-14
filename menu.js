@@ -31,7 +31,7 @@ const menu = [
       {
         id: "2-6",
         title: "2-6 let 和 const 敘述",
-        href: "#",
+        href: "2-6.html",
       },
     ],
   },

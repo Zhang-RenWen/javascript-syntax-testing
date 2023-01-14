@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript-syntax-learning</title>
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link
+      rel="stylesheet"
+      href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body>
+    <nav>
+      <h1>現代 Javascript 實務應用</h1>
+    </nav>
+    <main>
+      <aside></aside>
+      <section>
+        <h2>2-6 let 和 const 敘述</h2>
+        let 敘述 ES6 中最為人知的能特性,他的用就是 var 敘述,
+        但是有不同的作用域定義。談論到變數的作用域時, JavaScript
+        複雜的規則,總讓初次碰觸的程式 計師發狂。最後,你會瞭解變數的提升和
+        JavaScript 運作的原理。
+        變數提升(Hoisting)代表的意義,在程式碼中無論宣告的位置為何
+        ,均提升至該區域內最高作用域,使變數的作用域為最高。 如以下範例:
+        <pre><code class="language-js">
+        function isItTwo(value){
+            if( value === 2 ){
+                var two = true
+            }
+             return two
+        }
+        isItTwo(2) // true
+        isItTwo('two') // undefined
+    </code></pre>
+        這樣的 javaScript 程式碼仍可正確運作,即使變數 two 是宣告於程式
+        的分支區塊,並於分支區塊外進行存取。運作的行為是因為 var 變數
+        宣告必定受限於一個封閉的作用域,屬於函式或全域的範圍。以變數提
+        升的概念說明,上面的程式碼會被解譯並以如下範例運作。
+
+        <pre><code class="language-js">
+        function isItTwo(value) {
+            var two
+            if (value === 2) {
+                two = true
+            }
+            return two
+        }
+    </code></pre>
+        不管我們是否喜歡個運作方式,變數提升的定義比較起區塊作用
+        (block-scoped)變數更為複難懂。區塊作用域以大括號階層界定,不僅止是函式階層。
+      </section>
+    </main>
+  </body>
+  <script src="./menu.js"></script>
+</html>
