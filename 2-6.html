@@ -56,6 +56,19 @@
     </code></pre>
         不管我們是否喜歡個運作方式,變數提升的定義比較起區塊作用
         (block-scoped)變數更為複難懂。區塊作用域以大括號階層界定,不僅止是函式階層。
+        <h2>2-6-1 區塊作用域與 let 敘述句</h2>
+        若我們想要一個較深層的變數有效階層,除了宣告一个新的function
+        之外,利用區塊作用域可將既有的程式分支結構發揮效用,例如:if、
+        for、或while敘你也可以任意的建立新的{}區塊。你可能不知
+        道,只要我們有需要,在 JavaScript 語言中可允許建立無限的區塊。
+        <pre><code class="language-js">
+        {{{{{ var deep = 'This is available from outer scope.'; }}}}}
+        console.log(deep)
+        // 'This is available from outer scope.'
+        </code></pre>
+        因為語法作用域( lexical scoping )的因素，利用var關鍵字進行變數宣告
+        ,在區塊外部仍可存取至 deep 變數,且不會發生錯誤。但有時候
+        在這樣的情況下若會發生錯可能非常有用，特别是當一或多個 下列狀況存在時:
       </section>
     </main>
   </body>
