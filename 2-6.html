@@ -148,6 +148,45 @@
               // 2
           </code></pre>
         敘述還有一項需要探討的觀念,稱為「暫時性死區」。
+        <h2>2-6-2 暫時性死區</h2>
+
+        <pre><code class="language-js">
+          console.log(name) // 比如程式執行到這段，後面同作用域中尚未執行的部分都稱作暫時性死區
+          // Uncaught ReferenceError: name is not defined
+          let name = 'Stephen Hawking'
+
+          ----------------------------------------------------------------
+          function readName() {
+            return name
+          }
+          let name = 'Stephen Hawking'
+          console.log(readName()) // 'Stephen Hawking'
+          ----------------------------------------------------------------
+          function readName() {
+            return name
+          }
+          console.log(readName()) 
+          // Uncaught ReferenceError: name is not defined
+          let name = 'Stephen Hawking'
+          ----------------------------------------------------------------
+          function readName() {
+            return name
+          }
+          console.log(readName())
+          // Uncaught ReferenceError: name is not defined
+          let name
+          ----------------------------------------------------------------
+          function readName() {
+            return name
+          }
+          let name
+          console.log(readName())
+          // undefined
+        </code></pre>
+        <h2>2-6-3 Const 敘述</h2>
+        <pre><code class="language-js">
+
+        </code></pre>
       </section>
     </main>
   </body>
