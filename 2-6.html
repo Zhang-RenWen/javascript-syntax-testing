@@ -69,6 +69,85 @@
         因為語法作用域( lexical scoping )的因素，利用var關鍵字進行變數宣告
         ,在區塊外部仍可存取至 deep 變數,且不會發生錯誤。但有時候
         在這樣的情況下若會發生錯可能非常有用，特别是當一或多個 下列狀況存在時:
+        ·存取內層變數某種程度是違背程式的封裝(encapsulation)原則
+        ·內層變數完全不屬於外層的作用域
+        ·該區塊有許多的兄弟區塊也想要使用相同的變數名稱
+        ·父區塊已經具有需使用的變數，但在子區塊中仍適合使用相同名稱的變數 let
+        敘述句 是 var 的另一種替代方案。它依循區作用域,而非
+        預設的語法作用域規則。利用 var
+        敘述，要取得較深層的作用域就必須建立巢狀函式 但若使用 let
+        敘述，就可以直接建立一對大括號區塊。這代表著
+        你不需要建立新的函式就可以取得新的作用域,只要簡單的利用 {}
+        區塊就可以達成目的。
+        <pre><code class="language-js">
+        let topmost = {}
+        {
+          {
+            let inner = {}
+            {
+              let innermost = {}
+            }
+            console.log(innermost)
+            // Uncaught ReferenceError: innermost is not defined
+          }
+        }
+        console.log(inner)
+        console.log(innermost)
+        // Uncaught ReferenceError: inner is not defined
+        // Uncaught ReferenceError: innermost is not defined
+      </code></pre>
+
+        let 敘句的常用情境,就是運用在宣告 for 迴圈時,如此可將變數的
+        作用域限制於迴圈之中,如下範例:
+        <pre><code class="language-js">
+        for (let i =0; i &lt; 2; i++) {
+          console.log(i) 
+          // 0 
+          // 1
+        }
+        console.log(i)
+        // Uncaught ReferenceError: i is not defined
+      </code></pre>
+        以 let 敘述在圈宣告變數,其變數作用於圈的每次遞增;這樣的變數
+        繫結方式能夠與非同步函式完美的結合作,若以var變數宣告
+        方式則無法達成。看看以下幾個具體案例。 首先,讓我們看看一個典型的範例說明
+        var 變數宣告的作用域運作方式。 變數 i 的作用域為 printNumbers
+        函式,且它的值在每次執行回呼 時·已遞增至 10
+        故每次執行回呼函式時一每100毫秒執行一次- 變數 i 的值已為
+        10，因此每次所印出的值均為3。
+
+        <pre><code class="language-js">
+          function printNumbers() {
+            for (var i = 0; i  &lt; 3; i++) {
+              setTimeout(function () {
+              console.log(i)
+              }, i *100)
+            }
+          }
+            printNumbers() 
+            // 3 
+            // 3
+            // 3
+          </code></pre>
+        相反的,若使用 let 宣告變數，則屬於區塊作用域。
+        當迴圈每次遞增變數值時,每次的遞增都會建立新的變數繫結,這表示每次執行的
+        回呼函式都可以參考至當下該變數所繫結的 i 變數值,就可以如預期般 將 0 至 2
+        印出。
+
+        <pre><code class="language-js">
+            function printNumbers() {
+              for (let i = 0; i  &lt; 3; i++) {
+                setTimeout(function () {
+                console.log(i)
+                }, i *100)
+              }
+            }
+              printNumbers() 
+              // 0
+              // 1
+              // 2
+          </code></pre>
+        敘述還有一項需要探討的觀念,稱為「暫時性死區」。
       </section>
     </main>
   </body>
