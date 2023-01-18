@@ -35,3 +35,8 @@ td {
   border: #ccc 1px solid;
   padding: 0.5em;
 }
+
+.border-block {
+  border: #000 1px solid;
+  padding: 0.5em;
+}

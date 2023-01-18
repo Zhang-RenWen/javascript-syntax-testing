@@ -184,9 +184,85 @@
           // undefined
         </code></pre>
         <h2>2-6-3 Const 敘述</h2>
-        <pre><code class="language-js">
+const 敘述與 let 敘述相同，是屬於區塊作用域,它也遵循 TDZ
+的語義規範。事實上,TDZ 的語義規範是為了 const 敘述所實作出來的,
+接著才將他套用至 let 敘述，以維持運用的一致性。const 敘述需要
+TDZ 語義規範的原因，是可避免程式在抵達 const 變數宣告前,就將值指定
+給一個已提升作用域的 const 變數，使得宣告錯誤。暫時性死區的機制提供
+了一個方案,可讓 const 敘述只允許在變數宣告之處指定變數值的問
+題獲得解決。它也協助避免了在使用 let 敘述時可能發生的潛在問題,
+也讓其他的功能特徵實作,透過 TDZ 語義規則更為簡化。
+以下程式碼可以呈現出 const 敘如述如何依循區塊作用域,就如 let 敘述一樣。
+<pre><code class="language-js">
+  const pi = 3.1415
+  {
+    const pi = 6
+    console.log(pi)
+    // 6
+  }
+  console.log(pi)
+  // 3.1415
+</code></pre>
 
-        </code></pre>
+我們曾經探討過 const 和 let 敘述的主要差異：第一個差異是,const
+變數必須使用初始器 (initializer) 進行宣告。一個 const 宣告敘述必須
+搭配一個初始器,如下範例所示:
+<pre><code class="language-js"></code>
+const pi = 3.1415
+const e // Uncaught SyntaxError: Missing initializer in const declaration
+</code></pre>
+除了在初始化一個 const 變數時需指派變數值之外,利用 const 敘述所
+宣告的變數不能再被指派其他數值;也就是說,一旦 const 變數完成初
+始化後,它的內容值就不能再被變更。在嚴格模式(strict mode)下,若
+要企圖變更 const 值拋出錯;非格模式,則會變更失敗
+但並不會拋出錯誤,如以下程式碼所呈現的結果。
+<pre><code class="language-js"></code>
+  const people = ['Tesla', 'Musk']
+  people = []
+  console.log(people)
+  // ['Tesla', 'Musk']
+</code></pre>
+注意，建立一個cost不代表所指定的容值是永久不
+一個經常會造成困擾的問題來源:所以力地建議.需仔細
+下面所探討的注意事項·
+<div class="border-block">
+ <h3>以 const 所宣告的變數並非無法變更內容值</h3>
+  使用 const 敘述只是代表該變數必定會參考至相同的物件或
+  值,因為這樣的參考並不能夠被變更·參考無法變更,但並非
+  變數所擁有的內容值就無法變更。
+  下面的案例顯示,即使 people 的參考並不能够改變·但陣
+  列本身是可以被變更的。除非陣列的型態是不可被變更的,才
+  可能維持一致,但這是不可能的。
+  <pre><code class="language-js">
+  const people = ['Tesla', 'Musk']
+  people.push('Berners-Lee')
+  console.log(people)
+  // ['Tesla', 'Musk', 'Berners-Lee']
+</code></pre>
+  const 敘述僅能夠避免變數繫結至不同的參考。下面是另一個
+  案例,可說明一般以 var 敘述和 const 敘述進行宣告的差
+  異;我們利用 const 敘述建立了一個名稱為 people 的變數。
+  並在後續將它指派給一個以 var 敘述建立了一個名為的 humans 變數。而
+  在此我們能夠將 humans 變數參考至其他的值,因為它並不是
+  以 const 敘述進行宣告。然而,people 是以 const 敘述進行宣
+  告,故無法再參考至其他的值。
+  <pre><code class="language-js">
+  const people = ['Tesla', 'Musk']
+  var humans = people
+  humans = 'evil'
+  console.log(people) // ['Tesla', 'Musk']
+  console.log(humans)   // 'evil'
+</code></pre>
+  如果我們的目的是要使變数值無法變更,那麼必須使用如
+  Object.freeze 這類的函式使用 Object.freeze 可避免所指
+  定的物件繼續延伸,如以下範例所示。
+  <pre><code class="language-js">
+  const frozen = Object.freeze(
+['Ice', 'Icicle', 'Ice cube'])
+frozen.push('Water')
+// Uncaught TypeError: Cannot add property 3, object is not extensible
+</code></pre>
+</div>
       </section>
     </main>
   </body>
