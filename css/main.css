@@ -40,3 +40,8 @@ td {
   border: #000 1px solid;
   padding: 0.5em;
 }
+
+p {
+  text-indent: 2em;
+  line-height: 1.5em;
+}
