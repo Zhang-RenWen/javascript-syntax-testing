@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript-syntax-learning</title>
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link
+      rel="stylesheet"
+      href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link rel="stylesheet" href="./css/main.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </head>
+  <body>
+    <nav>
+      <h1>現代 Javascript 實務應用</h1>
+    </nav>
+    <main>
+      <aside></aside>
+      <section>
+        <h2>3-1 類別、符號、物件和修飾器</h2>
+        <h3>3-1-1 類別基本元素</h3>
+        <p>
+          下面的程式範例表示一个水果,可以利用一個建構子函式並在原型中加
+          入一系列的方法。建構子函式需要傳遞name 和 caries 參數,來表示
+          該水果的名稱以及卡路里的總量；建構子中水果切片數量,以 pieces 紀錄
+          ,預設為1。而在此處定義了一個 .chop 方法,可將水果切出另外一 片;一個
+          .bite 方法需要傳遞 person 參數,表示一個人吃掉了一片水
+          果,並計算取得的卡路里數量,也就是將水果的剩餘的卡路里數除以剩
+          餘的水果片數。
+        </p>
+        <pre><code class="language-js">
+            function Fruit(name, calories) {
+            this.name = name
+            this.calories = calories
+            this.pieces = 1
+            }
+
+            Fruit.prototype.chop = function () {
+            this.pieces++
+            
+        }
+            Fruit.prototype.bite = function (person) {
+            if (this.pieces &lt; 1) {
+            return
+            }
+            const calories = this.calories / this.pieces
+            person.satiety += calories
+            this.calories -= calories
+            this.pieces--
+        }
+        </code></pre>
+        <p>
+          非常簡單的範例,但有幾項要點需注意。這裡我們看到有一個建構子函
+          式,它需要幾個參數,也定義了一些方法和幾項特性。以下的程式碼示
+          範如何建立一個 Fruit 和一個 person， 這個人會將水果切為四片並吃掉
+          其中三片。
+        </p>
+        <pre><code class="language-js">
+            const person = { satiety: 0 }  
+            const apple = new Fruit('apple', 140)
+            apple.chop()
+            apple.chop()
+            apple.chop()
+            apple.bite(person)
+            apple.bite(person)
+            apple.bite(person)
+            console.log(person.satiety)
+            // 105
+            console.log(apple.pieces)
+            // 1
+            console.log(apple.calories)
+            // 35
+        </code></pre>
+        <p>
+          若是使用 class 語法描述此類別，如下案例所示,constructor函式被 宣告為
+          Fruit 類別的顯性員，而接下來的方法描述則遵循物件實字的
+          定義語法。當我們比較 class 語法和以原型為基礎的語法時,你會發現
+          減少許多重複性的樣板程式碼,如 Fruit.prototype 都可以省略了。整
+          個類別的宣告定義都描述於 class 區塊中,也可幫助讀者瞭解這段程式
+          的作用範圍，使類別的目的更為清楚。最後,有一個顯性的建構子函式 作為
+          Fruit 類別的成員函式,比起既有的方式,可讓 class 語法更為明 瞭易懂。
+        </p>
+        <pre><code class="language-js">
+class Fruit {
+    constructor(name, calories) {
+    this.name = name
+    this.calories = calories
+    this.pieces = 1
+    }
+
+    chop() {
+        this.pieces++
+    }
+
+    bite(person) {
+        if (this.pieces &lt; 1) {
+            return
+        }
+        const calories = this.calories / this.pieces
+        person.satiety += calories
+        this.calories -= calories
+        this.pieces--
+    }
+}
+        </code></pre>
+        <p>
+          還有一個你可能未注意到的細節,也就是在 Fruit 類別中各個方法的
+          定義之間並未使用逗號分隔。這並不是編輯排版上遺漏的錯誤，而是 class
+          語法的一部分。這個物件與類別定義上的差異,可以避免我們描
+          述二者時產生混淆的錯誤,且讓類別語法更適合在未來語法上的改善強 化,例如
+          公開(public) 和 私有(private) 的定義。
+        </p>
+        <p>
+          值得注意的是,類別的宣告是無法提升至最高作用域,與函式宣告不
+          同。這表的意義是,在編譯器尚未抵達和執行類別的宣告之前,你將
+          無法建立或存取類別。
+        </p>
+        <pre><code class="language-js">
+new Person()// ReferenceError:Person 未被定義
+class Person {}
+        </code></pre>
+        <p>
+          除了類別宣告的語法外,類別也能夠以運算式的方式進行宣告,就像
+          是函式宣告和函式運算式一般。使用 class 運算式時,你也可以省略對
+          它的命名,如下範例所示。
+        </p>
+        <pre><code class="language-js">
+const Person = class {
+    constructor(name) {
+        this.name = name
+    }
+}
+        </code></pre>
+        <p>
+          類別運算式可以很容易地自函式回傳,能夠以最少的成本建立類別製
+          造工廠。在下面的範例中,我們會在一個箭頭函式中動態地建立一個 JakePerson
+          類別,箭頭函式需要傳遞一名稱為 name 的參數,並利用 super()
+          函式將它傳遞至父類別 Person 的建構子中。
+        </p>
+        <pre><code class="language-js">
+const createPersonClass = name => class extends Person { 
+    constructor() {
+    super(name)
+    }
+}
+const JakePerson = createPersonClass('Jake')
+const jake = new JakePerson()
+console.log(jake) // Person {name: 'Jake'}
+        </code></pre>
+      </section>
+    </main>
+  </body>
+  <script src="./menu.js"></script>
+</html>
