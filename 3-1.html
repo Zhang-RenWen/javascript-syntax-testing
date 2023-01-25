@@ -153,6 +153,134 @@ const JakePerson = createPersonClass('Jake')
 const jake = new JakePerson()
 console.log(jake) // Person {name: 'Jake'}
         </code></pre>
+
+        <h3>3-1-2 類別中的特性與方法</h3>
+        <p>
+          值得注意的是constructor方法的宣告在class的定義中選用,非
+          絕對必要。以下的程式碼呈現一個有效的class宣告,和一個相同名稱
+          的建構子函式,互相比較其中的異同。
+        </p>
+        <pre><code class="language-js">
+          class Fruit f
+          function Fruit() [
+        </code></pre>
+        <p>
+          傳遞至newLg的數可為類建構子函式的數如下所
+          你可以用這些參數來初始化類別的實體。
+        </p>
+        <pre><code class="language-js">
+class Log f
+constructor(...args) {
+console.1og(args)
+new Log('a', 'b', 'c')
+// ['a' 'b' 'c']
+        </code></pre>
+        <p>
+          下方的範例顯示,在类別的建構子中,可為每一個實體建立和初始化
+          count特性getnext方法的宣告,表示所定義的Counter類別的實
+          體,將具有一個名稱為next的性;存取個特性,其值就是呼 與它同名的方法取得。
+        </p>
+        <pre><code class="language-js">
+          class Counter f
+          constructor(start) [
+          this.count = start
+          get next() [
+          return this.count+t
+        </code></pre>
+        <p>
+          在此案例中,你可以如下程式碼的方式使用counter別。每当.ex
+          特性被存取時數器便會增加1。樣的運用方式,比定義get特性 #器(property
+          accessr的式較佳特性作器需注意不 濫用,否則會令人感到困惑。
+        </p>
+        <pre><code class="language-js">
+
+              const counter = new counter(2)
+              console.10g(counter.next)
+              // 2
+              console.10g(counter.next)
+              // 3
+              console.10g(counter.next)
+              // 4
+             </code></pre>
+        <p>
+          設定器(setter一搭配器便可以作為物件和
+          區的橋梁。參考以下範例、我們定義了一個類別,可透 存區鍵ke儲c資料
+        </p>
+        <pre><code class="language-js">
+class LocalStorage f
+constructor(key) [
+this.key = key
+get data() [
+return JSON.parse(localStorage.getItem(this.key))
+set data(data) f
+localStorage.setItem(this.key, JSON.stringify(data))
+            </code></pre>
+        <p>
+          接著,你可以運用localsrae別,如下個範例所示。任何
+          定子1s.data的值均會被轉存為JSON物件的字电格式,並儲存
+          localstorage。後續當需要存取特性時,就利用相同的儲存鍵key
+          取出之前所儲存的資料,以JSON格式剖析為一個物件並回傳
+        </p>
+        <pre><code class="language-js">
+          const 1s = new LocalStorage(' groceries')
+ls.data = ['apples', 'bananas', 'grapes']
+console.log(1s.data)
+// ['apples', 'bananas', 'grapes']
+        </code></pre>
+        <p>
+          除了擷取器(getter和設定器(setter)外,也可以定義一些方法
+          虎如稍早我們建立的Fru別一樣。下的程式範例,示範建
+          別,他以之前討論過的方式,食用Fu實
+          建立一個水果和一個人員的實體,並使人員執行吃水果
+          後,人員吃掉了整顆水果,並達到40的飽足度。
+        </p>
+        <pre><code class="language-js">
+class Person f
+constructor() [
+this,satiety = 0
+eat(fruit) [
+while (fruit.pieces > 0) [
+fruit.bite(this)
+const plum = new Fruit('plum', 40)
+const person = new Person()
+person.eat(plum)
+console.1og(person.satiety)
+// 40
+        </code></pre>
+        <p>
+          有時會需要在類別階層加入一些静態方法,而非在實體階層使用成員方
+          法在ES6之前的语法,体成員必須明確地加入至原型,而靜態方
+          法必須直接於建構子中定義。
+        </p>
+        <pre><code class="language-js">
+          function Person() [
+          this.hunger = 100
+          Person.prototype.eat = function () f
+          this.hunger--
+          Person.isPerson = function (person) [
+          return person instanceof Person
+        </code></pre>
+        <p>
+          JavaScript類別可使用static關鍵字定義靜態方法,如:Person
+          isperson就如於方法前使用get或se關鍵描該方法為 取器或設定器。
+          下範例定義一個t,其包一個靜方法 藉使用Array#reduce
+          方法,算所有傳遞至函式中的數值總和。
+        </p>
+        <pre><code class="language-js">
+class MathHelper f
+static sum(...numbers) f
+return numbers.reduce((a, b) => a + b)
+console.10g(MathHelper.sum(1,2,3,4,5))
+// 15
+        </code></pre>
+        <p>
+          植得提的你也可以義靜態的特性操作器,例如:
+          設定器(staticgetstticset)護一些類別裡全域
+          #、或在單例模式(singleto使類别時,些特性
+          多少都可以派上用場。當然、或許你還是習慣使用的Java
+          ,而非操作些你未曾使用過、或僅使用過少數次的方式建立
+          無論何種方式,這就是Javacript,一種高度彈性的
+        </p>
       </section>
     </main>
   </body>
