@@ -47,7 +47,7 @@ const menu = [
       {
         id: "3-2",
         title: "3-2 符號",
-        href: "#",
+        href: "3-2.html",
       },
     ],
   },
