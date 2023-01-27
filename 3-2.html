@@ -68,7 +68,7 @@ console.log(typeof Symbol('my symbol')) // 'symbol'
           至符號的變數,並用以建立該特性。
         </p>
         <pre><code class="language-js">
-            const weapon = Symbol(' weapon')
+            const weapon = Symbol('weapon')
             const character = {
               name: 'Penguin',
               [weapon]: 'umbrella'
@@ -76,7 +76,7 @@ console.log(typeof Symbol('my symbol')) // 'symbol'
             console.log(character[weapon]) // 'umbrella'
           </code></pre>
         <p>
-          ,若使用傳統自物件取鍵的方式,是無法擷取到符號鍵的。下面範例呈現出,不管使用
+          若使用傳統自物件取鍵的方式,是無法擷取到符號鍵的。下面範例呈現出,不管使用
           for..in、Object.keys、和 getOwnPropertyNames 都無法取得符號特性。
         </p>
         <pre><code class="language-js">
@@ -88,7 +88,7 @@ console.log(typeof Symbol('my symbol')) // 'symbol'
           </code></pre>
         <p>JSON 描述也會忽略 Symbol 特性</p>
         <pre><code class="language-js">
-            console.log(JSON.stringify(character)) // '["name" : "Penguin")'
+            console.log(JSON.stringify(character)) // '{"name" : "Penguin"}'
           </code></pre>
         <p>實際上 Symbol 是可以被列舉，需要透過 Object.getownpropertysymbols</p>
         <pre><code class="language-js">
