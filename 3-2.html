@@ -94,6 +94,118 @@ console.log(typeof Symbol('my symbol')) // 'symbol'
         <pre><code class="language-js">
             console.log(Object.getOwnPropertySymbols(character)) // [Symbol(weapon) ]
           </code></pre>
+        <h3>3-2-2 符號的實際案例</h3>
+        <p>
+          符號的使用,可以透過一個函式庫將物件對應至 DOM 元件。例如:建立
+          一個函式庫,它可以將日曆功能的 API 物件與指定的 DOM 元件連結起來 。在
+          ES6 之前，並未有一個清楚的方式可以將 DOM 元件對應至物件 ;你僅能於 DOM
+          元件中加入一個特性,並將它指向 API、但是這樣的 自訂特性會影響到原有的
+          DOM 元件結構,故不是一個好的方法。特性
+          鍵在使用上必須謹慎,需注意他不會被其他函式庫所使用,或甚至在未
+          來也不能被語言本身所使用。就限制了你只能使用陣列查詢表 ( array lookup
+          table ) 的方式，記錄著每一對 DOM/API 的配對資訊。然而，這
+          樣的方式在大型的程式可能會較慢,因為陣列查詢表會隨著資料的增多
+          而越來越大,造成查詢速度的緩慢。
+          相反地,若使用符號,則不會發生此問題。它可以作為一種特性,且
+          不會因為語言在未來所推出的新功能特徽造成程式毀壞,因為它具備
+          唯一性。以下的程式碼顯示如何運用符號將 DOM 元件對應至日曆 API 物件。
+        </p>
+        <pre><code class="language-js">
+const cache = Symbol('calendar')
+function createCalendar(el) {
+  if(cache in el){  //符號是否存在於元件中?
+    return el[cache]  //使用 cache 避免重新初始化
+  } 
+  const api = el[cache] = {
+    // 日曆 API 內容
+  }
+  return api
+}
+          </code></pre>
+        <p>
+          這裡使用了一個 ES6 內建功能 一weakMap一 它可以將物件一對一對應至
+          其他的物件,而不需要使用陣列。或透過物件的標的特性進行查找。
+          比照起陣列查詢表， WeakMap 在執行查詢動作所花費的時間為常數，或
+          O(1)。在第 5 章我們將會學習 WeakMap 和其他 ES6 的内建功能。
+          <b>透過符號定義協議</b>
+          稍早之前，我們曾說過符號的其中一個用途是運用於協議的定義。協議
+          是一種溝通方式的規定,或定義行為規範。某些深奥的術語或規範需要
+          描述定義時,函式庫可以利用符號,繼承函式庫中所定義的溝通規範，並提供給物件使用。
+          參考以下範例程式碼,此處我們使用一個特別的 toJSON 方法·決定物件
+          是否需用 JSON.stringify 進行資料序列化如你所見將 character 物 件進行
+          stringify 操作，産生物件的序列化版本·並自 toJSON 方法 回傳。
+        </p>
+        <pre><code class="language-js">
+            const character = {
+              name: 'Thor',
+              toJSON: () => ({
+                key: 'value'
+              })
+            }
+            console.log(JSON.stringify(character)) //  '"["key" : "value")"'
+          </code></pre>
+        <p>
+          相反地,如果 toJSON 不是一個函式,而是一個特性或有其他定義,那麼 這個
+          character 物件便會進行序列化,包括 toJSON 特性,如下範例所
+          示·這種不一致性的防護,需依賴標準的常規特性,才能夠正確定義反
+          應的行為動作。
+        </p>
+        <pre><code class="language-js">
+            const character = {
+              name: 'Thor',
+              toJSON: true
+            }
+            console.log(JSON.stringify(character) //  '"("name":"Thor" ,"toJSON": true]"'
+          </code></pre>
+        <p>
+          較好的方式是將 toJSON 以符號的方式進行實作，因為它不會受到其他的
+          物件鍵值所影響。符號是具有唯一性的，無法被序列化，且唯有清楚明
+          確地使用 Object.getOwnPropertySymbols ,才能夠使用它。因此，當需要
+          牛鍵值所影響。符號是具有唯一性的,無法被序列化, 的方式是將 toJSON
+          符號的方式進行實作,因為它不會受 要定義 JSON.stringify
+          和物件序化的規則兩者間的互動規則時，這會
+          是較佳的解決方案。参考以下使用符號實作 toJSON 的另一種替代方案，
+          它將定義 stringify 函式的運作行為。
+        </p>
+        <pre><code class="language-js">
+          const json = Symbol('alternative to toJSON')
+          const character = {
+            name: 'Thor',
+            [json]:()=> ({
+            key:'value'
+            })
+          }
+          stringify(character)
+          function stringify(target) {
+            if (json in target) {
+              return JSON,stringify(target[json]())
+            } 
+            return JSON.stringify(target)
+          }
+        </code></pre>
+        <p>
+          使用符號意謂著,我們會需要利用運算取得的特性名稱,以直接在一
+          個物件實字中定義 json 的行為。這也表示此行為將不能夠與其他自訂
+          的特性,或未來各種無法預知的語言新功能特徵產生衝突。另一個特點是,符號
+          json 仍可提供給 stringify 函式的操作者使用,如此就可
+          以自訂其行為。只要簡單地加上以下一行程式敘述,便可將 json 符號透過
+          stringify 函式提供使用。如此當符號變更其行為時,也能夠與 stringify
+          函式同步變更。 stringify.as = json
+        </p>
+        <p>
+          藉著提供 stringify 函式使用 stringify.as 符號便也可以提供使用，
+          允許操作者利用自訂的符號微調物件,達成調整行為定義的目的。
+          當談及以符號描述行為,相較於額外傳遞一個參數至 stringify 函式，
+          其優點在於,第一:額外加入一個函式參數影響 API 已公開運用的方式
+          ,若是於函式內部支援符號的行為定義,便不會影響公開 API 已公開的運用
+          options 物 件為每一個選項定義不同的特性,也可以降低對 API 的影響幅度，
+          但並不是每一個函式呼叫的情境都適合使用 options 物件。
+          運用符號定義行為的好處,就是當加強自訂物件的行為時,不會影響或
+          變更其他程式碼或邏輯,除了定義符號特性內容值。透過函式內部程式
+          碼的實作改善來優化行為定義。另一個好處是,當新的語言功能推出
+          時,也不會因為無法預期的名稱衝突影響程式運作。
+          除了區域符號外，還有全域符號註冊，使跨越程式範圍存取使用成為可 能。
+        </p>
       </section>
     </main>
   </body>
