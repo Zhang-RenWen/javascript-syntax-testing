@@ -7,6 +7,13 @@ const menu = [
         id: "2-1",
         title: "2-1 物件實字",
         href: `./2-1.html`,
+        anchorMenu: [
+          {
+            id: "2-2-2",
+            title: "2-2-2 箭頭函式",
+            href: "#",
+          },
+        ],
       },
       {
         id: "2-2",
@@ -134,11 +141,19 @@ function createMenu(submenu, el) {
       li.appendChild(a);
       el.appendChild(li);
     }
-    if (o.submenu) {
+    if (o.submenu || o.anchorMenu) {
       const ul = document.createElement("ul");
-      ul.textContent = o.title;
-      el.appendChild(ul);
-      createMenu(o.submenu, ul);
+      if (o.submenu) {
+        const div = document.createElement("div");
+        div.textContent = o.title;
+        el.appendChild(div);
+        el.appendChild(ul);
+        createMenu(o.submenu, ul);
+      }
+      if (o.anchorMenu) {
+        el.appendChild(ul);
+        createMenu(o.anchorMenu, ul);
+      }
     }
   });
 }
