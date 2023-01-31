@@ -34,7 +34,7 @@
           進行存取;全域符號,利用 API 建立並可於程式碼間分享使用;以及「通用(well.
           known)」符號,內建於 JavaScript 中並可以用以定義內部的語言行為。
         </p>
-        <h3>3-2-1 區域符號</h3>
+        <h3 id="3-2-1">3-2-1 區域符號</h3>
         <p>
           符號可以利用 Symbol 封裝物件建立，在下面的程式中,我們建立一個名稱為
           first 的符號。 const first = Symbol() 你可以用 new 關鍵字於 Number 和
@@ -94,7 +94,7 @@ console.log(typeof Symbol('my symbol')) // 'symbol'
         <pre><code class="language-js">
             console.log(Object.getOwnPropertySymbols(character)) // [Symbol(weapon) ]
           </code></pre>
-        <h3>3-2-2 符號的實際案例</h3>
+        <h3 id="3-2-2">3-2-2 符號的實際案例</h3>
         <p>
           符號的使用,可以透過一個函式庫將物件對應至 DOM 元件。例如:建立
           一個函式庫,它可以將日曆功能的 API 物件與指定的 DOM 元件連結起來 。在
@@ -204,8 +204,9 @@ function createCalendar(el) {
           變更其他程式碼或邏輯,除了定義符號特性內容值。透過函式內部程式
           碼的實作改善來優化行為定義。另一個好處是,當新的語言功能推出
           時,也不會因為無法預期的名稱衝突影響程式運作。
-          除了區域符號外，還有全域符號註冊，使跨越程式範圍存取使用成為可 能。
+          除了區域符號外，還有全域符號註冊，使跨越程式範圍存取使用成為可能。
         </p>
+        <h3 id="3-2-3">3-2-3 全域符號註冊表</h3>
       </section>
     </main>
   </body>
