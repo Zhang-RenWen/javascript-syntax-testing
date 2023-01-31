@@ -7,13 +7,13 @@ const menu = [
         id: "2-1",
         title: "2-1 物件實字",
         href: `./2-1.html`,
-        anchorMenu: [
-          {
-            id: "2-2-2",
-            title: "2-2-2 箭頭函式",
-            href: "#",
-          },
-        ],
+        // anchorMenu: [
+        //   {
+        //     id: "2-2-2",
+        //     title: "2-2-2 箭頭函式",
+        //     href: "#",
+        //   },
+        // ],
       },
       {
         id: "2-2",
