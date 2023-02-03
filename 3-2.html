@@ -298,6 +298,91 @@ console.log(Symbol.keyFor(example)) // 'example'
           如果你使用一些廣泛使用的符號名稱,如 each 或 contains,可能會導
           致一些非預期的結果發生。 接下來還有另一種符號要介紹:內建的通用符號。
         </p>
+        <h3 id="3-2-4">3-2-4 通用符號</h3>
+        <p>
+          到目前為止,我們已經含括了兩種符號建立的方式;以 Symbol 函式建立
+          的符號,和利用 Symbol.for 所建立的符號。第三種也是最後一種符號,
+          稱為通用符號。這是内建於語言之中,而非由 JavaScript 開發人員所建
+          立;並且它可與內部語言的行為掛鉤,讓你可延伸或自訂語言的各層 面,這在 ES6
+          之前是無法達成的。
+        </p>
+        <p>
+          以下是一個非常好的範例,說明如何利用 Symbol.toPrimitive 通用符
+          號,將語言功能延伸且不需要破壞既有的程式碼·它可以指定給一個
+          函式,使函式可以決定如何將物件轉換為一個基礎型別的值·函式會
+          接收一個名稱為 hint 的参數,内容值可以是 'string'、'number'、或
+          'default',指示出期望取得的值所隸屬的基礎型别。
+        </p>
+        <pre><code class="language-js">
+
+  const morphling = {
+    [Symbol.toprimitive](hint) {
+      if (hint === 'number') {
+        return Infinity
+      }
+    
+      if (hint === 'string') {
+        return 'a lot'
+      }
+
+      return '[object Morphling]'
+    }
+  }
+  console.log(+morphling) 
+  //  Infinity 
+
+  console.log(`That is ${morphling}!`)
+  //  'That is a lot!' 
+
+  console.log(morphling + ' is powerful')
+  //  '[object.Morphling] is powerful'
+
+</code></pre>
+        <p>
+          另一個通用符號的範例是 Symbol.match。將 Symbol.match 設定為 false
+          的正規運算式,會被視為一個字串,以配合.startsWith、.endsWith 與
+          .includes 使用。這三個函式是 ES6 中新的字串方法。第一個方法
+          .startswith 方法可用於判斷字串是否以所指定的字串起始;第二個方法
+          .endsWith 方法可判斷字串是否以所指定的字串結束;第三種 .include
+          方法可判斷字串起是否包含所指定的字串,若有則回傳 true 。下面的範例說明
+          Symbol.match 如何用於將字串正規運算式所 描述的字串進行比較。
+        </p>
+        <pre><code class="language-js">
+  const text = '/an example string/'
+  const regex = /an example string/
+  regex[Symbol.match] = false
+  console.log(text.startsWith(regex))
+  //  true
+</code></pre>
+        <p>
+          若未透過符號變更正規運算式,那麼程式便無法正確運作,因為 startswith
+          方法需要傳入的是一個字串,而非一個正規運算式。
+        </p>
+        <h3>不透過註冊表於程式領域進行分享</h3>
+        <p>
+          通用符號可於程式領域間分享使用,透過以下範例可瞭解, Symbol.iterator
+          的參考與 &lt;iframe&gt; 視窗中所取得的參考相同。
+        </p>
+        <pre><code class="language-js">
+  const frame = document.createElement('iframe')
+  document.body.appendChild(frame)
+  Symbol.iterator === frame.contentWindow.Symbol.iterator //  true
+</code></pre>
+        <p>
+          請注意,即使通用符可於程式領域分享使用,但它們並不存在於全域註冊表中。
+          下面程式碼說明,當我們欲在註冊表中擷取該符號的 key 鍵時 ,
+          Symbol.iterator 會産生 undefined 的結果,這表示符號並不存在於
+          全域註冊表中。
+        </p>
+        <pre><code class="language-js">
+  console.log(Symbol.keyFor(Symbol.iterator)) //  undefined
+</code></pre>
+        <p>
+          Symbol.iterator 也是一個非常好用的通用符號,在一些其他的語言中
+          它都被作為依序迭代的工具;可利用函式定義其行為,並指定予物件
+          中以符號所定義的特性。在下一節的內容,我們會進一步討 Symbol. iterator
+          的操作細節,並廣泛地將它與迭代器和迭代協議搭配使用。
+        </p>
       </section>
     </main>
   </body>
