@@ -158,7 +158,7 @@ const menu = [
   },
 ];
 
-function createMenu(submenu, el) {
+(function createMenu(submenu, el) {
   submenu.map((o) => {
     if (o.href) {
       const a = document.createElement("a");
@@ -183,6 +183,4 @@ function createMenu(submenu, el) {
       }
     }
   });
-}
-
-createMenu(menu, document.querySelector("aside"));
+})(menu, document.querySelector("aside"));
