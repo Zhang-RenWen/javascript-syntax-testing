@@ -56,32 +56,49 @@ const menu = [
         title: "3-2 符號",
         href: "3-2.html",
         anchorMenu: [
-          {
-            id: "3-2-1",
-            title: "3-2-1 區域符號",
-            href: "3-2.html#3-2-1",
-          },
-          {
-            id: "3-2-2",
-            title: "3-2-2 符號的實際案例",
-            href: "3-2.html#3-2-2",
-          },
-          {
-            id: "3-2-3",
-            title: "3-2-3 全域符號註冊表",
-            href: "3-2.html#3-2-3",
-          },
-          {
-            id: "3-2-4",
-            title: "3-2-4 通用符號",
-            href: "3-2.html#3-2-4",
-          },
+{
+  id: "3-2-1",
+  title: "3-2-1 區域符號",
+  href: "3-2.html#3-2-1",
+},
+{
+  id: "3-2-2",
+  title: "3-2-2 符號的實際案例",
+  href: "3-2.html#3-2-2",
+},
+{
+  id: "3-2-3",
+  title: "3-2-3 全域符號註冊表",
+  href: "3-2.html#3-2-3",
+},
+{
+  id: "3-2-4",
+  title: "3-2-4 通用符號",
+  href: "3-2.html#3-2-4",
+},
         ],
       },
       {
         id: "3-3",
-        title: "3-3 物件內的功能強化",
+        title: "3-3 物件的內建功能強化",
         href: "3-3.html",
+        anchorMenu: [
+{
+  id: "3-3-1",
+  title: "3-3-1 運用 Object.assign 延伸物件",
+  href: "3-3.html#3-3-1",
+},
+{
+  id: "3-3-2",
+  title: "3-3-2 運用 Object.is 比較兩物件",
+  href: "3-3.html#3-3-2",
+},
+{
+  id: "3-3-3",
+  title: "3-3-3 Object.setPrototypeOf",
+  href: "3-3.html#3-3-3",
+},
+        ],
       },
     ],
   },

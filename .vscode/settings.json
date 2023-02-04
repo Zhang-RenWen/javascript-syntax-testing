@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["airconditioning", "Berners", "Bevacqua", "morphling"]
+  "cSpell.words": [
+    "airconditioning",
+    "Berners",
+    "Bevacqua",
+    "hljs",
+    "morphling"
+  ],
+  "editor.defaultFormatter": "vscode.html-language-features"
 }
