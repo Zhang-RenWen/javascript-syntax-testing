@@ -117,8 +117,29 @@ console.log(type) // 'vegetable'
 console.log(meta) // { color: 'orange' }
 </code></pre>
       <h3 id="3-3-2">3-3-2 運用 Object.is 比較兩物件</h3>
-
+      <pre><code class="language-js">
+NaN === NaN // false 
+Object.is( NaN , NaN ) // true 
++0 === -0 // true
+Object.is( +0 , -0 ) // false 
+        </code></pre>
       <h3 id="3-3-3">3-3-3 Object.setPrototypeOf</h3>
+      <p>
+        用於改變原型屬性的操作
+      </p>
+      <pre><code class="language-js">
+// before ES6
+const baseCat = { type: 'cat' , leg: 4}
+const cat = Object.create( baseCat )
+cat.name = 'smallBlackDot'
+
+// after ES6
+const baseCat = { type: 'cat' , leg: 4}
+const cat = Object.setPrototypeOf( { name: 'smallBlackDot'} , baseCat )
+      </code></pre>
+      <p>
+        注意 !!! Object.setPrototypeOf 較 Object.create 差‧應避免使用‧
+      </p>
     </section>
   </main>
 </body>
