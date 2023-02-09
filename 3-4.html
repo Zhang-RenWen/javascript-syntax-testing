@@ -22,12 +22,83 @@
   <main>
     <aside></aside>
     <section>
-      <h2>3-4 </h2>
+      <h2>3-4 修飾器</h2>
+
+      <h3 id="3-4-1">3-4-1 初談 JavaScript 修飾器
+
+      </h3>
+      <pre><code class="language-js">
+ 
+@decorators.frozen 是有效的修飾器
+@decorators.frozen(true )是有效的修飾器
+@decorators().frozen() 語法錯誤
+@decorators['frozen'] 語法錯誤
+
+ // class 類別宣告和類別成員宣告處,可選擇加入多个修飾器,或不加入亦可。
+
+@inanimate
+class Car {} 
+
+@expensive
+@speed('fast') 
+class Lamborghini extends Car {}
+
+class View {
+@throttle(200) // 最多每隔 200ms 便會呼叫 reconcile 一次
+reconcile() {}
+}
+</code></pre>
+
       <p>
 
+        修飾器是以函式的方式實作‧成員修飾器函式(member decorator
+        functions 需要傳入一個成員描述器 (member descriptor)並回傳一
+        成員描述器。成員描器與特性描述器類似，但外觀上看起來不同。
+        以下的程式碼是一個成員描述器介面,如修飾器提案的定義。finisher
+        是一個非必要的函式,他會接收類別的建構子,讓我們可以執行該類別
+        中需利用修飾特性的操作。
       </p>
-      <h3 id="3-4-1">3-4-1 </h3>
+      <pre><code class="language-js">
 
+interface MemberDescriptor {
+  kind: "Property"
+  key: string,
+  isStatic: boolean,
+  descriptor: PropertyDescriptor,
+  extras?: MemberDescriptor[]
+  finisher?: (constructor): void;
+}
+</code></pre>
+      <p>
+        下面範例中,我們定義了一個 readonly 的成員修飾器函式，他會設定
+        修飾的成員特性為不可變更。藉由使用物件其餘參數和物件展開的便利
+        性,我們可將特性描器設定為唯讀且不影響其他的成員描述器的設定。
+      </p>
+      <pre><code class="language-js">
+function readonly({ descriptor, ...rest }) {
+    return {
+    ...rest,
+    descriptor: {
+      ...descriptor,
+      writable: false
+    }
+  }
+}
+</code></pre>
+      <p>
+        下方的類別修飾器函式需要傳遞一個參數 ctor,他是一個修飾類別建構
+        子:而 heritage 參數包含它的父類別，如果該類別是繼承自其他類
+        别:members是一個陣列。包含一系列的該修飾類別的成員描述器。
+      </p>
+      <p>
+        我們可以實作一個類別範圍的 readonly members修飾器,藉由重複使用
+        上述的 readonly 成員修飾器於修飾類別中的每一個成員描述器上，如下程式碼所示。
+      </p>
+      <pre><code class="language-js">
+function readonlyMembers(ctor, heritage, members) {
+  return members.map(member => readonly(member))
+}
+</code></pre>
     </section>
   </main>
 </body>
