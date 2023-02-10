@@ -24,9 +24,7 @@
     <section>
       <h2>3-4 修飾器</h2>
 
-      <h3 id="3-4-1">3-4-1 初談 JavaScript 修飾器
-
-      </h3>
+      <h3 id="3-4-1">3-4-1 初談 JavaScript 修飾器</h3>
       <pre><code class="language-js">
  
 @decorators.frozen 是有效的修飾器
@@ -53,7 +51,7 @@ reconcile() {}
 
         修飾器是以函式的方式實作‧成員修飾器函式(member decorator
         functions 需要傳入一個成員描述器 (member descriptor)並回傳一
-        成員描述器。成員描器與特性描述器類似，但外觀上看起來不同。
+        成員描述器。成員描述器與特性描述器類似，但外觀上看起來不同。
         以下的程式碼是一個成員描述器介面,如修飾器提案的定義。finisher
         是一個非必要的函式,他會接收類別的建構子,讓我們可以執行該類別
         中需利用修飾特性的操作。
@@ -72,7 +70,7 @@ interface MemberDescriptor {
       <p>
         下面範例中,我們定義了一個 readonly 的成員修飾器函式，他會設定
         修飾的成員特性為不可變更。藉由使用物件其餘參數和物件展開的便利
-        性,我們可將特性描器設定為唯讀且不影響其他的成員描述器的設定。
+        性,我們可將特性描述器設定為唯讀且不影響其他的成員描述器的設定。
       </p>
       <pre><code class="language-js">
 function readonly({ descriptor, ...rest }) {
@@ -99,6 +97,22 @@ function readonlyMembers(ctor, heritage, members) {
   return members.map(member => readonly(member))
 }
 </code></pre>
+      <h3 id="3-4-2">3-4-2 修飾器堆疊和不可變更性的警示</h3>
+      <p>
+        在各項唯讀與否的繁雜設定,你可能會想要自你的修飾器回傳一个新的
+        特性描述器,而不需要變更原始的描述器。即便設計上非常的小心,仍
+        會造成無法預期的影響,因為它可能會對相同的 class 類別或類別成員
+        多次進行修飾。
+      </p>
+      <p>
+        如果在程式碼中有修飾器回傳了一個完全新的 descriptor 修飾器·而不
+        是該函式所接收的 descriptor 修飾器,那麼在這個全新的修飾器回傳之
+        前,就已經會失去所有的修飾功能了。
+      </p>
+      <p>
+        因此我們必須將所提供的 descriptor 修飾器非常小心的處理,一般通常
+        會基於所傳入的原始修飾器,再建立一個新的進行調整。
+      </p>
     </section>
   </main>
 </body>
