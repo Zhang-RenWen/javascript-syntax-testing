@@ -113,7 +113,78 @@ function readonlyMembers(ctor, heritage, members) {
         因此我們必須將所提供的 descriptor 修飾器非常小心的處理,一般通常
         會基於所傳入的原始修飾器,再建立一個新的進行調整。
       </p>
+      <h3 id="3-4-3">3-4-3 使用案例:C#的Attributes</h3>
+      <p>
+        依賴反射遊戲管理 NPC
+      </p>
+
+      <h3 id="3-4-4">3-4-4 於 JavaScript 中標記特性</h3>
+      <p>
+        JavaScript 中並沒有一項機制一在既定的提案草稿中也沒有一
+        於一項特性中取得自訂的屬性。但 JavaScript 是一個高度彈性的語言，且
+        建立這類的「標籤(labels)」 並不至於太困難。將 Dog 類別加入一個
+        「指令特性(command property)」進行修飾,並不會與 RunUO
+        和 #C 有太大差異
+      <pre><code class="language-js">
+class Dog {
+  @commandProperty('game-master')
+}
+
+</code></pre>
+      <p>
+        commandProperty 函式比起 C# 稍微複雜一些。在 JavaScript 修飾器
+        沒有反射的情況下我們可以使用執行期間件用域的符號,於陣列中紀錄
+        所有指定類別的指令特性。
+      </p>
+      <pre><code class="language-js">
+function commandProperty(writeLevel, readLevel = writeLevel){
+  return (( key, ...rest ]) => ({
+    key,
+    rest,
+    finisher(ctor) {
+      const symbol = Symbol.for(' commandProperties')
+      const commandPropertyDescriptor = {
+        key,
+        readLevel,
+        writeLevel
+      }
+      if(!ctor[symbol]){
+        ctor[symbol] = []
+      }
+      ctor[symbol].push(commandPropertyDescriptor)
+    }
+  })
+}
+</code></pre>
+      <p>
+        Dog 類別可以依我們需要,不計數量的擁有指令特性,且每一個均可於
+        符號特性中列出。對指定的類別要找出指令特性,我們所需要做的是
+        使用下列的函式。並於方括號中[]提供預設值。習慣上，
+        我們總是回傳原始串列的副本，以免使用者不小心將原始的資料變更，
+        影響程式功能。
+      </p>
+      <pre><code class="language-js">
+        function getCommandProperties(ctor) {
+          const symbol = Symbol.for('commandProperties')
+          const properties = ctor[symbol] || []
+          return [...properties ]
+        } 
+        getCommandProperties(Dog)
+        // [{
+        //    key: 'name',
+        //    readLevel: 'game-master',
+        //    writeLevel:  'game-master' 
+        // }]
+      </code></pre>
+      <p>
+        接著,我們便可以巡訪每個已知的指令特性,並在執行期間透過一個簡
+        的操作介面,對這些特性進行變更。為避免總是維護一個冗長的特性
+        列表,可以嘗試随著時間僅記錄目前需使用的特性,或使用某種限制性
+        的命名規範以便於擷取:在某些特殊案例需標記特性的情境,使用修飾
+        器實作是一種最完善的方法。
+      </p>
     </section>
+
   </main>
 </body>
 <script src="./menu.js"></script>

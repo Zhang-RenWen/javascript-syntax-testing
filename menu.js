@@ -103,6 +103,22 @@ const menu = [
   title: "3-4-1 初談 JavaScript 修飾器",
   href: "3-4.html#3-4-1",
 },
+{
+  id: "3-4-2",
+  title: "3-4-2 修飾器堆疊和不可變更性的警示",
+  href: "3-4.html#3-4-2",
+},
+{
+  id: "3-4-3",
+  title: "3-4-3 使用案例: C# 的 Attributes",
+  href: "3-4.html#3-4-3",
+},
+{
+  id: "3-4-4",
+  title: "3-4-4 於 JavaScript 中標記特性",
+  href: "3-4.html#3-4-4",
+}
+
         ],
       },
     ],
