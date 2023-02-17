@@ -125,12 +125,12 @@ const menu = [
   },
   {
     id: "4",
-    title: "chapter4",
+    title: "chapter4 迭代和流程控制",
     submenu: [
       {
         id: "4-1",
-        title: "4-1",
-        href: "#",
+        title: "4-1 Promise",
+        href: "4-1.html#4-1-1",
       },
       {
         id: "4-2",
