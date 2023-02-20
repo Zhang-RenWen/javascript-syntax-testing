@@ -22,14 +22,140 @@
     <main>
         <aside></aside>
         <section>
-            <h2>4-1 迭代和流程控制</h2>
-            <h3 id="4-1-1">4-1-1 Promise</h3>
+            <h2>4-1 Promise</h2>
+            <h3 id="4-1-1">4-1-1 開始學習 Promise</h3>
             <p>
-
+                瀏覽器所支援的新的 fetch API。個
+                相當於簡化版的 XMLHttpRequest 。
+                旨在提供使用者一個非常簡單的方式
+                處理經常使用的案例 : 也就是以 HTTP 資源發送 GET 請求。
+                基本的使用方式,可建立一個GET items HTTP 請求。
             </p>
             <pre><code class="language-js">
+fetch('/items ')
+ </code></pre>
+            <p>他會對 /items 建立一個「開始並遺忘」的GET 請求，代表不管所送出的請求是否成成功，
+                可以忽略回覆並續向下软行。fetch 方法會回傳一個Promise 物件。
+                你可以於該Promise 物利用 .then 方法鏈結一個回呼函式，當/items 資源完成載入並接收到 response 物件便會執行指定的回呼函式
+            </p>
+            <pre><code class="language-js">
+fetch('/items').then(response => {
+  // 執行某些動作
+})
+ </code></pre>
+            <p>
+                以下的程式碼展示以 Promise 為基礎的 API
+                利用他便可以將 fetch 於
+                瀏覽器端完整際地實作。呼叫 fetch 函式會取得一個Promise 物件，
+                就如事件一般你可以利用 .then 和 .catch 方法，該情境下應進行的動作進行繫結。
+            </p>
+            <pre><code class="language-js">
+ const p = fetch('/items')
+ p.then(res => {
+  // 處理回應
+ })
 
-      </code></pre>
+ p.catch(err => {
+  // 處理錯誤
+ })
+ </code></pre>
+            <p>.then 區塊中的動作是用以處理 Promise 請求完成後的情况，
+                他在完成後提供一個履行完畢的值 ; 而 .catch 中的動作,
+                是用以處理請求錯誤的情況,它會提供一個錯誤的原因。你也可以將錯誤的捕捉處理理於 .then 中、那麽上的程式碼則改寫如下。
+            </p>
+            <pre><code class="language-js">
+const p = fetch('/items')
+p.then(
+res =>{
+  // 處理回應
+},
+err => {
+  // 處理错誤
+}
+ </code></pre>
+            <p>
+                一種替代方案是忽略對 .then(fulfillment,rejection) 的處理。
+                這會與呼叫 .then 時，發生請求被拒絕的狀況但忽略不處理的情形類似。
+                .then(null, rejection) 與 .catch(rejection) 在使用上有相同效果,如以下範例所示。
+            </p>
+            <pre><code class="language-js">
+const p = fetch('/items')
+p.then(res => {
+  // 處理回應
+})
+
+p.then(null, err => {
+  // 處理錯誤
+})
+ </code></pre>
+            <div class="border-block">
+                <h3>以Promise 作為回呼函式與事件的替代方案</h3>
+                <p>
+                    傳統上·JavaScript較為仰賴回呼函式·而非Promise和健結
+                    (chaining)如果fetch函式需要一个回呼函式·那麼你象
+                    加入一个函式,且此函式在fetch行完畢後必定會被教行·
+                    在Node.js中典型的非同步程式流程慣例,將回呼函式的
+                    的第一個參數保留給錯誤物件使用一即使錯誤不一定會發生一
+                    在執行fetch的流程中,其餘的参數便可用以擷取非同步操作
+                    的結果最常被使用的,是單一个資料参數的狀況·下面的程
+                    式碼示範·若fetch具有一个回呼函式AP·它如何被操作
+                    使用。
+
+                </p>
+                <pre><code class="language-js">
+fetch('/items', (err, res) => {
+if (err) {
+    // 處理錯誤
+} else {
+   //處理回應
+}
+})
+</code></pre>
+                <p>
+                    items資源取得之後,回呼函式才會被執行
+                    fetch操作發生錯誤時。指令仍然為非同步執行且非阻塞式(nonBlocking)。注意在個模型下你只能夠指定一
+                    個回呼,而此函式需負責處理所有的回覆情况;且仰賴使用者建立一種機制,可將各種不同面向的回應處理整合於一個回呼函式中。
+
+                    除傳統的回呼函式之外,另一種 API 設計可選擇使用事件驅動的模型。在此情境下,自 fetch 回傳的物件必須能夠
+                    為不同事件註冊回呼函式,為各種事件可能地繫結對應的事件處理器。就如將事件監聽器繫結至瀏覽器的DOM物件。當運作發生問題時,便喚起 error 事件;且當
+                    值測到的錯誤也發生時對應的事件也會被喚醒。
+                <pre><code class="language-js">
+fetch('/items ')
+.on('error', err => {
+   // 處理錯誤
+})
+.on('data', res => {
+  // 處理回應
+}
+</code></pre>
+                <p>
+                    對每一種事件類別結多個事件監聽器,可去除稍早前我們所討論於單一回呼函式集中處理所有的回應的議題。
+                    然而,這也讓事件難以鏈結回呼函式,且當另一個非同步工作完成也會讓事件觸發;而這也就是 Promise 可以協助之處。此之外事件較適合用於一連串的值的處理,使得它在某些特殊的情況下不適合使用。
+                </p>
+            </div>
+            <p>
+                談到 Promise 物件,鏈結常是一個頭痛的問題。在以事件為
+                基礎的 API 中, 藉由 .on 方法的使用可與事件處理器鏈結,並接著回到事件本體。但 Promise 則不同， .then .catch 方法每次均會回傳一個新的
+                Promise 物件。這個觀念是很重要的,因為依據所鏈結的方法是 .then 或 .catch ，這會使程式較容易被理解推論。const 鏈結會產生完全不同的結果。
+            </p>
+            <div class="border-block">
+                <h3>視覺化Promise:理解常見的觀念混淆問題</h3>
+                <p>
+                    .then和·catch方法每次均回傳一個新的 Promise 物件，
+                    因此會建立了一個類似樹的資料結構。如果你具有名稱為 p1 的 Promise 物件,以及 p1.then所回傳的 p2 物件,那麼可將 p1 和 p2 視為連接至 p1.then
+                    回應處理器的節點。這樣的
+                    回應處理器會建立新的 Promise ,並連接至樹結構構中,作為它回應的 Promise 節點的子節點。
+
+                    當鏈結 Promise 物件時，我們必瞭解 p1.then(r1).then(r2)
+                    會建立兩個新的 p2 和 p3 的Promise 物件; 第二個回應處理,
+                    r2,會於 p2 完成後被啟動; 而 r1 則是於 p1 完成後啟動。若是我們的敘述是以 p1.then(r1); p1.then(r2)的方式撰寫,那麼當 p1 完成時, r1 與 r2
+                    均會啟動執行。比較上述兩情境,當 p1 完成而 p2 尚未完成時,就會發生不一致的狀況了。
+                    釐清 Promise 物件的類樹狀結構的本質,是更進一步理解
+                    Promise 物件運作的關鍵點。最後,我建立了一個線上的工具,
+                    稱為 (<a href="https://bevacqua.github.io/promisees/">Promisees</a> ),你可以
+                    使用他將所撰寫的 Promise 鏈結轉換為其所代表的樹狀結構圖
+                </p>
+            </div>
         </section>
     </main>
 </body>
