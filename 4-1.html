@@ -156,6 +156,75 @@ fetch('/items ')
                     使用他將所撰寫的 Promise 鏈結轉換為其所代表的樹狀結構圖
                 </p>
             </div>
+
+            <p>
+                要建立一個 Promise 物件,需要傳遞一個解析器(resolver)至 Promise 中，解析器可決定該 Promise 如何與何時完成確認(settled); 它會藉由呼叫 resolve 方法將
+                Promise 物件確認為已實現狀態;
+                (fulfillment);或是呼叫 reject 方法將 Promise 物件確認為已拒絕狀態 (rejection) 在兩個函式之一被呼叫之前,他會處於一個暫停的
+                (pending) 的狀態,且所有與之繫結的回應都不會被執行。以下的程式將示範如何從頭開始建立一個 Promise物件,但先已亂數的 方式將 Promise 物件確認為已實現或已拒絕的狀態。
+
+            </p>
+            <pre><code class="language-js">
+new Promise(function (resolve, reject) {
+    setTimeout(function () {
+        if (Math.random() > 0.5) {
+            resolve('random success')
+        }else if {
+            reject(new Error('random failure'))
+    }, 1000)
+})
+</code></pre>
+            <p>
+                Promise 物件也可以利用 Promise.resolve 和 Promise.reject 建立。用這
+                些方法建立 Promise 物件,可立即確認具有一個實現值(fulfillment value),或是具有一個拒絕原因的物件。
+            </p>
+            <pre><code class="language-js">
+Promise
+.resolve({result:123})
+.then(data =>console.log(data.result))
+//  123
+</code></pre>
+            <p>
+                當一個 Promise 物件 p 為已實現狀態時,註冊於 p.then的回應便會被執行;當 p 為已拒絕狀態時,註冊於 p.catch的回應便會被執行。這些
+                回應會依順序產生三種不的情況,根據它們的回傳值為一個值、一個 Promise 物件、一個 thenable 物件或利用throw 拋出錯誤。Thenable 物件被視為類 promise 的物件,可利用
+                Promise.resolve 將它
+                轉換為 Promise 物件。
+            </p>
+            <p>
+                一個回應可能會回傳一個值,它藉由 .then 回傳一個已實現的 Promise 物件並附帶一實現值。在此狀下,
+                Promise 物件可以被繫結，以將上一個 Promise 物件的實現值進行轉換,依此類推反覆進行,如下面程式碼所示
+            </p>
+            <pre><code class="language-js">
+Promise
+.resolve(2)
+.then(x=>x*7)
+.then(x=>x-3)
+.then(x=> console.log(x))
+// 11
+            </code></pre>
+            <p>
+                一個回應也會回傳一個 Promise 物件,對比上一個範例程式,下面程式碼等待呼叫第一個 .then 所回傳的物件 , 須至它的回應已實現後，才能夠取得;
+                因為 setTimeout 的函式呼叫,需要大約 2 秒鐘後才
+                會確認為已實現的狀態。
+            </p>
+            <pre><code class="language-js">
+Promise
+.resolve(2)
+.then(x => new Promise(function (resolve) {
+setTimeout(()=> resolve(x*1000),x*1000)
+}))
+.then(x =console.log(x)
+// 2000
+            </code></pre>
+            <p>
+                一個回應也可能以 throw 拋出錯,會使 .then 所回傳的Promise 物件成為已拒絕狀態，並接著進入 .catch 的分支區塊 , 以 error 物件作為拒絕的原因。
+                以下程式範例展示如何於 fetch 操作加上一個已實現的回應 ; 當 fetch 為已實現狀態時,在回應中會抛出一個錯誤,並産生一個已拒絕的回應，繫結於執行 .then 後所回傳的 Promise 物件上。
+            </p>
+            <pre><code class="language-js">
+const p = fetch('/items')
+.then(res => { throw new Error('unexpectedly')})
+.catch(err => console.error(err))
+            </code></pre>
         </section>
     </main>
 </body>
