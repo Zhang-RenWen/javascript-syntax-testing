@@ -130,7 +130,20 @@ const menu = [
       {
         id: "4-1",
         title: "4-1 Promise",
-        href: "4-1.html#4-1-1",
+        href: "4-1.html",
+        anchorMenu: [
+          {
+            id: "4-1-1",
+            title: "4-1-1 開始學習 Promise",
+            href: "4-1.html#4-1-1",
+          },
+          {
+            id: "4-1-2",
+            title: "4-1-2 物件的再開始和連結",
+            href: "4-1.html#4-1-2",
+          },
+        ],
+        
       },
       {
         id: "4-2",
