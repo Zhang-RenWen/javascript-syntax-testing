@@ -225,12 +225,44 @@ const p = fetch('/items')
 .then(res => { throw new Error('unexpectedly')})
 .catch(err => console.error(err))
             </code></pre>
-
-
             <h3 id="4-1-2">4-1-2 Promise 物件的再開始和連結</h3>
             <P>
-
+                當在 Promise 的解析中發生錯誤時，可利用 p.catch 捕捉到錯誤 ，如下方範例。
             </P>
+            <pre><code class="language-js">
+new Promise((resolve, reject) => reject(new Error('oops'))).catch(err=> console.error(err))
+            </code></pre>
+            <P>
+                當 Promise 的解析器呼叫了 reject 後，便會確認成為已拒絕狀態; 但是若再解析器中有拋出錯誤時，也會進入已拒絕狀態，如下範例所示。
+            </P>
+            <pre><code class="language-js">
+new Promise((resolve, reject) => {
+    throw new Error('oops')
+}).catch(err =>console.error(err))
+             </code></pre>
+
+            <P>
+                當執行一個已實現或已拒絕的回應時發生了錯誤,也會有相同的行為; 會自 .then 中回傳一個已拒絕的 Promise 物件,或自發生錯誤進入 .catch 方法後回傳。看完以下的程式範例應會較容易瞭解。
+            </P>
+            <pre><code class="language-js">
+Promise.resolve(2).then(x => {throw new Error('failed') })
+.catch(err =>console.error(err))           
+           </code></pre>
+            <P>
+                將一連串的鏈結方法拆解為多個變數說明,會較容易理解其觀念,如下方程式碼所示。這段程式可幫助你視覺化以下觀念; 若 .catch 回應繫結至 p1 , 你就不需要於 .then 回應中補捉可能發生的錯誤。當
+                p1 已確認實現時, p2 不同於 p1 的 Promise 物件,回傳自 p1.then 。因拋出
+                誤故成為已拒絕狀態; 而繫結於 p2 的已拒絕的回應,則會捕捉到所抛出的錯誤。
+            </P>
+            <pre><code class="language-js">
+const p1 = Promise.resolve(2) 
+const p2 = p1.then(x => { throw newError('failed')})
+const p3 = p2.catch(err => console.error(err))                               
+             </code></pre>
+            <p>
+                此處另一種情境可協助你以類樹狀的資料結構去思考Promise 概念。若在 p2 節點發生了錯誤，繫結於 p1 節點上的已拒絕狀態的回應是不會捕捉到的。
+                如下方範例。
+            </p>
+
 
         </section>
     </main>
