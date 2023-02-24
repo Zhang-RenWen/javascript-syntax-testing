@@ -211,14 +211,14 @@ Promise
 Promise
 .resolve(2)
 .then(x => new Promise(function (resolve) {
-setTimeout(()=> resolve(x*1000),x*1000)
+    setTimeout(()=> resolve(x*1000),x*1000)
 }))
 .then(x =console.log(x)
 // 2000
             </code></pre>
             <p>
-                一個回應也可能以 throw 拋出錯,會使 .then 所回傳的Promise 物件成為已拒絕狀態，並接著進入 .catch 的分支區塊 , 以 error 物件作為拒絕的原因。
-                以下程式範例展示如何於 fetch 操作加上一個已實現的回應 ; 當 fetch 為已實現狀態時,在回應中會抛出一個錯誤,並産生一個已拒絕的回應，繫結於執行 .then 後所回傳的 Promise 物件上。
+                一個回應也可能以 throw 拋出錯,會使 .then 所回傳的Promise 物件成為已拒絕狀態，並接著進入 .catch 的分支區塊 , 以 error 物件作為拒絕的原因。以下程式範例展示如何於
+                fetch 操作加上一個已實現的回應 ; 當 fetch 為已實現狀態時,在回應中會抛出一個錯誤,並産生一個已拒絕的回應，繫結於執行 .then 後所回傳的 Promise 物件上。
             </p>
             <pre><code class="language-js">
 const p = fetch('/items')
@@ -250,20 +250,75 @@ Promise.resolve(2).then(x => {throw new Error('failed') })
            </code></pre>
             <P>
                 將一連串的鏈結方法拆解為多個變數說明,會較容易理解其觀念,如下方程式碼所示。這段程式可幫助你視覺化以下觀念; 若 .catch 回應繫結至 p1 , 你就不需要於 .then 回應中補捉可能發生的錯誤。當
-                p1 已確認實現時, p2 不同於 p1 的 Promise 物件,回傳自 p1.then 。因拋出
-                誤故成為已拒絕狀態; 而繫結於 p2 的已拒絕的回應,則會捕捉到所抛出的錯誤。
+                p1 已確認實現時, p2 不同於 p1 的 Promise 物件,回傳自 p1.then 。因拋出錯誤故成為已拒絕狀態; 而繫結於 p2 的已拒絕的回應,則會捕捉到所抛出的錯誤。
             </P>
             <pre><code class="language-js">
 const p1 = Promise.resolve(2) 
 const p2 = p1.then(x => { throw newError('failed')})
-const p3 = p2.catch(err => console.error(err))                               
+const p3 = p2.catch(err => console.error(err))               
              </code></pre>
             <p>
                 此處另一種情境可協助你以類樹狀的資料結構去思考Promise 概念。若在 p2 節點發生了錯誤，繫結於 p1 節點上的已拒絕狀態的回應是不會捕捉到的。
                 如下方範例。
             </p>
+            <p>
+                已經瞭解,將回應繫結於正確的 Promise 物件上很重要。
+                影響到是否可正確地捕捉到所發生的錯誤。值得注意的是
+                Promise 物件鏈結上有未捕捉到的錯誤,拒絕處理器都可以捕捉到。
+                以下的例子中,我們在 p2 和 p4 中間插入了一個 .then 呼叫;
+                p2 是發生錯誤之處,p4 是繫結拒絕處理器的位置。當 p2 確認為已拒絕時，
+                p3 便也確認為已拒絕狀態,因為它直接與 p2 的結果相關連;當 p3 為已拒時,
+                在 p4 的拒絕處理器便會啟動。
+            </p>
+            <pre><code class="language-js">
+const p1 = Promise.resolve(2)
+const p2 = p1.then(x => { throw new Error('failed')})
+const p3 = p2.then(x=>x *2)
+const p4 = p3.catch(err => console.error(err))
+            </code></pre>
+            <p>
+                基本上 p4 是已實現的狀態,因為在 .catch 的拒絕處理器
+                並不會發再產生其他錯誤。這表示若加入 p4.then 的實現處理器,便一定會被執行。
+                以下的範例說明,如何透過 p4 的實現理器,將文字敘述
+                輸出至瀏覽器的控制終端中,該處理器在 p3 確認為已實現的狀態後便會執行。
+            </p>
+            <pre><code class="language-js">
+const p1 = Promise.resolve(2)
+const p2 = p1.then(x => { throw new Error('failed') })
+const p3 = p2.catch(err => console.error(err))
+const p4 = p3.then(() => console.log('crisis averted'))
+            </code></pre>
+            <p>
+                同理,如果在 p3 的拒絕處理器中發生,我們也可利用。.catch捕捉到該錯誤。下面的程式碼說明如何使用p3.catch 捕捉到自p3所拋出的錯誤,就像是在前幾個捕捉錯誤的範例一樣。
+            </p>
 
+            <pre><code class="language-js">
+const p1 = Promise.resolve(2)
+const p2 = p1.then(x => { throw new Error('failed')})
+const p3 = p2.catch(err => { throw new Error('oops') })
+const p4 = p3.catch(err => console.error(err))
+            </code></pre>
+            <p>
+                下面的例子會將 err.message 印出一次,而非兩次:因為在第一個 .catch 中並未發生錯誤,故所回傳的 Promise 物件其繫結的拒絕處理器並不會被執行。
+            </p>
+            <pre><code class="language-js">
+fetch('/items')
+.then(res => res.a.prop.that.does.not.exist)
+.catch(err =>console.error(err.message))
+.catch(err => console.error(err.message))
+// 'cannot read property "prop" of undefined'
+            </code></pre>
 
+            <p>
+                相反的，下方的例子則會將 err.message 印出兩次:程式
+                會先儲存 .then 所回傳的 Promise 物件的參考,接著將兩個 .catch 繫結於物件上; 在上一個範例中，第二個 .catch 會處理第一個 .catch 所回傳的 Promise 物件
+                拋出的錯誤 ;但在此範例中,這兩個拒絕處理器都會處理 p 所拋出的錯誤。
+            </p>
+            <pre><code class="language-js">
+const p = fetch('/items').then(res =>
+    res.a.prop.that.does.not.exist
+)
+            </code></pre>
         </section>
     </main>
 </body>
