@@ -318,7 +318,42 @@ fetch('/items')
 const p = fetch('/items').then(res =>
     res.a.prop.that.does.not.exist
 )
+p.catch(err => console.error(err.message))
+p.catch(err =>console.error(err.message))
+//  'Cannot read property "prop" of undefined"
+//  'Cannot read property "prop" of undefined"
             </code></pre>
+            <p>
+                所以，Promise 物件能夠任意地鏈結方法 ; 就如前面我們所看到的例子，在 Promise 物件的方法鏈捷中，可於任何的位置儲存 Promise 物件的參考，並於該物件上附加産生更多的 Promise
+                物件。這是一個瞭解 Promise 運作的重要觀念。
+            </p>
+            <p>
+                下面的範例列出事件啟動的順序,自 Promise 物件的建立和結·讓我們一起看看以下的程式碼。
+            </p>
+            <pre><code class="language-js">
+                const p1 = fetch('/items')
+                const p2 = p1.then(res => res.a.prop.that.does.not.exist)
+                const p3 = p2.catch(err => {})
+                const p4 = p3.catch(err=>console.error(err.message))
+            </code></pre>
+
+            <p>
+                下面逐步說明程式碼執行的過程:
+                1. fetch 回傳一個全新的 p1 物件。
+                2. p1.then 回傳一個全新的 p2 物件,當 p1 為已實現狀態時便會執行。
+                3. p2.catch 回傳一個全新的 p3 物件,當 p2 為已拒絕狀態時便會執行。
+                4. p3.catch 回傳一個全新的 p4 物件,當 p3 為已拒絕狀態時便會執行。
+                5.當 p1 物件為已實現時,便會執行 p1.then 的回應敘述。
+                6.因為 p1.then 的回應中拋出錯誤，故 p2 物件為已拒絕狀態。
+                7.因為 p2 物件為已拒絕狀態,便會執行 p2.catch ,若有 p2.then 的回應處理器則會被略過不執行。
+                8. p2.catch 所回傳的 p3 物件為已實現狀態,因為在一個已拒絕的
+                Promise 物件不會再產生錯誤,或回傳一個已拒絕的物件。
+                9.因為 p3 物件為已實現，便不會執行 p3.catch , 若有 p3.then 的回應
+                處理器則便會執行。
+                你可以將 Promise 物件的產生以樹狀結構看待,再強調一次:可用樹狀
+                結構看待 Promise 物件的關係1,圖4-4可協助你更具體瞭解這個觀念。
+            </p>
+
         </section>
     </main>
 </body>
