@@ -352,7 +352,20 @@ p.catch(err =>console.error(err.message))
                 你可以將 Promise 物件的產生以樹狀結構看待,再強調一次:可用樹狀結構看待 Promise 物件的關係1,圖4-4可協助你更具體瞭解這個觀念。
             </p>
             <h3 id="4-1-3">4-1-3 從頭開始建立一個 Promise</h3>
+            <p>
+                new promise(resolver) 可開始建立一個
+                Promise 物件。所傳遞的參數 resolver 解析器是一個函式,用以確認 Promise 物件的狀態。resolver 解析器需要傳入兩個引數:resolve解析函式和 reject 拒絕函式。
+            </p>
+            <p>下面範例的 2 個 Promise 物件分別確認為已實現和已拒絕狀態·此處第一個 Promise 物件設定為已實現具有'result' 值,而第 2 個 Promise 物件設定為已拒絕並具有 Error
+                物件,指定 'reason' 作為他的內容的訊息。</p>
+            <p></p>
+            <pre><code class="language-js">
+new Promise(resolve => resolve('result'))
+new Promise((resolve, reject) => reject(new Error('reason')))
 
+</code></pre>
+            <p>物件在已實現與已拒絕狀態時,是可以不需要具備值的,但這樣通常並不好用。已實現的 Promise 物件通常附帶一個 result 結果值,例如: Ajax 呼叫後所回應的結果值,就如我們曾看到 fetch
+                函式一般。而你也一定會希望在你拋出拒絕時,描述 reason 原因通常包裹於 Error 物件中,以將錯誤向上回報。</p>
         </section>
     </main>
 </body>
