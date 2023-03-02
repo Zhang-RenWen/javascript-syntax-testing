@@ -91,14 +91,14 @@ p.then(null, err => {
             <div class="border-block">
                 <h3>以Promise 作為回呼函式與事件的替代方案</h3>
                 <p>
-                    傳統上·JavaScript較為仰賴回呼函式·而非Promise和健結
-                    (chaining)如果fetch函式需要一个回呼函式·那麼你象
-                    加入一个函式,且此函式在fetch行完畢後必定會被教行·
-                    在Node.js中典型的非同步程式流程慣例,將回呼函式的
-                    的第一個參數保留給錯誤物件使用一即使錯誤不一定會發生一
+                    傳統上·JavaScript較為仰賴回呼函式·而非Promise和鏈結
+                    (chaining)如果 fetch 函式需要一个回呼函式·那麼你則需
+                    加入一個函式,且此函式在 fetch 執行完畢後必定會被教行·
+                    在 Node.js 中典型的非同步程式流程慣例,將回呼函式的
+                    的第一個參數保留給錯誤物件使用(即使錯誤不一定會發生)
                     在執行fetch的流程中,其餘的参數便可用以擷取非同步操作
-                    的結果最常被使用的,是單一个資料参數的狀況·下面的程
-                    式碼示範·若fetch具有一个回呼函式AP·它如何被操作
+                    的結果‧最常被使用的,是單一個資料参數的狀況·下面的程
+                    式碼示範。若 fetch 具有一個回呼函式 API。它應如何被操作
                     使用。
 
                 </p>
@@ -112,8 +112,8 @@ if (err) {
 })
 </code></pre>
                 <p>
-                    items資源取得之後,回呼函式才會被執行
-                    fetch操作發生錯誤時。指令仍然為非同步執行且非阻塞式(nonBlocking)。注意在個模型下你只能夠指定一
+                    items 資源取得之後,回呼函式才會被執行
+                    fetch 操作發生錯誤時。指令仍然為非同步執行且非阻塞式(nonBlocking)。注意在個模型下你只能夠指定一
                     個回呼,而此函式需負責處理所有的回覆情况;且仰賴使用者建立一種機制,可將各種不同面向的回應處理整合於一個回呼函式中。
 
                     除傳統的回呼函式之外,另一種 API 設計可選擇使用事件驅動的模型。在此情境下,自 fetch 回傳的物件必須能夠
@@ -366,6 +366,50 @@ new Promise((resolve, reject) => reject(new Error('reason')))
 </code></pre>
             <p>物件在已實現與已拒絕狀態時,是可以不需要具備值的,但這樣通常並不好用。已實現的 Promise 物件通常附帶一個 result 結果值,例如: Ajax 呼叫後所回應的結果值,就如我們曾看到 fetch
                 函式一般。而你也一定會希望在你拋出拒絕時,描述 reason 原因通常包裹於 Error 物件中,以將錯誤向上回報。</p>
+
+            <p>
+                你所猜想解析器的操作並不需要同步。已實現和已拒絕的狀態確認都
+                是以非同步的方式進行;即使解析器立即呼叫 resolve 函式,
+                其結果不會立刻喚起後續的回應,這就是 Promise 的特性!
+                以下範例會建立一個 Promise 物件,在兩秒過後才會確認轉為已實現
+            </p>
+            <pre><code class="language-js">
+new Promise(resolve => setTimeout(resolve, 2000))
+</code></pre>
+            <p>
+                注意只有第一個呼叫這些函式的才產生效果，一旦 Promise 物件已確認狀態後，他的結果就無法再被改變。以下程式碼示範,建立
+                一個 Promise 物件，並設定他在指定的 delay 時間後確認為已實現,
+                或 3 秒後確認為已拒絕狀態。如此我們會看到,在 Promise 物件已確認狀態後,再呼叫這些函式都無法產生對應的結果。如便產生一
+                種競賽的情況，讓第一個執行的函式就可以確認 Promise 物件的最終結果。
+            </p>
+            <pre><code class="language-js">
+function resolveUnderThreeSeconds(delay) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(resolve,delay)
+        setTimeout(reject,3000)
+    })
+}
+resolveUnderThreeSeconds(2000) // 2秒後變為已實現狀態
+resolveUnderThreeSeconds(7000) // 3秒後變為已拒絕狀態
+</code></pre>
+            <p>
+                當建立一個新的 Promise 物件 p1 時,你還可以在呼叫 resolve 函式時傳
+                入另一個 Promise 物件 p2 ，而非只能於呼叫 resolve 時傳入一般值。在
+                這類的情況中, p1 的建立會暫停,需等待 p2 的結果確認;當 p2 已確認狀
+                態結果後， p1 便可接續進行,並確認他的狀態結果和值。下面程式碼與簡單的執行 fetch('/items') 具有相同的效果。
+            </p>
+            <pre><code class="language-js">
+new Promise(resolve => resolve(fetch('/items')))
+</code></pre>
+            <p>
+                請注意,這樣的方式只能夠在呼叫 resolve 函式時使用。如果你在呼
+                叫 reject 時也想要使用相同的方式,那麼 p1 物件的建立會被拒絕,並
+                回傳 p2 物件作為 reason 拒絕原因。當 resolve 呼叫可能產生已實現或
+                已拒絕的 Promise 物件 ，reject 呼叫則只會回傳拒絕狀態的 Promise 物件。如果在呼叫 resolve 函式時,所傳入的是已拒絕的 Promise 物件,
+                或最終會成為拒絕狀態的 Promise 物件;那麼所建立的 Promise 物件也會
+                是已拒絕狀態。而呼叫 reject 則不同,所取得的 Promise 物件必為已拒
+                絕狀態,無論所傳入至 reject 值為何。
+            </p>
         </section>
     </main>
 </body>
