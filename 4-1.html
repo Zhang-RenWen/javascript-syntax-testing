@@ -410,6 +410,56 @@ new Promise(resolve => resolve(fetch('/items')))
                 是已拒絕狀態。而呼叫 reject 則不同,所取得的 Promise 物件必為已拒
                 絕狀態,無論所傳入至 reject 值為何。
             </p>
+            <p>
+                某些狀況,你已知道所期望的 Promise 物件的值,如此就可以從頭自行建
+                立一個 Promise 物件,如下範例所示。當你希望運用 Promise 物件
+                鏈結的優點時,以這樣的方式進行是很方便的,除了使用簡單回傳 Promise 的函式或方法之外(例如呼叫fetch函式。)
+            </p>
+            <pre><code class="language-js">
+new Promise(resolve => resolve(12))
+    </code></pre>
+            <p>
+                當不需要建立一個可事先確認狀態的 Promise 物件時,使用這樣的語句
+                較為冗長。此時,可用 Promise.resolve 取代,作為一種簡便的快捷方
+                法。下面的敘所產生的結果會與上述相同,兩句敘述的差異僅在於語
+                法的不同:下方的敘述並未宣告 resolver 函式,且自可讀性的觀點考量在， Promise 物件的連續性和鏈結操作,使用上較為友善。
+            </p>
+            <pre><code class="language-js">
+Promise.resolve(12)
+                </code></pre>
+            <p>
+                就像是不久前我們看到的 resolve(fetch) 情境,你可以使用 Promise.
+                resolve 將另一個 Promise 物件包裹起來,或是將一個 Thenable 物件
+                轉換為適合的 Promise 物件。以下的程式碼說明,如何使用 Promise.
+                resolve 將一個 Thenable 物件轉換為 Promise 物件進行操作,就如使用一般的 Promise 物件方式。
+            </p>
+            <pre><code class="language-js">
+Promise.resolve({ then:resolve=> resolve(12)}).then(x=> console.log(x)) // 12
+</code></pre>
+            <p>
+                當你已經知道 Promise 物件設定的拒絕原因,可以利用 Promise.
+                reject 方法。下面的程式範例建立一個 Promise 物件, 確認為已
+                拒絕並附帶指定的 reason 拒絕原因。你可以在回應中使用 Promise.
+                reject,作為 throw 敘述的替代方式。另一種使用 Promise.reject 的情
+                況,是作為箭頭函式的隱性回傳值,有些值的回傳用 throw 敘述無法達到的。
+            </p>
+            <pre><code class="language-js">
+Promise.reject(reason)
+etch('/items').then(() =>
+    Promise.reject(new Error('arbitrarily'))
+)
+fetch('/items').then(()=> { throw new Error('arbitrarily')})
+</code></pre>
+            <p>
+                你大概不會需要經常地呼叫 new Promise。其實在支援 Promise 物件的函式庫或原生函式,如 fetch 都已經在內部經常地呼叫 Promise 建
+                構子。在單純的呼叫 new Promise 建立一個原始根物件,透過 .then 和 .catch 方法的鏈
+                結,便可自原始物件開展出樹狀結構的多個子孫物件。無疑地，
+                要充分運用以 Promise 物件為基礎的流程控制,瞭解 Promise 物件的建立方法是很重要的。
+            </p>
+            <h3 id="4-1-4">4-1-4 Promise 狀態和結果</h3>
+
+
+
         </section>
     </main>
 </body>

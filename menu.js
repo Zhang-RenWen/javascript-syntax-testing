@@ -1,7 +1,7 @@
 const menu = [
   {
     id: "2",
-    title: "chapter2 ES6 基礎元素",
+    title: "Chapter 2 ES6 基礎元素",
     submenu: [
       {
         id: "2-1",
@@ -44,7 +44,7 @@ const menu = [
   },
   {
     id: "3",
-    title: "chapter3 類別、符號、物件和修飾器",
+    title: "Chapter 3 類別、符號、物件和修飾器",
     submenu: [
       {
         id: "3-1",
@@ -125,7 +125,7 @@ const menu = [
   },
   {
     id: "4",
-    title: "chapter4 迭代和流程控制",
+    title: "Chapter 4 迭代和流程控制",
     submenu: [
       {
         id: "4-1",
@@ -146,7 +146,12 @@ const menu = [
             id: "4-1-3",
             title: "4-1-3 從頭開始建立一個 Promise",
             href: "4-1.html#4-1-3",
-          }
+          },
+          {
+            id: "4-1-4",
+            title: "4-1-4 Promise 狀態和結果",
+            href: "4-1.html#4-1-4",
+          },
         ],
         
       },
@@ -159,7 +164,7 @@ const menu = [
   },
   {
     id: "5",
-    title: "chapter5",
+    title: "Chapter 5",
     submenu: [
       {
         id: "5-1",
@@ -170,7 +175,7 @@ const menu = [
   },
   {
     id: "6",
-    title: "chapter6",
+    title: "Chapter 6",
     submenu: [
       {
         id: "6-1",
@@ -181,7 +186,7 @@ const menu = [
   },
   {
     id: "7",
-    title: "chapter7",
+    title: "Chapter 7",
     submenu: [
       {
         id: "7-1",
@@ -192,7 +197,7 @@ const menu = [
   },
   {
     id: "8",
-    title: "chapter8",
+    title: "Chapter 8",
     submenu: [
       {
         id: "8-1",
@@ -203,7 +208,7 @@ const menu = [
   },
   {
     id: "9",
-    title: "chapter9",
+    title: "Chapter 9",
     submenu: [
       {
         id: "9-1",
