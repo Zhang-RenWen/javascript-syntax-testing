@@ -457,9 +457,78 @@ fetch('/items').then(()=> { throw new Error('arbitrarily')})
                 要充分運用以 Promise 物件為基礎的流程控制,瞭解 Promise 物件的建立方法是很重要的。
             </p>
             <h3 id="4-1-4">4-1-4 Promise 狀態和結果</h3>
+            <p>
+                Promise 物件會有三種不同的狀態:暫停(pending)、已實現(fulfilled)、已拒絕(rejected)
+                ,預設狀態為暂停,接著可移轉至已實現或已拒絕其中之一個狀態。
 
-
-
+            </p>
+            <p>
+                一個 Promise 物件可被操作解析(resolved)或拒絕(rejected)一次。欲
+                進行第二次的 Promise 物件解析或拒絕操作不會有任何效果。
+            </p>
+            <p>
+                當 Promise 物件被解析為非 Promise 物件、或非 Thenable 值時,它便被
+                確認為已實現狀態;當物件被拒絕時,此時物件狀態也已確認完成,不
+                會再變更。
+            </p>
+            <p>
+                一個 Promise 物件 p1 解析出另一個 Promise 物件或 Thenable 物件 p2
+                時,他便處於暫停狀態,但無疑地已解析完成:也就是說它無法再次解
+                析,也不會被拒絕。當 p2 已確認狀態後,結果會回覆給 p1,使得 p1 可
+                完成狀態確認。
+            </p>
+            <p>
+                一旦 Promise 物件已確認為實現狀態,那麼在 p.then 中的回應便會立刻
+                執行;同理,若確認為拒絕狀態,便會立即執行 p.catch 中的回應。在
+                Promise 物件狀態完成確認後,所繫結的回應都會立即被執行。
+            </p>
+            <p>
+                下面的範例說明如何建立一個 fetch 請求,並在此請求的 .then 回應中
+                繼續建立第二個 fetch 請求;而第二個請求只會於第一個 Promise 物件
+                確認為已實現狀態後才會被執行。而 console.log 敘述只會於第二個
+                Promise 物件確認為已實現狀態後,才會執行並印出 done 的訊息
+            </p>
+            <pre><code class="language-js">
+fetch('/items ')
+.then(() => fetch('/item/first'))
+.then(() => console.log('done'))
+</code></pre>
+            <p>
+                另一個範例則加入一些額外的步驟。在以下的程式碼中,我們依據第一個
+                fetch 請求的結果來處理第二個請求。為達到此目的,我們使用了
+                res.json 方法,它剖析 JSON 回傳結果而得一物件,以解析出一
+                Promise 物件回傳。接著我們使用該物件建構一個節點,以在第二個 fetch
+                呼叫中發送請求,最後將第二個回應結果所取得 item 物件輸出
+                至控制終端。
+            </p>
+            <pre><code class="language-js">
+fetch('/items')
+.then(res => res.json())
+.then(items => fetch(`/item/${items[0].slug }`))
+.then(res => res.json())
+.then(item => console.log(item))
+    </code></pre>
+            <p>
+                我們並不僅局限於 Promise 或 Thenable 物件的回傳。我們也可以
+                自 .then 和 .catch 的回應敘述中回傳值,這些回傳值可以傅遞至鏈結中
+                的下一個回應敘述。在這種情況下,回應敘述在鏈結中,可想像是上一
+                個回應對輸入值的運算轉換後,作為下一個回應的輸入值。以下範例自
+                建立一個已實現的 Promise 物件並具備值 [1,2,3] 開始,接著在回應
+                敘述中將這些值轉換為[2,4,6],並在下一個回應中將些值输出至控制終端。
+            </p>
+            <pre><code class="language-js">
+Promise
+.resolve([1,2,3])
+.then(values => values.map(value => value * 2))
+.then(values => console.log(values))
+// [2, 4, 6]
+    </code></pre>
+            <p>
+                值得注意的是,你也可以在拒絕回應中進行資料轉換。請記得,在我
+                們初次學習第100頁第4.1.3節「從頭開始建立一個 Promise」中,
+                當 .catch 執行回應時不會產生錯誤也不會回傳已拒絕的 Promise 物件,
+                此時是處於已實現狀態,故可接著執行 .then 中的回應敘述。
+            </p>
         </section>
     </main>
 </body>
