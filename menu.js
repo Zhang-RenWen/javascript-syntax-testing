@@ -152,6 +152,11 @@ const menu = [
             title: "4-1-4 Promise 狀態和結果",
             href: "4-1.html#4-1-4",
           },
+          {
+            id: "4-1-5",
+            title: "4-1-5 Promise#finally提案",
+            href: "4-1.html#4-1-5",
+          },
         ],
         
       },

@@ -331,10 +331,10 @@ p.catch(err =>console.error(err.message))
                 下面的範例列出事件啟動的順序,自 Promise 物件的建立和結·讓我們一起看看以下的程式碼。
             </p>
             <pre><code class="language-js">
-                const p1 = fetch('/items')
-                const p2 = p1.then(res => res.a.prop.that.does.not.exist)
-                const p3 = p2.catch(err => {})
-                const p4 = p3.catch(err=>console.error(err.message))
+const p1 = fetch('/items')
+const p2 = p1.then(res => res.a.prop.that.does.not.exist)
+const p3 = p2.catch(err => {})
+const p4 = p3.catch(err=>console.error(err.message))
             </code></pre>
             <p>
                 下面逐步說明程式碼執行的過程:
@@ -426,7 +426,7 @@ new Promise(resolve => resolve(12))
             </p>
             <pre><code class="language-js">
 Promise.resolve(12)
-                </code></pre>
+</code></pre>
             <p>
                 就像是不久前我們看到的 resolve(fetch) 情境,你可以使用 Promise.
                 resolve 將另一個 Promise 物件包裹起來,或是將一個 Thenable 物件
@@ -529,6 +529,60 @@ Promise
                 當 .catch 執行回應時不會產生錯誤也不會回傳已拒絕的 Promise 物件,
                 此時是處於已實現狀態,故可接著執行 .then 中的回應敘述。
             </p>
+            <h3 id="4-1-5">4-1-5 Promise#finally提案</h3>
+            <p>
+                在 TC39 提案中討論的是 Promise#finally 方法。可在 Promise 物件已確認狀態後執行回應敘述,不管是已實現或已拒絕狀態。
+            </p>
+            <p>
+                以下的程式碼可視為是 Promise#finally 的簡略版本。我們將已實現和已拒絕狀態的回應置於回呼函式中,並傳遞給 p.then。
+            </p>
+            <pre><code class="language-js">
+function finally(p, fn) {
+    return p.then(
+         fn,
+         fn
+     )
+}
+</code></pre>
+            <p>
+                然而還是有一些能上的差異須說明清楚;第一,傳遞至Promise#finally 方法的回應函式無法傳入任何引數,因為 Promise 尚無法確認為已實現的實現值,或已拒絕的拒絕原因。一般來說
+                Promise#finally 方法通常使用的情境,如:在進行 fetch 請求之前,
+                隱藏頁面上的載入中圖示,以及其他不需要 Promise 物件確認值的前置清整動作。下面範例是更新後的程式碼,不管在哪一種狀態下都不需要傳遞任何引數。
+            </p>
+            <pre><code class="language-js">
+function finally(p, fn) {
+    return p.then(
+      () => fn(),
+      () => fn()
+}
+            </code></pre>
+
+            <p>
+                傳遞至 Promise#finally 方法的回應敘述,可解析出父物件的結果。
+            </p>
+
+            <pre><code class="language-js">
+const p1 = Promise. resolve('value')
+const p2 = p1.finally(() => {})
+const p3 = p2.then(data => console.log(data))
+//  'value'
+            </code></pre>
+
+            <p>
+                p.then(fn,fn)與上述方式不同,他會產生一個新的實現值,除非它於回應敘述中有明確地轉送並回傳,如下所示。
+
+            </p>
+            <pre><code class="language-js">
+const p1 = Promise. resolve('value')
+const p2 = p1.then(()=> {},()=>{})
+const p3 = p2.then(data => console.log(data))
+//  undefined
+            </code></pre>
+
+
+
+
+
         </section>
     </main>
 </body>
