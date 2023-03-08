@@ -578,9 +578,42 @@ const p2 = p1.then(()=> {},()=>{})
 const p3 = p2.then(data => console.log(data))
 //  undefined
             </code></pre>
+            <p>
+                以下的程式碼是與 Promise#finally 方法相同的完整相容函式
+            </p>
+            <pre><code class="language-js">
+    function finally(p, fn) {
+        return p.then(
+          result => resolve(fn()).then(()=>result),
+          err => resolve(fn()).then(()=> Promise.reject(err))
+        )
+       }
+       
+</code></pre>
+            <p>
+                需注意的是,若傳遞至 Promise#finally 回應敘述,其結果為己拒絕，或拋出錯誤,那麼自 Promise#finally 所回傳的 Promise 物件則會是已拒絕狀態,並附帶拒絕原因,如下範例。
+            </p>
 
-
-
+            <pre><code class="language-js">
+    const p1 = Promise.resolve('value') 
+    const p2 = p1.finally(() => Promise.reject('oops'))
+    const p3 = p2.catch(err => console.log(err))
+    //  'oops'
+</code></pre>
+            <p>
+                如我們所見,在仔細的瞭解上面的相容函式運作後,當任一種狀態的回應敘述產生錯誤,那麼所回傳的 Promise 物件便會是已拒絕的狀態。同時透過 Promise.reject 所回傳的已拒絕物件,或其他與
+                resolve(fn()) 類似的方法所產生的已拒絕物件,都不會依照原本預期於 .then 回應敘述中,回傳我們呼叫 .finally 的 Promise 物件的確認值。
+            </p>
+            <h3 id="4-1-6">4-1-6 善用 Promise.all 和 Promise.race</h3>
+            <p>
+                當撰寫非同步程式的流程時,會有一些工作它們其中一項工作須等待另一項工作的執行結果才能進行,因此它們是一連串依序執行。而有一些工作則與其他工作的執行結果無關,故它們能夠同步進行。Promise
+                物件擅長處理非同步執行流程,一個單一的 Promise 物件可以觸發一串鏈結的事件,使它們一個接一個的執行。Promise 物件也針對運行的工作提供系列的解決方案,分別以 2 種 API 方法的方式呈現:
+                Promise.all 和 Promise.race 。
+            </p>
+            <p>
+                在大多數的情況下,你希望程式能夠同步地被運行,因為這樣能夠讓你的程式執行上更為快速。假設你想要呼叫兩個不同的 API,在產品型錄中取得兩項產品的說明,並輸出至控制終端上。以下的程式碼可以同步執行這 2
+                項操作,但是需要將輸出至終端的敘述分離。在輸出至控制終端的狀況,並沒有什麼太大的功能差異,只是若我們要執行一次的
+            </p>
 
 
         </section>
