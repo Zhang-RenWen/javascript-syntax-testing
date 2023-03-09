@@ -686,7 +686,7 @@ Promise
             <p>
                 被拒絕也將會結束競賽,且回傳的 Promise 物件也已拒絕狀態。
                 適合使用 Promise.race 的情況是,我們希望在一定的時間內取得 Promise 物件的結果,否則無法掌控等待的時間。舉例來說,在以下的程式碼中,有一個 fetch 請求和一個在五秒為拒絕狀態的
-                Promise 物件進行競賽:如果請求等待超過五秒尚未取得結果,則此競赛便會成為被拒絕狀態。
+                Promise 物件進行競賽:如果請求等待超過五秒尚未取得結果,則此競賽便會成為被拒絕狀態。
             </p>
             <pre><code class="language-js">
 function timeout(delay) {
