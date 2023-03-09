@@ -646,8 +646,8 @@ fetch('/products/table')
             <pre><code class="language-js">
 Promise
 .all([
-fetch('/products/chair'),
-fetch('/products/table')
+ f etch('/products/chair'),
+  fetch('/products/table')
 ])
 .then(([chair, table]) => console.log(chair, table))
             </code></pre>
@@ -656,6 +656,52 @@ fetch('/products/table')
                 Promise 物件, 即使其他陣列中的物件均為已實現,仍無法使 p 物件成為已實現的結果。在範例中,不需要等到 p2 和 p3 的狀態確認,p立即成為
                 已拒絕狀態。
             </p>
+            <pre><code class="language-js">
+const p1 = Promise.reject('failed')
+const p2 = fetch('/products/chair')
+const p3 = fetch('/products/table')
+const p = Promise
+.all([p1,p2,p3])
+.catch(err=>console.log(err))
+//  'failed'
+            </code></pre>
+            <p>
+                1.總的來說, Promise.all 有三種可能的結果:
+                確認為已實現狀態,並附有已實現的 results 所有結果,當所有物件均確認為已實現
+                2.確認為已拒絕狀態,並附有一個 reason 拒絕原因，當其中一個物件確認為已拒絕
+                3.停留於暫停狀態，因為尚無任何的物件被拒絕,且至少還有一個物件為暫停狀態
+            </p>
+            <p>
+                Promise.race 方法與 Promise.all 類似,不同的是,只要有第一個物件確認狀態,可以「赢」下此競賽,而它的結果值會附帶於 Promise.race 所回傳的 Promise 物件中。
+            </p>
+            <pre><code class="language-js">
+Promise
+.race([
+  new Promise(resolve => setTimeout(() => resolve(1),1000)),
+  new promise(resolve => setTimeout(() => resolve(2),2000))
+])
+.then(result=> console.log(result))
+// 1
+            </code></pre>
+            <p>
+                被拒絕也將會結束競賽,且回傳的 Promise 物件也已拒絕狀態。
+                適合使用 Promise.race 的情況是,我們希望在一定的時間內取得 Promise 物件的結果,否則無法掌控等待的時間。舉例來說,在以下的程式碼中,有一個 fetch 請求和一個在五秒為拒絕狀態的
+                Promise 物件進行競賽:如果請求等待超過五秒尚未取得結果,則此競赛便會成為被拒絕狀態。
+            </p>
+            <pre><code class="language-js">
+function timeout(delay) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(() => reject('timeout'), delay)
+    })
+}
+Promise
+.race([
+  fetch('/large-resource-download'),
+  timeout(5000)
+])
+.then(res => console.log(res))
+.catch(err => console.log(err))
+            </code></pre>
         </section>
     </main>
 </body>
