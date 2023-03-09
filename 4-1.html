@@ -612,10 +612,50 @@ const p3 = p2.then(data => console.log(data))
             </p>
             <p>
                 在大多數的情況下,你希望程式能夠同步地被運行,因為這樣能夠讓你的程式執行上更為快速。假設你想要呼叫兩個不同的 API,在產品型錄中取得兩項產品的說明,並輸出至控制終端上。以下的程式碼可以同步執行這 2
-                項操作,但是需要將輸出至終端的敘述分離。在輸出至控制終端的狀況,並沒有什麼太大的功能差異,只是若我們要執行一次的
+                項操作,但是需要將輸出至終端的敘述分離。在輸出至控制終端的狀況,並沒有什麼太大的功能差異,只是若我們要執行一次的函式呼叫並印出兩項產品說明、就無法以發送兩個不同的 fetch 請求的方式同步進行。
             </p>
+            <pre><code class="language-js">
+fetch('/products/chair')
+.then(r => r.json())
+.then(p=> console.log(p))
 
-
+fetch('/products/table')
+.then(r => r.json())
+.then(p=> console.log(p))
+            </code></pre>
+            <p>
+                Promise.all 方法可許傳入一個 Promise 物件陣列,並回傳單一個 Promise 物件 p。當所傳入至 Promise.all 的物件均為已實現狀態時，p
+                也會成為已實現狀態,並附帶一個結果值陣列,順序則依據所傳入的 Promise 物件排列。如果有一個 Promise 物件成為已拒絕狀態, p 則立刻確認為已拒絕狀態,並附帶拒絕原因。以下範例示如何使用
+                Promise.all 同時擷取兩項產品說明,並利用單一個console.log 敘述將兩項結果印出。
+            </p>
+            <pre><code class="language-js">
+Promise
+. all([
+fetch('/products/chair'),
+fetch('/products/table')
+])
+.then(products =>console.log(products[0], products[1]))
+            </code></pre>
+            <p>
+                回傳值會以陣列的型態提供,而其索引值並無代表任何意義。利用參數
+                的解構賦值,將每一個產品的資訊在取後,放置至對應的變數名稱,
+                可提升程式碼的可讀性。下面的程式碼示範如何使用解構賦值,讓程式
+                為簡潔。請記得,即使只有單一個引數,在箭頭函式中的
+                處,使用解構賦值一要加上小括號標示。
+            </p>
+            <pre><code class="language-js">
+Promise
+.all([
+fetch('/products/chair'),
+fetch('/products/table')
+])
+.then(([chair, table]) => console.log(chair, table))
+            </code></pre>
+            <p>
+                以下範例說明,當一個 Promise 物件被拒絕時, p 物件如何也成為拒絕的狀態。很重要需要理解的觀念是,在陣列中只要有一個已拒絕的
+                Promise 物件, 即使其他陣列中的物件均為已實現,仍無法使 p 物件成為已實現的結果。在範例中,不需要等到 p2 和 p3 的狀態確認,p立即成為
+                已拒絕狀態。
+            </p>
         </section>
     </main>
 </body>

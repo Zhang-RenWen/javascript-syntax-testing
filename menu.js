@@ -157,6 +157,11 @@ const menu = [
             title: "4-1-5 Promise#finally提案",
             href: "4-1.html#4-1-5",
           },
+          {
+            id: "4-1-6",
+            title: "4-1-6 善用 Promise.all 和 Promise.race",
+            href: "4-1.html#4-1-6",
+          },
         ],
         
       },
