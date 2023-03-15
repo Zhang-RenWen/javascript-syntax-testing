@@ -23,7 +23,110 @@
         <aside></aside>
         <section>
             <h2>4-2 迭代器協議和可迭代協議</h2>
-            <h3 id="4-2-1">4-2-1 </h3>
+            <h3 id="4-2-1">4-2-1 瞭解迭代原則 </h3>
+            <p>
+
+                任何物件都可以支援可迭代協議,藉由將函式指定予該物件的 Symbol.iterator 特性。無論何時當物件需要進行迭代時,它的可迭代協議方法,也就是指定給 Symbol.iterator 特性,便會被呼叫。
+                在第2章所介紹的展開運算子,是ES6中發揮可代協議的一項特徵。當展開運子使用於假設的 iterator 物件,如下的程式碼所示, Symbol.iterator
+                會需要一個可遵循选代器協議的物件,而所回傳的迭代器會被運用於取得物件外的值。
+            </p>
+            <pre><code class="language-js">
+const sequence = [...iterable]
+        </code></pre>
+            <p>
+                你可能還記得,符號特性無法直接作為物件實字的鍵，下面的程式碼示範,如何使用 ES6 之前的語法,將符特性加入至物件中。
+            </p>
+            <pre><code class="language-js">
+const example = {}
+example[Symbol. iterator] = fn
+        </code></pre>
+            <p>
+                然而,我們可以利用運算取得的特性名稱,將符號鍵置入物件實字中，如此便不需要如上範例會需增加一行敘述來達目的
+            </p>
+            <pre><code class="language-js">
+const example = {
+    [Symbol.iterator]: fn
+}
+        </code></pre>
+            <p>
+                指定給 Symbol.iterator 的方法須回傳一個遵循迭代器協議的物件。
+                協議中定義如何自可迭代序列中取得值,規定迭代器必須是具有 next 方法的物件。next 方法不需要引數，且必須回傳一個具有以下2像特性的物件:
+                1. value是在序列中目前的項目
+                2. done是一個布林值,標示著序列是否已結束
+            </p>
+            <p>
+                我們來看一段程式碼,以加強理解迭代協議背後的觀念。
+                藉由加入一個 Symbol.iterator 特性,將 sequence 物件轉換為可迭代物件,而此物件回傳一個迭代器物件。每次呼叫 next 方法取得序列中的下一個值時,便會回傳 items
+                陣列的一個內容項目。當 i 超過了
+                items 陣列的最後一個索引值時,則會回傳 done:true,以顯示序列已結束。
+            </p>
+            <pre><code class="language-js">
+const items = ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
+const sequence = {
+    [Symbol.iterator]() {
+        let i = 0
+        return {
+            next() {
+                const value = items[i]
+                i++
+                const done =  i &gt; items.length
+                return { value, done }
+            }
+        }
+    }
+}
+        </code></pre>
+            <p>
+                JS 是一個漸進式的語言:新的特徵是附加上去的。
+                不會破壞原有的程式碼運作。因此,可迭代物件可能無法
+                配合一些原有語言組件使用,例如: forEach 和 for..in。在 ES6 中,可使用其他的方式巡訪可迭代物件:
+                如 for..of、展開開運算子、和 Array.from。
+            </p>
+            <p>
+                for..of 迭代方法可以循環方式訪問可迭代物件。下面示範如何使用 for..of 循環一個 sequence 物件，因為他是一個可迭代物件。
+            </p>
+            <pre><code class="language-js">
+for (const item of sequence){
+    console.log(item)
+    // 'i'
+    // 't'
+    // 'e'
+    // 'r'
+    // 'a'
+    // 'b'
+    // 'l'
+    // 'e'
+}
+        </code></pre>
+            <p>
+                一般的物件透過 Symbol.iterator 轉換也可以成為可迭代物件，就如剛才所學習的。在 ES6 的標準範例中、語言組件如 Array、String、DOM 中所使用的
+                NodeList、和 arguments,預設均為可迭代的，也使得 for..of 的運用能夠更廣泛。欲自可迭代的序列中取得陣列結果，可以利用展開運算子,將序列中的每個 item
+                項目展開至結果陣列裡的每一個資料項。當然,我們也可以使用 Array.from 達到相同的效果。此外，Array.from 也可以將類陣列的物件轉換為陣列,所謂類陣列物件定義上是具有 length
+                特性和資料項儲存於自零起始的整數的特性。
+            </p>
+            <pre><code class="language-js">
+console.log([...sequence])
+// ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
+console.log(Array.from(sequence))
+// ['i', 't', 'e', 'r', 'a', 'b', 'I', 'e']
+console.log(Array.from( {0: 'a' , 1: 'b' , 2: 'c', length:3} ))
+// ['a', 'b', 'c']
+        </code></pre>
+            <p>
+                總結來說, sequence 物件在指定方法予[Symbol.iterator] 後便可遵循可迭代協議,這代表著此物件是可迭代協議的。上述的方法會回傳一個遵循 iterator
+                送代器協議的物件。當我們需要開始巡訪物件時,只要呼叫迭代器的方法,所回傳的迭代器便可自 sequence 中取出內容值。欲巡訪可迭代物件,我們可以使用 for..of、展開運算子、或 Array.from。
+            </p>
+            <p>
+                本質上,使用這些協議的優點是,它們提供了方便表述的方法，可輕鬆地巡訪集合與類陣列物件。要為所有的物件定義出巡訪的功能是一項浩大的工程，因為必須要使函式庫能夠支援定義的規範,融入語言的原始能力之中，這不是件容易的事。而目前這樣附加的使用方式,好處是不需要花費很高的成本來實作迭代器協議，且不會破壞既有的程式行爲。
+            </p>
+            <p>
+                jQuery 和 document.querySelectorAll 均會回傳類陣列
+                ;如果 jQuery 在它的集合(collection) 原型上實作了迭代器協議,那可以使用 for..of 語法尋訪集合中的項目。
+                可迭代序列的項目數量並不總是有限的個數,有可能會有無限的情況。
+            </p>
+            <pre><code class="language-js">
+
+        </code></pre>
             <pre><code class="language-js">
 
         </code></pre>

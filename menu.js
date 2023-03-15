@@ -172,7 +172,7 @@ const menu = [
         anchorMenu: [
           {
             id: "4-2-1",
-            title: "4-2-1 ",
+            title: "4-2-1 瞭解迭代原則",
             href: "4-2.html#4-2-1",
           },
         ]
