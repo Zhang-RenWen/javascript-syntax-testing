@@ -124,12 +124,146 @@ console.log(Array.from( {0: 'a' , 1: 'b' , 2: 'c', length:3} ))
                 ;如果 jQuery 在它的集合(collection) 原型上實作了迭代器協議,那可以使用 for..of 語法尋訪集合中的項目。
                 可迭代序列的項目數量並不總是有限的個數,有可能會有無限的情況。
             </p>
+            <h3 id="4-2-2">4-2-2 無限量的序列</h3>
+            <p>
+                迭代器本質上是延遲的(lazy)在迭代器序列中的元素是逐一產生的。即使當序列中的元素數量是有限的。須注意的是,無限量的序列需要使用延遲的特性才能夠表達,這表示使用展開運算子或 Array.from
+                將序列轉換為陣列的動作,會使 JavaScript 的運作崩潰,進入一個無限迴圈的狀態。
+            </p>
+            <p>
+                以下的範例呈現一個能夠代表 0 與 1 之間無限量浮點數的迭代器。請注意,裡由 next 方法所回傳的資料項並沒有 done 特性定為 true
+                的情形,因為樣便代表著此序列已結束。範例中使用了兩個隱性回傳物件的箭頭函式,第一個函式會回傳一個选代器物件,用以巡訪無限量的亂數序列 ;第二個箭頭函式則用以取得序列中的每個資料值,利用
+                Math.random。
+            </p>
             <pre><code class="language-js">
+const random = {
+    [Symbol.iterator]:()=&gt;({
+        next: () =&gt; ({ value: Math.random()}) 
+    })
+}
+            </code></pre>
+            <p>
+                企圖使用 Array.from(random) 或[...random] 將可迭代的 random
+                物件轉換為陣列,會讓此程式崩潰,因為無限量序列是不會結束的。使用上必須非常注意這類型的序列,否則很容易便讓瀏覽器或 Node.js 伺服器執行緒崩潰。
+            </p>
+            <p>
+                以下有一些不同的方法可讓你安全的存取序列,而不會造成成無限迴圈的況。第一個方式使用解構賦值擷取序列中指定位置的資料,如下。
+            </p>
 
+            <pre><code class="language-js">
+const [one, another] = random
+console.log(one)
+// 0.23235511826351285
+console.log(another)
+// 0.28749457537196577
+        </code></pre>
+            <p>
+                對無限量序列進行解構賦值有時無法很好地衡量範圍,特別是在套用一個動態的範圍,例如:取序列中前 1 個值,或擷取出不符合條件的值。在這類情境中,我們最好使用for..of ,
+                以此方式能夠在我們需要取得足夠的資料項時,定義出避免無限迴圈的條件。以下
+                以 for..of 巡訪無限量序,但是當值大於 0.8 時,便會結束迴圈。因 Math.radom 會產出介於 0 與 1 之間的數值,迴圈最終仍會跳出。
+            </p>
+            <pre><code class="language-js">
+for (const value of random) {
+    if (value &gt; 0.8) {
+         break
+    }
+    console.log(value)
+ }
+        </code></pre>
+            <p>
+                當日後回頭閱讀這類程式碼時,可能會很難理解其意義,因為大部分的程式碼都聚焦於序列巡訪的方式,將自
+                radom亂數所得數值印出,直到數值大於邊界值為止。將部分的邏輯抽象化後出,移至另一個方法中,可能讓程式碼會更易讀些。
+            </p>
+            <p>
+                如另一個範例,當自無限量序列或非常大的序列中擷取資料,相同的步驟就是會自序列中出前幾個資料項。當你可以習慣使用 for..of 和 break 時 , 最好可以再將它抽象化為一個 take 式。下面示範
+                take 函式可能的實作方式,他接受一個 sequence 序列參數。自 sequence 序列中擷取的 amount 資料項總數;他會回傳一個可迭代物件,且當該物件進行迭代時,都會為所傳入的
+                sequence 序列建立一個迭代器。當 amount 總數為 1 時 next 方法會回傳原始 sequence 序列,接著便結束序列巡訪。
+            </p>
+            <pre><code class="language-js">
+function take(sequence, amount) {
+    return {
+        [Symbol.iterator]() {
+            const iterator = sequence[Symbol.iterator]()
+                return {
+                    next() {
+                        if (amount -- &lt; 1) {
+                            return { done: true }
+                        }
+                        return iterator.next()
+                    }
+                }
+            }
+    }
+}
+        </code></pre>
+            <p>
+                此實作方式用於無限量序列相當好,因為他可提供一個固
+                定的結束條件:當 amount 計數耗盡時 ,take 所回傳的序列也就結束。除了以循環訪問的方式自 random 擷取值外,現在你可以將程式碼以下敘述方式取代。
+            </p>
+            <pre><code class="language-js">
+[...take(random, 2)]
+// [0.304253100650385, 0.5851333604659]
+        </code></pre>
+            <p>
+                如此模式可讓你將一個無限量序列減少為一個有限量的
+                序列。若想要的有限量序並非只是「前Ｎ個值」,除了我們前述的「在出現第一個大於 0.8 之前的所有數值 」之外,你可以採用 take 函式輕鬆地調整結束條件即可。下面的 range 函式具有一個 low
+                參數,預設為 0 , high 參數預設為 1 ; 當序列的值超出所指定的範圍時，則停止自序列中擷取值。
+            </p>
+            <pre><code class="language-js">
+function range(sequence, low = 0, high = 1) {
+    return {
+        [Symbol.iterator]() {
+            const iterator = sequence[Symbol.iterator]()
+            return {
+                next() {
+                    const item = iterator.next()
+                    if (item.value &lt; low || item.value &gt; high){
+                        return { done: true }
+                    }
+                    return item
+                }
+            }
+        }
+     }
+}
+        </code></pre>
+            <p>
+                以此方式,除了中斷 for..of 迴圈的方式避免無限迴圈之外,可以保證只要超出所定義的範圍之外,迴圈就會中斷而停止。
+                按照這個方法，程式可以不需要在意序列是如何產生的,並可多關注於序列如何被使用。如下範例，你將不須使用 for..of , 因為中斷的條件現在已經置於中介的 range 函式。
+            </p>
+            <pre><code class="language-js">
+const low = [ ...range(random, 0, 0.8)]
+// [0.68912092433311 , 0.059788614744320, 0.09396195202134]
+        </code></pre>
+            <p>
+                當我們想要避免使用 for..of
+                圈取得一個衍生的序列時,這類將複雜性抽象化至另一個函式的方式,通常可讓程式碼更聚焦於原始目的上。它也說明了序列如何組成並與其他方法連接使用。在這種情境下，我們會先建立一個多用途的無限量序列 radom
+                ，並接著將它 與 range 範圍函式連接; 此函式會衍生出一個序列,其中的值需符合所定義範圍之內。迭代器的另一個重點是,由 range
+                函式所産生的迭代器也可被延遲地進行迭代,即使已被結合運用;這表示你可以依需要結合任意數量的迭代器至對應、篩選、和結束條件的輔助函式中。
+            </p>
+
+            <div class="border-block">
+                <h3>判定無限量序列</h3>
+                <p>
+                    迭代器並沒有能力可瞭解它們所產生的序列是否為無限量序列。
+                    一般來說,你對所使用的序列是否為無限量會有一個清楚的概念。當擁有一個無限量序列時,你需要決定是否加入一個跳出條件,以避免在無限量序列中巡訪每一個內容值,造成應用程式崩潰。當使用 for..of
+                    並設定跳出條件時,則不會遇到此問題; 但若使用展開運算子或 Array.from ,就會因無限迴圈立即造成應用程式的崩潰。
+                </p>
+
+            </div>
+            <h3 id="4-2-3">4-2-3 以鍵/值配對的方式對物件映射進行迭代 </h3>
+            <pre><code class="language-js">
         </code></pre>
             <pre><code class="language-js">
-
         </code></pre>
+            <pre><code class="language-js">
+        </code></pre>
+            <pre><code class="language-js">
+        </code></pre>
+            <pre><code class="language-js">
+        </code></pre>
+            <pre><code class="language-js">
+        </code></pre>
+
         </section>
     </main>
 </body>
