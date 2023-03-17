@@ -251,6 +251,141 @@ const low = [ ...range(random, 0, 0.8)]
 
             </div>
             <h3 id="4-2-3">4-2-3 以鍵/值配對的方式對物件映射進行迭代 </h3>
+            <p>
+                物件轉換為可迭代物件,在許多實務情境中均可受惠。物件映射 (object
+                maps)、可進行迭代的虛擬陣列(pseudo arrays)、「無限量的序列」的亂數産生器、和常需要進行迭代的類別或物件特性，均可受益於迭代協議的使用。
+            </p>
+            <p>
+                JS 物件經常作為字串鍵或任意值之間的映射。在以下的程式碼範例中,我們有一個色彩名稱和十六進位的 RGB 色彩的映射，在這類情況下,你會展開手擁抱這種可輕鬆巡訪所有不同色彩名稱、色彩碼或鍵/值配對的能力。
+            </p>
+            <pre><code class="language-js">
+const colors = {
+    green: '#0eo0',
+    orange: '#f50',
+    pink: '#e07'
+}
+        </code></pre>
+            <p>
+                下方的程式碼實作了一個可迭代物件,他可為 colors 映射中的色彩，產生對應的 [key,value] 序列。將它指定予Symbol.iterator 特性,我們就可以輕鬆地巡訪整個序列。
+            </p>
+            <pre><code class="language-js">
+const colors = {
+    green: '#0e0',
+    orange: '#f50',
+    pink: '#e07',
+    [Symbol.iterator]() {
+        const keys = Object.keys(colors)
+         return {
+            next() {
+                const done = keys.length === 0
+                const key = keys.shift()
+                return {
+                    done,
+                    value: [key,colors[key]]
+                }
+            }
+        }
+    }
+}
+        </code></pre>
+            當我們想要擷取出鍵/值配對時,我們可以使用展開運算子如下
+            </p>
+            <pre><code class="language-js">
+console.log([...colors])
+// [['green', '#0e0'], ['orange', '#f50'], ['pink','#e07']]
+        </code></pre>
+            <p>
+                我們發現,繁複的可迭代定義反而破壞了原本簡潔的 colors 映射，就是一個問題。送代的行為對色彩名稱和色彩碼的儲存並沒有幫助。要分離出 colors
+                的兩個鍵和值,較好的方式抽取出鍵/值配對迭代氣的邏輯，並置入至第一個可重複使用的函式。依此方式,我們最ˋ中可將 keyValueIterable 函式於程式中的任何位置使用,並且也可運用於其他案例中。
+            </p>
+            <pre><code class="language-js">
+function keyValueIterable(target) {
+    target[Symbol.iterator] = function(){
+        const keys = Object.keys(target)
+        return {
+            next() {
+                const done = keys.length === 0
+                const key = keys.shift()
+                return {
+                    done,
+                    value: [key, target[key]]
+                }    
+            }
+        }
+    }
+    return target  
+}  
+        </code></pre>
+            <p>
+                我們接著便可呼叫 keyValueIterable 函式並將 colors 物件映射傳入,將 colors 轉換為可代物件。事實上,你也可將 keyValueIterable
+                函式運用於任何你需要進行鍵/值配對代的物件,因為迭代行為並不會對物件有任何設限。一旦我們將 Symbol.iterator
+                行為加入後,就可以將物件視為可迭代物件。在下面範例中,我們會巡訪所有的鍵/值配對並僅印出色彩碼。
+            </p>
+            <pre><code class="language-js">
+const colors = keyValueIterable({
+    green: '#0e0',
+    orange: '#f50',       
+    pink: '#e07 '
+})
+for (const [ , color] of colors) { 
+    console.log(color)
+}
+// '#0e0'
+// '#f50'
+// '#e07'
+        </code></pre>
+            <h3 id="4-2-4">4-2-4 為播放清單的迭代行為增加彈性</h3>
+            <p>
+                假如你正在開發一款音樂播放器,播放器中可以無限次的建立播放清單、停止播放、重複播放和重建清單。當你需要無限次的訪問播放清單時,你就可以將可迭代協議運用於此能上。
+            </p>
+            <p>
+                假設有位使用者將一些歌加入至她的音樂資料庫中,這些歌如以下方式儲存於陣列中。
+            </p>
+            <pre><code class="language-js">
+const songs = [
+    'Bad moon rising ',
+    "Don't stop me now" ,
+    'The Scientist ',
+    'Somewhere only we know '
+]
+        </code></pre>
+            <p>
+                我們可以建立一個 playlist 函式,它會回傳一個序列,記錄著要被應用程式播放的所有歌曲。這個函式會取得該使用者所提供的歌曲和 repeat
+                值,此值表示這些歌曲重複播放的次數一次、兩次、Infinity無限多次。在播放完畢之前。
+            </p>
+            <p>
+                以下程式碼說明我們實作 playlist 的方式。我們從建立一個空白的播清單開始,並使用 index 記錄目前所播的歌曲位置。每次 index
+                增加時,就回傳清單中的下一首歌曲,直到迴圈中已無任何歌曲;在此時我們便將 repeat 值減 1 並重設 index 。當 repeat 值為 0 且清單已無歌曲時,便結束此序列。
+            </p>
+            <pre><code class="language-js">
+function playlist(songs, repeat) {
+    return {
+        [Symbol.iterator]() {
+            let index = 0
+            return {
+                next() {
+                    if (index &gt;= songs.length) {
+                        repeat--
+                        index = 0
+                    }
+                    if(repeat &lt; 1) {
+                        return { done: true }
+                    }
+                    const song = songs[index]
+                    index++
+                    return { done: false, value: song}
+                }
+            }
+        }
+    }
+}
+                
+                    
+        </code></pre>
+            <pre><code class="language-js">
+        </code></pre>
+            <pre><code class="language-js">
+        </code></pre>
             <pre><code class="language-js">
         </code></pre>
             <pre><code class="language-js">
