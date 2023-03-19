@@ -382,12 +382,100 @@ function playlist(songs, repeat) {
                 
                     
         </code></pre>
+            <p>
+                以下程式碼說明 playlist 函式如何取得一個陣列,並產生一個序列記錄著指定重複次數的陣列資料項。如果我們指定為 Infinity,所產生的序列便有無限量個資料項,否則均為有限個數。
+            </p>
             <pre><code class="language-js">
-        </code></pre>
+console.log([...playlist(['a','b'], 3)])
+// ['a' ,'b' ,'a' ,'b']
+</code></pre>
+            <p>
+                為巡訪歌曲播放清單的資料項目，我們可能要建立一個 player 函式。假設有一個 playSong 函式可以播放一首歌曲，並在歌曲播放完畢時執行一個回呼函式，我們的
+                player實作方式就會如以下的函式所示；在函式中我們會非同步地循環執行序列的迭代器，以在上一首啟曲播放完畢時取得下一首歌曲。在兩次 g.next 呼叫間都有一段等待的時間一就是 playSong
+                函式所播放歌曲的時間(這樣可能會有陷入無窮遞迴的風險，使程式在執行期間崩潰，即使當 playlist 所產生的序列為有限的。)
+            </p>
             <pre><code class="language-js">
-        </code></pre>
+function player (sequence) {
+    const g = sequence()
+    more()
+    function more() {
+        const item = g.next()
+        if (item.done) {
+            return
+        }
+        playSong(item.value, more)
+    }
+}
+</code></pre>
+
+            <p>
+                將所有的功能部分組合在一起 , 利用幾行程式碼便可建立此歐曲音樂資料庫，並能夠重複播放一個歐曲清單 ，如下程式碼。
+            </p>
             <pre><code class="language-js">
+const songs = [
+'Bad moon rising',
+'Don't stop me now',
+'The scientist',
+'Somewhere only we know'
+]
+const sequence = playlist (songs, Infinity)
+player (sequence)
         </code></pre>
+            <p>
+                再簡單調整一下，就可讓使用者可以隨機播放歌曲清單。我們必須變更 playlist 函式以包含一個 shuffle 旗標，當此旗標被設定時，就以亂數隨機方式設定播放清單。
+            </p>
+            <pre><code class="language-js">
+function playlist (inputSongs, repeat, shuffle) {
+    const songs = shuffle? shuffleSongs (inputSongs) : inputSongs
+    return {
+        [Symbol.iterator](){
+            let index = 0
+            return {
+                next() {
+                    if (index &gt;= songs.length) {
+                        repeat--
+                        index = 0
+                    }
+                    if (repeat &lt; 1) {
+                        return { done: true }
+                    }
+                    const song = songs[ index]
+                    index++
+                    return { done: false, value: song }
+                }
+            }
+        }
+    }
+}
+function shuffleSongs (songs){
+  return songs.slice().sort(()=&gt; Math.random() &gt; 0.5 ? 1 : -1)
+}                
+        </code></pre>
+            <p>
+                最後，若我們想要隨機播放歌曲清單，只要把 shuffle 旗標設定為 true
+                即可；否則，歌曲會以使用者所提供的原始順序進行播放。此處我們將取得下一首歌曲的程式抽取出來，置入一個較簡潔無關聯性的函式，它僅負責取得播放器即將進行播放的歌曲。
+            </p>
+            <pre><code class="language-js">
+console.log([...playlist(['a','b'], 3 ,true)])
+// ['a','b','b','a','a','b']
+            </code></pre>
+            <p>
+                你可能已經注意到，play1ist 函式其實不需要在意歌曲的播放順序。較好的設計方式應該是随機選取歌曲的都分，調整至呼叫此函式時便傳入‧如果我們移除 play1ist 函式的 Shuffle
+                參數，仍然可以使用如下程式碼的方式取得隨機選取的歌曲集合‧
+            </p>
+            <pre><code class="language-js">
+function shuffleSongs (songs){
+    return songs.slice().sort(()=&gt; Math.random() &gt; 0.5 ? 1 : -1)
+}   
+console.log([...playlist(['a','b'], 3)])
+// ['a','b','b','a','a','b']
+        </code></pre>
+            <p>
+                迭代器在 ES6
+                中是很重要的一項工具，它不僅可幫助我們降低程式碼間的關聯性，還可解決之前一些難以實作的問題，例如：模糊處理一系列歌曲的能力一不管序列為有限或無限量。這樣以某種程度相同的處理方式，可讓有運用迭代器協議的程式碼看起來更為優雅。但它將未知的可
+                迭代物件轉換為陣列也會產生可能的風險，因為無窮迥圈會使你的應用程式崩潰•產生器是另一種建立可回傅迭代物件的函式的方式，且不需要明確地宜告一個附有 Symbol.iterator
+                方法的物件實字。它可讓函式的實作更為簡單，例如：第 112 頁-第 4-2-2 節「無限量的序列」的 range 或 take 函式，還有一些有趣的案例可參考使用。
+            </p>
             <pre><code class="language-js">
         </code></pre>
             <pre><code class="language-js">
