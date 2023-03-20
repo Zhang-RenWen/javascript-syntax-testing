@@ -4,7 +4,8 @@
     "Berners",
     "Bevacqua",
     "hljs",
-    "morphling"
+    "morphling",
+    "trailmix"
   ],
   "editor.defaultFormatter": "vscode.html-language-features"
 }

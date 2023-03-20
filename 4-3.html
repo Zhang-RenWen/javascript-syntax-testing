@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>4-3 產生器函式和產生器物件</h2>
+      <p>
+        產生器是 ES6 新的特徵功能。它運作的方式是。你可以宣告一個產生器函式，函式會回傅產生器物件 B。這些 B 物件可使用 Array.from(g)、[...g]、或 for..of
+        迴圈進行迭代。產生器函式可以允許宣告一個特殊的
+        iterator 迭代器，這種迭代器可暫停執行並保留其內容。
+      </p>
+      <h3 id="4-3-1">4-3-1 產生器基礎元素</h3>
+      <p>
+        我們已經在上一個章節中仔細瞭解了迭代器的運作，學習如何呼叫 .next() 方法自序列中擷取值。當你需要回傳一個值時，除了使用 next 方法之外，產生器可使用關鍵字 yield 將值加入至序列中。
+        這裡有一個產生器函式的範例。請注意在 function 之後的 * 符號，這並不是印刷錯誤，而是將一個函式標示為產生器函式的語法。
+      </p>
+      <pre><code class="language-js">
+function* abc(){
+  yield 'a'
+  yield 'b'
+  yield 'c'
+}
+        </code></pre>
+      <p>
+        產生器物件同時遵守可迭代協議和迭代器協議：
+      <ul>
+        <li>
+          一個產生器物件 chars 是以abc 函式建立
+        </li>
+        <li>
+          物件 chars 是一個可选代物件，因為它具有一個 Symbol.iterator 方法
+        </li>
+        <li>
+          物件 chars 也是一個迭代器，因為它具有一個 .next 方法
+        </li>
+        <li>
+          chars 的迭代器就是它自己
+        </li>
+      </ul>
+      以 JavaScript 程式碼表示如下。
+      </p>
+      <pre><code class="language-js">
+const chars = abc()
+typeof chars[Symbol.iterator] === 'function'
+typeof chars.next === 'function'
+chars[Symbol.iterator]() === chars
+console.log(Array.from(chars))
+// ['a','b','c']
+console.log([...chars])
+// ['a','b','c']
+      </code></pre>
+
+
+
+      <pre><code class="language-js">
+console.log([...numbers ()])
+// 'a'
+// 'b'
+// 'c'
+// [1, 2, 3]
+        </code></pre>
+      <p>
+        若我們現在以 for..of 迴圈取代,就能夠保留住宣告於 numbers 產生器函式的輸出順序。在下方的範例中，numbers 序列的資料項在每次的 for..of 迴圈中會被印出一次。第一次產生器函式被要求一個
+        number 數值時，它會回傳 1 後便暫停執行，第二次，產生器函式會自上次暫停處
+        恢復執行，並輸出 'a' 至控制終端，接著將 2 產出;第三次，輸出 'b'
+        並產出了 3；第四次，輸出 'c' 且產生器會發現序列已結束。
+      </p>
+      <pre><code class="language-js">
+for (const number of numbers ()) {
+  console.log(number)
+}      
+// 1
+// 'a'
+// 2
+// 'b'
+// 3
+// 'c'
+        </code></pre>
+      <p>
+        當建立了一個產生器物件時，你會取得一個迭代器，它會使用產生器函式產出可迭代序列。當執行到 yield 叙述時，迭代器會將它的值送出且會暫停產生器函式的執行。
+      </p>
+      <p>
+        以下範例說明，在產生器函式中的迭代行為如何觸發執行一些周邊的敘述。當產生器函式恢復執行且要求序列的下一個資料項時，每個 yield 敘述後的 console.log 敘述將被執行。
+      </p>
+      <pre><code class="language-js">
+function* numbers () {
+  yield 1
+  console.log('a' )
+  yield 2
+  console.log(' b' )
+  yield 3
+  console.log('c')
+}
+        </code></pre>
+      <p>
+        假設你用 numbers 建立了一個產生器物件，將它的資料內容展開至陣列中，並輸出至控制終端。考量一下發生在 numbers
+        的周邊敘述的執行，你可以猜想下方的程式碼輸出的結果為何嗎？展開運算子會巡訪序列所有資料項，以提供你一個結果陣列;當透過解構賦值的方式建立陣列時，所有的周邊敘述會在
+        console.log 印出陣列值之前就完成執行。
+      </p>
+      <div class="border-block">
+        <h3>使用 yield* 委派以產生序列</h3>
+        <p>產生器函式可以使用 yield* 去委派一個產生器物件，或任何其他的可迭代物件</p>
+        <p>
+          在 ES6 中的字串型態會遵守迭代規則，你可以撰寫一段類似下方的程式碼，將 hello 拆解為單獨的字元。
+        </p>
+        <pre><code class="language-js">
+function* salute() {
+  yield* 'hello'
+} 
+console.log([...salute()])
+// ['h','e','l','l','o']
+        </code></pre>
+        <p>
+          很自然的，你會使用[...'hello'] 作為另一種替代的方案。然而，當結合多個 yield 敘述時，我們會開始看到委派給另一個可迭代物件中的資料值。下一個範例顯示，將 salute 產生器修改為可傳入一個 name
+          參數，並產生一個包含 'hello you' 字串的陣列。
+        </p>
+        <pre><code class="language-js">
+function* salute(name) {
+  yield* 'hello '
+  yield* name
+}
+console.log([...salute('you' )])
+//['h','e','l','l','o','', 'y', 'o', 'u']
+        </code></pre>
+        <p>
+          再重申一次，你可以將 yield* 用於任何遵守迭代規則的資料型態，而不僅只是字串。這包含了產生器物件、陣列 arguments、瀏覽器中的 NodeList 節點串列、和任何有實作 Symbol.iterator
+          的項目。下面的例子說明如何將 yield 和 yield* 結合運用，以使用產生器函式、可迭代物件、和展開算子描述一個序列中的資料。你可以推想出 console.log 敘述會輸出甚麼內容嗎？
+        </p>
+        <pre><code class="language-js">
+const salute = {
+  [Symbol.iterator](){
+    const items = ['h','e','l','l','o']
+      return {
+        next:()=&gt; ({
+            done: items.length === 0,
+            value: items.shift()
+        })
+      }
+  }
+}
+function* multiplied (base, multiplier) {
+  yield base + 1 * multiplier
+  yield base + 2 * multiplier
+}
+function* trailmix(){
+  yield* salute
+  yield 0
+  yield* [1, 2]
+  yield* [...multiplied(3, 2)]
+  yield [...multiplied(6, 3)]
+  yield* multiplied(15, 5)
+}
+console.log([...trailmix()])
+        </code></pre>
+        <p>
+          以下是 trailmix 產生器函式產生的序列。
+        </p>
+        <pre><code class="language-js">
+['h', 'e','l', 'l', 'o', 0, 1, 2, 5, 7, [9, 12], 20, 25]
+        </code></pre>
+        <p>
+          除了以 for..of 和 Array.from 巡訪一個產生器物件之外，我們也可以直接使用產生器物件進行巡訪，接下來護我們看看如何進行。
+        </p>
+      </div>
+      <h3 id="4-3-2">4-3-2 手動迭代產生器</h3>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
