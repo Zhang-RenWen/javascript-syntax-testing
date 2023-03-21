@@ -182,8 +182,57 @@ console.log([...trailmix()])
         </p>
       </div>
       <h3 id="4-3-2">4-3-2 手動迭代產生器</h3>
+      <p>
+        產生器迭代操作不僅限於使用 for..of、 Array..from或 展開運算子。就像其他的可迭代物件,你可以使用它的 Symbol.iterator 於需要時以 .next 取出資料項,而不需使用嚴格同步迴圈
+        for..of 、Array..from 或 展開運算子。若一個產生器物件是可迭代也是一個迭代器 : 你就不需要呼叫 g[Symbol.iterator]() 取得一個迭代器:你可以直接使用 g，因為它和
+        Symbol.iterator 方法所回傳的物件是一樣的。
+      </p>
+
+      <p>
+        以我們早前所建立的 numbers 迭代器為例、以下範例說明,你可以使用產生器物件和 while 迴圈手動操作巡訪。請記住,迭代器所回傳的物件都會有一個 done 特性，它會標示著序列是否已結束 ; 而 value
+        特性則是目前序列資料項的值。
+      </p>
       <pre><code class="language-js">
-        </code></pre>
+const g = numbers()
+while (true) {
+  const item = g.next()
+  if (item.done) {
+    break
+  }
+  console.log(item.value)
+}   
+      </code></pre>
+      <p>
+        使用送代器巡訪一個產生器,看起來像是用一種複雜的方式實作 for..of 迴圈;但樣的方式適合一些有趣的使用情境,例如: for..of 是一個同步迴圈 ; 反之,若使用迭代器則可以決定執行 g.next
+        的時間點。這樣的優點是可以執行非同步的操作,並在取得結果後再呼叫 g.next。
+        當呼叫產生器的 .next() 方法後,在取得結果值並回傳給 .next() 的當下，會有四種不同類型的「事件」可以暂停產生器的執行。我們接著就來瞭解以下四種情境:
+      </p>
+      <ul>
+        <li>yield 運算回傳序列中的下一個值。</li>
+        <li>return 敘述回傳序列中的最後一個值。</li>
+        <li>throw 敘述完全中止產生器的執行。
+        </li>
+        <li>當函式不明確地回傳 undefine 值,表示已觸及産生器函式的結束訊息 { done: true }
+        </li>
+      </ul>
+      <p>
+        一旦産生器 g 結束了序列的巡訪,後續在呼叫 g.next() 就不會有任何效果,並且只回傳 { done:true}。 下面的程式碼說明
+        在序列已訪問至結束端時,重複地呼叫 g.next ,我們可以觀察到等冪性 (idempotence,也就是重複執行均取得相同的結果)。
+      </p>
+      <pre><code class="language-js">
+function* generator() {
+  yield 'only'
+}
+  const g = generator()
+  console.log(g.next())
+  // {done: false, value: 'only'}
+  console.log(g.next())
+  // {done: true}
+  console.log(g.next())
+  // {done: true}
+      </code></pre>
+      <pre><code class="language-js">
+  </code></pre>
       <pre><code class="language-js">
         </code></pre>
       <pre><code class="language-js">
