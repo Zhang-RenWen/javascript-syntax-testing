@@ -231,6 +231,114 @@ function* generator() {
   console.log(g.next())
   // {done: true}
       </code></pre>
+      <h3>4-3-3 於可迭代物件加入產生器</h3>
+      <p>
+        讓我們快速回顧一下產生器。當執行產生器函式時，它會回傳一個產生器物件。一個產生器物件具有一個next 方法，它會回傳序列中的下一個資料項目。next 方法會以 {value , done}
+        的型態回傳物件。下面範例示範實作一個無限費氏數列產生器。我們先取得產生器物件的實例，並取得序列的前八個數值。
+      </p>
+      <pre><code class="language-js">
+function* fibonacci(){
+  let previous = 0 
+  let current = 1
+  while (true) {
+    yield current
+    const next = current + previous
+    previous = current
+    current = next
+  }
+}
+const g = fibonacci()
+console.log(g.next()) // { value: 1, done: false }
+console.log(g.next()) // { value: 1, done: false }
+console.1og(g.next()) // { value: 2, done: false }
+console.log(g.next()) // { value: 3, done: false }
+console.log(g.next()) // { value: 5, done: false }
+console.log(g.next()) // { value: 8, done: false }
+console.log(g.next()) // { value: 13, done: false }
+console.log(g.next()) // { value: 21, done: false }
+      </code></pre>
+      <p>
+        可迭代物件也具有類似的操作模式。他依循著回傳物件需附有 next 方法物件的協議，這個方法會以 { value , done }
+        的型態回傳序列資料項目。下面的程式碼實作一個費氏數列可迭代物件,看起來很像我們方才所討論的產生器。
+      </p>
+
+
+      <pre><code class="language-js">
+const fibonacci = {
+  [Symbol.iterator]() {
+  let previous = 0
+  let current = 1
+    return {
+     next() {
+     const value = current 
+     const next = current + previous
+     previous = current
+     current = next
+    }
+    return { value, done: false }
+    }
+  }
+}
+const sequence = fibonacci[Symbol.iterator]()
+console.log(sequence.next()) // { value: 1, done: false }
+console.log(sequence.next()) // { value: 1, done: false }
+console.log(sequence.next()) // { value: 2, done: false }
+console.log(sequence.next()) // { value: 3, done: false }
+console.log(sequence.next()) // { value: 5, done: false }
+console.log(sequence.next()) // { value: 8, done: false }
+console.log(sequence.next()) // { value: 13, done: false }
+console.log(sequence.next()) // { value: 21, done: false }
+        </code></pre>
+      <p>
+        再次強調,一個可迭代物件必須回傳一個附有 next 方法的物件:產生器函式也是一樣。next 方法回傳 { value , done } 型態的物件; 產生器函式也是一樣。如果我們將 fibonacci
+        可迭代物件調整為將産生器函式結合 Symbol.iterator 特性，會變成如何呢? 事實證明這樣仍然是可行的。
+      </p>
+      <p>
+        以下範例示範可迭代的 fibonacci 物件使產生器函式定義迭代的行為。請注意,可迭代物件的內容敘述與我們之前討論的 fibonacci 產生器函式均相同。我們可使用 yield、yield* ,
+        那麼所有的產生器函式的敘述都可以完全保留。
+      </p>
+      <pre><code class="language-js">
+const fibonacci = {
+  [Symbol.iterator](){
+    let previous = 0
+    let current = 1
+    while (true) {
+        yield current
+        const next = current + previous
+        previous = current
+        current = next
+    }
+  }
+}
+const g = fibonacci[Symbol.iterator]()
+console.log(g.next ()) // { value: 1, done: false }
+console.log(g.next ()) // { value: 1, done: false }
+console.log(g.next()) // { value: 2, done: false }
+console.log(g.next()) // { value: 3, done: false }
+console.log(g.next()) // { value: 5, done: false }
+console.log(g.next()) // { value: 8, done: false}
+console.log(g.next()) // { value: 13, done: false }
+console.log(g.next()) // { value: 21, done: false }
+      </code></pre>
+      <p>
+        在此同時，可迭代協議也被一併保留。你可以使用 for..of 之類的方式，而不是手動地建立產生器物件，來確認這個特性。以下的範例使用 for..of 並導入一個迴圈中斷器，以避免無限迴圈的情況使應用程式崩潰。
+      </p>
+      <pre><code class="language-js">
+for (const value of fibonacci) {
+  console.log(value)
+  if (value > 20) {
+    break
+  }
+}
+// 1
+// 1
+// 2
+// 3
+// 5
+// 8
+// 13
+// 21
+      </code></pre>
       <pre><code class="language-js">
   </code></pre>
       <pre><code class="language-js">
