@@ -339,6 +339,102 @@ for (const value of fibonacci) {
 // 13
 // 21
       </code></pre>
+      <h3 id="4-3-4">
+        4-3-4 利用產生器巡訪樹狀結構資料
+      </h3>
+      <p>
+        運用於樹狀結構的巡訪演算法通常與遞迴相關，且難以理解。在下面的程式碼中，我們定義了一個 Node 類別，他可以保存著 value 值和任意數量的子節點。
+      </p>
+      <pre><code class="language-js">
+class Node {
+  constructor(value, ...children) {
+    this.value = value
+    this.children = children
+  }
+}
+        </code></pre>
+
+      <p>
+        樹可以用深度優先搜尋(depth-first search) 進行巡訪 ,此搜尋會先訪問至樹狀結構最深處,此時就不會移動至節點串列的其他子節點。在以下的樹狀結構中、深度優先搜尋演算法會以
+        1,2,3,4,5,6,7,8,9,10 的順序訪問樹的節點。
+      </p>
+      <pre><code class="language-js">
+const root = new Node(1, 
+  new Node(2),
+  new Node(3,
+    new Node(4,
+      new Node(5,
+        new Node(6)
+      ),
+      new Node(7)
+    )
+  ),
+  new Node(8,
+    new Node(9),
+      new Node(10)
+  )
+)
+      </code></pre>
+      <p>
+        深度優先巡訪可以使用產生器函式進行實作,它可以產生序列中每個節點的值,接著利用 yield* 運算子實作迭代器遞迴模組,遞迴訪問目前節點的子節點。
+      </p>
+      <pre><code class="language-js">
+function* depthFirst(node) {
+  yield node.value
+  for (const child of node.children) {
+    yield* depthFirst(child)
+  }
+}
+console.log([...depthFirst(root)])
+// [1,2,3,4,5,6,7,8,9,10]
+      </code></pre>
+      <p>
+        在宣告巡訪演算法有些不同的地方,就是利用 depthFirst產生器，將 Node 類別更為可迭代。以下程式碼也受惠於此變更,讓 child 也是 Node 類別（因此也具備可迭代性）為了以 yield* 產生可迭代排序,讓
+        child 節點可方便自其父節點的子節點序列取出。
+      </p>
+
+      <pre><code class="language-js">
+class Node {
+  constructor(value,...children) {
+  this.value = value
+  this.children = children
+  }
+  * [Symbol.iterator]() {
+    yield this.value
+    for (const child of this.children) {
+      yield* child
+    }
+  }
+}
+console.log([...root])
+//[1,2,3,4,5,6,7,8,9,10]
+      </code></pre>
+      <p>
+        若我們想要變更為廣度優先搜尋 (breadth-first search ),可以將迭代器調整如下範例的敘述方式。此處,我們使用先進先出的佇列 (first-in first-out queue)
+        作為尚未造訪的節點暫存區;在每次的迭代步驟，自根節點開始,我們會將目前的節點值印出,並將目前節點的子節點放入佇列中。子節點均自列的尾端加入,但自佇列的起始端取出;這意味著,樹狀結構的巡訪會先將該指定階層的節點均造訪完畢後,才會更深入至下一個階層。
+      </p>
+      <pre><code class="language-js">
+class Node {
+  constructor(value, ...children) {
+    this.value = value
+    this.children = children
+  }
+  * [Symbol.iterator]() {
+    const queue = [this]
+    while (queue.length) {
+      const node = queue.shift()
+      yield node.value
+      queue.push(...node.children) 
+    }
+  }
+}
+
+console.log([...root])
+// [1,2,3,8,4,9,10,5,7,6]
+        </code></pre>
+      <p>
+        在迭代器協議允許自訂一個序列可按照我們需求執行迭代的情況下，產生器因為它具表達性的敘述,顯得非常方便使用。當樹結構有上千個節點,且迭代行為針對效能因素進行調校時,該都可以派上用場。
+      </p>
       <pre><code class="language-js">
   </code></pre>
       <pre><code class="language-js">
