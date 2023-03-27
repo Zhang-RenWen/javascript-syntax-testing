@@ -435,6 +435,66 @@ console.log([...root])
       <p>
         在迭代器協議允許自訂一個序列可按照我們需求執行迭代的情況下，產生器因為它具表達性的敘述,顯得非常方便使用。當樹結構有上千個節點,且迭代行為針對效能因素進行調校時,該都可以派上用場。
       </p>
+      <h3 id="4-3-5">
+        4-3-5 利用產生器函式增加彈性
+      </h3>
+      <p>
+        目前為止,我們已經從序列建立的角度探討產生器的功能。產生器也可以作為一段程式碼的介面,此程式碼可決定産生器函式進行迭代的方式。
+      </p>
+      <p>
+        本節,我們將撰寫可傳遞給方法的一個產生器函式，此方法會巡訪產生器以取得序列的所有資料項。即使初次看到這樣的撰寫方式,你可能會覺得這並非是標做法但大多數圍繞著產生器所建立的函式庫，,均會要求他們的使用者撰可由函式控迭代行為的產生器。
+      </p>
+      <p>
+        下面的程式碼可作為一個範本,定義我們希望 modelProvider 運作的方式。使用者提供一個産生器函式,他每次可以產生出一個模組不同組件的細節，並取得與該組件相關的組件資訊。一個產生器物件可以將結果
+        回傳給産生器函式,透過呼叫 g.next(result) 方法。當我們執行此敘述時, yield 敘述便會將産生器物件所提供的 result 結果進行運算。
+      </p>
+      <pre><code class="language-js">
+modelProvider(function*() {
+  const items = yield 'cart.items'
+  const item = items.reduce((left, right) => left.price > right.price ? left : right)
+  const details = yield `products.${ item.id }`
+  console.log(details)
+})
+  </code></pre>
+      <p>
+        無論何時當使用者自訂的產生器出產(yield)了一個值,產生器函式中的指令運作便會暂停,直到迭代器再次呼叫 g.next 才會恢復運行,但這可能會在幕後非同步地發生。下面的程式碼實作了一個 modelProvider 函
+        式,它會迭代產生器所出産的 paths 。請注意我們如何將資廖傳遞給 g.next() 方法。
+      </p>
+      <pre><code class="language-js">
+const model = {
+  cart: {
+    items: [item1, ..., itemN]
+  },
+  products: {
+    product1:{...},
+    productN:{...}
+  }
+}
+function modelProvider(paths) {
+  const g = paths()
+  pull()
+  function pull(data) {
+    const { value, done } = g.next(data)
+    if (done) {
+      return
+    }
+    const crumbs = value.split('.')
+    const data = crumbs.reduce(followCrumbs,model)
+    pull(data)
+  }
+}
+
+function followCrumbs(data, crumb) {
+  if (!data || !data.hasOwnProperty(crumb)) {
+    return null
+  }
+  return data[crumb]
+}
+          
+  </code></pre>
+      <p>
+        要求使用者提供產生器函式的最大優點就是,函式配合yield 關鍵字的使用,當迭代器在兩個 g.next 呼叫之間執行非同步的操作時,程式碼的執行能夠有暂停運作的能力。
+      </p>
       <pre><code class="language-js">
   </code></pre>
       <pre><code class="language-js">
