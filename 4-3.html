@@ -495,7 +495,23 @@ function followCrumbs(data, crumb) {
       <p>
         要求使用者提供產生器函式的最大優點就是,函式配合yield 關鍵字的使用,當迭代器在兩個 g.next 呼叫之間執行非同步的操作時,程式碼的執行能夠有暂停運作的能力。
       </p>
+      <h3 id="4-3-6">4-3-6 非同步流程的處理</h3>
+      <p>
+        回到前面討論的呼叫 modelProvider
+        函式並傳入使用者提供的產生器的案例,如果模組的組件是非同步的方式提供,那麼程式應該要如何調整?使用產生器的優點是,若在巡訪路徑序列的動作變為非同步執行時,使用者自訂的函式則完全不需要變動。在擷取模組組件的情境中,我們已經能夠暫停產生器的執行;現在我們需要的就是可以詢問一個服務,該服務可以提供目前所需的路徑值,透過一個中繼的
+        yield 敘述或其他的方式回傳;接著再呼叫產生器物件的 g.next。
+      </p>
+      <p>
+        假設我們先返回到如下 modelProvider 的使用方式
+      </p>
       <pre><code class="language-js">
+modelProvider(function*() {
+  const items = yield 'cart.items'
+  const item = items.reduce(
+  (left, right) => left.price > right.price ? left :right)
+  const details = yield  `products.${ item.id }`
+  console.log(details)
+})
   </code></pre>
       <pre><code class="language-js">
         </code></pre>
