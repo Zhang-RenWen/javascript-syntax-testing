@@ -451,7 +451,7 @@ console.log([...root])
       <pre><code class="language-js">
 modelProvider(function*() {
   const items = yield 'cart.items'
-  const item = items.reduce((left, right) => left.price > right.price ? left : right)
+  const item = items.reduce((left, right) =&gt; left.price &gt; right.price ? left : right)
   const details = yield `products.${ item.id }`
   console.log(details)
 })
@@ -508,7 +508,7 @@ function followCrumbs(data, crumb) {
 modelProvider(function*() {
   const items = yield 'cart.items'
   const item = items.reduce(
-  (left, right) => left.price > right.price ? left :right)
+  (left, right) =&gt; left.price &gt; right.price ? left :right)
   const details = yield  `products.${ item.id }`
   console.log(details)
 })
