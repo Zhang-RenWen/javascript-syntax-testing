@@ -513,6 +513,32 @@ modelProvider(function*() {
   console.log(details)
 })
   </code></pre>
+      <p>
+        我們會使用 fetch 向每一個 HTTP 資源請求（你應該還記得這樣會回傳一個 Promise 物件。注意。在一個非同步的情境中,我們不能夠使用 for..of 迴圈來巡訪序列,此迴圈僅限於以同步的方式。
+      </p>
+      <p>
+        下面的程式碼會為每個模組組件查詢均發送一個 HTTP 請求，在伺服器端會負責產生模組相關的資訊,而客戶端不需要保存任何狀態，除了一些使用者身分認證的資訊保存,例如: cookies。
+      </p>
+      <pre><code class="language-js">
+function modelProvider(paths) {
+  const g = paths()
+  pull()
+  function pull(data) {
+    const { value, done } = g.next(data)
+    if (done) {
+      return
+    }
+    fetch(`model?query=${ encodeURIComponent(value)}`).then(response=&gt; response.json()).then(data=&gt; pull(data))
+  }
+}
+  </code></pre>
+      <p>
+        請牢記在腦海中,當 yield 運算式正在運算時,產生器函式的執行便會暂停,直到序列的下一個資料項被送代器請求(在我們的範例中,就是下一次對模组的查詢。在個情況下,產生器函式中的程式碼看起和操作起來都像是同步執行,即使
+        yield 指令會中斷產生器的執行,直到下一次觸及 g.next 才會恢復執行。
+      </p>
+      <p>
+        產生器可讓我們撰寫非同步程式碼,即便它感覺像是同步執行,但這也同樣帶來了一些問題。我們如何處理在迭代進行時所發生的錯誤?例如:如果 HTTP 請求失敗了,該如何通知產生器並在産生器函式中處理錯誤?
+      </p>
       <pre><code class="language-js">
         </code></pre>
       <pre><code class="language-js">
