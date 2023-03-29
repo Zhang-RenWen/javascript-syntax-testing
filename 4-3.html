@@ -539,6 +539,47 @@ function modelProvider(paths) {
       <p>
         產生器可讓我們撰寫非同步程式碼,即便它感覺像是同步執行,但這也同樣帶來了一些問題。我們如何處理在迭代進行時所發生的錯誤?例如:如果 HTTP 請求失敗了,該如何通知產生器並在産生器函式中處理錯誤?
       </p>
+      <h3 id="4-3-7">4-3-7 產生器拋出錯誤</h3>
+      <p>
+        在注意力轉向至使用者自訂的產生器前,我們嘗試著尋找 g.throw 的使用案例，這個方法可在產生器中止時回報發生的錯誤。當我們以流程控制的觀點思考,在兩個 yield
+        運算式執行時,中間的時間會有錯誤發生的可能,此時就可以利用這個方法拋出錯誤。當處理序列中的資料項發生錯誤時,使用產生器的程式碼就能夠使用 throw 方法,將錯誤拋入至產生器。
+      </p>
+      <p>
+        在 modelProvider 的案例中,迭代器可能會遭遇一些網路的問題 (或錯誤格式的 HTTP 回應) 造成無法提供模組的資訊。在下面的程式碼中， fetch 步驟會加入一個錯誤回呼函式,當
+        response.json() 無法正確剖析回應資訊時便會執行:在此情況下我們就在產生器函式中拋出例外錯誤。
+      </p>
+
+      <pre><code class="language-js">
+fetch(`/model?query=${ encodeURIComponent(value)}`)
+.then(response =&gt; response.json())
+.then(data =&gt; pull(data))
+.catch(err =&gt; g.throw(err))
+      </code></pre>
+      <p>
+        呼叫 g.next 時，產生器的程式碼便會恢復執行。 g.throw 方法也會將產生器恢復運作,但是它會在 yield 運算式的位置將錯誤拋出。在產生器中，未被處理的例外錯誤會使迭代器停止執行,以避免觸及其他的 yield
+        運算式。產生器程式碼可以將 yield 運算式包裹在 try/catch 區塊中，以優雅地管理來自迭代程式發生的錯誤(如下列程式碼所示。)以此方式可讓後續的 yield
+        運算式仍可被觸及執行,使暫停產生器運作，並再次由迭代器掌控。
+      </p>
+      <pre><code class="language-js">
+modelProvider(function*() {
+  try {
+    console.log('items in the cart:', yield 'cart.items')
+  } catch (e) {
+    console.error('uh oh, failed to fetch model.cart.items!', e)
+  }
+  try {
+    console.log(`these are our products: ${ yield 'products' }`)
+  } catch (e) {
+    console.error('uh oh, failed to fetch model.products!', e)
+  }
+})
+      </code></pre>
+      <p>即使產生器函式可允許我們中止執行，再非步的恢復執行,我們還是可以使用相同的錯誤處理機制 ( try、catch 和 throw ) 如在一般函式中的操作使用。在產生器程式中使用 try/catch
+        區塊的能力,可讓程式碼的執行有如同步的狀況一樣;即使 HTTP 請求在迭代器程式碼的位置是撰寫在 yield 運算式的後方。</p>
+      <pre><code class="language-js">
+      </code></pre>
+      <pre><code class="language-js">
+      </code></pre>
       <pre><code class="language-js">
         </code></pre>
       <pre><code class="language-js">
