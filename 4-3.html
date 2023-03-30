@@ -576,12 +576,95 @@ modelProvider(function*() {
       </code></pre>
       <p>即使產生器函式可允許我們中止執行，再非步的恢復執行,我們還是可以使用相同的錯誤處理機制 ( try、catch 和 throw ) 如在一般函式中的操作使用。在產生器程式中使用 try/catch
         區塊的能力,可讓程式碼的執行有如同步的狀況一樣;即使 HTTP 請求在迭代器程式碼的位置是撰寫在 yield 運算式的後方。</p>
+      <h3 id="4-3-8">
+        4-3-8 代表產生器進行回傳
+      </h3>
+      <p>
+        除了 g.next 和 g.throw 方法外,產生器物件有一個方法可定義一個產生器序列如何進行迭代: g.return(value)。這個方法會恢復產生器函式執行,並在 yield 的位置執行 return
+        value,通常會結束產生器物件對序列的巡訪。如果產生器函式中已有使用 return 敘述,這兩種方式所產生的效果是相同的。
+      </p>
       <pre><code class="language-js">
+function* numbers() {
+  yield 1
+  yield 2
+  yield 3
+}
+const g = numbers() 
+console.log(g.next()) 
+// { done: false, value: 1 }
+console.log(g.return())
+// { done: true }
+console.log(g.next()) 
+// { done: true }
       </code></pre>
+      <p>若 g.return(value) 在産生器函式最後暫停的 yield 位置進行 return value動作,利用try/finally 區塊可以避免產出的序列立即結束·因為 finally
+        中的敘述在程式結束之前被完成執行。如以下程式碼所示,它描述了 finally 區塊中的 yield 運算式可持續產出序列所需要的資料項。</p>
       <pre><code class="language-js">
+function* numbers() {
+  try {
+    yield 1
+  } finally {
+    yield 2
+    yield 3
+  }
+  yield 4
+  yield 5
+}
+const g = numbers()
+console.log(g.next())
+// { done: false, value: 1 }
+console.log(g.return(-1))
+// { done: false, value: 2 }
+console.log(g.next())
+// { done: false, value: 3 }
+console.log(g.next())
+// { done: true , value : -1 }
       </code></pre>
+      <p>
+        再看看一個簡單的產生器函式,他會利用 yield 出產一些數值，接著會遇到一個 return 敘述。
+      </p>
       <pre><code class="language-js">
+function* numbers() {
+  yield 1
+  yield 2
+  return 3
+  yield 4
+}
+      </code></pre>
+      <p>
+        return value 敘述可能會放置於產生器函式的任何位置,但當使用展開運算子或 Array.from 對產生器進行迭代以建立一個陣列時,並不會出現 value值;即使用 for..of 也不會出現,如下程式碼所示。
+      </p>
+      <pre><code class="language-js">
+console.log([...numbers()])
+// [1, 2]
+console.log(Array.from(numbers()))
+// [1, 2]
+for (const number of numbers()) {
+  console.log(number)
+  // 1 
+  // 2
+}
+      </code></pre>
+      <p>
+        這樣的狀況會發生的原因是,執行 g.return 或是一個return 敘述所取得的迭代器結果會包含 done:true 訊號,這代表著序列已經結束。即使此迭代器結果包含著一個序列的 value
+        值,但上述提到的方法自產生器取出一個序列值時均會將它忽略。在樣情況下,產生器中的 return 敘述大部分會被視為是一種迴圈中斷器,而不是提供序列的最末端值的方法。
+      </p>
+      <p>唯一可實際存取產生器回傳值的方法,就是利用產生器物件對產生器進行迭代,並擷取迭代器結果值,即便出現 done:true 的訊息，如下範例所示。</p>
+      <pre><code class="language-js">
+const g = numbers()
+console.log(g.next())
+// { done: false, value: 1 }
+console.log(g.next())
+// { done: false, value: 2 }
+console.log(g.next())
+// { done: true, value: 3 }
+console.log(g.next())
+// { done: true }
         </code></pre>
+      <p>
+        因為 yield 運算式和 return 敘述令人困惑的差異性，return 敘述最好避免在產生器中使用，除非有特定的方法需要特別運用 yield 和 return
+        的差異特徵;而兩者最終的目的都是要提供一種資料抽取方法,以簡化程式開發描述。
+      </p>
       <pre><code class="language-js">
         </code></pre>
       <pre><code class="language-js">
