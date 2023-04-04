@@ -126,6 +126,77 @@ getRandomArticle( function* printRandomArticle() {
       <h3 id="4-4-2">
         4-4-2 使用 async/await
       </h3>
+      <p>非同步函式可讓我們採用以 Promise 物件為基礎的實作，同時也受益於外觀看似同步的產生器。這種方法的一個巨大優點是，你將完全不需要變更原始的 getRandomArticle 函式：只要它回傳一個可被等候的
+        Promise 物件。</p>
+      <p>
+        請注意，await 只能夠在非同步函式中使用，函式須以關鍵宇 async 標示。非同步函式的運作類似於產生器，可在本文中暫停執行直到 Promise 物件已確認狀態為止。若被等待的運算式並不是一個 Promise
+        物件，則會被轉換型態為 Promise 物件。
+      </p>
+      <p>
+        下面的程式碼使用我們最初的 getRandomArticle 函式，它使用 Promise 物件進行運作。接著它會透過一個名稱為renderView的非同步函式，傳回 HTML 結果更新頁面内容。請注意我們如何使用
+        try/catch 在被等候的 Promise 物件中進行錯誤理,就如我們在同步程式操作一樣。
+      </p>
+      <pre><code class="language-js">
+async function read() {
+  try {
+    const model = await getRandomArticle()
+    const html = await renderView(model)
+    await setPageContents(html)
+    console.log('Successfully changed page!')
+  } catch (err) {
+    console. error (err)
+  }
+ }
+
+read()
+      </code></pre>
+      <p>
+        非同步函式均會回傅一個 Promise 物件。萬一發生末捕捉的錯誤時，則回傅已拒絕的 Promise 物件。此外，回傳的物件也可解析為回傳值。非同步函式允許我們將這兩種回傳型態與一般以 Promise
+        物件為基礎的方法繼續搭配使用。下面範例說明如何將這兩種回傳型態結合運用。
+      </p>
+      <pre><code class="language-js">
+
+      </code></pre>
+      <pre><code class="language-js">
+async function read() {
+  const model = await getRandomArticle()
+  const html = await renderView(model)
+  await setPageContents(html)
+  return 'Successfully changed page!'
+}
+
+read()
+.then(message =&gt; console.log (message))
+.catch(err =&gt; console.error (err))
+      </code></pre>
+      <p>
+        若要護 read 函式更具再利用性，我們可以將 html 結果回傳，並允許使用者利用Promise 或其他的非同步函式進行後續處理。這樣你的 read 函式功能就可以專注於擷取頁面的 HTML 內容。
+      </p>
+      <pre><code class="language-js">
+async function read() {
+  cost model = await getRandomArticle()
+  const html = await renderView(model)
+  return html
+}
+      </code></pre>
+      <p>
+        在下面範例中 ，我們運用單純的 Promise 物件將 HTML 輸出。
+      </p>
+      <pre><code class="language-js">
+read().then(html =&gt; console.log(html))
+      </code></pre>
+      <p>
+        使用非同步函式對後續的處理也較不會那麼困難。在下方的程式碼中，我們建立了一個 write 函式，作為後續的應用處理。
+      </p>
+      <pre><code class="language-js">
+async function write() {
+  const html = await read()
+  console.log(html)
+}
+      </code></pre>
+      <p>
+        那同時進行的非同步流程會如何呢?
+      </p>
       <pre><code class="language-js">
 
       </code></pre>
