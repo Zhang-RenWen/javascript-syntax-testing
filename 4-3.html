@@ -665,10 +665,164 @@ console.log(g.next())
         因為 yield 運算式和 return 敘述令人困惑的差異性，return 敘述最好避免在產生器中使用，除非有特定的方法需要特別運用 yield 和 return
         的差異特徵;而兩者最終的目的都是要提供一種資料抽取方法,以簡化程式開發描述。
       </p>
+      <h3 id="4-3-9">4-3-9 運用產生器操作非同步 I/O</h3>
+      <p>
+        下面的程式碼呈現一個自我描述的產生器函式,在函式中我們會指示輸入來源和一個輸出目標。這個假設的方法可自 yield 處取得產品資訊，這些產品資訊接著可被存放至 return
+        敘述處的儲存位置。這個介面有趣的地方是,作為一個使用者你不需要花時間釐清如何讀取和寫入資訊。只需要確定資訊的來源和目的,剩下的可在後續的實作完成。
+      </p>
+      <pre><code class="language-js">
+saveProducts(function*(){
+  yield '/products/modern-javascript'
+  yield '/products/mastering-modular-javascript'
+  return '/wishlists/books'
+})
+        </code></pre>
+      <p>
+        更棒的是,我們可讓 saveProducts 方法回傳一個 Promise 物件,它會在訂單置入至 return 敘述指定的位置之後轉換為已實現狀態;這表示使用者在愿望清單建檔之後便可以執行回呼函式。產生器函式也會透過
+        yield 運算式取得產品資訊,它可透過呼叫 g.next 搭配相關聯的產品資訊傳遞至函式中。
+      </p>
+      <pre><code class="language-js">
+saveProducts(function* () {
+  const p2 = yield '/products/modern-javascript'
+  const p2 = yield '/products/mastering-modular-javascript'
+  return '/wishlists/books'
+}).then(response =&gt; {
+  //在完成儲存產品願望清單後繼續執行
+})
+        </code></pre>
+      <p>
+        在 saveProducts 函式加入條件式的邏輯判斷,可將產品置入至使用者的購物車中,而非只是願望清單之一。
+      </p>
+      <pre><code class="language-js">
+saveProducts(function*() {
+  yield '/products/modern-javascript'
+  yield '/products/mastering-modular-javascript'
+  if (addToCart) {
+    return '/cart'
+  }
+  return '/wishlists/books'
+})
+        </code></pre>
+      <p>採用這樣「輸入和輸出」一體的優點之一,就是可在 API
+        大部分保持不變的狀況下,內部的實作可進行各種的變化。輸入的來源可透過 HTTP 請求取得，或來自一個暫存的快取儲存;這些資料來源可以j逐一的擷取或同步進行擷取,或是將所有自 yield 出產的資料源整合至單一的 HTTP
+        請求即可完整擷取的機制。除了逐一擷取資料相對於一個單一請求擷取所有資料的差異之外, API 在實作上大幅變更,但在操作運用上幾乎不變。</p>
+      <p>我們實際地來深入瞭解 saveProducts 方法的實作方式。首先，下面的範例示範如何結合fetch 和它以 Promise 物件為基礎的 API 來發送一個 HTTP請求,並取得以 JSON 格式描述的第一個產品資訊。
+      </p>
+      <pre><code class="language-js">
+function saveProducts(productList) {
+  const g = productList()
+  const item = g.next()
+  fetch(item.value)
+  .then(res => res.json())
+  .then(product => {})
+}
+        </code></pre>
+      <p>為了同步擷取產品資訊(以非同步方式,一次發送一個請求) 我們將 fetch 函式呼叫包裹於一個遞迴函式中,每當取得產品資訊時便會被執行。它執行的步驟是,擷取一個產品、呼叫 g.next
+        恢復產生器函式運行以擷取序列中下一個產品、接著再呼叫 more 擷取該產品資訊。</p>
+      <pre><code class="language-js">
+saveProducts(productList) {
+  const g = productList()
+  more(g.next())
+  function more(item) {
+    if (item.done) {
+      return
+    }
+    fetch(item.value)
+    .then(res =&gt; res.json())
+    .then(product =&gt; {
+      more(g.next(product))
+    })
+  }
+}
+        </code></pre>
+      <p>至此我們已經取得所有的輸入資料，並將它們透過 g.next(product) 回傅給產生器(一次一個產品)為了發揮 return 叙述的效用，我們會將產品儲存於一個暫存的陣列中，當迭代器 item
+        已標示序列為結束時，再接著將產品清單以 POST 方式傳送至輸出點儲存。</p>
+      <pre><code class="language-js">
+function saveProducts (productList) {
+  const products = []
+  const g = productList()
+  more(g.next ())
+  function more(item){
+   if (item.done) {
+     save(item.value)
+    } else {
+      details(item. value)
+    }
+  }
+  function details(endpoint) {
+    fetch(endpoint)
+    .then (res => res. json())
+    .then(product =&gt; {
+      products.push (product)
+      more(g.next (product))
+    })
+  }
+  function save (endpoint){
+    fetch(endpoint, {
+      method: 'POST'
+      body: JSON.stringify({ products })
+    })
+  }
+}
+        </code></pre>
+      <p>到這裡已將產品描述資訊擷取下來了，並暫存在 products 陣列中，在產生器的 body 儲存此陣列；資訊最終會儲存至return 敘述所回傳的目的路徑。
+      </p>
+      <p>
+        在我們原始的 API 設計，會建議自 saveProducts 回傳一個 Promise 物件，這樣回呼函式就能夠在 save 操作完成後被鏈結和執行。如稍早前所談過，fetch 函式會回傳一個 Promise 物件；藉著將
+        return 敘述加入至每一個函式呼叫中，你可以觀察看看 saveProducts 函式是如何將 more 函式的輸出結果回傳。函式會回傳 save 或 details 函式的輸出結果，這兩個函式都會回傳 fetch
+        函式呼叫所建立的 Promise 物件。除此之外，details 函式呼叫都會取得內部 Promise 物件呼叫 more 函式的結果；這表示原始的 fetch 呼叫要在第二個 fetch 函式呼叫已實現後，它的狀態
+      </p>
+      <p>
+        才會轉換為已實現。此方式可讓我們將這些 Promise 物件鏈結起來，當 save 函式呼叫被執行並解析完成時,這些物件最終也都會被進行解析。
+      </p>
+      <pre><code class="language-js">
+function saveProducts (productList) {
+  const products = []
+  const g = productList()
+  return more(g.next())
+  function more(item){
+    if (item. done) {
+      return save(item.value)
+    }
+    return details(item.value)
+  }
+  function details (endpoint) {
+    return fetch(endpoint)
+    .then(res => res.json())
+    .then (product =&gt; {
+      products.push(product)
+      return more(g.next (product))
+    })
+  }
+  function save (endpoint) {
+    return fetch(endpoint,{
+      method:'POST'
+      body: JSON. stringify({ products })
+    })
+    .then(res =&gt; res. json())
+  }
+}
+        </code></pre>
+      <p>
+        你應該已注意到，在實作上並沒有將重要的操作邏輯也一併撰寫於程式中，這表示只要你希望將一或多個輸入轉換為最終單一的輸出結果時，可以廣泛地將此處輸入和輸出的樣板進行活用。使用者最後會得到一個外觀優雅且容易理解的方法.由
+        yield 所生產的結果是輸入資訊， return 所回傳的結果是輸出資訊。此外，我們運用 Promise 物件讓這項操作更容易與其他方法結合。在運用此方法時，要時常注意條件式判斷和流程控制機制可能造成的混亂。所以在
+        SaveProducts 方法中，抽取出流程控制的部分整併至迭代機制中。
+      </p>
+      <p>
+        至此我們已經探討了許多的流程控制機制，例如：回呼、事件、 Promise、迭代器、和產生器。接下來的兩個章節會鑽研 async/await
+        非同步选代器、和非同步產生器，它們均是建構在本章至今所介紹的流程控制機制之上。
+      </p>
       <pre><code class="language-js">
         </code></pre>
       <pre><code class="language-js">
         </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+
       <div class="border-block"></div>
     </section>
   </main>
