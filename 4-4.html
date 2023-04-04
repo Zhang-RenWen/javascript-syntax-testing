@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>4-4 非同步函式</h2>
+      <h3 id="4-4-1">
+        4-4-1 非同步函式的意義
+      </h3>
+      <P>
+        假設我們有一段如下方的程式碼，其中fetch 請求被包裹於
+        getRandomArticle 函式中；當請求成功時，所回傳的 Promise 物件為已實現並附帶 JSON 格式的 body 主體資訊；若失敗，則依循標準的 fetch
+        已拒絕機制處理‧
+      </P>
+      <pre><code class="language-js">
+function getRandomArticle(){
+  return fetch('/articles/random', {
+    headers: new Headers({
+      Accept:'application/json'
+    })
+  })
+  .then(res =&gt; res.json())
+}
+        </code></pre>
+      <p>
+        下一段程式碼則說明 getRandomArticle 函式基本的運用方式。我們會建立一個 Promise 物件鏈結，它會擷取文章的JSON 物件，並傳遞至非同步的 renderView 的畫面描繪函式，在完成後會產生一個
+        HTML 頁面，接著再以該 HTML 頁面取得我們的頁面内容。為了避免無法捕捉到的錯誤，我們利用 console.error 可將所有發生的拒絕原因輸出。
+      </p>
+      <pre><code class="language-js">
+getRandomArticle()
+.then(model =&gt; renderView(model))
+.then(html =&gt; setPageContents(html))
+.then(() =&gt; console.log('Successfully changed page!'))
+.catch(err =&gt; console.error (err))
+        </code></pre>
+      <p>
+        Promise 物件鏈結是很難除錯的：流程控制的錯誤原因很難追溯，且撰寫以 Promise 物件為基礎的程式碼流程，閱讀起來是比撰寫更加不易，常會導致後續維護上的困難。
+      </p>
+      <p>
+        如果是單使用單純 JavaScript 回呼函式,我們的程式碼內容會較具重複性，就如接下來的範例一樣。同時,也落入回呼困境:在非同步程式流程中的每一個步驟都再加入一層縮排,使得程式碼更難閱讀理解。
+      </p>
+      <pre><code class="language-js">
+getRandomArticle( (err, model) =&gt;{
+  if (err) {
+    return console.error(err)
+  }
+  renderView(model, (err, html) =&gt; {
+    if (err) {
+      return console.error(err)
+    }
+    setPageContents (html, err =&gt; {
+      if (err) {
+        return console.error(err)
+      }
+      console.log('Successfully changed page!')
+    })
+  })
+})
+        </code></pre>
+      <p>當然,以函式庫可以解決回呼困境,和錯誤處理的重複性·函式庫的使用可受惠於標準化回呼函式的優點,如 async 非同步,將第一個引數保留給錯誤使用。若使用它的 waterfall 方法,我們的程式又會變得更簡潔一些。</p>
+      <pre><code class="language-js">
+async.waterfall([
+  getRandomArticle,
+  renderView,
+  setPageContents
+  ], (err, html) =&gt;{
+    if (err){
+      return console.error(err)
+    }
+    console.log('Successfully changed page! ')
+  }
+)
+        </code></pre>
+      <p>
+        我們再看一個類似的範例，但這次我們將使用產生器。下面的範例是 getRandomArticle 的重製版，此處我們使用產生器以改變 getRandomArticle 的使用方式。
+      </p>
+      <pre><code class="language-js">
+function getRandomArticle(gen) {
+  const g = gen()
+  fetch('/articles/random', {
+  headers: new Headers({
+      Accept: 'application/json'
+    })
+  })
+  .then(res =&gt; res.json())
+  .then(json =&gt; g.next(json))
+  .catch(err =&gt; g.throw(err))
+}
+        </code></pre>
+      <p>以下的程式碼展示如何透過 yield 運算式，自 getRandomArticle 函式中擷取 json
+        結果值。即使看起來像是同步進行，現在其實已加入了產生器函式。當我們希望加入更多步驟時，必須大幅更動getRandomArticle ，才能夠以 yield 出產期望的結果值；並需調整產生器內容，以使用最新的結果序列。</p>
+      <pre><code class="language-js">
+getRandomArticle( function* printRandomArticle() {
+  const json = yield
+  // render view
+})
+        </code></pre>
+      <p>
+        在此案例中，使用產生器可能不是達到我們期望的結果最直覺的方式：只是把複雜性搬移到其他地方而已，而我們也受限於 Promise 的使用。
+      </p>
+      <p>
+        除了將不直覺的語法加入其中，迭代器的程式碼也將與使用中的產生器函式高度地結合；這表示當產生器程式碼中加入了 yield 運算式，迭代器的程式碼也必須一併調整。
+      </p>
+      <p>
+        另一個較佳的方案是使用 async 函式。
+      </p>
+      <h3 id="4-4-2">
+        4-4-2 使用 async/await
+      </h3>
+      <pre><code class="language-js">
+
+      </code></pre>
+      <h3 id="4-4-3">
+        4-4-3 同時發生的非同步流程
+      </h3>
+      <pre><code class="language-js">
+
+      </code></pre>
+      <h3 id="4-4-4">
+        4-4-4 錯誤處理
+      </h3>
+      <pre><code class="language-js">
+
+      </code></pre>
+      <h3 id="4-4-5">
+        4-4-5 了解非同步函式的內部運作
+      </h3>
+      <pre><code class="language-js">
+
+      </code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
