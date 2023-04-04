@@ -203,9 +203,68 @@ async function write() {
       <h3 id="4-4-3">
         4-4-3 同時發生的非同步流程
       </h3>
+      <p>
+        在非同步程式碼的流程中，經常會同時地執行兩個或多個工作。利用非同步函式可以很容易的撰寫非同步程式，同時在程式上也將它們以一次進行一個非同步操作的方式撰寫。一個函式若有多個 await 運算式在其中，則在每一個await
+        運算執行時會暫停一次，直到 Promise 狀態確認，恢復運作並至下一個 await 運算之前一這和我們所看到的產生器與 yield 運算式的案例類似。
+      </p>
       <pre><code class="language-js">
-
+async function concurrent (){
+  const p1 = new Promise(resolve=&gt;
+  setTimeout (resolve, 500,'fast')
+)
+  const p2 = new Promise (resolve=&gt;
+  setTimeout (resolve, 200,'faster')
+)
+  const p3 = new Promise (resolve =&gt;
+  setTimeout (resolve, 100,'fastest')
+)
+  const r1 = await p1 // 運作會暫停，直到 p1 己確認狀態
+  const r2 = await p2
+  const r3 = await p3
+}
       </code></pre>
+      <p>
+        我們可以使用 Promise.all 修正此問題，透過建立一個我們可以 await 的 Promise 物件。和用此方式，我們的程式碼運作會暫停，直到清單中的每一個 Promise 物件都確認狀態後，它們就同時地完成解析。
+      </p>
+      <p>
+        下面的範例示範如何利用 await 等待三個不同的 Promise 物件並同時完成解析。假定 await 暫停了你的 async 函式，且 await Promise.all 運算式最終會將解析結果置於 results
+        結果陣列中。你可以利用解構賦值的方式將每一個結果值自陣列中取出。
+      </p>
+      <pre><code class="language-js">
+async function concurrent (){
+  const p1 = new Promise(resolve=&gt;
+    setTimeout (resolve, 500,'fast')
+  )
+  const p2 = new Promise(resolve=&gt;
+    setTimeout (resolve, 200,'faster')
+  )
+  const p3 = new Promise(resolve=&gt;
+    setTimeout (resolve, 100,'fastest')
+  )
+  const [r1, r2, r3] = await Promise.all([p1, p2, p3])
+  console.log(r1, r2, r3)
+  //'fast','faster','fastest'
+}
+      </code></pre>
+      <p>
+        我們可以使用 Promise.race 自較早實現的 Promise 物件中取得結果。
+      </p>
+      <pre><code class="language-js">
+async function race (){
+  const p1 = new Promise(resolve=&gt;
+    setTimeout (resolve, 500,'fast')
+  )
+  const p2 = new Promise(resolve=&gt;
+    setTimeout (resolve, 200,'faster')
+  )
+  const p3 = new Promise(resolve=&gt;
+    setTimeout (resolve, 100,'fastest')
+  )
+  const result = await Promise.race([p1, p2, p3])
+  console.log(result)
+  // 'fastest'
+}
+              </code></pre>
       <h3 id="4-4-4">
         4-4-4 錯誤處理
       </h3>
