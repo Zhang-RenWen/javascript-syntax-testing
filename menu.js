@@ -279,17 +279,17 @@ const menu = [
       },
       {
         id: "4-5",
-        title: "4-5 ",
+        title: "4-5 非同步迭代",
         href: "4-5.html",
         anchorMenu: [
           {
             id: "4-5-1",
-            title: "4-5-1  ",
+            title: "4-5-1 非同步迭代器",
             href: "4-5.html#4-5-1",
           },
           {
             id: "4-5-2",
-            title: "4-5-2  ",
+            title: "4-5-2 非同步產生器",
             href: "4-5.html#4-5-2",
           }
         ]
