@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>Chapter 5 運用 ECMAScript 集合</h2>
+      <p>
+        JavaScript 資料結構具備足夠的彈性，可將任何的物件轉換為一個雜湊 (Hash-map)，讓我們可以將字串型態的鍵對應到任意的值。舉例來說，下面的範例使用一個物件將 npm 套件名稱對應至它的描述資料，如下所示。
+      </p>
+      <pre><code class="language-js">
+const registry = {}
+function set (name, meta) {
+  registry[name] = meta
+}
+function get (name) {
+  return registry[name]
+}
+set ('contra', { description:'Asynchronous flow control' })
+set ('dragula', { description: 'Drag and drop' })
+set ('woofmark' { description: 'Markdown and WYSIWYG editor '})
+        </code></pre>
+      <p>
+        這樣的方法會產生多個問題，概述如下：
+      <ul>
+        <li>
+          安全性議題，當使用者提供的字串鍵如 __proto__、toString、或其他不在 Object.prototype 所允許的字串時，會使得與這類的 Hash-map 雜湊表資料結構互動更難以處理
+        </li>
+        <li>當使用 for..in 進行迭代時，須仰賴 Object#hasOwnProperty 來確認所指定的特性未被繼承</li>
+        <li>以 Object.keys(registry).forEach 對串列項目進行迭代也是很繁複冗長的</li>
+        <li>鍵僅限於使用字串，這使得想用 DOM 元件或其他非字串的參考來建立 Hash-map 雜凑表，顯得相當困難</li>
+      </ul>
+      </p>
+      <p>
+        第一個問題可以用前置字串來解決，可透過函式來為設定和擷取 Hash-map 雜湊表的值謹慎地加入前置字串，以避免發生錯誤。
+      </p>
+      <pre><code class="language-js">
+const registry = {}
+function set (name, meta) {
+  registry['pkg:' + name ] = meta
+}
+function get (name) {
+  return registry[ 'pkg:' + name ]
+}
+      </code></pre>
+      <p>
+        另一個可行的方法，是使用 Object.create(null) 的方式取代空的物件實字。在這樣的情境中，所建立的物件將不會繼承自 Object.prototype，這表示不會受到 __proto__
+        和其他違反規則的字串影響。
+      </p>
+      <pre><code class="language-js">
+const registry = Object.create(null)
+function set (name, meta) {
+  registry['pkg:' + name ] = meta
+}
+function get (name) {
+  return registry[ 'pkg:' + name ]
+}
+      </code></pre>
+      <p>
+        若要進行迭代，我們可以建立一個 list 函式來回傳鍵/值配對。
+      </p>
+      <pre><code class="language-js">
+const registry = Object.create(null)
+function list() {
+  return Object.keys(registry).map(key => [key, registry[key]])
+}
+      </code></pre>
+      <p>
+        或者我們可以在 Hash-map 雜凑表物件上實作迭代器協議。在此我們為了換取使用上的便利性而需提高複雜度：迭代器程式碼與上一個使用 list 函式運用熟悉的 Object.keys 和 Array#map
+        的方式比較起來，會較為複雜難理解。然而，在下面的範例中，存取串列會更為簡單，且比起透過 list 函式更為便利：依循迭代器協議代表著不需要自訂 list 函式。
+      </p>
+      <pre><code class="language-js">
+const registry = Object.create(null)
+  registry[Symbol.iterator]= ()=&gt;{
+  const keys = Object.keys(registry)
+  return {
+    next (){
+      const done = keys.length === 0
+      const key = keys.shift()
+      const value = [key, registry[key]]
+      return { done, value }
+    }
+  }
+}
+console.log([...registry])
+      </code></pre>
+      <p>
+        當談論到使用非字串的鍵 ，在 ES5 中我們遇到很大的困難：但幸運的是 ES6 的特徵功能集合可提供更好的解決方案， ES6 特徵功能集合不會有鍵值命名的問題，且他們使集合的行為更容易，例如：我們曾實作在自訂
+        hash-map 雜湊表上的迭代器。同時，ES6 特徵功能集合可允許任意鍵，不再只受限於僅能以宇串命名鍵，如一般的 JavaScript 物件。
+      </p>
+      <h2>5-1 運用ES6 的映射</h2>
+      <h3 id="5-1-1">5-1-1 初探 ES6 的映射</h3>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

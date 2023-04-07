@@ -298,12 +298,19 @@ const menu = [
   },
   {
     id: "5",
-    title: "Chapter 5",
+    title: "Chapter 5 運用 ECMAScript 集合",
     submenu: [
       {
         id: "5-1",
-        title: "5-1",
-        href: "#",
+        title: "5-1 運用ES6 的映射",
+        href: "#5-1.html",
+        anchorMenu: [
+          {
+            id: "5-1-1",
+            title: "5-1-1 初探 ES6 的映射",
+            href: "5-1.html#5-1-1",
+          },
+        ]
       },
     ],
   },

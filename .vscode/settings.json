@@ -3,9 +3,11 @@
     "airconditioning",
     "Berners",
     "Bevacqua",
+    "dragula",
     "hljs",
     "morphling",
-    "trailmix"
+    "trailmix",
+    "woofmark"
   ],
   "editor.defaultFormatter": "vscode.html-language-features"
 }
