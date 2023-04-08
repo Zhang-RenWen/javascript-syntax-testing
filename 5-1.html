@@ -107,7 +107,32 @@ console.log([...registry])
         hash-map 雜湊表上的迭代器。同時，ES6 特徵功能集合可允許任意鍵，不再只受限於僅能以宇串命名鍵，如一般的 JavaScript 物件。
       </p>
       <h2>5-1 運用ES6 的映射</h2>
+      <p>
+        ES6引入了新的內建特徵功能集合，例如：Map映射；若需要從零關始建構自訂的 hash_map 雜湊表結構時，期望能降低上面我們所提到的這些功能模板的實作複雜性。Map 映射在 ES6 中是一個鍵/值配對的資料結構，可在
+        JavaScript 中以更自然且有效率的方式建立資料的關聯對應，而不需要再使用物件實字的方式。
+      </p>
       <h3 id="5-1-1">5-1-1 初探 ES6 的映射</h3>
+      <p>
+        在使用 ES6 的 Map 映射時，這裡是我們稍早曾看過的。如你所見，我們在 ES5 中自訂的 Hash-map 雜湊表的實作細節已經建置入 Map 中，大大地簡化了所提及的使用案例。
+      </p>
+      <pre><code class="language-js">
+const map = new Map()
+map.set('contra', { description:'Asynchronous flow control' })
+map.set('dragula', { description:'Drag and drop'})
+map.set('woofmark' , {description:'Markdown and WYSIWYG editor'})
+console.log([...map])
+// 0 : (2) ['contra', {description:…}] 
+// 1 : (2) ['dragula', {description:…}]
+// 2 : (2) ['woofmark', {description:…}]
+        </code></pre>
+      <p>當你擁有一個 Map 映射，就可以將鍵透過 map.has 方法查詢到是否包含此筆鍵所對應的資料。</p>
+      <pre><code class="language-js">
+map.has('contra') //  true
+map.has('jquery') // false
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
       <pre><code class="language-js">
 
         </code></pre>
