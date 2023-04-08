@@ -130,6 +130,101 @@ console.log([...map])
 map.has('contra') //  true
 map.has('jquery') // false
         </code></pre>
+      <p>
+        稍早之前我們提到映射無法如傳統物件般將鍵進行的資料型態轉換。這是它的一項優點，但是必須謹記於心的是，當對映射進行查詢時，在操作上也不相同。下方的範例使用 Map 建構子，它有一個可选代的鍵/值配對，接著說明 map
+        映射為何無法將它的鍵轉換為字串型態。
+      </p>
+      <pre><code class="language-js">
+const map = new Map([[1, 'the number one']])
+map.has(1)
+// true
+map.has('1')
+// false
+        </code></pre>
+      <p>
+        map.get 方法需要傅入一個映射的資料鍵，當此鍵可在映射中找到對應的資料項目時，便會回傳對應的資料值。
+      </p>
+      <pre><code class="language-js">
+map.get('contra')
+// { description:'Asynchronous flow control' }
+        </code></pre>
+      <p>
+        透過 map.delete 可將資料值自映射中刪除，只要給子欲刪除的資料項目的鍵即可。
+      </p>
+      <pre><code class="language-js">
+map.delete('contra' )
+map.get('contra' )
+// undefined
+        </code></pre>
+      <p>你可以刪除一個映射中所有的資料項目，且不會失去對它的參考。在你需要重置一個物件的狀態時，此操作會非常便利。</p>
+      <pre><code class="language-js">
+const map = new Map([[1, 2], [3, 4], [5, 6]])
+map.has(1)
+// true
+map.clear()
+map.has(1)
+// false
+[...map]
+// []
+        </code></pre>
+      <p>
+        映射具一個唯讀的。size 特性，它的作用與 Array#length 相似-提供當下在映射中的資料項目總數。
+      </p>
+      <pre><code class="language-js">
+const map = new Map([[1, 2], [3, 4], [5, 6]])
+map.size
+// 3
+map.delete(3)
+map.size
+// 2
+map.clear()
+map.size
+// 0
+        </code></pre>
+      <p>
+        當需要為 Map 映射選擇鍵的資料型態時，你可以使用任意的物件作為鍵：不僅限於使用原生的資料型態，如：行號、數值、或宇串。你還可以使用函式、物件、日期一甚至是 DOM 元件。鍵無法被轉換為字串，就如我們對單純
+        Javascript 物件的認識，但是它們的參考會被保留著。
+      </p>
+      <pre><code class="language-js">
+const map = new Map()
+map.set (new Date(), function today(){})
+map.set(() =&gt;'key', { key:'door'  })
+map.set(Symbol('items'), [1, 2])
+        </code></pre>
+      <p>如下範例，如果選擇以符號作為鍵的資料型態，我們需要使用一個參考來指向相同的符號，以取得對應的資料項目，如下方程式碼的使用方式。</p>
+      <pre><code class="language-js">
+const map = new Map ()
+const key = Symbol('items' )
+map.set(key, [1, 2])
+map.get(Symbol('items')) // 與'key'的参考不同
+// undefined
+map.get(key)
+// [1, 2]
+        </code></pre>
+      <p>
+        若有一個儲存鍵/值配對資料項的陣列想要放置於 Map 映射中，我們可以使用 for..of 迴圈迭代出這些項目，並使用 map.set 將這些配對加入至映射，如下方程式碼的方式。請注意我們在 for..of
+        迥圈中使用解構賦值的方式，是為了輕鬆地將 key 和 value 自 items 中的每個二維的資料項目中取出。
+      </p>
+      <pre><code class="language-js">
+const items =[
+  [new Date(), function today() {}],
+  [() =&gt;'key', { key:'door'}],
+  [Symbol("items"), [1, 2]]
+]
+const map = new Map ()
+for (const [key, value] of items) {
+  map.set(key, value)
+}
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
       <pre><code class="language-js">
 
         </code></pre>
