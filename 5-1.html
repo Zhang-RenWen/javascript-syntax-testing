@@ -216,11 +216,63 @@ for (const [key, value] of items) {
   map.set(key, value)
 }
         </code></pre>
+      <p>
+        映射也是可迭代物件，因為它質作了 Symbol.iterator 方法。因此，欲複製一份映射可以用如上的 for..of 程式敘述完成。
+      </p>
       <pre><code class="language-js">
 const copy = new Map()
 for (const [key, value] of map) {
   copy.set(key, value)
 }
+        </code></pre>
+      <p>
+        為了保持操作的簡易性，你可以直接使用任何遵循可迭代協議和可產生 [key, value] 資料項集合的物件來初始 Map 映射。以下的程式碼使用一個陣列餵入新建立的 Map 中，在這案例中，迭代操作完全都會在 Map
+        建構子中進行。
+      </p>
+      <pre><code class="language-js">
+const items =[
+  [new Date(), function today(){}],
+  [() =&gt;'key', { key:'door'}],
+  [Symbol('items"), [1, 2]]
+]
+const map = new Map(items)
+        </code></pre>
+      <p>
+        複製一個映射則更為簡單：將你想要複製的映射物件提供給新的映射建構子，這樣就可以取得一個複本了。使用 new Map(Map)
+        的方式並不會造成額外的系統負荷；反之，我們則是善用了映射的特點，當建立一個新的物件時，內部已實作迭代協議並使用可迭代物件。下面的程式碼告訴你這樣的動作有多簡單。
+      </p>
+      <pre><code class="language-js">
+const copy = new Map(map)
+        </code></pre>
+      <p>
+        就像映射物件很容易餵人至其他的映射物件，因為它們均為可迭代物件，所以在使用上非常簡單。下面程式碼利用展開運算子說明此特性。
+      </p>
+      <pre><code class="language-js">
+const map = new Map()
+map.set(1,'one')
+map.set(2,'two')
+map.set(3,'three')
+console.log([...map])
+// [[1,'one'], [2, 'two'], [3, 'three' ]]
+        </code></pre>
+      <p>
+        在下方的範例中，我們結合了 ES6 中的數項新特徵功能：Map、for..of 迥圈、let 變數和字串樣板
+      </p>
+      <pre><code class="language-js">
+const map = new Map()
+map.set(1,'one')
+map.set(2,'two')
+map.set(3,'three')
+for (const [key, value] of map) {
+  console.log(`${key}: ${value}`)
+}
+// '1: one'
+// '2: two'
+// '3: three'
+
+        </code></pre>
+      <pre><code class="language-js">
+
         </code></pre>
       <pre><code class="language-js">
 
