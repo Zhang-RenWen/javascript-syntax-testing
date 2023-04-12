@@ -271,6 +271,77 @@ for (const [key, value] of map) {
 // '3: three'
 
         </code></pre>
+      <p>
+        即便映射資料項可以透過可程式化的 API 進行擷取，但它們的鍵仍然是唯一的。就像是 Hash-map 雜湊表一樣。對一個鍵重複地進行設定只會將對應的值進行覆寫。下方的程式碼示範，針對 'a' 鍵對應的資料項重複寫入，在
+        Map 映射物件中所得到的結果仍只有單一個資料項。
+      </p>
+      <pre><code class="language-js">
+const map = new Map()
+map.set('a', 1)
+map.set('a', 2)
+map.set('a', 3)
+console.log([...map])
+// [['a', 3]]
+        </code></pre>
+      <p>
+        在 ES6 的規格中，映射物件針對鍵與鍵的比較是使用名稱為 SameValueZero 的演算法，其中定義 NaN 與 NaN 為相等，但 -0 與 +0 相等。以下程式碼說明，即使 NaN 基本上並不等於它自己，但在
+        Map 中則認為 NaN 是一個不變的常數。
+      </p>
+      <pre><code class="language-js">
+console.log(NaN === NaN)
+//false
+console.log(-0 === +0)
+// true
+const map = new Map()
+map.set(NaN,'one')
+map.set(NaN,'two')
+map.set(-0,'three')
+map.set(+0,'four')
+console.log([...map])
+// [[NaN,'two'], [0,'four' ]]
+        </code></pre>
+      <p>
+        當你對 Map 進行迭代時，實際上是對它的 .entries() 進行迭代。這表示你不需要真的對 .entries()進行迭代，它已代表你完成了這項操作： map[Symbol.iterator] 會指向
+        map.entries。而 .entries()方法會回傳一個迭代器，含有映射物件中的 鍵/值 配對。
+      </p>
+      <pre><code class="language-js">
+console.log(map[Symbol.iterator] === map.entries)
+// true
+        </code></pre>
+      <p>有兩個 Map 迭代器可以使用： .keys() 和 .values()。第一個方法會列出所有的鍵，而二個方法則會列出所有的值：與 .entries() 不同，它是列出所有的 鍵/值 配對。下方的範例說明這三個方法的差異。
+      </p>
+      <pre><code class="language-js">
+const map = new Map([[1, 2], [3, 4], [5, 6]])
+console.log([...map.keys()])
+// [1, 3, 5]
+console.log([...map.values()])
+// [2, 4, 6]
+console.log([...map.entries()])
+// [[1, 2], [3, 4], [5, 6]]
+        </code></pre>
+      <p>
+        映射的資料項是以資料加入的順序進行迭代，這與 Object.keys 不同，它是依據鍵擷取資料，並無一定的順序。但實務上，資料加入的順序是由 JavaScript 引擎所保存，與敘述無關。
+      </p>
+      <p>
+        Map 映射具備一個 .forEach 方法，它的作用與 ES5 中的 Array 物件相同。特徵是 (value, key, map), value 和 key 就是迭代當下的資料項的值與鍵，而 map 則為被迭代的
+        map 物件。再次強調，在 Map 映射中鍵無法被轉換為字串，如下範例。
+      </p>
+      <pre><code class="language-js">
+const map = new Map([
+  [NaN, 1],
+  [Symbol(), 2],
+  ['key','value'],
+  [{ name:'Kent' }, 'is a person' ]
+])
+map.forEach((value, key) => console.log(key, value))
+// NaN 1
+// Symbol() 2
+// 'key' 'value'
+// { name:, 'Kent' }  'is a person'
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
       <pre><code class="language-js">
 
         </code></pre>
