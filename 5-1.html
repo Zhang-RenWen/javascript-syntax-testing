@@ -339,25 +339,93 @@ map.forEach((value, key) => console.log(key, value))
 // 'key' 'value'
 // { name:, 'Kent' }  'is a person'
         </code></pre>
+      <h3 id="5-1-2">5-1-2 Hash-map 雜湊表和 DOM射</h3>
+      <p>
+        在 ES5 中，當我們想要將 DOM 元件與 API 物件關聯起來，以將元件連結至某些函式庫時，必須實作一個複雜又綏慢的樣板，如接下來的程式範例。程式會回傳一個 API 物件，且該物件可支援數種方法於指定的 DOM
+        元件操作：道樣就可讓我們將元件儲存至 Map 映射中，後續需要使用時，便可取出 API 物件對元件進行處理。
+      </p>
       <pre><code class="language-js">
+const map = []
+function customThing(el){
+  const mapped = findByElement(el)
+  if (mapped) {
+    return mapped
+  }
+  const api = {
+    // api 方法的自訂內容
+  }
+  const entry = storeInMap(el, api)
+  api.destroy = destroy.bind(null, entry)
+  return api
+}
 
+function storeInMap(el, api) {
+  const entry = { el, api }
+  map.push(entry)
+  return entry
+}
+
+function findByElement(query) {
+  for (const { el, api } of map) {
+    if (el === query) {
+      return api
+    }
+  }
+}
+function destroy (entry) {
+  const index = map.indexOf (entry)
+  map.splice(index, 1)
+}
+        
         </code></pre>
+      <p>
+        Map 映射最具價值的一項特色，就是可用任意的物件作為素引，例如 DOM 元件。這項特色結合 Map 映射本身對資料集合的處理能力，可有效的簡化操作複雜度。這在 JQuery 中對 DOM 樹的處理，與其他仰賴
+        DOM操作，需要將 DOM 元件對應至內部狀態的函式庫，顯得非常重要。下面範例展示，運用 Map 可减低程式碼維護的負擔。
+      </p>
       <pre><code class="language-js">
+const map = new Map()
+function customThing(el) {
+  const mapped= findByElement(el)
+  if (mapped){
+    return mapped
+  }
+  const api={
+    // api 方法的自訂內容
+    destroy: destroy.bind(null, el)
+  }
+  storeInMap(el, api)
+  return api
+}
 
+function storeInMap(el, api) {
+  map.set(el, api)
+}
+function findByElement (el) {
+  return map.get(el)
+}
+function destroy(el) {
+  map.delete(el)
+}
         </code></pre>
+      <p>
+        對應函式變為單一行叙述即可完成，歸功於 Map 所提供的原生方法，這代表我們可以直接將這些簡單敘述的函式置於程式中，大大提高了程式的可讀性。下方的程式碼則是一開始 ES5 的程式碼簡化版，在此我們先忽略實作的細節，而是著重在
+        DOM 與 API 關聯對應的本質。
+      </p>
       <pre><code class="language-js">
-
+const map = new Map()
+function customThing(el){
+  const mapped = map.get(el)
+  if (mapped) {
+    return mapped
+  }
+  const api ={
+    // api 方法的自訂內容
+    destroy: () =&gt; map.delete(el)
+  }
+  map.set(el, api)
+  return api
+}
         </code></pre>
-      <pre><code class="language-js">
-
-        </code></pre>
-      <pre><code class="language-js">
-
-        </code></pre>
-      <pre><code class="language-js">
-
-        </code></pre>
-      <div class="border-block"></div>
     </section>
   </main>
 </body>

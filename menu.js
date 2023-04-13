@@ -310,6 +310,11 @@ const menu = [
             title: "5-1-1 初探 ES6 的映射",
             href: "5-1.html#5-1-1",
           },
+          {
+            id: "5-1-2",
+            title: "5-1-2 Hash-map 雜湊表和 DOM",
+            href: "5-1.html#5-1-2",
+          },
         ]
       },
     ],
