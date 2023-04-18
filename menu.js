@@ -303,7 +303,7 @@ const menu = [
       {
         id: "5-1",
         title: "5-1 運用ES6 的映射",
-        href: "#5-1.html",
+        href: "5-1.html",
         anchorMenu: [
           {
             id: "5-1-1",
@@ -316,6 +316,30 @@ const menu = [
             href: "5-1.html#5-1-2",
           },
         ]
+      },
+      {
+        id: "5-2",
+        title: "5-2 瞭解並運用弱映射",
+        href: "5-2.html",
+        anchorMenu: [
+          {
+            id: "5-2-1",
+            title: "5-2-1 弱映射是一個糟糕的映射？",
+            href: "5-2.html#5-2-1",
+          }
+        ]
+      },
+      {
+        id: "5-3",
+        title: "5-3 ES6 的集合",
+        href: "5-3.html",
+        anchorMenu: []
+      },
+      {
+        id: "5-4",
+        title: "5-4 ES6 的弱集合",
+        href: "5-4.html",
+        anchorMenu: []
       },
     ],
   },
