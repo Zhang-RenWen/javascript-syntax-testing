@@ -345,12 +345,19 @@ const menu = [
   },
   {
     id: "6",
-    title: "Chapter 6",
+    title: "Chapter 6 運用代理器管理特性存取",
     submenu: [
       {
         id: "6-1",
-        title: "6-1",
-        href: "#",
+        title: "6-1 代理器初探",
+        href: "#6-1.html",
+        anchorMenu: [
+          {
+            id: "6-1-1",
+            title: "6-1-1 定義 get 機關攔截擷取操作",
+            href: "6-1.html#6-1-1",
+          } 
+        ]
       },
     ],
   },
