@@ -73,12 +73,12 @@ Object.defineproperty(options, 'name', {
 })
 
 console.log(Object.assign({}, defaults , options))
-// ([Symbol('currency')]: 'USD', price: '0.99' }
+// {[Symbol('currency')]: 'USD', price: '0.99' }
         </code></pre>
       <p>無法有效應用在遞迴和迴圈需求的巢狀物件上</p>
       <pre><code class="language-js">
 Object.assign({}, { a: {b: 'c', d: 'e' }}, {a: { f: 'g'}  })
-// { a: { f: 'g'} }}  
+// { a: { f: 'g'} }  
 Object.assign({}, {a: ['b', 'c', 'd']} , { a: ['e', 'f']} )
 //  { a: ['e' , 'f'] }
         </code></pre>
@@ -91,7 +91,7 @@ const grocery = { ...details }
 // Object.assign({}, details )
 
 const grocery = { type: 'fruit', ...details } 
-// Object.assign({ type: 'fruit' }, details }
+// Object.assign({ type: 'fruit' }, details )
 
 const grocery = { type: 'fruit', ...details, ...fruit } 
 // Object.assign({ type: 'fruit' }, details, fruit)
