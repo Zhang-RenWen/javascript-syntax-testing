@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>Chapter 6 運用代理器管理特性存取</h2>
+      <h2>6-1 代理器初探</h2>
+      <pre><code class="language-js">
+const target = {}
+const handler = {}
+const proxy = new Proxy(target, handler)
+proxy.exposed = true
+console.log(target.exposed)
+// true
+console.log(proxy.somethingElse)
+// undefined
+        </code></pre>
+      <h3 id="6-1-1">6-1-1 定義 get 機關攔截擷取操作</h3>
+      <pre><code class="language-js">
+const handler = {
+  get(target, key) {
+    console.log( `Get on property"${ key }"`)
+    return target[ key]
+  }
+}
+const target = {}
+const proxy = new Proxy(target, handler)
+proxy.numbers = [1, 1, 2, 3, 5, 8, 13]
+proxy.numbers
+// 'Get on property"numbers'
+// [1, 1, 2, 3, 5, 8, 13]
+proxy['something-else']
+// 'Get on property"something-else"'
+// undefined
+        </code></pre>
+      <pre><code class="language-js">
+const handler = {
+  get(target, key) {
+    console.log( `Get on property "${ key }"` )
+    return Reflect.get(target, key)
+  }
+}
+const target = {}
+const proxy = new Proxy(target, handler)
+        </code></pre>
+      <pre><code class="language-js">
+const handler = {
+  get(target, key) {
+    if (key.startsWith('_')) {
+      throw new Error( `Property "${ key }" 特性不允許存取。` )
+    }
+    return Reflect.get (target, key)
+  }
+}
+const target = {}
+const proxy = new Proxy(target, handler)
+proxy._secret
+// Uncaught Error: "_secret" 特性不允許存取。
+        </code></pre>
+      <h3 id="6-1-2">6-1-2 定義 set 機關攔截擷取操作</h3>
+      <pre><code class="language-js">
+const handler = {
+  get(target, key) {
+    invariant(key, 'get')
+    return Reflect.get(target, key) 
+  },
+  set(target, key, value) {
+    invariant(key, 'set')
+    return Reflect.set(target, key, value)
+  }
+}
+function invariant (key, action) {
+  if (key.startswith('_')) {
+  throw new Error( `Can't ${ action } private "${ key }" property`)
+}
+}
+cost target = {}
+const proxy = new Proxy (target, handler)
+// 下方的程式碼說明proxy 物件如何回應使用者的操作。
+proxy.text = 'the great black pony ate your lunch'
+console.log(target.text)
+'the great black pony ate your lunch'
+proxy._secret
+// Error：無法擷取私有的 "_secret" 特性
+proxy._secret = 'invalidate'
+// Error：無法設定私有的 "_secret" 特性
+        </code></pre>
+      <pre><code class="language-js">
+function proxied(){
+  const target = {}
+  const handler = {
+    get(target, key) {
+      invariant (key,'get')
+      return Reflect.get(target, key)
+    },
+    set(target, key, value) {
+      invariant (key,'set')
+      return Reflect.set(target, key, value)
+    }
+  }
+  return new Proxy(target, handler)
+}
+function invariant (key, action){
+  if (key.startswith('_')) {
+    throw new Error(`Can't ${ action } private "${ key }" property `)
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+function concealWithPrefix(original, prefix=''){
+  const handler = {
+    get (original, key){
+      invariant (key,'get')
+      return Reflect.get(original, key)
+    },
+    set(original, key, value) {
+      invariant (key,'set')
+      return Reflect.set(original, key, value)
+    }
+  }
+  return new Proxy(original, handler)
+  function invariant (key, action) {
+    if (key.startswith (prefix)) {
+      throw new Error ( `Can't ${ action } private"${ key }"property`)
+    }
+    }
+}
+const target = {
+  _secret: 'secret',
+  text: 'everyone-can-read-this'
+}
+const proxy = concealWithPrefix(target)
+// 提供 proxy 予使用者操作
+        </code></pre>
+      <h3 id="6-1-3">6-1-3 以代理器進行格式驗證</h3>
+      <pre><code class="language-js">
+const validations = new Map()
+const validator={
+  set(target, key, value) {     
+    if (validations.has(key)) {
+      return validations[key] (value)
+    }
+    return Reflect.set(target, key, value)
+  } 
+}
+validations.set('age', validateAge)
+
+function validateAge (value) {
+  if (typeof value !=='number' || Number.isNaN (value)) {
+    throw new TypeError ('Age must be a number')
+  }
+  if (value &lt;= 0) {
+    throw new TypeError ('Age must be a positive number')
+  }
+  return true
+}
+        </code></pre>
+      <pre><code class="language-js">
+const person = {}
+const proxy = new Proxy (person, validator)
+proxy.age = 'twenty three'
+// TypeError : Age 必須是一個數值
+proxy.age = NaN
+// TypeError : Age 必須是一個數值
+proxy.age = 9
+// TypeError : Age必須是一個正数
+proxy.age = 28
+console.log (person.age)
+// 28
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
