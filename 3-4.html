@@ -89,7 +89,7 @@ class Dog {
 </code></pre>
       <pre><code class="language-js">
 function commandProperty(writeLevel, readLevel = writeLevel){
-  return (( key, ...rest ]) => ({
+  return ({ key, ...rest }) => ({
     key,
     rest,
     finisher(ctor) {
