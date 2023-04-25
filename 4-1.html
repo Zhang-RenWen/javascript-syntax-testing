@@ -87,18 +87,19 @@ fetch('/items ')
 })
 .on('data', res => {
   // 處理回應
-}
+})
 </code></pre>
 
 
 
                 <pre><code class="language-js">
 new Promise(function (resolve, reject) {
-    setTimeout(function () {
+    setTimeout(function (){
         if (Math.random() > 0.5) {
             resolve('random success')
         }else if {
             reject(new Error('random failure'))
+        }
     }, 1000)
 })
 </code></pre>
@@ -298,6 +299,7 @@ function finally(p, fn) {
     return p.then(
       () => fn(),
       () => fn()
+    )
 }
             </code></pre>
 
