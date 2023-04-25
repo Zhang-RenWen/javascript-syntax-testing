@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>6-2 可廢止的代理器</h2>
+      <pre><code class="language-js">
+const target = {}
+const handler = {}
+const { proxy, revoke } = Proxy.revocable(target, handler)
+proxy.isUsable = true
+console.log(proxy.isUsable)
+// true
+revoke()
+revoke()
+revoke()
+console.log(proxy.isUsable)
+// TypeError：企圖於廢止的代理器執行一個不合法的操作
+        </code></pre>
+      <pre><code class="language-js">
+const proxies= new WeakMap()
+const storage = {}
+function getStorage(){
+  const handler = {}
+  const { proxy, revoke } = Proxy.revocable(storage, handler)
+  proxies.set(proxy,{revoke})
+  return proxy
+}
+function revokeStorage (proxy) {
+  proxies.get(proxy).revoke()
+  proxies.delete(proxy)
+}
+      </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

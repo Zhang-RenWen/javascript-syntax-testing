@@ -367,9 +367,19 @@ const menu = [
             title: "6-1-3 以代理器進行格式驗證",
             href: "6-1.html#6-1-3",
           }, 
-
-         
-        ]
+        ],
+      },
+      {
+        id: "6-2",
+        title: "6-2 ",
+        href: "#6-2.html",
+        anchorMenu: []
+      },
+      {
+        id: "6-3",
+        title: "6-3 ",
+        href: "#6-3.html",
+        anchorMenu: []
       },
     ],
   },
