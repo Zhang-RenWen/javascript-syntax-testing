@@ -22,11 +22,48 @@
   <main>
     <aside></aside>
     <section>
-      <h2></h2>
-      <h3 id=""></h3>
+      <h2>6-3 代理器機關處理器</h2>
+      <h3 id="6-3-1">6-3-1 是否設定機關一 has</h3>
       <pre><code class="language-js">
-
-        </code></pre>
+const handler = {
+  get(target, key) {
+    invariant(key,'get')
+    return Reflect.get(target, key)
+  },
+  set(target, key, value){
+    invariant(key,'set')
+    return Reflect.set(target, key, value)
+  },
+},
+has(target, key) {
+  if (key.startswith('_')) {
+    return false
+  }
+  return Reflect.has(target, key)
+}
+function invariant (key, action) {
+  if(key.startsWith('_')) {  
+    throw new Error (`Can't ${ action } private "${ key}"property`)
+  }
+}
+                </code></pre>
+      <pre><code class="language-js">
+const target = {
+  _secret:'securely-stored-value'
+  wellKnown:'publicly-known-value'
+}
+const proxy = new Proxy(target, handler)
+console.log('welIKnown' in proxy)
+// true
+console.log('_secret' in proxy)
+// false
+console.log('_secret' in target)
+// true
+                          </code></pre>
+      <pre><code class="language-js">
+console.log(Proxy.hasOwnProperty( _secret'))
+// true
+     </code></pre>
       <div class="border-block"></div>
     </section>
   </main>
