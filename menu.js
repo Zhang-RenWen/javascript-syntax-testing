@@ -385,6 +385,11 @@ const menu = [
             title: "6-3-1 是否設定機關一 has",
             href: "6-3.html#6-3-1",
           }, 
+          {
+            id: "6-3-2",
+            title: "6-3-2 deleteProperty 機關",
+            href: "6-3.html#6-3-2",
+          }, 
         ]
       },
     ],
