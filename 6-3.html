@@ -66,16 +66,53 @@ console.log(Proxy.hasOwnProperty( _secret'))
      </code></pre>
       <h3 id="6-3-2">6-3-2 deleteProperty 機關</h3>
       <pre><code class="language-js">
-
+const cat = { furBall: true }
+cat.furBall = undefined
+console.log('furBall' in cat)
+// true
+delete cat.furBall
+console.log('furBall' in cat)
+// false
       </code></pre>
       <pre><code class="language-js">
-
+const target = { _secret: 'foo' }
+const proxy = new Proxy(target, handler)
+console.log('_secret' in proxy)
+// false
+console.log('_secret' in target)
+// true
+delete proxy._secret
+console.log(secret'in target)
+// false
       </code></pre>
       <pre><code class="language-js">
-
+const handler = {
+  get(target, key){
+    invariant(key,'get')
+    return Reflect.get(target, key)
+  },
+  set(target, key, value) {
+    invariant(key,'set')
+    return Reflect.set(target, key, value) 
+  },
+  deleteProperty(target, key) {
+    invariant(key,'delete')
+    return Reflect.deleteProperty(target, key)
+  }
+}
+function invariant (key, action) {
+  if(key.startsWith('_')){
+    throw new Error( `Can't ${ action } private "${ key }" property`)
+  }
+}
       </code></pre>
       <pre><code class="language-js">
-
+const target = { _secret: 'foo' }
+const proxy = new Proxy(target, handler)
+console.log('_secret' in proxy)
+// true
+delete proxy._secret
+// Error：無法刪除 "_secret" 私有特性
       </code></pre>
       <pre><code class="language-js">
 
