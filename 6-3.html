@@ -114,6 +114,62 @@ console.log('_secret' in proxy)
 delete proxy._secret
 // Error：無法刪除 "_secret" 私有特性
       </code></pre>
+      <h3 id="6-3-3">6-3-3 defineProperty 機關</h3>
+
+      <pre><code class="language-js">
+const pizza = {}
+pizza.topping ='ham',
+Object.defineProperty(pizza, 'extraCheese', { value: true })
+console.log(object.getOwnPropertyDescriptor(pizza,'topping' ))
+// { 
+//  value: 'ham',
+//  writable: true,
+//  enumerable: true,
+//  configurable: true
+// }
+console.log(Object.getOwnPropertyDescriptor(pizza,'extraCheese'))
+// {
+//  value: true,
+//  writable: false,
+//  enumerable: false,
+//  configurable: false
+// }
+      </code></pre>
+      <pre><code class="language-js">
+const handler = { 
+  defineProperty(target, key, descriptor){
+    return false
+  }
+}
+const target = {}
+const proxy = new Proxy(target, handler)
+proxy.extraCheese = false
+// TypeError：代理器上的 'defineProperty'：機關回傳結果為 false
+      </code></pre>
+
+      <pre><code class="language-js">
+const handler = {
+  defineProperty(target, key, descriptor) {
+    invariant (key,'define')
+    return Reflect.defineProperty(target, key, descriptor)
+  }
+}
+function invariant (key, action) {
+  if(key.startswith('_')){
+    throw new Error ( `Can't ${ action } private "${ key }"  property` )
+  } 
+}
+      </code></pre>
+      <pre><code class="language-js">
+const target= {}
+const proxy = new Proxy(target, handler)
+proxy.topping = 'cheese'
+proxy._ secretIngredient = 'salsa'
+// Error:'無法定義 "secretIngredient" 私有特性'
+      </code></pre>
+      <pre><code class="language-js">
+
+      </code></pre>
       <pre><code class="language-js">
 
       </code></pre>
