@@ -371,7 +371,7 @@ const menu = [
       },
       {
         id: "6-2",
-        title: "6-2 ",
+        title: "6-2 可廢止的代理器",
         href: "#6-2.html",
         anchorMenu: []
       },
@@ -399,6 +399,48 @@ const menu = [
             id: "6-3-4",
             title: "6-3-4 ownkeys 機關",
             href: "6-3.html#6-3-4",
+          }, 
+        ]
+      },
+      {
+        id: "6-4",
+        title: "6-4 進階的代理器機關",
+        href: "#6-4.html",
+        anchorMenu:[
+          {
+            id: "6-4-1",
+            title: "6-4-1 ",
+            href: "6-4.html#6-4-1",
+          }, 
+          {
+            id: "6-4-2",
+            title: "6-4-2 ",
+            href: "6-4.html#6-4-2",
+          }, 
+          {
+            id: "6-4-3",
+            title: "6-4-3 ",
+            href: "6-4.html#6-4-3",
+          }, 
+          {
+            id: "6-4-4",
+            title: "6-4-4 ",
+            href: "6-4.html#6-4-4",
+          }, 
+          {
+            id: "6-4-5",
+            title: "6-4-5 ",
+            href: "6-4.html#6-4-5",
+          }, 
+          {
+            id: "6-4-6",
+            title: "6-4-6 ",
+            href: "6-4.html#6-4-6",
+          }, 
+          {
+            id: "6-4-7",
+            title: "6-4-7 ",
+            href: "6-4.html#6-4-7",
           }, 
         ]
       },
