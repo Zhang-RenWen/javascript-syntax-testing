@@ -43,7 +43,7 @@ has(target, key) {
 }
 function invariant (key, action) {
   if(key.startsWith('_')) {  
-    throw new Error (`Can't ${ action } private "${ key}"property`)
+    throw new Error(`Can't ${ action } private "${ key}"property`)
   }
 }
                 </code></pre>
@@ -156,7 +156,7 @@ const handler = {
 }
 function invariant (key, action) {
   if(key.startswith('_')){
-    throw new Error ( `Can't ${ action } private "${ key }"  property` )
+    throw new Error( `Can't ${ action } private "${ key }"  property` )
   } 
 }
       </code></pre>
@@ -167,16 +167,71 @@ proxy.topping = 'cheese'
 proxy._ secretIngredient = 'salsa'
 // Error:'無法定義 "secretIngredient" 私有特性'
       </code></pre>
+      <h3 id="6-3-4">6-3-4 ownkeys 機關</h3>
       <pre><code class="language-js">
-
+const handler = {
+  OwnKeys(target){
+    return Reflect.ownKeys(target)
+  }
+}
       </code></pre>
+
       <pre><code class="language-js">
+const target = {
+  [Symbol('id' )]: 'ba3dfcc0'
+  _secret:'sauce'
+  _toppingCount: 3,
+  toppings: ['cheese','tomato', 'bacon' ]
+}
+const proxy = new Proxy(target, handler)
+  for (const key of Object.keys(proxy)) {
+  console.log(key)
+  // '_secret'
+  // '_toppingCount'
+  // 'toppings'
+}
+        </code></pre>
 
-      </code></pre>
       <pre><code class="language-js">
+const handler ={
+  OwnKeys (target) {
+    return Reflect.ownKeys(target).filter(key => {
+      const isStringKey = typeof key ==='string'
+      if(isStringKey){
+        return !key.startswith('_')
+      }
+      return true
+    })
+  }
+}
+        </code></pre>
 
-      </code></pre>
-      <div class="border-block"></div>
+      <pre><code class="language-js">
+const target = {
+  [Symbol( 'id' )]:'ba3dfcc0',
+  _secret:'sauce'
+  _toppingCount: 3,
+  toppings: ['cheese','tomato','bacon' ]
+}
+const proxy = new Proxy(target, handler)
+for (const key of Object.keys(proxy)){
+  console.log(key)
+  // 'toppings'
+}
+        </code></pre>
+      <pre><code class="language-js">
+const target ={
+  [Symbol('id')]:'ba3dfcc0',
+  _secret: 'sauce'
+  _toppingCount: 3,
+  toppings: ['cheese','tomato','bacon']
+}
+const proxy = new Proxy(target, handler)
+for (const key of Object.getOwnPropertySymbols(proxy)) {
+  console.log(key)
+  // Symbol(id)
+}
+        </code></pre>
     </section>
   </main>
 </body>

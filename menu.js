@@ -390,6 +390,16 @@ const menu = [
             title: "6-3-2 deleteProperty 機關",
             href: "6-3.html#6-3-2",
           }, 
+          {
+            id: "6-3-3",
+            title: "6-3-3 defineProperty 機關",
+            href: "6-3.html#6-3-3",
+          }, 
+          {
+            id: "6-3-4",
+            title: "6-3-4 ownkeys 機關",
+            href: "6-3.html#6-3-4",
+          }, 
         ]
       },
     ],
