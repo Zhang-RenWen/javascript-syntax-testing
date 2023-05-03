@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>6-4 進階的代理器機關</h2>
+      <h3 id="6-4-1">6-4-1 getOwnPropertyDescriptor 機關</h3>
+      <pre><code class="language-js">
+const handler = {
+  getOwnPropertyDescriptor(target, key) {
+    invariant(key,'get property descriptor for')
+    return Reflect.getOwnPropertyDescriptor (target, key) 
+  }
+}
+function invariant (key, action) {
+  if(key.startswith('_')){
+    throw new Error( `Can't ${ action } private "${ key }"property`)
+  }
+}
+const target = {}
+const proxy = new Proxy(target, handler)
+Reflect.getOwnPropertyDescriptor(proxy,'_secret')
+// Error：無法取得私有特性 '_secret' 的特性描述子
+        </code></pre>
+      <pre><code class="language-js">
+const handler = {
+  getOwnPropertyDescriptor(target, key) {
+   if (key.startswith('_')){
+     return 
+   }
+   return Reflect.getOwnPropertyDescriptor(target, key)
+  }
+}
+const target = {
+   _secret:'sauce',
+   topping:'mozzarella'
+}
+const proxy= new Proxy(target, handler)
+console.log(Object.getOwnPropertyDescriptor(proxy,'dressing'))
+// undefined
+console.log(Object.getOwnPropertyDescriptor(proxy,'_secret'))
+// undefined
+console.log(Object.getOwnPropertyDescriptor(proxy,'topping'))
+// {
+//  value:'mozzarella',
+//  writable: true,
+//  enumerable: true,
+//  configurable: true
+// }
+
+// getownpropertyDescriptor 機關能夠攔截 Object#hasOwnProperty 的操作，它需仰賴特性描述子來判斷指定特性是否存在。
+console.log(proxy.hasOwnProperty('topping'))
+// true
+console.log(proxy.hasOwnProperty('_secret'))
+// false
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+
+
+
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

@@ -409,7 +409,7 @@ const menu = [
         anchorMenu:[
           {
             id: "6-4-1",
-            title: "6-4-1 ",
+            title: "6-4-1 getOwnPropertyDescriptor 機關",
             href: "6-4.html#6-4-1",
           }, 
           {
