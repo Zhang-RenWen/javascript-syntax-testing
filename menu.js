@@ -414,12 +414,12 @@ const menu = [
           }, 
           {
             id: "6-4-2",
-            title: "6-4-2 apply 機關",
+           title: "6-4-2 apply 機關",
             href: "6-4.html#6-4-2",
           }, 
           {
             id: "6-4-3",
-            title: "6-4-3 ",
+            title: "6-4-3 setPrototypeOf 機關",
             href: "6-4.html#6-4-3",
           }, 
           {

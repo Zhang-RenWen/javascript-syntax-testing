@@ -73,23 +73,104 @@ console.log(proxy.hasOwnProperty('topping'))
 console.log(proxy.hasOwnProperty('_secret'))
 // false
         </code></pre>
-      <pre><code class="language-js">
-
-          
-        </code></pre>
+      <h3 id="6-4-2">6-4-2 apply 機關</h3>
 
       <pre><code class="language-js">
-
+proxy('cats','dogs')
+proxy(...['cats','dogs' ])
+proxy.call(null,'cats','dogs')
+proxy.apply(null, ['cats','dogs' ])
+Reflect.apply(proxy, null, ['cat','dogs'])
+        </code></pre>
+      <pre><code class="language-js">
+const handler = {
+  apply(target, ctx, args) {
+    return Reflect.apply(target, ctx, args)
+  }
+}   
+        </code></pre>
+      <pre><code class="language-js">
+const twice= {
+  apply(target, ctx, args) {
+    return Reflect.apply(target, ctx, args) * 2
+  }
+}
+function sum(a, b) {
+  return a + b
+}
+const proxy = new Proxy(sum, twice)
+console.log(proxy(1, 2))
+// 6
+        </code></pre>
+      <pre><code class="language-js">
+const logger = {
+  return this
+}
+        </code></pre>
+      <pre><code class="language-js">
+logger.test = logger.test.bind(logger)   
+        </code></pre>
+      <pre><code class="language-js">
+const selfish = {
+  get (target, key) {
+    const value = Reflect.get(target, key)
+    if (typeof value !== 'function' ){
+      return value
+    }
+    return value.bind(target)
+  }
+}
+const proxy = new Proxy (logger, selfish)
           
         </code></pre>
       <pre><code class="language-js">
-
+const something
+console.log(logger.test() === logger)
+// true
+console.log(logger.test.call(something) === something)
+// true
+console.log(proxy.test() === logger)
+// true
+console.log(proxy.test.call(something) === logger)
+// true
           
         </code></pre>
       <pre><code class="language-js">
-
+console.log(proxy.test !== proxy.test)
+// true  
+        </code></pre>
+      <pre><code class="language-js">
+function selfish(target) {
+  const cache = new WeakMap()
+  const handler = {
+    get(target, key){
+      const value = Reflect.get(target, key)
+      if (typeof value !== 'function' ){
+       return value
+      }
+      if(!cache.has(value)){
+        cache.set (value, value.bind (target))
+      }
+      return cache.get (value)
+    }
+  } 
+  const proxy = new Proxy(target, handler)
+  return proxy
+}
           
         </code></pre>
+      <pre><code class="language-js">
+const selfishLogger = selfish(logger)
+console.log(selfishLogger.test === selfishLogger.test)
+// true
+console.log(selfishLogger.test() === selfishLogger)
+// true
+console.log(selfishLogger.test.call(something) selfishLogger)
+// true
+          
+        </code></pre>
+      <h3 id="6-4-3">6-4-3 setPrototypeOf 機關</h3>
+
       <pre><code class="language-js">
 
           
