@@ -419,27 +419,27 @@ const menu = [
           }, 
           {
             id: "6-4-3",
-            title: "6-4-3 setPrototypeOf 機關",
+            title: "6-4-3 construct 機關",
             href: "6-4.html#6-4-3",
           }, 
           {
             id: "6-4-4",
-            title: "6-4-4 ",
+            title: "6-4-4 setPrototypeOf 機關",
             href: "6-4.html#6-4-4",
           }, 
           {
             id: "6-4-5",
-            title: "6-4-5 ",
+            title: "6-4-5 setPrototypeOf 機關",
             href: "6-4.html#6-4-5",
           }, 
           {
             id: "6-4-6",
-            title: "6-4-6 ",
+            title: "6-4-6 preventExtensions 機關",
             href: "6-4.html#6-4-6",
           }, 
           {
             id: "6-4-7",
-            title: "6-4-7 ",
+            title: "6-4-7 isExtensible 機關",
             href: "6-4.html#6-4-7",
           }, 
         ]
