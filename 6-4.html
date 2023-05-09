@@ -172,15 +172,45 @@ console.log(selfishLogger.test.call(something) selfishLogger)
       <h3 id="6-4-3">6-4-3 setPrototypeOf 機關</h3>
 
       <pre><code class="language-js">
+const handler = {
+  construct (Target, args) {
+    return new Target(...args)
+  }
+}
+        </code></pre>
 
+      <pre><code class="language-js">
+const handler = {
+  construct(Target, args) {
+    return Reflect.construct(Target, args)
+  }
+}     
+        </code></pre>
+      <pre><code class="language-js">
+const handler = {
+  construct(Target, args) {
+    const [ name ] = args
+    const target = Reflect.construct(Target, args)
+    target.name = name
+    return target
+  }
+  class Target
+    hello(){
+      console.log(`Hello, ${ this.name }!`)
+    }
+}
           
         </code></pre>
       <pre><code class="language-js">
+const target= new Target()
+target.name = 'Nicolás'
+target.hello()
+// 'Hello, Nicolás'
 
-          
-        </code></pre>
-      <pre><code class="language-js">
-
+const ProxiedTarget = new Proxy(Target, handler)
+const proxy = new ProxiedTarget('Nicolás' )
+proxy.hello()
+// 'Hello, Nicolás'
           
         </code></pre>
       <pre><code class="language-js">
