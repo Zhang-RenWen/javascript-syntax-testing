@@ -277,31 +277,38 @@ proxy.setPrototypeOf(proxy, base)
       <h3 id="6-4-6">6-4-6 preventExtensions 機關</h3>
 
       <pre><code class="language-js">
-
-          
+const canExtend = new WeakSet()
+const handler = {
+  preventExtensions(target) {
+    const canPrevent = !canExtend.has(target)
+    if (canPrevent) {
+      Object.preventExtensions(target)
+    }
+    return Reflect.preventExtensions(target)
+  }
+}
         </code></pre>
       <pre><code class="language-js">
-
-          
+const target = {}
+const proxy = new Proxy(target, handler)
+canExtend.add(target)
+Object.preventExtensions(proxy)
+// TypeError:'preventExtensions'於 proxy:
+// 機關回傳錯誤
         </code></pre>
       <pre><code class="language-js">
-
-          
+const target = {}
+const proxy = new Proxy(target, handler)
+canExtend.add(target)
+canExtend.delete(target)
+Object.preventExtensions(proxy)
+console.log(Object.isExtensible(proxy))
+// false
         </code></pre>
-      <pre><code class="language-js">
-
-          
-        </code></pre>
-      <pre><code class="language-js">
-
-          
-        </code></pre>
-      <pre><code class="language-js">
-
-          
-        </code></pre>
-
-      <div class="border-block"></div>
+      <h3 id="6-4-7">
+        6-4-7 isExtensible 機關
+      </h3>
+      <p>description...</p>
     </section>
   </main>
 </body>
