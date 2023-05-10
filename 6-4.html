@@ -248,6 +248,34 @@ proxy.push('first','second' )
 console.log(proxy)
 // {0: 'first', 1:'second' , length: 2 }
         </code></pre>
+      <h3 id="6-4-5">6-4-5 setPrototypeOf 機關</h3>
+      <pre><code class="language-js">
+const handler{
+  setPrototypeOf(target, proto) {
+    Object.setPrototypeOf(target, proto)
+  }
+}
+const base = {}
+function Target(){}
+const proxy = new Proxy(Target, handler)
+proxy.setPrototypeOf(proxy, base)
+console.log(proxy.prototype === base)
+// true
+        </code></pre>
+      <pre><code class="language-js">
+const handler={
+  setPrototypeOf(target, proto){
+    throw new Error('Changing the prototype is forbidden' )
+  }
+}
+const base = {}
+function Target() {}
+const proxy = new Proxy(Target, handler)
+proxy.setPrototypeOf(proxy, base)
+// Error: Changing the prototype is forbidden
+        </code></pre>
+      <h3 id="6-4-6">6-4-6 preventExtensions 機關</h3>
+
       <pre><code class="language-js">
 
           
@@ -260,7 +288,18 @@ console.log(proxy)
 
           
         </code></pre>
+      <pre><code class="language-js">
 
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
+      <pre><code class="language-js">
+
+          
+        </code></pre>
 
       <div class="border-block"></div>
     </section>
