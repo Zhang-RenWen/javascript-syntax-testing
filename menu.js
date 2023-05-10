@@ -11,7 +11,7 @@ const menu = [
         //   {
         //     id: "2-2-2",
         //     title: "2-2-2 箭頭函式",
-        //     href: "#",
+        //     href: "",
         //   },
         // ],
       },
@@ -350,7 +350,7 @@ const menu = [
       {
         id: "6-1",
         title: "6-1 代理器初探",
-        href: "#6-1.html",
+        href: "6-1.html",
         anchorMenu: [
           {
             id: "6-1-1",
@@ -372,13 +372,13 @@ const menu = [
       {
         id: "6-2",
         title: "6-2 可廢止的代理器",
-        href: "#6-2.html",
+        href: "6-2.html",
         anchorMenu: []
       },
       {
         id: "6-3",
         title: "6-3 代理器機關處理器",
-        href: "#6-3.html",
+        href: "6-3.html",
         anchorMenu: [
           {
             id: "6-3-1",
@@ -405,7 +405,7 @@ const menu = [
       {
         id: "6-4",
         title: "6-4 進階的代理器機關",
-        href: "#6-4.html",
+        href: "6-4.html",
         anchorMenu:[
           {
             id: "6-4-1",
@@ -448,34 +448,366 @@ const menu = [
   },
   {
     id: "7",
-    title: "Chapter 7",
+    title: "Chapter 7 ES6 內建功能優化",
     submenu: [
       {
         id: "7-1",
-        title: "7-1",
-        href: "#",
+        title: "7-1 數值",
+        href: "7-1.html",
+        anchorMenu:[
+          {
+            id: "7-1-1",
+            title: "7-1-1 二進位和八進位實字",
+            href: "7-1.html#7-1-1",
+          }, 
+          {
+            id: "7-1-2",
+            title: "7-1-2 Number.isNaN",
+            href: "7-1.html#7-1-2",
+          }, 
+          {
+            id: "7-1-3",
+            title: "7-1-3 Number.isFinite",
+            href: "7-1.html#7-1-3",
+          }, 
+          {
+            id: "7-1-4",
+            title: "7-1-4 Number.parseInt",
+            href: "7-1.html#7-1-4",
+          },
+          {
+            id: "7-1-5",
+            title: "7-1-5 Number.parseFloat",
+            href: "7-1.html#7-1-5",
+          },
+          {
+            id: "7-1-6",
+            title: "7-1-6 Number.isInteger",
+            href: "7-1.html#7-1-6",
+          },  
+          {
+            id: "7-1-7",
+            title: "7-1-7 Number.EPSILON",
+            href: "7-1.html#7-1-7",
+          },  
+          {
+            id: "7-1-8",
+            title: "7-1-8 Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER",
+            href: "7-1.html#7-1-8",
+          }, 
+          {
+            id: "7-1-9",
+            title: "7-1-9 Number.isSafeInteger",
+            href: "7-1.html#7-1-9",
+          },    
+        ]
+      },
+      {
+        id: "7-2",
+        title: "7-2 Math 物件",
+        href: "7-2.html",
+        anchorMenu:[
+          {
+            id: "7-2-1",
+            title: "7-2-1 Math.sign",
+            href: "7-2.html#7-2-1",
+          }, 
+          {
+            id: "7-2-2",
+            title: "7-2-2 Math.trunc",
+            href: "7-2.html#7-2-2",
+          }, 
+          {
+            id: "7-2-3",
+            title: "7-2-3 Math.cbrt",
+            href: "7-2.html#7-2-3",
+          }, 
+          {
+            id: "7-2-4",
+            title: "7-2-4 Math.expm1",
+            href: "7-2.html#7-2-4",
+          },
+          {
+            id: "7-2-5",
+            title: "7-2-5 Math.log1p",
+            href: "7-2.html#7-2-5",
+          },
+          {
+            id: "7-2-6",
+            title: "7-2-6 Math.log10",
+            href: "7-2.html#7-2-6",
+          },  
+          {
+            id: "7-2-7",
+            title: "7-2-7 Math.log2",
+            href: "7-2.html#7-2-7",
+          },  
+          {
+            id: "7-2-8",
+            title: "7-2-8 三角函數",
+            href: "7-2.html#7-2-8",
+          }, 
+          {
+            id: "7-2-9",
+            title: "7-2-9 Math.hypot",
+            href: "7-2.html#7-2-9",
+          },  
+          {
+            id: "7-2-10",
+            title: "7-2-10 位元運算輔助器",
+            href: "7-2.html#7-2-10",
+          },   
+        ]
+      },
+      {
+        id: "7-3",
+        title: "7-3 字串和萬國碼",
+        href: "7-3.html",
+        anchorMenu:[
+          {
+            id: "7-3-1",
+            title: "7-3-1 String#startsWith",
+            href: "7-3.html#7-3-1",
+          }, 
+          {
+            id: "7-3-2",
+            title: "7-3-2 String#endsWith",
+            href: "7-3.html#7-3-2",
+          }, 
+          {
+            id: "7-3-3",
+            title: "7-3-3 String#includes",
+            href: "7-3.html#7-3-3",
+          }, 
+          {
+            id: "7-3-4",
+            title: "7-3-4 String#repeat",
+            href: "7-3.html#7-3-4",
+          },
+          {
+            id: "7-3-5",
+            title: "7-3-5 字串補足與修整",
+            href: "7-3.html#7-3-5",
+          },
+          {
+            id: "7-3-6",
+            title: "7-3-6 萬國碼",
+            href: "7-3.html#7-3-6",
+          },  
+          {
+            id: "7-3-7",
+            title: "7-3-7 String.prototype[Symbol.iterator]",
+            href: "7-3.html#7-3-7",
+          },  
+          {
+            id: "7-3-8",
+            title: "7-3-8 分辨字元符號叢集提案",
+            href: "7-3.html#7-3-8",
+          }, 
+          {
+            id: "7-3-9",
+            title: "7-3-9 String#codePointAt",
+            href: "7-3.html#7-3-9",
+          },  
+          {
+            id: "7-3-10",
+            title: "7-3-10 String.fromCodePoint",
+            href: "7-3.html#7-3-10",
+          },  
+          {
+            id: "7-3-11",
+            title: "7-3-11 萬國碼感知的字串返回法",
+            href: "7-3.html#7-3-11",
+          },  
+          {
+            id: "7-3-12",
+            title: "7-3-12 String#normalize",
+            href: "7-3.html#7-3-12",
+          },  
+        ]
+      },
+      {
+        id: "7-4",
+        title: "7-4 正規表示式",
+        href: "7-4.html",
+        anchorMenu:[
+          {
+            id: "7-4-1",
+            title: "7-4-1 黏著比對模式 /y",
+            href: "7-4.html#7-4-1",
+          }, 
+          {
+            id: "7-4-2",
+            title: "7-4-2 萬國碼比對模式 /u",
+            href: "7-4.html#7-4-2",
+          }, 
+          {
+            id: "7-4-3",
+            title: "7-4-3 命名匹配群組",
+            href: "7-4.html#7-4-3",
+          }, 
+          {
+            id: "7-4-4",
+            title: "7-4-4 萬國碼特性跳脫",
+            href: "7-4.html#7-4-4",
+          },
+          {
+            id: "7-4-5",
+            title: "7-4-5 左合子樣式",
+            href: "7-4.html#7-4-5",
+          },
+          {
+            id: "7-4-6",
+            title: "7-4-6 全新的 /s 'dotAll' 模式",
+            href: "7-4.html#7-4-6",
+          },  
+          {
+            id: "7-4-7",
+            title: "7-4-7 String#matchAll",
+            href: "7-4.html#7-4-7",
+          } 
+        ]
+      },
+      {
+        id: "7-5",
+        title: "7-5 陣列",
+        href: "7-5.html",
+        anchorMenu:[
+          {
+            id: "7-5-1",
+            title: "7-5-1 Array.from",
+            href: "7-5.html#7-5-1",
+          }, 
+          {
+            id: "7-5-2",
+            title: "7-5-2 Array.of",
+            href: "7-5.html#7-5-2",
+          }, 
+          {
+            id: "7-5-3",
+            title: "7-5-3 Array#copyWithin",
+            href: "7-5.html#7-5-3",
+          }, 
+          {
+            id: "7-5-4",
+            title: "7-5-4 Array#fill",
+            href: "7-5.html#7-5-4",
+          },
+          {
+            id: "7-5-5",
+            title: "7-5-5 Array#find 和 Array#findIndex",
+            href: "7-5.html#7-5-5",
+          },
+          {
+            id: "7-5-6",
+            title: "7-5-6 Array.keys",
+            href: "7-5.html#7-5-6",
+          },  
+          {
+            id: "7-5-7",
+            title: "7-5-7 Array.values",
+            href: "7-5.html#7-5-7",
+          },  
+          {
+            id: "7-5-8",
+            title: "7-5-8 Array.entries",
+            href: "7-5.html#7-5-8",
+          }, 
+          {
+            id: "7-5-9",
+            title: "7-5-9 Array.prototype[Symbol.iterator]",
+            href: "7-5.html#7-5-9",
+          }   
+        ]
       },
     ],
   },
   {
     id: "8",
-    title: "Chapter 8",
+    title: "Chapter 8 JavaScript 模組",
     submenu: [
       {
         id: "8-1",
-        title: "8-1",
-        href: "#",
+        title: "8-1 CommonJS",
+        href: "8-1.html",
+      },
+      {
+        id: "8-2",
+        title: "8-2 JavaScript 模組",
+        href: "8-2.html",
+        anchorMenu:[
+          {
+            id: "8-2-1",
+            title: "8-2-1 嚴格模式",
+            href: "8-2.html#8-2-1",
+          },  
+          {
+            id: "8-2-2",
+            title: "8-2-2 export 輸出敘述",
+            href: "8-2.html#8-2-2",
+          },
+          {
+            id: "8-2-3",
+            title: "8-2-3 import 載入敘述",
+            href: "8-2.html#8-2-3",
+          },        
+          {
+            id: "8-2-4",
+            title: "8-2-4 動態 import()",
+            href: "8-2.html#8-2-4",
+          },     
+        ]
+      },
+      {
+        id: "8-3",
+        title: "8-3 ES 模組操作的實務考量",
+        href: "8-3.html",
       },
     ],
   },
   {
     id: "9",
-    title: "Chapter 9",
+    title: "Chapter 9 實務操作的考量",
     submenu: [
       {
         id: "9-1",
-        title: "9-1",
-        href: "#",
+        title: "9-1 變數宣告",
+        href: "9-1.html",
+      },
+      {
+        id: "9-2",
+        title: "9-2 字串樣板",
+        href: "9-2.html",
+      },
+      {
+        id: "9-3",
+        title: "9-3 簡化語法與物件解構賦值",
+        href: "9-3.html",
+      },
+      {
+        id: "9-4",
+        title: "9-4 其餘展開運算子",
+        href: "9-4.html",
+      },
+      {
+        id: "9-5",
+        title: "9-5 探究各類函式宣告方法",
+        href: "9-5.html",
+      },
+      {
+        id: "9-6",
+        title: "9-6 類別與代理器",
+        href: "9-6.html",
+      },
+      {
+        id: "9-7",
+        title: "9-7 非同步程式流程",
+        href: "9-7.html",
+      },
+      {
+        id: "9-8",
+        title: "9-8 複雜性、抽象化與規範",
+        href: "9-8.html",
       },
     ],
   },
