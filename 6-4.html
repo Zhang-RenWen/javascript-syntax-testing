@@ -211,13 +211,55 @@ const ProxiedTarget = new Proxy(Target, handler)
 const proxy = new ProxiedTarget('Nicolás' )
 proxy.hello()
 // 'Hello, Nicolás'
+        </code></pre>
+      <h3 id="6-4-4">6-4-4 setPrototypeOf 機關</h3>
+      <pre><code class="language-js">
+const handler = {
+  getPrototypeOf: target=> Array.prototype
+}
+const target = {}
+const proxy = new Proxy(target, handler)
+console.log(proxy instanceof Array)
+// true
+          
+        </code></pre>
+      <pre><code class="language-js">
+console.log(proxy.push)
+// undefined
+        </code></pre>
+      <pre><code class="language-js">
+const handler = {
+  getPrototypeOf: target => Array.prototype,
+  get(target, key) {
+    return(
+      Reflect.get(target, key)||
+      Reflect.get(Array.prototype, key)
+    )
+  }
+}
+const target = {}
+const proxy = new Proxy(target, handler)
+          
+        </code></pre>
+      <pre><code class="language-js">
+console.log(proxy.push)
+// function push(){ [native code] }
+proxy.push('first','second' )
+console.log(proxy)
+// {0: 'first', 1:'second' , length: 2 }
+        </code></pre>
+      <pre><code class="language-js">
+
           
         </code></pre>
       <pre><code class="language-js">
 
           
         </code></pre>
+      <pre><code class="language-js">
 
+          
+        </code></pre>
 
 
       <div class="border-block"></div>
