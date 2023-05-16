@@ -53,6 +53,41 @@ console.log(0x0ff) // 255
 console.log(0xf00) // 3840
       </code></pre>
       <h3 id="7-1-2">7-1-2 Number.isNaN</h3>
+      <pre><code class="language-js">
+Number.isNaN(123)
+// false，整數不是 NaN
+Number.isNaN(Infinity)
+// false ，Infinity不是NaN
+Number.isNaN('a hundred' )
+// false , 'a hundred'不是 NaN
+Number.isNaN(NaN)
+// true , NaN 是 NaN
+Number.isNaN('a hundred'/ 'two')
+// true
+      </code></pre>
+      <pre><code class="language-js">
+isNaN('a hundred')
+// true，因為 Number('a hundred')是 NaN
+isNaN(new Date())
+// false, 因為 Number(new Date()) 使用 Date#valueOf 會回傳一個 unix timestamp 數值
+      </code></pre>
+      <pre><code class="language-js">
+function isNumber(value){
+  return typeof value === 'number' && !Number.isNaN(value)
+}
+      </code></pre>
+      <pre><code class="language-js">
+isNumber(1)
+// true
+isNumber(Infinity)
+// true
+isNumber(NaN)
+// false
+isNumber('two")
+// false
+isNumber(new Date())
+// false
+      </code></pre>
       <h3 id="7-1-3">7-1-3 Number.isFinite</h3>
       <h3 id="7-1-4">7-1-4 Number.parseInt</h3>
       <h3 id="7-1-5">7-1-5 Number.parseFloat</h3>
