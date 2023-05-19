@@ -122,7 +122,46 @@ function numberIsFinite(value) {
   return typeof value ==='number' && isFinite(value)
 }
       </code></pre>
+
       <h3 id="7-1-4">7-1-4 Number.parseInt</h3>
+      <pre><code class="language-js">
+console.log(Number.parseInt === parseInt)
+// true
+      </code></pre>
+      <pre><code class="language-js">
+parseInt('0xf00")
+// 3840
+parseInt('0xf00', 16)
+// 3840
+      </code></pre>
+      <pre><code class="language-js">
+parseInt('0xf00',10)
+// 0
+parseInt('5xf00',10)
+// 5 舉例說明此處並無任何的特別的動作
+      </code></pre>
+      <pre><code class="language-js">
+parseInt('0b011')
+// 0
+parseInt('0b011', 2)
+// 0
+parseInt('0o100')
+// 0
+parseInt('0o100' , 8)
+// 0
+      </code></pre>
+      <pre><code class="language-js">
+parseInt('0b011'.slice(2),2)
+// 3
+parseInt('0o110'.slice(2), 8)
+// 72
+      </code></pre>
+      <pre><code class="language-js">
+Number('0b011')
+// 3
+Number('0o110')
+// 72
+      </code></pre>
       <h3 id="7-1-5">7-1-5 Number.parseFloat</h3>
       <h3 id="7-1-6">7-1-6 Number.isInteger</h3>
       <h3 id="7-1-7">7-1-7 Number.EPSILON</h3>
