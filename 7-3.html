@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.//normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>7-3 字串和萬國碼</h2>
+      <pre><code class="language-js">
+function greet(name){
+  return `Hello, ${ name }!`
+}
+greet('Gandalf') //'Hello, Gandalf!'
+        </code></pre>
+      <h3 id="7-3-1">7-3-1 String#startsWith</h3>
+      <pre><code class="language-js">
+'hello gary'.indexOf('gary') // 6
+'hello gary'.indexOf('hello') // 0
+'hello gary'.indexOf('stephan') // -1
+        </code></pre>
+      <pre><code class="language-js">
+'hello gary'.indexOf('gary') === 0 // false
+'hello gary'.indexOf('hello') === 0 // true
+'hello gary'.indexOf('stephan') === 0 // false
+        </code></pre>
+      <pre><code class="language-js">
+'hello gary'.startsWith('gary') // false
+'hello gary'.startsWith('hello') // true
+'hello gary'.startsWith('stephan') // false
+        </code></pre>
+      <pre><code class="language-js">
+'hello gary'.slice(6).indexOf('gary') === 0 //true
+        </code></pre>
+      <pre><code class="language-js">
+'hello ell'.indexOf('ell') === 6 
+// false，因為結果為 1
+        </code></pre>
+      <pre><code class="language-js">
+'hello ell'.indexOf('ell', 6) === 6
+ // true
+        </code></pre>
+      <pre><code class="language-js">
+'hello ell'.startsWith('ell', 6) // true
+        </code></pre>
+      <h3 id="7-3-2">7-3-2 String#endsWith</h3>
+      <pre><code class="language-js">
+'hello gary'.endswith('gary')
+// true
+'hello gary'.endsWith('hello')
+// false
+      </code></pre>
+      <pre><code class="language-js">
+'hello gary'.endswith('gary', 10)
+// true
+'hello gary'
+'.endswith('gary' ,9)
+// false，在此案例中會結束於 'gar'
+'hello gary'.endsWith('hell', 4)
+// true
+      </code></pre>
+      <h3 id="7-3-3">7-3-3 String#includes</h3>
+      <pre><code class="language-js">
+'hello gary'.includes('hell')
+// true
+'hello gary'.includes('ga')
+// true
+'hello gary'.includes('rye')
+// false
+      </code></pre>
+      <pre><code class="language-js">
+'hello gary'.indexOf('ga') !== -1
+// true
+'hello gary'.indexOf('rye') !== -1
+// false
+      </code></pre>
+      <pre><code class="language-js">
+'hello gary'.includes('ga', 4)
+// true
+'hello gary'.includes('ga', 7)
+// false
+      </code></pre>
+      <h3 id="7-3-4">7-3-4 String#repeat</h3>
+      <pre><code class="language-js">
+'ha'.repeat(1)
+// 'ha'
+'ha'.repeat(2)
+// 'haha'
+'ha'.repeat(5) 
+// 'hahahahaha'
+'ha'.repeat(0)
+// '' 
+      </code></pre>
+      <pre><code class="language-js">
+'ha'.repeat(Infinity)
+// RangeError
+'ha'.repeat(-1)
+// RangeError
+      </code></pre>
+      <pre><code class="language-js">
+'ha'.repeat(3.9)
+// 'hahaha'，count 值向下捨去取整數 3
+      </code></pre>
+      <pre><code class="language-js">
+若count 參數傳入 NaN，則會被轉譯為 0。
+'ha'.repeat(NaN)
+// ''
+      </code></pre>
+      <pre><code class="language-js">
+// 引數若為非數值，則會被強制轉換為數值。
+'ha'.repeat('ha')
+// ''，因為 Number('ha')是 NaN
+'ha'.repeat('3') 
+// 'hahaha'，因為 Number('3')是3
+      </code></pre>
+      <pre><code class="language-js">
+function ToInteger(number) {
+  return Math.floor(Math.abs(number)) * Math.sign(number)
+}
+      </code></pre>
+      <pre><code class="language-js">
+'na'.repeat(-0.1) 
+// '，因為 count 會被捨去小數部位並予值為 -0
+'na'.repeat(-0.9)
+// '，因為 count 會被捨去小數部位並予值為 -0
+'na'.repeat(-0.9999)
+// '，因為 count 會被捨去小數部位並予值為 -0
+'na'.repeat(-1)
+//  Uncaught RangeError ：無效的 count 值
+        </code></pre>
+      <pre><code class="language-js">
+function indent (text, spaces = 2) {
+  return text.split('\n').map(line =&gt; ' '.repeat(spaces) + line).join('\n')
+}
+indent( `a
+b
+c`, 2)
+// ' a\n b\n c'
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+  
+          </code></pre>
+      <pre><code class="language-js">
+  
+          </code></pre>
+      <pre><code class="language-js">
+  
+          </code></pre>
+
+      <pre><code class="language-js">
+  
+          </code></pre>
+      <pre><code class="language-js">
+  
+          </code></pre>
+      <pre><code class="language-js">
+  
+          </code></pre>
+      <pre><code class="language-js">
+  
+          </code></pre>
+      <pre><code class="language-js">
+    
+            </code></pre>
+      <pre><code class="language-js">
+    
+            </code></pre>
+      <pre><code class="language-js">
+    
+            </code></pre>
+
+      <pre><code class="language-js">
+    
+            </code></pre>
+      <pre><code class="language-js">
+    
+            </code></pre>
+      <pre><code class="language-js">
+    
+            </code></pre>
+      <pre><code class="language-js">
+    
+            </code></pre>
+      <pre><code class="language-js">
+      
+              </code></pre>
+      <pre><code class="language-js">
+      
+              </code></pre>
+      <pre><code class="language-js">
+      
+              </code></pre>
+
+      <pre><code class="language-js">
+      
+              </code></pre>
+      <pre><code class="language-js">
+      
+              </code></pre>
+      <pre><code class="language-js">
+      
+              </code></pre>
+      <pre><code class="language-js">
+      
+              </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
