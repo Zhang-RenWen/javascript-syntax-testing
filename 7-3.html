@@ -250,115 +250,145 @@ overLined('o')
 // 16，應該是11
             </code></pre>
                   <h3 id="7-3-8">7-3-8 分辨字元符號叢集提案</h3>
+                  <pre><code class="language-js">
+function getGraphemes(locale, text){
+  const segmenter = new Intl.Segmenter(locale, {
+    granularity:'grapheme'
+  })
+  const sequence = segmenter.segment(text)
+  const graphemes = [ ...sequence ].map(item => item.segment)
+  return graphemes
+}
+// getGraphemes('es','Esto está bien bueno! ')
+
+        </code></pre>
                   <h3 id="7-3-9">7-3-9 String#codePointAt</h3>
+                  <pre><code class="language-js">
+const text = '\ud83d\udc0e\ud83d\udc71\u2764'
+text.codePointAt(0)
+// 0x1f40e
+text.codePointAt(2)
+// 0x1f471
+text.codePointAt(4)
+// 0x2764
+      </code></pre>
+                  <pre><code class="language-js">
+const text = '\ud83d\udc0e\ud83d\udc71\u2764'
+for(const codePoint of text) {
+  console.log(codePoint.codePointAt(0))
+  // 0x1f40e
+  // 0x1f471
+  // 0x2764
+}
+      </code></pre>
+                  <pre><code class="language-js">
+const text ='\ud83d\udc0e\ud83d\udc71\u2764'
+[...text ].map(cp=&gt; cp.codePointAt(0))
+// [0x1f48e, 0x1f471, 0x2764]
+        </code></pre>
+                  <pre><code class="language-js">
+const text = '\ud83d\udc0e\ud83d\udc71\u2764'
+[...text].map(cp =&gt; cp.codePointAt(0).toString(16))
+// ['1f40e','1f471','2764' ]
+      </code></pre>
+                  <pre><code class="language-js">
+'\u{1f40e}'
+// '🐎'
+'\u{1f471}'
+// '👱'
+'\u{2764}'
+// '❤'
+      </code></pre>
                   <h3 id="7-3-10">7-3-10 String.fromCodePoint</h3>
+                  <pre><code class="language-js">
+String.fromCodePoint(0x1f40e)
+// '🐎'
+String. fromCodePoint(0x1f471)
+// '👱'
+String.fromCodePoint(0x2764)
+// '❤'
+      </code></pre>
+                  <pre><code class="language-js">
+String.fromCodePoint(128014)
+// '🐎'
+String.fromCodePoint(128113)
+// '👱'
+String.fromCodePoint(10084)
+// '❤'
+      </code></pre>
+                  <pre><code class="language-js">
+String.fromCodePoint(0x1f40e, 0x1f471, 0x2764)
+// '🐎👱❤'
+      </code></pre>
+                  <pre><code class="language-js">
+const text = '\ud83d\udc0e\ud83d\ udc71\u2764'
+[...text].map(cp =&gt; cp.codePointAt(0))
+.map(cp =&gt; String.fromCodePoint(cp))
+.join('')
+// '🐎👱❤'
+      </code></pre>
                   <h3 id="7-3-11">7-3-11 萬國碼感知的字串返回法</h3>
+                  <pre><code class="language-js">
+const text ='\ud83d\udc0e\ud83d\udc71\u2764'
+text.split(' ').map(cp => cp.codePointAt(0))
+// [55357, 56334, 55357, 56433, 10084]
+text.split('').reverse().map(cp =&gt; cp.codePointAt(0))
+// [10084, 56433, 128014, 55357]
+        </code></pre>
+                  <pre><code class="language-js">
+const text='\ud83d \udc0e\ud83d \udc71\u2764'
+[...text].reverse().join('')
+// '❤👱🐎'
+        </code></pre>
+                  <pre><code class="language-js">
+[...'hello\u0305'].reverse().join('')
+// '̅olleh'
+        </code></pre>
                   <h3 id="7-3-12">7-3-12 String#normalize</h3>
                   <pre><code class="language-js">
+'mañana' ==='mañana'
+// false
+// only escape non-ASCII and unprintable ASCII characters : 'ma\xF1ana man\u0303ana'
+// output JSON : '\x6D\x61\xF1\x61\x6E\x61\x20\x6D\x61\x6E\u0303\x61\x6E\x61'
+var q = 'q\u0307\u0323'.normalize('NFC') // q̣̇
+// 經過 normalize 還是 q\u0307\u0323
 
-        </code></pre>
+console.log([...q].length);
+// 是 3 不是 1
 
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-  
+console.log([...'Z͑ͫ̓ͪ̂ͫ̽͏̴̙̤̞͉͚̯̞̠͍A̴̵̜̰͔ͫ͗͢L̠ͨͧͩ͘G̴̻͈͍͔̹̑͗̎̅͛́Ǫ̵̹̻̝̳͂̌̌͘!͖̬̰̙̗̿̋ͥͥ̂ͣ̐́́͜͞'].length);
+// 是 74 不是 6
           </code></pre>
                   <pre><code class="language-js">
-  
-          </code></pre>
-                  <pre><code class="language-js">
-  
-          </code></pre>
-
-                  <pre><code class="language-js">
-  
-          </code></pre>
-                  <pre><code class="language-js">
-  
-          </code></pre>
-                  <pre><code class="language-js">
-  
-          </code></pre>
-                  <pre><code class="language-js">
-  
-          </code></pre>
-                  <pre><code class="language-js">
-    
+[...'mañana' ].map(cp =&gt; cp.codePointAt(0).toString(16))
+// ['6d', '61' ,'f1' ,'61' ,'6e' ,'61']
+[...'mañana'].map(cp =&gt; cp.codePointAt(0).toString(16))
+// ['6d' ,'61' ,'6e', '303', '61','6e' ,'61']
             </code></pre>
                   <pre><code class="language-js">
-    
+[...'mañana'].length
+// 6
+[...'mañana'].length
+// 7
             </code></pre>
                   <pre><code class="language-js">
-    
-            </code></pre>
-
-                  <pre><code class="language-js">
-    
-            </code></pre>
-                  <pre><code class="language-js">
-    
+const normalized = 'mañana'.normalize()
+[...normalized].map(cp => cp.codePointAt(0).toString(16))
+// ['6d','61'. 'f1' ,'61', '6e','61' ]
+normalized.length
+// 6
             </code></pre>
                   <pre><code class="language-js">
-    
+function compare (left, right) {
+  return left.normalize() === right.normalize()
+}
+const normal = 'mañana'
+const irregular ='mañana'
+normal === irregular
+// false
+compare(normal, irregular)
+// true
             </code></pre>
-                  <pre><code class="language-js">
-    
-            </code></pre>
-                  <pre><code class="language-js">
-      
-              </code></pre>
-                  <pre><code class="language-js">
-      
-              </code></pre>
-                  <pre><code class="language-js">
-      
-              </code></pre>
-
-                  <pre><code class="language-js">
-      
-              </code></pre>
-                  <pre><code class="language-js">
-      
-              </code></pre>
-                  <pre><code class="language-js">
-      
-              </code></pre>
-                  <pre><code class="language-js">
-      
-              </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <pre><code class="language-js">
-
-        </code></pre>
-                  <div class="border-block"></div>
             </section>
       </main>
 </body>
