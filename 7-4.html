@@ -24,6 +24,33 @@
     <section>
       <h2>7-4 正規表示式</h2>
       <h3 id="7-4-1">7-4-1 黏著比對模式 /y</h3>
+      <pre><code class="language-js">
+function matcher (regex, input) {
+  return () =&gt; {
+    cost match = regex.exec(input)
+    const lastIndex = regex.lastIndex
+    return { lastIndex, match }
+  }
+}
+  const input = 'haha haha haha'
+  const nextGlobal = matcher(/ha/g, input)
+  console.log(nextGlobal()) // { lastIndex: 2, match: ['ha' ] }
+  console.1og(nextGlobal()) // { lastIndex: 4, match: ['ha'] }
+  console.log(nextGlobal()) // { lastIndex: 7, match: ['ha'] }
+
+  const nextSticky = matcher(/ha/y, input)
+  console.log(nextSticky()) // { lastIndex: 2, match: ['ha' ] }
+  console.log(nextSticky()) // { lastIndex: 4, match: ['ha'] }
+  console.log(nextSticky()) // { lastIndex: 0, match: null }
+        </code></pre>
+      <pre><code class="language-js">
+const sticky = /ha/y
+cost nextSticky = matcher(sticky, input)
+console.log(nextSticky()) // { lastIndex: 2, match: ['ha'] }
+console.log(nextSticky()) // { lastIndex: 4, match: ['ha'] }
+sticky.lastIndex = 5
+console.log(nextSticky()) // { lastIndex: 7, match: ['ha'] }
+        </code></pre>
       <h3 id="7-4-2">7-4-2 萬國碼比對模式 /u</h3>
       <h3 id="7-4-3">7-4-3 命名匹配群</h3>
       <h3 id="7-4-4">7-4-4 萬國碼特性跳脫</h3>
