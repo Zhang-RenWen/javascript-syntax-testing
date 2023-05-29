@@ -79,6 +79,74 @@ rdot.test('\n') // false
 rdot.test('\u{1d11e}') // true
       </code></pre>
       <h3 id="7-4-3">7-4-3 命名匹配群</h3>
+      <pre><code class="language-js">
+function parseKeyValuePair(input){
+  const rattribute = /([a-z]+)=([a-z]+)/
+  const [, key, value] = attribute.exec(input)
+  return { key, value }
+}
+parseKeyValuePair('strong=true')
+// { key:'strong',value:'true'}
+      </code></pre>
+      <pre><code class="language-js">
+function parseKeyValuePair(input) {
+  const rattribute = /([a-z]+)(?:=|\sis\s) ([a-z]+)/
+  const [, key, value] = rattribute.exec(input)
+  return {key, value }
+}
+parseKeyValuePair('strong is true')
+// { key: 'strong', value:'true'}
+parseKeyValuePair('flexible=too")
+// { key: 'flexible', value:'too'}
+      </code></pre>
+      <pre><code class="language-js">
+function parseKeyValuePair(input){
+  const rattribute = (/(?&lt;key&gt;[a-z]+)(?:=|\sis\s)(?&lt;value&gt;[a-z]+)/)
+  const { groups } = rattribute.exec(input)
+  return groups
+}
+parseKeyValuePair('strong=true')
+// { key:'strong', value: 'true' }
+parseKeyValuePair('flexible=too')
+// { key:'flexible', value:'too' }
+      </code></pre>
+      <pre><code class="language-js">
+function hasSameUserAndPassword(input){
+  const rduplicate = /([^:]+):\1/
+  return rduplicate.exec(input) !== null
+}
+hasSameUserAndPassword('root:root') // true
+hasSameUserAndPassword('root:pF6GGlyPhoy1!9i') // false
+      </code></pre>
+      <pre><code class="language-js">
+function hasSameUserAndPassword(input){
+  const rduplicate = /(?&lt;user&gt;[^:]+):\k&lt;user&gt;/u
+  return rduplicate.exec(input) !== null
+}
+hasSameUserAndPassword('root:root') // true
+hasSameUserAndPassword('root: pF6GGlyPhoy1!9i' ) // false
+      </code></pre>
+      <pre><code class="language-js">
+function americanDateToHungarianFormat(input){
+  const ramerican =(/(?&lt;month&gt;\d{2})\/(?&lt;day&gt;\d{2})\/(?&lt;year&gt;\d{4})/)
+  const hungarian = input.replace(ramerican,`$&lt;year&gt;-$&lt;month&gt;-$&lt;day&gt;`)
+  return hungarian
+}
+americanDateToHungarianFormat('06/09/1988') // '1988-09-06
+      </code></pre>
+      <pre><code class="language-js">
+function americanDateToHungarianFormat(input){
+  const ramerican = const ramerican =(/(?&lt;month&gt;\d{2})\/(?&lt;day&gt;\d{2})\/(?&lt;year&gt;\d{4})/)
+  const hungarian = input.replace(ramerican, (...rest) =&gt; {
+    const groups = rest[rest.length - 1]
+    const { month, day, year }= groups
+    return `${ year }-${ month }-${ day}`
+  })
+  return hungarian
+}
+americanDateToHungarianFormat('06/09/1988') //'1988-09-06'
+      </code></pre>
+
       <h3 id="7-4-4">7-4-4 萬國碼特性跳脫</h3>
       <h3 id="7-4-5">7-4-5 左合子樣式</h3>
       <h3 id="7-4-6">7-4-6 全新的 /s 'dotAll' 模式</h3>
