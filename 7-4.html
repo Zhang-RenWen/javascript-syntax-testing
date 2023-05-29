@@ -52,6 +52,32 @@ sticky.lastIndex = 5
 console.log(nextSticky()) // { lastIndex: 7, match: ['ha'] }
         </code></pre>
       <h3 id="7-4-2">7-4-2 萬國碼比對模式 /u</h3>
+      <pre><code class="language-js">
+/\a/.test('ab') // true
+          </code></pre>
+      <pre><code class="language-js">
+/\a/u.test('ab') // SyntaxError：無效的字元跳脫/\a/
+      </code></pre>
+      <pre><code class="language-js">
+/\u{1f40e}/.test('🐎') // false
+/\u{1f40e}/.test('u{1f40e}') // true
+      </code></pre>
+      <pre><code class="language-js">
+/\u{1f40e}/u.test('🐎')
+// true
+      </code></pre>
+      <pre><code class="language-js">
+const rdot = /^.$/
+rdot.test('a') // true
+rdot.test('\n') // false
+rdot.test('\u{1d11e}') // false
+      </code></pre>
+      <pre><code class="language-js">
+const rdot = /^.$/u
+rdot.test('a') // true
+rdot.test('\n') // false
+rdot.test('\u{1d11e}') // true
+      </code></pre>
       <h3 id="7-4-3">7-4-3 命名匹配群</h3>
       <h3 id="7-4-4">7-4-4 萬國碼特性跳脫</h3>
       <h3 id="7-4-5">7-4-5 左合子樣式</h3>
