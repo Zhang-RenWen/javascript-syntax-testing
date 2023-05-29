@@ -89,7 +89,7 @@ parseKeyValuePair('strong=true')
 // { key:'strong',value:'true'}
       </code></pre>
       <pre><code class="language-js">
-function parseKeyValuePair(input) {
+function parseKeyValuePair(input){
   const rattribute = /([a-z]+)(?:=|\sis\s) ([a-z]+)/
   const [, key, value] = rattribute.exec(input)
   return {key, value }
@@ -136,7 +136,7 @@ americanDateToHungarianFormat('06/09/1988') // '1988-09-06
       </code></pre>
       <pre><code class="language-js">
 function americanDateToHungarianFormat(input){
-  const ramerican = const ramerican =(/(?&lt;month&gt;\d{2})\/(?&lt;day&gt;\d{2})\/(?&lt;year&gt;\d{4})/)
+  const ramerican =(/(?&lt;month&gt;\d{2})\/(?&lt;day&gt;\d{2})\/(?&lt;year&gt;\d{4})/)
   const hungarian = input.replace(ramerican, (...rest) =&gt; {
     const groups = rest[rest.length - 1]
     const { month, day, year }= groups
