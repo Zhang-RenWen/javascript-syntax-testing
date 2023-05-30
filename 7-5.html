@@ -63,8 +63,6 @@ Array.from($('div'))
       <pre><code class="language-js">
 Array.from(document.querySelectorAll('div')).slice(1)
       </code></pre>
-      使用 Array.from 你無法進行陣列切割，但是可以轉換。map 函式可以有效率地將某個值轉換為某個項目，當這些值被加入至 Array.from 所產出的陣列時。
-      </p>
       <pre><code class="language-js">
 function typesOf(){
   return Array.from(arguments, value =&gt; typeof value)
