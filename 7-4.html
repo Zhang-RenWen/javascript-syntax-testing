@@ -256,9 +256,98 @@ rcharacter.test('\n') // true
 
       <h3 id="7-4-7">7-4-7 String#matchAll</h3>
       <pre><code class="language-js">
-
+function* parseAttributes(input){
+  const rattributes = /(\w+)="([^"]+)"\s/ig
+  while (true){
+    const match = rattributes.exec(input)
+    if(match === null){
+      break
+    }
+    const [, key, value] = match
+    yield [key, value]
+  }
+}
+const html = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+console.log(...parseAttributes(html))
+// [
+//  ['type', 'email']
+//  ['placeholder', 'hello@mjavascript.com']
+// ]
         </code></pre>
-      <div class="border-block"></div>
+      <pre><code class="language-js">
+function* matchAll(regex, input){
+  while(true){
+    const match = regex.exec(input)
+    if (match === null){
+      break
+    }
+    const [ , ...captures] = match
+    yield captures
+  }
+}
+
+function* parseAttributes(input){
+  const attributes = /(\w+)="([^"]+)"\s/ig
+  yield* matchAll(rattributes, input)
+}
+const html = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+console.log(...parseAttributes(html))
+// [
+//  ['type', 'email']
+//  ['placeholder', 'hello@mjavascript.com']
+// ]
+        </code></pre>
+      <pre><code class="language-js">
+const attributes = /(\w+)="([^"]+)"\s/ig
+const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+const emailMatcher = matchAll(rattributes, email)
+const address = '&lt;input type="text" placeholder="Enter your business address"/&gt;'
+const addressMatcher = matchAll(rattributes, address)
+console.log(emailMatcher.next().value)
+// ['type','email']
+console.log(addressMatcher.next().value)
+//['laceholder',Enter your business address']
+        </code></pre>
+      <pre><code class="language-js">
+function* matchAll(regex, input) {
+  let lastIndex = 0
+  while (true) {
+    regex.lastIndex = lastIndex
+    const match = regex.exec(input)
+    if (match === null) {
+      break
+    }
+    lastIndex = regex.lastIndex
+    regex.lastIndex = 0
+    const [ , ...captures] = match
+    yield captures
+  }
+}
+const rattributes =/(\w+)="([^"]+)"\s/ig
+const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+const emailMatcher = matchAll (rattributes, email)
+const address = '&lt;input type="text" placeholder="Enter your business address"/&gt;'
+const addressMatcher = matchAll(rattributes, address)
+console.log(emailMatcher.next().value)
+// ['type','email']
+console.log(addressMatcher.next().value)
+// ['type','text]
+console.log(emailMatcher.next().value)
+// ['placeholder','hello@javascript.com']
+console.log(addressMatcher.next().value)
+// ['placeholder', 'Enter your business address']
+        </code></pre>
+      <pre><code class="language-js">
+const attributes = /(?&lt;key&gt;w+)="(?&lt;value&gt;[^"]+)"\s/igu
+const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+for (const match of email.matchAll(rattributes)){
+  const { groups: { key, value } } = match
+  console.log(${ key }: ${ value })
+}
+// type: email
+// placeholder: hello@mjavascript.com
+        </code></pre>
+
     </section>
   </main>
 </body>
