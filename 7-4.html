@@ -148,13 +148,206 @@ americanDateToHungarianFormat('06/09/1988') //'1988-09-06'
       </code></pre>
 
       <h3 id="7-4-4">7-4-4 萬國碼特性跳脫</h3>
+      <pre><code class="language-js">
+function isGreekSymbol(input){
+  const rgreek=/^\p{Script=Greek}$/u
+  return rgreek.test(input)
+}
+isGreekSymbol('?') // true
+      </code></pre>
+      <pre><code class="language-js">
+function isNonGreekSymbol(input){
+  const rgreek = /^\P{Script=Greek}$/u
+  return rgreek.test(input)
+}
+isNonGreekSymbol('?') // false
+      </code></pre>
+      <pre><code class="language-js">
+function isDecimalNumber(input){
+  const rdigits = /^\p{Decimal_Number}+$/u
+  return rdigits.test(input)
+}
+isDecimalNumber('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼')
+// true
+
+// 參考
+正常體	粗體	雙線體	無襯線	無襯線粗體等 寬字體
+0030	1D7CE	1D7D8	1D7E2	1D7EC	  1D7F6
+0	𝟎	𝟘	𝟢	𝟬	  𝟶
+1	𝟏	𝟙	𝟣	𝟭	  𝟷
+2	𝟐	𝟚	𝟤	𝟮	  𝟸
+3	𝟑	𝟛	𝟥	𝟯	  𝟹
+4	𝟒	𝟜	𝟦	𝟰	  𝟺
+5	𝟓	𝟝	𝟧	𝟱	  𝟻
+6	𝟔	𝟞	𝟨	𝟲	  𝟼
+7	𝟕	𝟟	𝟩	𝟳	  𝟽
+8	𝟖	𝟠	𝟪	𝟴	  𝟾
+9	𝟗	𝟡	𝟫	𝟵	  𝟿
+
+      </code></pre>
       <h3 id="7-4-5">7-4-5 左合子樣式</h3>
+      <pre><code class="language-js">
+function getJavaScriptFilename(input){
+  const rfile=/^(?&lt;filename&gt;[a-z]+)(?=\.js)\.[a-z]+$/u
+  const match = rfile.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.filename
+}
+getJavaScriptFilename('index.js') // 'index'
+getJavaScriptFilename('index.php') // null
+      </code></pre>
+      <pre><code class="language-js">
+function getNonJavaScriptFilename(input){
+  const rfile = /^(?&lt;filename&gt;[a-z]+)(?!\.js)\.[a-z]+$/u
+  const match = file.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.filename
+}
+getNonJavaScriptFilename('index.js') // null
+getNonJavaScriptFilename('index.php') // 'index'
+      </code></pre>
+      <pre><code class="language-js">
+function getDollarAmount(input){
+  const dollars = /^(?&lt;=\$)(?&lt;amount&gt;\d+(?:\.\d+)?)$/u
+  const match = dollars.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.amount
+}
+getDollarAmount('$12.34') // '12.34'
+getDo11arAmount('€12.34') // null
+      </code></pre>
+      <pre><code class="language-js">
+function getDollarAmount(input){
+  const dollars = /^(?&lt;!\$)(?&lt;amount&gt;\d+(?:\.\d+)?)$/u
+  const match = dollars.exec(input)
+  if (match === null) {
+    return null
+  }
+  return match.groups.amount
+}
+getDollarAmount('$12.34') // null
+getDo11arAmount('€12.34') // '12.34'
+      </code></pre>
       <h3 id="7-4-6">7-4-6 全新的 /s 'dotAll' 模式</h3>
+      <pre><code class="language-js">
+const rcharacter = /^.$/
+rcharacter.test('a') // true
+rcharacter.test('\t') // true
+rcharacter.test('\n') // false
+      </code></pre>
+      <pre><code class="language-js">
+const rcharacter = /[\s\S]$/
+rcharacter.test('a') // true
+rcharacter.test('\t') // true
+rcharacter.test('\n') // true
+      </code></pre>
+      <pre><code class="language-js">
+const rcharacter= /^.$/s
+rcharacter.test('a') // true
+rcharacter.test('\t') // true
+rcharacter.test('\n') // true
+      </code></pre>
+
       <h3 id="7-4-7">7-4-7 String#matchAll</h3>
       <pre><code class="language-js">
-
+function* parseAttributes(input){
+  const rattributes = /(\w+)="([^"]+)"\s/ig
+  while (true){
+    const match = rattributes.exec(input)
+    if(match === null){
+      break
+    }
+    const [, key, value] = match
+    yield [key, value]
+  }
+}
+const html = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+console.log(...parseAttributes(html))
+// [
+//  ['type', 'email']
+//  ['placeholder', 'hello@mjavascript.com']
+// ]
         </code></pre>
-      <div class="border-block"></div>
+      <pre><code class="language-js">
+function* matchAll(regex, input){
+  while(true){
+    const match = regex.exec(input)
+    if (match === null){
+      break
+    }
+    const [ , ...captures] = match
+    yield captures
+  }
+}
+
+function* parseAttributes(input){
+  const attributes = /(\w+)="([^"]+)"\s/ig
+  yield* matchAll(rattributes, input)
+}
+const html = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+console.log(...parseAttributes(html))
+// [
+//  ['type', 'email']
+//  ['placeholder', 'hello@mjavascript.com']
+// ]
+        </code></pre>
+      <pre><code class="language-js">
+const attributes = /(\w+)="([^"]+)"\s/ig
+const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+const emailMatcher = matchAll(rattributes, email)
+const address = '&lt;input type="text" placeholder="Enter your business address"/&gt;'
+const addressMatcher = matchAll(rattributes, address)
+console.log(emailMatcher.next().value)
+// ['type','email']
+console.log(addressMatcher.next().value)
+//['laceholder',Enter your business address']
+        </code></pre>
+      <pre><code class="language-js">
+function* matchAll(regex, input) {
+  let lastIndex = 0
+  while (true) {
+    regex.lastIndex = lastIndex
+    const match = regex.exec(input)
+    if (match === null) {
+      break
+    }
+    lastIndex = regex.lastIndex
+    regex.lastIndex = 0
+    const [ , ...captures] = match
+    yield captures
+  }
+}
+const rattributes =/(\w+)="([^"]+)"\s/ig
+const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+const emailMatcher = matchAll (rattributes, email)
+const address = '&lt;input type="text" placeholder="Enter your business address"/&gt;'
+const addressMatcher = matchAll(rattributes, address)
+console.log(emailMatcher.next().value)
+// ['type','email']
+console.log(addressMatcher.next().value)
+// ['type','text]
+console.log(emailMatcher.next().value)
+// ['placeholder','hello@javascript.com']
+console.log(addressMatcher.next().value)
+// ['placeholder', 'Enter your business address']
+        </code></pre>
+      <pre><code class="language-js">
+const attributes = /(?&lt;key&gt;w+)="(?&lt;value&gt;[^"]+)"\s/igu
+const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
+for (const match of email.matchAll(rattributes)){
+  const { groups: { key, value } } = match
+  console.log(${ key }: ${ value })
+}
+// type: email
+// placeholder: hello@mjavascript.com
+        </code></pre>
+
     </section>
   </main>
 </body>
