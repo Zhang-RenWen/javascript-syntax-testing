@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>Chapter 8 JavaScript 模組</h2>
+      <pre><code class="language-js">
+function has(list, item){
+  return list.includes(item)
+}
+function union(list, item){
+  if(has(list, item)){
+    return list
+  }
+  return [...list, item]
+}
+module.exports = union
+        </code></pre>
+      <pre><code class="language-js">
+const union = require('./union.js')
+console.log(union([1, 2], 3))
+// [1, 2, 3]
+console.log(union([1, 2], 2))
+// [1, 2]
+      </code></pre>
+      <pre><code class="language-bash hljs">
+» node app.js
+# [1, 2, 3]
+# [1, 2]
+      </code></pre>
+      <pre><code class="language-js">
+// views/item.js
+module.exports = model =&gt;`
+&lt;li&gt;
+&lt;span&gt;${ model.amount }&lt;/span&gt;
+&lt;span&gt;x &lt; span&gt;
+&lt;span&gt;${ model.name }&lt;/span&gt;
+&lt;/li&gt;`
+      </code></pre>
+      <pre><code class="language-js">
+// app.js
+const renderItem = require('./views/item.js')
+const html = renderItem({
+  name:'Banana bread',
+  amount: 3
+})
+console.log(html)
+      </code></pre>
+
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
