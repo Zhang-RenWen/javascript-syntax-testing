@@ -65,16 +65,45 @@ const html = renderItem({
 })
 console.log(html)
       </code></pre>
-
-      <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
-      <div class="border-block"></div>
+      <pre><code class="language-js">
+// views/list.js
+const renderItem = require('./item.js')
+module.exports = model =&gt;`&lt;ul&gt;
+  ${ model.map(renderItem).join('\n') }
+&lt;/ul&gt;`
+      </code></pre>
+      <pre><code class="language-js">
+// app.js
+const renderList = require('./views/list.js')
+const html = renderList([{
+    name: 'Banana bread',
+    amount: 3
+  }, {
+  name: 'Chocolate chip muffin',
+  amount: 2
+}])
+console.log(html)
+      </code></pre>
+      <pre><code class="language-js">
+// render.js
+module.exports = function render(template, model){
+  return require(`./views/${ template }`.js)(model)
+}
+      </code></pre>
+      <pre><code class="language-js">
+// app. js
+const render = require('./render.js')
+console.log(render('item', {
+    name:'Banana bread'
+    amount: 1
+}))
+console.log(render('list', [{
+  name:'Apple pie',
+  amount: 2,},{
+  name:'Roasted almond',
+  amount: 25
+}]))
+      </code></pre>
     </section>
   </main>
 </body>
