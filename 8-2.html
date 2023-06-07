@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>8-2 JavaScript 模組</h2>
+      <h3 id="8-2-2">8-2-2 export 輸出敘述</h3>
+      <pre><code class="language-js">
+// 輸出任何類型的值都可以
+
+module.exports = 'hello'
+
+module.exports = { hello:'world'}
+
+module.exports = ['hello' ,'world' ]
+
+module.exports = function hello(){}
+      </code></pre>
+      </p>
+      <pre><code class="language-js">
+// 另一種寫法
+
+export default 'hello'
+
+export default { hello: ,'world' }
+
+export default ['hello','world' ]
+
+export default function hello() {}
+      </code></pre>
+      <pre><code class="language-js">
+function initialize() {
+  module.exports = 'hello!'
+  initialize()
+}
+      </code></pre>
+      <pre><code class="language-js">
+function initialize() {
+  export default 'hello!' // SyntaxError
+}
+initialize()
+      </code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <h3 id="8-2-3">8-2-3 import 載入敘述</h3>
+      <h3 id="8-2-4">8-2-4 動態 import()</h3>
+      <pre><code class="language-js">
+
+        </code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
