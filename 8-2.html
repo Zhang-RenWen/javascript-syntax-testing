@@ -25,42 +25,37 @@
       <h2>8-2 JavaScript 模組</h2>
       <h3 id="8-2-2">8-2-2 export 輸出敘述</h3>
       <pre><code class="language-js">
-module.exports
-=
-"hello'
-module. exports = {hello:
-'world'
-}
-module.exports = ['hello'
-'world' ]
-module. exports = function hello() {}
+// 輸出任何類型的值都可以
+
+module.exports = 'hello'
+
+module.exports = { hello:'world'}
+
+module.exports = ['hello' ,'world' ]
+
+module.exports = function hello(){}
       </code></pre>
       </p>
       <pre><code class="language-js">
-export default
-"hello'
-export default { hello:
-'world' }
-export default ['hello',
-'world' ]
+// 另一種寫法
+
+export default 'hello'
+
+export default { hello: ,'world' }
+
+export default ['hello','world' ]
+
 export default function hello() {}
       </code></pre>
-      <p>
-        在 CommonJs 中，module.exports可被動態地進行指派。
-      </p>
       <pre><code class="language-js">
 function initialize() {
-module.exports
-"hello!
-initialize()}
+  module.exports = 'hello!'
+  initialize()
+}
       </code></pre>
       <pre><code class="language-js">
 function initialize() {
-export default 'hello!'
-11 SyntaxError
-1N03
-Tol
-ano)
+  export default 'hello!' // SyntaxError
 }
 initialize()
       </code></pre>
