@@ -59,6 +59,69 @@ function initialize() {
 }
 initialize()
       </code></pre>
+      <pre><code class="language-js">
+module.exports.counter = 0
+module.exports.count = () =&gt; module.exports.counter++
+      </code></pre>
+      <pre><code class="language-js">
+export let counter = 0
+export const count = () =&gt; counter++
+      </code></pre>
+      <pre><code class="language-js">
+let counter = 0
+const count = ()=&gt; counter++
+export counter // SyntaxError
+export count
+      </code></pre>
+      <pre><code class="language-js">
+let counter = 0
+const count = () =&gt; counter++
+export { counter, count }
+      </code></pre>
+      <pre><code class="language-js">
+let counter = 0
+const count = () =&gt; counter++
+export { counter, count as increment }
+      </code></pre>
+      <pre><code class="language-js">
+//下面兩者相同
+
+let counter = 0
+const count = ()=&gt; counter++
+export { counter as default, count as increment }
+
+let counter = const count = () =&gt; counter++
+export default counter
+export { count as increment }
+      </code></pre>
+      <pre><code class="language-js">
+export let fungible = { name: 'bound' }
+setTimeout(() =&gt; fungible = [0, 1, 2], 5000)
+      </code></pre>
+      <pre><code class="language-js">
+import { fungible } from '/fungible.js'
+console.log(fungible) //  { name: 'bound' }
+setInterval(() =&gt; console.log(fungible), 2000)
+// { name: 'bound'}
+// { name: 'bound'}
+// [0, 1, 2]
+// [0, 1, 2]
+// [0, 1, 2]
+      </code></pre>
+      <pre><code class="language-js">
+export { increment } from '/counter.js'
+increment ()
+// ReferenceError :increment 未定義
+      </code></pre>
+      <pre><code class="language-js">
+export { increment as add } from '/counter. js'
+      </code></pre>
+      <pre><code class="language-js">
+export * from './counter.js'
+      </code></pre>
+      <pre><code class="language-js">
+export { default as counter } from './counter.is'
+      </code></pre>
       <pre><code class="language-js"></code></pre>
       <pre><code class="language-js"></code></pre>
       <pre><code class="language-js"></code></pre>
