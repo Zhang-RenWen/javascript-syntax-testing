@@ -178,9 +178,45 @@ console.log(counter.default) // 2
 
                   <h3 id="8-2-4">8-2-4 動態 import()</h3>
                   <pre><code class="language-js">
-
-        </code></pre>
-                  <div class="border-block"></div>
+import localizationService from './localizationService.js'
+import(`./localizations/${ navigator.language }.json`)
+.then(module =&gt; localizationService.use(module))
+</code></pre>
+                  <pre><code class="language-js">
+import('./vendor/jquery.js')
+.then($ =&gt; {
+  //使用jquery
+})
+.catch(()=&gt;{
+  // 無法載入 jquery
+})
+</code></pre>
+                  <pre><code class="language-js">
+const specifiers = [
+   './vendor/jquery.js',
+   './vendor/backbone. js',
+   './lib/util.js'
+]
+Promise
+.all(specifiers.map(specifier =&gt; import(specifier)))
+.then(([$, backbone, util]) =&gt; {
+  // 使用模組
+})
+</code></pre>
+                  <pre><code class="language-js">
+// 類似的方式，你可以利用同步迥圈或 async/await 來載入模組，如下範例。
+async function load(){
+   const { map } = await import('./vendor/jquery.js')
+   const $ = await import('./vendor/jquery.js')
+   const response = await fetch('/cats' )
+   const cats = await response.json()
+   $('&lt;div&gt;')
+   .addClass('container cats')
+   .html(map(cats, cat =&gt; cat.htmlSnippet))
+   .appendTo(document.body)
+}
+load()
+</code></pre>
             </section>
       </main>
 </body>
