@@ -77,12 +77,12 @@ export count
                   <h4>輸出串列</h4>
                   <pre><code class="language-js">
 let counter = 0
-const count = () =&gt; counter++
+const count = ()=&gt; counter++
 export { counter, count }
       </code></pre>
                   <pre><code class="language-js">
 let counter = 0
-const count = () =&gt; counter++
+const count = ()=&gt; counter++
 export { counter, count as increment }
       </code></pre>
                   <pre><code class="language-js">
@@ -92,14 +92,14 @@ let counter = 0
 const count = ()=&gt; counter++
 export { counter as default, count as increment }
 
-let counter = const count = () =&gt; counter++
+let counter = const count = ()=&gt; counter++
 export default counter
 export { count as increment }
       </code></pre>
                   <h4>繫結，而不是值</h4>
                   <pre><code class="language-js">
 export let fungible = { name: 'bound' }
-setTimeout(() =&gt; fungible = [0, 1, 2], 5000)
+setTimeout(()=&gt; fungible = [0, 1, 2], 5000)
       </code></pre>
                   <pre><code class="language-js">
 import { fungible } from '/fungible.js'
@@ -118,13 +118,13 @@ increment()
 // ReferenceError :increment 未定義
       </code></pre>
                   <pre><code class="language-js">
-export { increment as add } from '/counter. js'
+export { increment as add } from '/counter.js'
       </code></pre>
                   <pre><code class="language-js">
 export * from './counter.js'
       </code></pre>
                   <pre><code class="language-js">
-export { default as counter } from './counter.is'
+export { default as counter } from './counter.js'
       </code></pre>
                   <h3 id="8-2-3">8-2-3 import 載入敘述</h3>
                   <pre><code class="language-js">
@@ -147,8 +147,8 @@ console.log(counter)
         </code></pre>
                   <h4>載入名稱的輸出</h4>
                   <pre><code class="language-js">
-import { increment } from './ counter.js'
- //  欲載入多個繫結，可用逗號將它們分隔。
+import { increment } from './counter.js'
+//  欲載入多個繫結，可用逗號將它們分隔。
 import { increment, decrement } from './counter.js'
         </code></pre>
                   <pre><code class="language-js">
@@ -194,7 +194,7 @@ import('./vendor/jquery.js')
                   <pre><code class="language-js">
 const specifiers = [
    './vendor/jquery.js',
-   './vendor/backbone. js',
+   './vendor/backbone.js',
    './lib/util.js'
 ]
 Promise
