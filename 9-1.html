@@ -25,7 +25,110 @@
       <h2>Chapter 9 實務操作的考量</h2>
       <h2>9-1 變數宣告</h2>
       <pre><code class="language-js">
+if (condition){
+  // 在宣告敘述之前無法存取,`isReady`
+  const isReady = true
+  // `isReady` 繫結無法被重新指派
+}
+// 無法存取 `isReady`，因為位於包含該繫結的區塊作用域之外
+        </code></pre>
+      <pre><code class="language-js">
+function prettySize(input) {
+  let value = input
+  let unit = 'MB'
+  if (value &gt;= 1024) {
+    value /= 1024
+    unit = 'GB'
+  }
+  if (value &gt;= 1024) {
+    value /= 1024
+    unit = 'TB'
+  }
+  return `${ value.toFixed(1) } ${ unit }`
+}
 
+// 加入對千兆位元組單位的支援，會需要在return 叙述前增加一個 i千判斷敘述
+
+if (value &gt;= 1024) {
+  value /= 1024
+  unit = 'PB'
+}
+        </code></pre>
+      <pre><code class="language-js">
+function toLargestUnit(value, unit ='MB' ) {
+  const units = ['MB','GB','TB' ]
+  const i = units.indexOf(unit)
+  const nextUnit = units[i + 1]
+  if (value &gt;= 1024 && nextUnit) {
+    return toLargestUnit (value / 1024, nextUnit)
+  }
+  return { value, unit }
+}
+        </code></pre>
+      <pre><code class="language-js">
+function prettySize(input) {
+  const { value, unit } = toLargestUnit(input)
+  return `${ value.toFixed(1) } ${ unit }`
+}
+        </code></pre>
+      <pre><code class="language-js">
+function makeCollection(size){
+  let result = []
+  if(size &gt; 0) {
+    result = result.concat([1, 2])
+  }
+  if(size &gt; 1){
+    result = result.concat([3, 4])
+  }
+  if(size &gt; 2) {
+    result = result.concat([5, 6])
+  }
+  return result
+}
+makeCollection(0) // []
+makeCollection(1) // [1, 2]
+makeCollection(2) // [1, 2, 3, 4]
+makeCollection(3) // [1, 2, 3, 4, 5, 6]
+        </code></pre>
+      <pre><code class="language-js">
+function makeCollection(size){
+  const result = []
+  if(size &gt; 0){
+    result.push(1, 2)
+  }
+  if(size &gt; 1){
+    result.push(3, 4)
+  }
+  if(size &gt; 2){
+    result.push(5, 6)
+  }
+  return result
+}
+makeCollection(0) // []
+makeCollection(1) // [1, 2]
+makeCollection(2) // [1, 2, 3, 4]
+makeCollection(3) // [1, 2, 3, 4, 5, 6]
+        </code></pre>
+      <pre><code class="language-js">
+let completionText = 'in progress'
+if (completionPercent &gt;= 85) {
+  completionText= 'almost done'
+} else if(completionPercent &gt;= 70) {
+  completionText= 'reticulating splines'
+}
+        </code></pre>
+      <pre><code class="language-js">
+const completionText = getCompletionText(completionPercent)
+// ...
+function getCompletionText (progress) {
+  if (progress &gt;= 85) {
+    return 'almost done'
+  }
+  if (progress &gt;= 70) {
+    return 'reticulating splines'
+  }
+  return 'in progress'
+}
         </code></pre>
       <div class="border-block"></div>
     </section>
