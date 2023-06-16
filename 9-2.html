@@ -51,31 +51,61 @@
 `Alfred's cat suit is "slick".`
         </code></pre>
       <pre><code class="language-js">
-
+const suitKind = `cat`
+console.log( `Alfred's ${ suitKind } suit is "slick".`)
+// Alfred's cat suit is "slick".
         </code></pre>
       <pre><code class="language-js">
-
+const suitKind = 'cat'
+console.log('Alfred\'s ' + suitKind + ' suit is "slick".')
+// Alfred's cat suit is "slick".
         </code></pre>
       <pre><code class="language-js">
-
+JSON.parse('{ "payload":`message`}')
+// SyntaxError
+JSON.stringify({ payload: `message`})
+// '{"payload": "message"}'
         </code></pre>
       <pre><code class="language-js">
-
+const alfred = {`suit kind`: `cat`}
         </code></pre>
       <pre><code class="language-js">
-
+const alfred ={ [`suit kind`]:`cat` }
         </code></pre>
       <pre><code class="language-js">
-
+const brand = `Porsche`
+const car = {
+  `wheels`:4,
+  `has fuel`: true,
+  `is ${ brand } `: `you wish`
+}
         </code></pre>
       <pre><code class="language-js">
-
+import { SayHel1o } from `./World`
         </code></pre>
       <pre><code class="language-js">
-
+'use strict' //啟用嚴格模式
+"use strict" // 啟用嚴格模式
+`use strict` // 無任何動作發生
         </code></pre>
-
-      <div class="border-block"></div>
+      <pre><code class="language-js">
+{
+  "env":{
+    "es6": true
+  }
+  "extends":"eslint:recommended",
+  "rules":{
+    "quotes": ["error", "backtick"]
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+{
+  "scripts": {
+    "lint": "eslint --fix ."
+  }
+}
+        </code></pre>
     </section>
   </main>
 </body>
