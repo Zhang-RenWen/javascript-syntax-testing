@@ -24,9 +24,81 @@
     <section>
       <h2>9-3 簡化語法與物件解構賦值</h2>
       <pre><code class="language-js">
-
+const unitPrice = 1.25
+const tomato = {
+  name: 'Tomato',
+  color:'red',
+  unitPrice
+}
         </code></pre>
-      <div class="border-block"></div>
+      <pre><code class="language-js">
+function getGroceryModel({ name, unitPrice }, units) {
+  return {
+     name,
+     unitPrice,
+     units,
+     totalPrice: unitPrice * units
+  }
+}
+
+getGroceryModel(tomato, 4)
+/*
+{
+  name: 'Tomato',
+  unitPrice: 1.25,
+  units: 4,
+  totalPrice: 5
+}
+*/
+        </code></pre>
+      <pre><code class="language-js">
+const { totalPrice } = getGroceryModel(tomato, 4)
+        </code></pre>
+      <pre><code class="language-js">
+function getGroceryModel({ name, unitPrice }, units) {
+  return {
+    name,
+    unitPrice,
+    units,
+    totalPrice: unitPrice * units
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+const { name, totalPrice } = getGroceryModel(tomato, 4)
+        </code></pre>
+      <pre><code class="language-js">
+const model = getGroceryModel(tomato, 4)
+        </code></pre>
+      <pre><code class="language-js">
+const summary = `${ model.units }x ${ model.name }
+($${ model.unitPrice }) = $${ model.totalPrice }`
+// '4x Tomato ($1.25) = $5'
+        </code></pre>
+      <pre><code class="language-js">
+const { name, units, unitPrice, totalPrice } = model
+const summary = `${ units }x ${ name } ($${ unitPrice })= $${ totalPrice }`
+        </code></pre>
+      <pre><code class="language-js">
+const { name } = model
+const summary = `This is a ${ name } summary`
+        </code></pre>
+      <pre><code class="language-js">
+const summary =  `This is a ${ model.name } summary`
+        </code></pre>
+      <pre><code class="language-js">
+const summary = `This is a summary for ${ model.units }x ${ model.name }`
+        </code></pre>
+      <pre><code class="language-js">
+const { name, units } = model
+const = summary = `This is a summary for ${ units }x ${ name }`
+        </code></pre>
+      <pre><code class="language-js">
+const { name } = model
+const summary = `This is a ${ name } summary`
+const description =  `${ name } is a grocery item`
+        </code></pre>
+
     </section>
   </main>
 </body>
