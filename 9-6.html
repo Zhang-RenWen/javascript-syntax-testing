@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>9-6 類別與代理器</h2>
+      <pre><code class="language-js">
+function Player() {
+  this.health= 5
+}
+Player.prototype.damage = function () {
+  this.health--
+}
+
+Player.prototype.attack = function (player) {
+  player.damage()
+}
+        </code></pre>
+      <pre><code class="language-js">
+class Player {
+  constructor() {
+    this.health = 5
+  }
+  damage() {
+    this.health--
+  }
+  attack(player) {
+    player.damage()
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+class Player {
+  constructor() {
+    Player.heal(this)
+  }
+  damage(){
+    this.health--
+  }
+  attack(player) {
+    player.damage()
+  }
+  get alive() {
+    return this.health &gt; 0
+  }
+  static heal(player) {
+    player.health = 5
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+class GameMaster extends Player {
+  constructor(...rest) {
+    super(...rest)
+    this.health = Infinity
+  }
+  kill(player) {
+    while (player.alive){
+      player.damage()
+    }
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+class List extends Array {
+  constructor(...items){
+    super()
+    this.push(...items)
+  }
+  get first() {
+    return this[0]
+  }
+  get last() {
+    return this[this.length - 1]
+  }
+}
+const number = new List(2)
+console.log(number.first) // 2
+const items = new List('a','few','examples')
+console.log(items.last) // 'examples'
+        </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

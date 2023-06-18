@@ -1,0 +1,143 @@
+<!DOCTyPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="x-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>9-5 探究各類函式宣告方法</h2>
+      <pre><code class="language-js">
+printSum(2, 3)
+function printSum(x, y) {
+  return print(sum(x, y))
+}
+function sum(x, y) {
+  return x + y
+}
+function print(message) {
+  console.log( `printing: ${ message }` )
+}
+        </code></pre>
+      <pre><code class="language-js">
+var printSum = function (x, y) {
+  return print (sum(x, y))
+}
+var sum = function (x, y) {
+  return x + y
+}
+// `printSum()` 敘述會失敗： print 尚未被定義
+var print = function (message) {
+  console.log( `printing: ${ message }`)
+}
+printSum(2, 3)
+        </code></pre>
+      <pre><code class="language-js">
+var sum = function (x, y) {
+  return x + y
+}
+var print = function (message) {
+  console.log( `printing: ${ message }`)
+}
+var printSum = function (x, y) {
+  return print(sum(x, y))
+}
+printSum(2, 3)
+        </code></pre>
+      <pre><code class="language-js">
+var sumMany = function sum(accumulator = 0, ...values) {
+  if (values. length === 0) {
+    return accumulator
+  }
+  const [value, ...rest] = values
+  return sum(accumulator + value, ...rest)
+}
+console.log(sumMany(0, 1, 2, 3, 4))
+// 10
+console.log(sum())
+// ReferenceError: sum 未被定義
+        </code></pre>
+      <pre><code class="language-js">
+const sum = (x,y)=&gt;{ return x + y }
+const multiply = (x,y)=&gt; x*y
+const double = x &gt; x * 2
+const print = x = &gt; {
+  console.log(x) 
+}
+        </code></pre>
+      <pre><code class="language-js">
+const makeArray = (first, second) =&gt; [ first, second]
+const makeSlice = (discarded, ...items) =&gt; items
+        </code></pre>
+      <pre><code class="language-js">
+const getPerson = name =&gt; ({
+  name:'Nico'
+})
+        </code></pre>
+      <pre><code class="language-js">
+wait(5000).then(function(){
+  console.log('waited 5 seconds!')
+})
+
+function wait(delay) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve()
+    }, delay)
+  })
+}
+        </code></pre>
+      <pre><code class="language-js">
+wait(5000).then(() =&gt; console.log('waited 5 seconds!'))
+function wait (delay) {
+  return new Promise(resolve=&gt;
+    setTimeout(() =&gt; resolve(), delay)
+  )
+}
+        </code></pre>
+      <pre><code class="language-js">
+const pistol ={
+  caliber: 50,
+  trigger(){
+    const self = this
+    setTimeout (function () {
+      console.log(`Fired caliber ${ self.caliber } pistol`)
+    }, 1000)
+  }
+}
+pistol.trigger()
+        </code></pre>
+      <pre><code class="language-js">
+const pistol= {
+  caliber: 50,
+  trigger() {
+    setTimeout(() =&gt; {
+      console.log(`Fired caliber ${ self.caliber } pistol` ) 
+    }, 1000)
+  }
+}
+pistol.trigger()
+        </code></pre>
+
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
