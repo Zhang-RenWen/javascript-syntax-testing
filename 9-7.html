@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="x-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>9-7 非同步程式流程</h2>
+      <pre><code class="language-js">
+const tracker = emitter()
+tracker.on('started', multiply)
+tracker.on('multiplied', print)
+start(256, 512, 1024)
+
+function start (...input) {
+  const sum = input.reduce((a, b) =&gt; a + b, 0)
+  tracker.emit('started', { sum, input })
+}
+function multiply({ sum, input }) {
+  const message = `The sum of ${ input.join('') } is ${ sum }`
+  tracker.emit('multiplied'message)
+}
+function print (message) {
+  console.log(message)
+}
+      </code></pre>
+      <pre><code class="language-js">
+const integers = value =&gt; ({
+  value,
+  [Symbol.iterator](){
+    return {
+      next: () =&gt; ({
+        value: this.value++
+      })
+    }
+  }
+})
+      </code></pre>
+      <pre><code class="language-js">
+function* integers (value = 0){
+  while (true) {
+    yield value++
+  }
+}
+      </code></pre>
+      <pre><code class="language-js">
+Promise
+.resolve(2)
+.then(x=x*2)
+.then(x =&gt;x*2)
+.then(x =&gt;x*2)
+      </code></pre>
+      <pre><code class="language-js">
+async function calculate() {
+  let x = 2
+  x= await x * 2
+  x= await x * 2
+  x= await x * 2
+  return x
+}
+      </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
