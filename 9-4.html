@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>9-4 其餘展開運算子</h2>
+      <pre><code class="language-js">
+function getNumberParts (number) {
+  const rnumber = /(\d+)\.(\d+)/
+  const matches = number.match(rnumber)
+  if (matches=== null) {
+    return null
+  }
+  const [, integer, fractional] = number.match(rnumber)
+  return { integer, fractional }
+}
+getNumberParts('1234.56')
+// { integer: '1234', fractional: '56' }
+        </code></pre>
+      <pre><code class="language-js">
+function getNumberParts (number) {
+  const rnumber = /(\d+)\.(\d+)/
+  const matches = number.match(rnumber)
+  if (matches === null) {
+    return null
+  }
+  const [ , ...captures] = number.match(rnumber)
+  return captures
+}
+getNumberParts('1234.56')
+// ['1234', '56' ]
+        </code></pre>
+      <pre><code class="language-js">
+administrators.concat(moderators)
+[...administrators, ...moderators]
+[...administrators, ...moderators, bob]
+        </code></pre>
+      <pre><code class="language-js">
+Object.assign({}, defaults, options, { important:true })
+        </code></pre>
+      <pre><code class="language-js">
+{
+  ...defaults,
+  ...options,
+  important: true
+}
+        </code></pre>
+      <pre><code class="language-js">
+{
+  ...{ // defaults
+    speed: 1,
+    type: 'sports'
+  },
+  ...{ // options
+    speed: 3,
+    important: false
+  },
+  important: true
+}
+        </code></pre>
+      <pre><code class="language-js">
+const player = {
+  strength: 4,
+  luck: 2,
+  mana: 80,
+  health: 10
+}
+castHealingSpell(player) //使用 40 個 mana 點數，補充 110 健康點數
+        </code></pre>
+      <pre><code class="language-js">
+const castHealingSpell = player =&gt; ({
+  ...player,
+  mana: player.mana - 40,
+  health: player.health + 110
+})
+        </code></pre>
+      <pre><code class="language-js">
+const copy = Object.assign({}, source)
+const copy = {
+  ...source 
+}
+const { ... copy } = source
+        </code></pre>
+      <pre><code class="language-js">
+const { name,...metadata } = person
+        </code></pre>
+      <pre><code class="language-js">
+people.map(({ name, ssn, ...person }) =&gt; person)
+        </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>
