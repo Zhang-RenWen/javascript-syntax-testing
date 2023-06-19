@@ -27,7 +27,7 @@
       <pre><code class="language-js">
 function matcher (regex, input) {
   return () =&gt; {
-    cost match = regex.exec(input)
+    const match = regex.exec(input)
     const lastIndex = regex.lastIndex
     return { lastIndex, match }
   }
@@ -45,7 +45,7 @@ function matcher (regex, input) {
         </code></pre>
       <pre><code class="language-js">
 const sticky = /ha/y
-cost nextSticky = matcher(sticky, input)
+const nextSticky = matcher(sticky, input)
 console.log(nextSticky()) // { lastIndex: 2, match: ['ha'] }
 console.log(nextSticky()) // { lastIndex: 4, match: ['ha'] }
 sticky.lastIndex = 5

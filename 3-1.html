@@ -96,7 +96,7 @@ const Person = class {
 }
         </code></pre>
       <pre><code class="language-js">
-const createPersonClass = name => class extends Person { 
+const createPersonClass = name =&gt; class extends Person { 
     constructor() {
     super(name)
     }
@@ -193,7 +193,7 @@ Person.isPerson = function (person) {
       <pre><code class="language-js">
 class MathHelper {
   static sum(...numbers) {
-    return numbers.reduce((a, b) => a + b)
+    return numbers.reduce((a, b) =&gt; a + b)
   }
 }
 console.log(MathHelper.sum(1,2,3,4,5)) // 15
@@ -239,7 +239,7 @@ class Banana extends Fruit {
 }
       </code></pre>
       <pre><code class="language-js">
-const createJuicyFruit = (...params) =>
+const createJuicyFruit = (...params) =&gt;
 class JuicyFruit extends Fruit {
   constructor() {
     this.juice = 0

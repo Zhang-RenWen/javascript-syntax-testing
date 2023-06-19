@@ -256,7 +256,7 @@ function getGraphemes(locale, text){
     granularity:'grapheme'
   })
   const sequence = segmenter.segment(text)
-  const graphemes = [ ...sequence ].map(item => item.segment)
+  const graphemes = [ ...sequence ].map(item =&gt; item.segment)
   return graphemes
 }
 // getGraphemes('es','Esto está bien bueno! ')
@@ -330,7 +330,7 @@ const text = '\ud83d\udc0e\ud83d\ udc71\u2764'
                   <h3 id="7-3-11">7-3-11 萬國碼感知的字串返回法</h3>
                   <pre><code class="language-js">
 const text ='\ud83d\udc0e\ud83d\udc71\u2764'
-text.split(' ').map(cp => cp.codePointAt(0))
+text.split(' ').map(cp =&gt; cp.codePointAt(0))
 // [55357, 56334, 55357, 56433, 10084]
 text.split('').reverse().map(cp =&gt; cp.codePointAt(0))
 // [10084, 56433, 128014, 55357]
@@ -373,7 +373,7 @@ console.log([...'Z͑ͫ̓ͪ̂ͫ̽͏̴̙̤̞͉͚̯̞̠͍A̴̵̜̰͔ͫ͗͢L̠ͨͧͩ
             </code></pre>
                   <pre><code class="language-js">
 const normalized = 'mañana'.normalize()
-[...normalized].map(cp => cp.codePointAt(0).toString(16))
+[...normalized].map(cp =&gt; cp.codePointAt(0).toString(16))
 // ['6d','61'. 'f1' ,'61', '6e','61' ]
 normalized.length
 // 6

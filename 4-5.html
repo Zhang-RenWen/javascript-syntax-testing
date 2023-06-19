@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>4-5 非同步迭代</h2>
+      <pre><code class="language-js">
+const sequence = {
+  [Symbol.iterator](){
+  const items = ['i', 't','e', 'r','a','b', 'l', 'e']
+    return {
+      next: ()=&gt; ({
+        done: items.length === 0,
+        value: items.shift()
+      })
+    }
+  }
+}
+      </code></pre>
+      <pre><code class="language-js">
+[...sequence]
+// ['i', 't','e', 'r','a','b', 'l', 'e']
+ Array.from(sequence)
+// ['i', 't','e', 'r','a','b', 'l', 'e']
+for (const item of sequence) {
+  console.log(item)
+  // 'i'
+  // 't'
+  // 'e'
+  // 'r'
+  // 'a'
+  // 'b'
+  // 'l'
+  // 'e'
+}
+      </code></pre>
+      <h3 id="4-5-1">
+        4-5-1 非同步迭代器
+      </h3>
+      <pre><code class="language-js">
+const sequence = {
+  [Symbol.asyncIterator](){
+    const items = ['i', 't' , 'e', 'r' , 'a' , 'b', 'l', 'e']
+    return {
+      next: ()=&gt; Promise.resolve({
+        done: items.length === 0,
+        value: items.shift()
+      })
+    }
+  }
+}
+      </code></pre>
+      <pre><code class="language-js">
+const interval = duration =&gt; ({
+  [Symbol.asyncIterator]:()=&gt; ({
+    i: 0,
+    next(){
+      return new Promise(resolve=&gt;
+       setTimeout(() =&gt; resolve({
+         value: this.i++,
+         done: false
+       }), duration)
+      )
+    }
+  })
+})
+      </code></pre>
+      <pre><code class="language-js">
+async function print (){
+  for await (const i of interval(1000)) {
+    console.log(`${ i } seconds elapsed.` )
+  }
+}
+print()
+      </code></pre>
+      <h3 id="4-5-2">
+        4-5-2 非同步產生器
+      </h3>
+      <pre><code class="language-js">
+async function* fetchInterval (duration,...params) {
+  for await (const i of interval (duration)){
+     yield await fetch(... params)
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+async function process() {
+  for await (const response of fetchInterval(1000, '/api/status' )) {
+    const data = await response.json()
+    // 使用最新的資料
+  }
+}
+process()
+        </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

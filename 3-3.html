@@ -101,7 +101,7 @@ const grocery = { type: 'fruit', ...details , color:'red' }
         </code></pre>
       <p>關於展開運算子的其他案例</p>
       <pre><code class="language-js">
-const getUnKnownProperties = ({ name, type, ...unknown}) => unknown
+const getUnKnownProperties = ({ name, type, ...unknown}) =&gt; unknown
 getUnKnownProperties({
   name; 'Carrot', type: 'vegetable', color: 'orange'
 })

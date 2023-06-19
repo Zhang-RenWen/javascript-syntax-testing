@@ -24,24 +24,23 @@
         <section>
             <h2>4-1 Promise</h2>
             <h3 id="4-1-1">4-1-1 開始學習 Promise</h3>
-
             <pre><code class="language-js">
 fetch('/items ')
  </code></pre>
 
             <pre><code class="language-js">
-fetch('/items').then(response => {
+fetch('/items').then(response =&gt; {
   // 執行某些動作
 })
  </code></pre>
 
             <pre><code class="language-js">
  const p = fetch('/items')
- p.then(res => {
+ p.then(res =&gt; {
   // 處理回應
  })
 
- p.catch(err => {
+ p.catch(err =&gt; {
   // 處理錯誤
  })
  </code></pre>
@@ -49,29 +48,28 @@ fetch('/items').then(response => {
             <pre><code class="language-js">
 const p = fetch('/items')
 p.then(
-res =>{
+res =&gt;{
   // 處理回應
 },
-err => {
+err =&gt; {
   // 處理错誤
-}
+})
  </code></pre>
 
             <pre><code class="language-js">
 const p = fetch('/items')
-p.then(res => {
+p.then(res =&gt; {
   // 處理回應
 })
 
-p.then(null, err => {
+p.then(null, err =&gt; {
   // 處理錯誤
 })
  </code></pre>
             <div class="border-block">
                 <h3>以Promise 作為回呼函式與事件的替代方案</h3>
-
                 <pre><code class="language-js">
-fetch('/items', (err, res) => {
+fetch('/items', (err, res) =&gt; {
 if (err) {
     // 處理錯誤
 } else {
@@ -82,19 +80,18 @@ if (err) {
 
                 <pre><code class="language-js">
 fetch('/items ')
-.on('error', err => {
+.on('error', err =&gt; {
    // 處理錯誤
 })
-.on('data', res => {
+.on('data', res =&gt; {
   // 處理回應
 })
 </code></pre>
 
-
-
-                <pre><code class="language-js">
+            </div>
+            <pre><code class="language-js">
 new Promise(function (resolve, reject) {
-    setTimeout(function (){
+    setTimeout(function () {
         if (Math.random() > 0.5) {
             resolve('random success')
         }else if {
@@ -104,122 +101,103 @@ new Promise(function (resolve, reject) {
 })
 </code></pre>
 
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise
 .resolve({result:123})
-.then(data =>console.log(data.result))
+.then(data =&gt;console.log(data.result))
 //  123
 </code></pre>
-
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise
 .resolve(2)
-.then(x=>x*7)
-.then(x=>x-3)
-.then(x=> console.log(x))
+.then(x=&gt;x*7)
+.then(x=&gt;x-3)
+.then(x=&gt; console.log(x))
 // 11
             </code></pre>
-                <pre><code class="language-js">
+
+            <pre><code class="language-js">
 Promise
 .resolve(2)
-.then(x => new Promise(function (resolve) {
-    setTimeout(()=> resolve(x*1000),x*1000)
+.then(x =&gt; new Promise(function (resolve) {
+    setTimeout(()=&gt; resolve(x*1000),x*1000)
 }))
 .then(x =console.log(x))
 // 2000
             </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p = fetch('/items')
-.then(res => { throw new Error('unexpectedly')})
-.catch(err => console.error(err))
+.then(res =&gt; { throw new Error('unexpectedly')})
+.catch(err =&gt; console.error(err))
             </code></pre>
-                <h3 id="4-1-2">4-1-2 Promise 物件的再開始和連結</h3>
-                <P>
-                    當在 Promise 的解析中發生錯誤時，可利用 p.catch 捕捉到錯誤 ，如下方範例。
-                </P>
-                <pre><code class="language-js">
-new Promise((resolve, reject) => reject(new Error('oops'))).catch(err=> console.error(err))
+            <h3 id="4-1-2">4-1-2 Promise 物件的再開始和連結</h3>
+            <pre><code class="language-js">
+new Promise((resolve, reject) =&gt; reject(new Error('oops'))).catch(err=&gt; console.error(err))
             </code></pre>
-                <P>
-                    當 Promise 的解析器呼叫了 reject 後，便會確認成為已拒絕狀態; 但是若再解析器中有拋出錯誤時，也會進入已拒絕狀態，如下範例所示。
-                </P>
-                <pre><code class="language-js">
-new Promise((resolve, reject) => {
+            <pre><code class="language-js">
+new Promise((resolve, reject) =&gt; {
     throw new Error('oops')
-}).catch(err =>console.error(err))
+}).catch(err =&gt;console.error(err))
              </code></pre>
-
-                <pre><code class="language-js">
-Promise.resolve(2).then(x => {throw new Error('failed') })
-.catch(err =>console.error(err))           
+            <pre><code class="language-js">
+Promise.resolve(2).then(x =&gt; {throw new Error('failed') })
+.catch(err =&gt;console.error(err))           
            </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = Promise.resolve(2) 
-const p2 = p1.then(x => { throw newError('failed')})
-const p3 = p2.catch(err => console.error(err))               
+const p2 = p1.then(x =&gt; { throw newError('failed')})
+const p3 = p2.catch(err =&gt; console.error(err))               
              </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed')})
-const p3 = p2.then(x=>x *2)
-const p4 = p3.catch(err => console.error(err))
+const p2 = p1.then(x =&gt; { throw new Error('failed')})
+const p3 = p2.then(x=&gt;x *2)
+const p4 = p3.catch(err =&gt; console.error(err))
             </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed') })
-const p3 = p2.catch(err => console.error(err))
-const p4 = p3.then(() => console.log('crisis averted'))
+const p2 = p1.then(x =&gt; { throw new Error('failed') })
+const p3 = p2.catch(err =&gt; console.error(err))
+const p4 = p3.then(() =&gt; console.log('crisis averted'))
             </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = Promise.resolve(2)
-const p2 = p1.then(x => { throw new Error('failed')})
-const p3 = p2.catch(err => { throw new Error('oops') })
-const p4 = p3.catch(err => console.error(err))
+const p2 = p1.then(x =&gt; { throw new Error('failed')})
+const p3 = p2.catch(err =&gt; { throw new Error('oops') })
+const p4 = p3.catch(err =&gt; console.error(err))
             </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 fetch('/items')
-.then(res => res.a.prop.that.does.not.exist)
-.catch(err =>console.error(err.message))
-.catch(err => console.error(err.message))
+.then(res =&gt; res.a.prop.that.does.not.exist)
+.catch(err =&gt;console.error(err.message))
+.catch(err =&gt; console.error(err.message))
 // 'cannot read property "prop" of undefined'
             </code></pre>
-                <pre><code class="language-js">
-const p = fetch('/items').then(res =>
+            <pre><code class="language-js">
+const p = fetch('/items').then(res =&gt;
     res.a.prop.that.does.not.exist
 )
-p.catch(err => console.error(err.message))
-p.catch(err =>console.error(err.message))
+p.catch(err =&gt; console.error(err.message))
+p.catch(err =&gt;console.error(err.message))
 //  'Cannot read property "prop" of undefined"
 //  'Cannot read property "prop" of undefined"
             </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = fetch('/items')
-const p2 = p1.then(res => res.a.prop.that.does.not.exist)
-const p3 = p2.catch(err => {})
-const p4 = p3.catch(err=>console.error(err.message))
+const p2 = p1.then(res =&gt; res.a.prop.that.does.not.exist)
+const p3 = p2.catch(err =&gt; {})
+const p4 = p3.catch(err=&gt;console.error(err.message))
             </code></pre>
-
-                <h3 id="4-1-3">4-1-3 從頭開始建立一個 Promise</h3>
-
-                <pre><code class="language-js">
-new Promise(resolve => resolve('result'))
-new Promise((resolve, reject) => reject(new Error('reason')))
+            <h3 id="4-1-3">4-1-3 從頭開始建立一個 Promise</h3>
+            <pre><code class="language-js">
+new Promise(resolve =&gt; resolve('result'))
+new Promise((resolve, reject) =&gt; reject(new Error('reason')))
 
 </code></pre>
-
-                <pre><code class="language-js">
-new Promise(resolve => setTimeout(resolve, 2000))
+            <pre><code class="language-js">
+new Promise(resolve =&gt; setTimeout(resolve, 2000))
 </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 function resolveUnderThreeSeconds(delay) {
     return new Promise(function (resolve, reject) {
         setTimeout(resolve,delay)
@@ -229,64 +207,48 @@ function resolveUnderThreeSeconds(delay) {
 resolveUnderThreeSeconds(2000) // 2秒後變為已實現狀態
 resolveUnderThreeSeconds(7000) // 3秒後變為已拒絕狀態
 </code></pre>
-
-                <pre><code class="language-js">
-new Promise(resolve => resolve(fetch('/items')))
+            <pre><code class="language-js">
+new Promise(resolve =&gt; resolve(fetch('/items')))
 </code></pre>
-
-
-                <pre><code class="language-js">
-new Promise(resolve => resolve(12))
+            <pre><code class="language-js">
+new Promise(resolve =&gt; resolve(12))
     </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise.resolve(12)
 </code></pre>
-
-                <pre><code class="language-js">
-Promise.resolve({ then:resolve=> resolve(12)}).then(x=> console.log(x)) // 12
+            <pre><code class="language-js">
+Promise.resolve({ then:resolve=&gt; resolve(12)}).then(x=&gt; console.log(x)) // 12
 </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise.reject(reason)
-etch('/items').then(() =>
+etch('/items').then(() =&gt;
     Promise.reject(new Error('arbitrarily'))
 )
-fetch('/items').then(()=> { throw new Error('arbitrarily')})
+fetch('/items').then(()=&gt; { throw new Error('arbitrarily')})
 </code></pre>
-
-                <h3 id="4-1-4">4-1-4 Promise 狀態和結果</h3>
-
-
-                <pre><code class="language-js">
+            <h3 id="4-1-4">4-1-4 Promise 狀態和結果</h3>
+            <pre><code class="language-js">
 fetch('/items ')
-.then(() => fetch('/item/first'))
-.then(() => console.log('done'))
+.then(() =&gt; fetch('/item/first'))
+.then(() =&gt; console.log('done'))
 </code></pre>
 
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 fetch('/items')
-.then(res => res.json())
-.then(items => fetch(`/item/${items[0].slug }`))
-.then(res => res.json())
-.then(item => console.log(item))
+.then(res =&gt; res.json())
+.then(items =&gt; fetch(`/item/${items[0].slug }`))
+.then(res =&gt; res.json())
+.then(item =&gt; console.log(item))
     </code></pre>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise
 .resolve([1,2,3])
-.then(values => values.map(value => value * 2))
-.then(values => console.log(values))
+.then(values =&gt; values.map(value =&gt; value * 2))
+.then(values =&gt; console.log(values))
 // [2, 4, 6]
     </code></pre>
-                <h3 id="4-1-5">4-1-5 Promise#finally提案</h3>
-                <p>
-                    在 TC39 提案中討論的是 Promise#finally 方法。可在 Promise 物件已確認狀態後執行回應敘述,不管是已實現或已拒絕狀態。
-                </p>
-                <p>
-                    以下的程式碼可視為是 Promise#finally 的簡略版本。我們將已實現和已拒絕狀態的回應置於回呼函式中,並傳遞給 p.then。
-                </p>
-                <pre><code class="language-js">
+            <h3 id="4-1-5">4-1-5 Promise#finally提案</h3>
+            <pre><code class="language-js">
 function finally(p, fn) {
     return p.then(
          fn,
@@ -294,107 +256,89 @@ function finally(p, fn) {
      )
 }
 </code></pre>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 function finally(p, fn) {
     return p.then(
-      () => fn(),
-      () => fn()
+      () =&gt; fn(),
+      () =&gt; fn()
     )
 }
             </code></pre>
-
-                <p>
-                    傳遞至 Promise#finally 方法的回應敘述,可解析出父物件的結果。
-                </p>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = Promise. resolve('value')
-const p2 = p1.finally(() => {})
-const p3 = p2.then(data => console.log(data))
+const p2 = p1.finally(() =&gt; {})
+const p3 = p2.then(data =&gt; console.log(data))
 //  'value'
             </code></pre>
-
-                <p>
-                    p.then(fn,fn)與上述方式不同,他會產生一個新的實現值,除非它於回應敘述中有明確地轉送並回傳,如下所示。
-
-                </p>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = Promise. resolve('value')
-const p2 = p1.then(()=> {},()=>{})
-const p3 = p2.then(data => console.log(data))
+const p2 = p1.then(()=&gt; {},()=&gt;{})
+const p3 = p2.then(data =&gt; console.log(data))
 //  undefined
             </code></pre>
-                <p>
-                    以下的程式碼是與 Promise#finally 方法相同的完整相容函式
-                </p>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
     function finally(p, fn) {
         return p.then(
-          result => resolve(fn()).then(()=>result),
-          err => resolve(fn()).then(()=> Promise.reject(err))
+          result =&gt; resolve(fn()).then(()=&gt;result),
+          err =&gt; resolve(fn()).then(()=&gt; Promise.reject(err))
         )
        }
        
 </code></pre>
-                <p>
-                    需注意的是,若傳遞至 Promise#finally 回應敘述,其結果為己拒絕，或拋出錯誤,那麼自 Promise#finally 所回傳的 Promise
-                    物件則會是已拒絕狀態,並附帶拒絕原因,如下範例。
-                </p>
-
-                <pre><code class="language-js">
+            <pre><code class="language-js">
     const p1 = Promise.resolve('value') 
-    const p2 = p1.finally(() => Promise.reject('oops'))
-    const p3 = p2.catch(err => console.log(err))
+    const p2 = p1.finally(() =&gt; Promise.reject('oops'))
+    const p3 = p2.catch(err =&gt; console.log(err))
     //  'oops'
 </code></pre>
-                <h3 id="4-1-6">4-1-6 善用 Promise.all 和 Promise.race</h3>
-                <pre><code class="language-js">
+            <h3 id="4-1-6">4-1-6 善用 Promise.all 和 Promise.race</h3>
+            <pre><code class="language-js">
 fetch('/products/chair')
-.then(r => r.json())
-.then(p=> console.log(p))
+.then(r =&gt; r.json())
+.then(p=&gt; console.log(p))
 
 fetch('/products/table')
-.then(r => r.json())
-.then(p=> console.log(p))
+.then(r =&gt; r.json())
+.then(p=&gt; console.log(p))
             </code></pre>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise
 . all([
 fetch('/products/chair'),
 fetch('/products/table')
 ])
-.then(products =>console.log(products[0], products[1]))
+.then(products =&gt;console.log(products[0], products[1]))
             </code></pre>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise
 .all([
  f etch('/products/chair'),
   fetch('/products/table')
 ])
-.then(([chair, table]) => console.log(chair, table))
+.then(([chair, table]) =&gt; console.log(chair, table))
             </code></pre>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 const p1 = Promise.reject('failed')
 const p2 = fetch('/products/chair')
 const p3 = fetch('/products/table')
 const p = Promise
 .all([p1,p2,p3])
-.catch(err=>console.log(err))
+.catch(err=&gt;console.log(err))
 //  'failed'
             </code></pre>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 Promise
 .race([
-  new Promise(resolve => setTimeout(() => resolve(1),1000)),
-  new promise(resolve => setTimeout(() => resolve(2),2000))
+  new Promise(resolve =&gt; setTimeout(() =&gt; resolve(1),1000)),
+  new Promise(resolve =&gt; setTimeout(() =&gt; resolve(2),2000))
 ])
-.then(result=> console.log(result))
+.then(result=&gt; console.log(result))
 // 1
             </code></pre>
-                <pre><code class="language-js">
+            <pre><code class="language-js">
 function timeout(delay) {
     return new Promise(function (resolve, reject) {
-        setTimeout(() => reject('timeout'), delay)
+        setTimeout(() =&gt; reject('timeout'), delay)
     })
 }
 Promise
@@ -402,8 +346,8 @@ Promise
   fetch('/large-resource-download'),
   timeout(5000)
 ])
-.then(res => console.log(res))
-.catch(err => console.log(err))
+.then(res =&gt; console.log(res))
+.catch(err =&gt; console.log(err))
             </code></pre>
         </section>
     </main>

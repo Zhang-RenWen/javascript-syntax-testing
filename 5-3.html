@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charSet="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>Chapter 5 運用 ECMAScript 集合</h2>
+      <h2>5-3 ES6 的集合</h2>
+      <pre><code class="language-js">
+const set = new Set()
+set.add({ an: 'example' })
+        </code></pre>
+      <pre><code class="language-js">
+const set = new Set(['a','b','c'])
+console.log([...set])
+// ['a','b','c'] 
+        </code></pre>
+      <pre><code class="language-js">
+const set = new Set(['a','b','b','c','c'])
+console.log([...set])
+// ['a','b','c'] 
+        </code></pre>
+      <pre><code class="language-js">
+function allDiv(){
+  return document.querySelectorAll('div')
+}
+const set = new Set(allDiv()) 
+console.log(set.size) // 56
+allDiv().forEach(div=&gt; set.add(div))
+console.log(set.size) // 56
+        </code></pre>
+      <pre><code class="language-js">
+const set = new Set(['a','b','c'])
+console.log([...set.entries()])
+// [['a','a'],['b', 'b'],['c','c']]
+        </code></pre>
+      <pre><code class="language-js">
+const map = new Map()
+console.log(map[Symbol.iterator] === map.entries) // true
+const set = new Set()
+console.log(set[Symbol.iterator] === set.entries) // false
+console.log(set[Symbol.iterator] === set.values) // true
+        </code></pre>
+      <pre><code class="language-js">
+const set = new set()
+console.log(set.keys === set.values) // true
+        </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

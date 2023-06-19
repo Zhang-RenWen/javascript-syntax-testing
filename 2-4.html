@@ -23,75 +23,94 @@
     <aside></aside>
     <section>
       <h2>2-4 其餘參數和展開運算子</h2>
-      ES6以前函式對不定量參數操作較為複雜。必須透過 arguments 類陣列。
-      通常透過 Array.prototype.slice.call(arguments) 來將 arguments
-      轉換為陣列。 以下列例子作為展示：
+      <p>
+        ES6 以前函式對不定量參數操作較為複雜。必須透過 arguments 類陣列。通常透過 Array.prototype.slice.call(arguments) 來將 arguments轉換為陣列。 以下列例子作為展示：
+      </p>
       <pre><code class="language-js">
-        function join(){
+function join(){
   var list = Array.prototype.slice.call(arguments)
   return list.join(', ')
-        }
-        join('first','second','third') // 'first, second, third'
+}
+join('first','second','third') // 'first, second, third'
         </code></pre>
-
-      ES6 後有更好的解決辦法
+      <p>
+        ES6 有更好的方法
+      </p>
       <h3>2-4-1 其餘參數</h3>
       <pre><code class="language-js">
-        function join(...list){
+function join(...list){
   return list.join(', ');
-        }
-        join('first','second','third') // 'first, second, third'
+}
+join('first','second','third') // 'first, second, third'
         </code></pre>
-      注意事項 1 - 其餘參數之前已命名的參數不會被包含進list中
+      <p>
+        注意事項 1 - 其餘參數之前已命名的參數不會被包含進list中
+      </p>
       <pre><code class="language-js">
-        function join( separator , ...list){
+function join( separator , ...list){
   return list.join('separator');
-        }
-        join('; ','first','second','third') // 'first; second; third'
+}
+join('; ','first','second','third') // 'first; second; third'
         </code></pre>
-      注意事項 2 - 箭頭函示中使用其餘參數必須要加小括號
+      <p>
+        注意事項 2 - 箭頭函示中使用其餘參數必須要加小括號
+      </p>
+
       <pre><code class="language-js">
-        var getArguments =  ...list => return list // Uncaught SyntaxError: Unexpected 
+var getArguments =  ...list =&gt; return list // Uncaught SyntaxError: Unexpected 
 
-        // 加上箭頭函式的運用
-        var sumAll = (...numbers) => numbers.reduce((total, number) => total + number)
-        sumAll(1,2,3,5,0,-1) // 10
+// 加上箭頭函式的運用
+var sumAll = (...numbers) =&gt; numbers.reduce((total, number) =&gt; total + number)
+sumAll(1,2,3,5,0,-1) // 10
 
-        // 上面舉例的 sumAll 比較以下 ES5 的版本較難以閱讀，尤其對於不習慣使用 reduce 的開發者而言。
-        // 可讀性跟簡潔性之間的取捨之後的章節會說明。
+// 上面舉例的 sumAll 比較以下 ES5 的版本較難以閱讀，尤其對於不習慣使用 reduce 的開發者而言。
+// 可讀性跟簡潔性之間的取捨之後的章節會說明。
 
-        function sumAll(){
+function sumAll(){
   var numbers = Array.prototype.slice.call(arguments)
   return numbers.reduce(function(total,next){
       return total + next
   })
-        }
-        sumAll(1,2,3,5,0,-1) // 10
+}
+sumAll(1,2,3,5,0,-1) // 10
         </code></pre>
       <h3>2-4-2 展開運算子</h3>
-      可迭代性在 ES6 中是種協議，允許將任何物件轉換成可迭代性質。
-      將可迭代物件，轉換為陣列。 比如：
+
+      <p>可迭代性在 ES6 中是種協議，允許將任何物件轉換成可迭代性質。將可迭代物件，轉換為陣列。 比如：</p>
+
       <pre><code class="language-js">
 function cast(){
   return [...arguments];
 }
 cast('a', 'b','c'); // ['a','b','c']
         </code></pre>
-      可以將字串分割：
+      <h4>
+        可以將字串分割：
+      </h4>
+      =
       <pre><code class="language-js">
 [...'ab c'];  // ['a','b','','c']
         </code></pre>
-      展開運算子陣列左右也可加入其他元素合併
+      <p>
+        展開運算子陣列左右也可加入其他元素合併
+      </p>
+
       <pre><code class="language-js">
 ['left',...'abc','right'];  // ['left','a','b','c','right']
         </code></pre>
-      展開嵌套陣列
+      <h4>展開嵌套陣列</h4>
+
       <pre><code class="language-js">
 [1,...[2,3],4,...[5],6,7];  // [1,2,3,4,5,6,7]
         </code></pre>
-      遞移回傳 (shifting) 與展開( Spreading )。
-      當想獲取陣列第一個或第二個元素時通常使用.shift方法。 如此一來問題有2個,
-      1.難以快速閱讀理解。 2.修改掉原本的陣列。在 ES6 中增強描述性
+      <p>遞移回傳 (shifting) 與展開( Spreading )。當想獲取陣列第一個或第二個元素時通常使用.shift方法。 如此一來問題有2個,
+      <ul style="list-style-type: decimal;">
+        <li>難以快速閱讀理解。 </li>
+        <li>修改掉原本的陣列。在 ES6 中增強描述性</li>
+      </ul>
+
+      </p>
+
       <pre><code class="language-js">
 // before ES6
 vat list = ['a', 'b', 'c', 'd', 'e']
@@ -103,7 +122,10 @@ console.log(list) // ['c', 'd', 'e']
 var [first, second, ...other] = ['a', 'b', 'c', 'd', 'e']
 console.log(other) // ['c', 'd', 'e']
         </code></pre>
-      展開引數
+      <h4>
+        展開引數
+      </h4>
+
       <pre><code class="language-js">
 // 傳參展開
 function multiply(left,right) {
@@ -121,15 +143,16 @@ print([1,...[2,3],4,...[5],6,7]) // [[1,2,3,4,5,6,7]]
 print(1,...[2,3],4,...[5],6,7) // [1, 2, 3, 4, 5, 6, 7]
 
         </code></pre>
-      使用 .apply 方法時會有限制，即當需要建立一個物件時，若要將他與 new
-      關鍵字一同使用，則敘述上會變冗長。
+      <p>
+        使用 .apply 方法時會有限制，即當需要建立一個物件時，若要將他與 new 關鍵字一同使用，則敘述上會變冗長。
+      </p>
       <pre><code class="language-js">
 // before ES6
 new (Date.bind.apply(Date,[null,2015,11,31])) // Thu Dec 31 2015 00:00:00 GMT+0800 (台北標準時間)
 // after ES6
 new Date(...[2015,11,31]) // Thu Dec 31 2015 00:00:00 GMT+0800 (台北標準時間)
         </code></pre>
-      補充
+      <h4>補充</h4>
       <a href="https://segmentfault.com/a/1190000018270750">call bind apply</a>
       <h2>彙整使用情境總表</h2>
       <table>

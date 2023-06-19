@@ -71,7 +71,7 @@ function readonly({ descriptor, ...rest }) {
 </code></pre>
       <pre><code class="language-js">
 function readonlyMembers(ctor, heritage, members) {
-  return members.map(member => readonly(member))
+  return members.map(member =&gt; readonly(member))
 }
 </code></pre>
       <h3 id="3-4-3">3-4-3 使用案例:C#的Attributes</h3>
@@ -89,7 +89,7 @@ class Dog {
 </code></pre>
       <pre><code class="language-js">
 function commandProperty(writeLevel, readLevel = writeLevel){
-  return ({ key, ...rest }) => ({
+  return ({ key, ...rest }) =&gt; ({
     key,
     rest,
     finisher(ctor) {
@@ -108,17 +108,17 @@ function commandProperty(writeLevel, readLevel = writeLevel){
 }
 </code></pre>
       <pre><code class="language-js">
-        function getCommandProperties(ctor) {
-          const symbol = Symbol.for('commandProperties')
-          const properties = ctor[symbol] || []
-          return [...properties ]
-        } 
-        getCommandProperties(Dog)
-        // [{
-        //    key: 'name',
-        //    readLevel: 'game-master',
-        //    writeLevel:  'game-master' 
-        // }]
+function getCommandProperties(ctor) {
+  const symbol = Symbol.for('commandProperties')
+  const properties = ctor[symbol] || []
+  return [...properties ]
+} 
+getCommandProperties(Dog)
+// [{
+//    key: 'name',
+//    readLevel: 'game-master',
+//    writeLevel:  'game-master' 
+// }]
       </code></pre>
 
     </section>
