@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>Chapter 5 運用 ECMAScript 集合</h2>
+      <h2>5-2 瞭解並運用弱映射</h2>
+      <h3 id="5-2-1">5-2-1 弱映射是一個糟糕的映射？</h3>
+      <pre><code class="language-js">
+const map = new WeakMap()
+map.set(Date.now, 'now')
+map.set(1, 1) // TypeError
+map.set(Symbol(), 2) // TypeError
+</code></pre>
+      <pre><code class="language-js">
+const map = new WeakMap([
+  [new Date(),'foo' ],
+  [() =&gt; 'bar', 'baz']
+])
+        </code></pre>
+      <pre><code class="language-js">
+const date = new Date ()
+const map = new WeakMap([[date, 'foo'], [() =&gt;'bar','baz']])
+map.has(date) // true
+map.get(date) // 'foo'
+map.delete(date) 
+map.has(date) // false
+        </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

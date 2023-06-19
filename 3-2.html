@@ -77,7 +77,7 @@ function createCalendar(el) {
       <pre><code class="language-js">
   const character = {
     name: 'Thor',
-    toJSON: () => ({
+    toJSON: () =&gt; ({
       key: 'value'
     })
   }
@@ -94,7 +94,7 @@ function createCalendar(el) {
 const json = Symbol('alternative to toJSON')
 const character = {
   name: 'Thor',
-  [json]:()=> ({
+  [json]:()=&gt; ({
   key:'value'
   })
 }

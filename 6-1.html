@@ -93,7 +93,7 @@ function invariant (key, action) {
   throw new Error( `Can't ${ action } private "${ key }" property`)
 }
 }
-cost target = {}
+const target = {}
 const proxy = new Proxy (target, handler)
 // 下方的程式碼說明proxy 物件如何回應使用者的操作。
 proxy.text = 'the great black pony ate your lunch'

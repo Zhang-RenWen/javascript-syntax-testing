@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>4-3 產生器函式和產生器物件</h2>
+      <h3 id="4-3-1">4-3-1 產生器基礎元素</h3>
+      <pre><code class="language-js">
+function* abc(){
+  yield 'a'
+  yield 'b'
+  yield 'c'
+}
+        </code></pre>
+      <pre><code class="language-js">
+const chars = abc()
+typeof chars[Symbol.iterator] === 'function'
+typeof chars.next === 'function'
+chars[Symbol.iterator]() === chars
+console.log(Array.from(chars))
+// ['a','b','c']
+console.log([...chars])
+// ['a','b','c']
+      </code></pre>
+
+
+
+      <pre><code class="language-js">
+console.log([...numbers ()])
+// 'a'
+// 'b'
+// 'c'
+// [1, 2, 3]
+        </code></pre>
+      <pre><code class="language-js">
+for (const number of numbers ()) {
+  console.log(number)
+}      
+// 1
+// 'a'
+// 2
+// 'b'
+// 3
+// 'c'
+        </code></pre>
+      <pre><code class="language-js">
+function* numbers () {
+  yield 1
+  console.log('a' )
+  yield 2
+  console.log(' b' )
+  yield 3
+  console.log('c')
+}
+        </code></pre>
+
+      <pre><code class="language-js">
+function* salute() {
+  yield* 'hello'
+} 
+console.log([...salute()])
+// ['h','e','l','l','o']
+        </code></pre>
+      <pre><code class="language-js">
+function* salute(name) {
+  yield* 'hello '
+  yield* name
+}
+console.log([...salute('you' )])
+//['h','e','l','l','o','', 'y', 'o', 'u']
+        </code></pre>
+      <pre><code class="language-js">
+const salute = {
+  [Symbol.iterator](){
+    const items = ['h','e','l','l','o']
+      return {
+        next:()=&gt; ({
+            done: items.length === 0,
+            value: items.shift()
+        })
+      }
+  }
+}
+function* multiplied (base, multiplier) {
+  yield base + 1 * multiplier
+  yield base + 2 * multiplier
+}
+function* trailmix(){
+  yield* salute
+  yield 0
+  yield* [1, 2]
+  yield* [...multiplied(3, 2)]
+  yield [...multiplied(6, 3)]
+  yield* multiplied(15, 5)
+}
+console.log([...trailmix()])
+        </code></pre>
+      <pre><code class="language-js">
+['h', 'e','l', 'l', 'o', 0, 1, 2, 5, 7, [9, 12], 20, 25]
+        </code></pre>
+      <h3 id="4-3-2">4-3-2 手動迭代產生器</h3>
+      <pre><code class="language-js">
+const g = numbers()
+while (true) {
+  const item = g.next()
+  if (item.done) {
+    break
+  }
+  console.log(item.value)
+}   
+      </code></pre>
+      <pre><code class="language-js">
+function* generator() {
+  yield 'only'
+}
+  const g = generator()
+  console.log(g.next())
+  // {done: false, value: 'only'}
+  console.log(g.next())
+  // {done: true}
+  console.log(g.next())
+  // {done: true}
+      </code></pre>
+      <h3 id="4-3-3">4-3-3 於可迭代物件加入產生器</h3>
+      <pre><code class="language-js">
+function* fibonacci(){
+  let previous = 0 
+  let current = 1
+  while (true) {
+    yield current
+    const next = current + previous
+    previous = current
+    current = next
+  }
+}
+const g = fibonacci()
+console.log(g.next()) // { value: 1, done: false }
+console.log(g.next()) // { value: 1, done: false }
+console.1og(g.next()) // { value: 2, done: false }
+console.log(g.next()) // { value: 3, done: false }
+console.log(g.next()) // { value: 5, done: false }
+console.log(g.next()) // { value: 8, done: false }
+console.log(g.next()) // { value: 13, done: false }
+console.log(g.next()) // { value: 21, done: false }
+      </code></pre>
+      <pre><code class="language-js">
+const fibonacci = {
+  [Symbol.iterator]() {
+  let previous = 0
+  let current = 1
+    return {
+     next() {
+     const value = current 
+     const next = current + previous
+     previous = current
+     current = next
+    }
+    return { value, done: false }
+    }
+  }
+}
+const sequence = fibonacci[Symbol.iterator]()
+console.log(sequence.next()) // { value: 1, done: false }
+console.log(sequence.next()) // { value: 1, done: false }
+console.log(sequence.next()) // { value: 2, done: false }
+console.log(sequence.next()) // { value: 3, done: false }
+console.log(sequence.next()) // { value: 5, done: false }
+console.log(sequence.next()) // { value: 8, done: false }
+console.log(sequence.next()) // { value: 13, done: false }
+console.log(sequence.next()) // { value: 21, done: false }
+        </code></pre>
+      <pre><code class="language-js">
+const fibonacci = {
+  [Symbol.iterator](){
+    let previous = 0
+    let current = 1
+    while (true) {
+        yield current
+        const next = current + previous
+        previous = current
+        current = next
+    }
+  }
+}
+const g = fibonacci[Symbol.iterator]()
+console.log(g.next ()) // { value: 1, done: false }
+console.log(g.next ()) // { value: 1, done: false }
+console.log(g.next()) // { value: 2, done: false }
+console.log(g.next()) // { value: 3, done: false }
+console.log(g.next()) // { value: 5, done: false }
+console.log(g.next()) // { value: 8, done: false}
+console.log(g.next()) // { value: 13, done: false }
+console.log(g.next()) // { value: 21, done: false }
+      </code></pre>
+      <pre><code class="language-js">
+for (const value of fibonacci) {
+  console.log(value)
+  if (value > 20) {
+    break
+  }
+}
+// 1
+// 1
+// 2
+// 3
+// 5
+// 8
+// 13
+// 21
+      </code></pre>
+      <h3 id="4-3-4">
+        4-3-4 利用產生器巡訪樹狀結構資料
+      </h3>
+      <pre><code class="language-js">
+class Node {
+  constructor(value, ...children) {
+    this.value = value
+    this.children = children
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+const root = new Node(1, 
+  new Node(2),
+  new Node(3,
+    new Node(4,
+      new Node(5,
+        new Node(6)
+      ),
+      new Node(7)
+    )
+  ),
+  new Node(8,
+    new Node(9),
+      new Node(10)
+  )
+)
+      </code></pre>
+      <pre><code class="language-js">
+function* depthFirst(node) {
+  yield node.value
+  for (const child of node.children) {
+    yield* depthFirst(child)
+  }
+}
+console.log([...depthFirst(root)])
+// [1,2,3,4,5,6,7,8,9,10]
+      </code></pre>
+      <pre><code class="language-js">
+class Node {
+  constructor(value,...children) {
+  this.value = value
+  this.children = children
+  }
+  * [Symbol.iterator]() {
+    yield this.value
+    for (const child of this.children) {
+      yield* child
+    }
+  }
+}
+console.log([...root])
+//[1,2,3,4,5,6,7,8,9,10]
+      </code></pre>
+      <pre><code class="language-js">
+class Node {
+  constructor(value, ...children) {
+    this.value = value
+    this.children = children
+  }
+  * [Symbol.iterator]() {
+    const queue = [this]
+    while (queue.length) {
+      const node = queue.shift()
+      yield node.value
+      queue.push(...node.children) 
+    }
+  }
+}
+
+console.log([...root])
+// [1,2,3,8,4,9,10,5,7,6]
+        </code></pre>
+      <h3 id="4-3-5">
+        4-3-5 利用產生器函式增加彈性
+      </h3>
+      <pre><code class="language-js">
+modelProvider(function*() {
+  const items = yield 'cart.items'
+  const item = items.reduce((left, right) =&gt; left.price &gt; right.price ? left : right)
+  const details = yield `products.${ item.id }`
+  console.log(details)
+})
+  </code></pre>
+      <pre><code class="language-js">
+const model = {
+  cart: {
+    items: [item1, ..., itemN]
+  },
+  products: {
+    product1:{...},
+    productN:{...}
+  }
+}
+function modelProvider(paths) {
+  const g = paths()
+  pull()
+  function pull(data) {
+    const { value, done } = g.next(data)
+    if (done) {
+      return
+    }
+    const crumbs = value.split('.')
+    const data = crumbs.reduce(followCrumbs,model)
+    pull(data)
+  }
+}
+
+function followCrumbs(data, crumb) {
+  if (!data || !data.hasOwnProperty(crumb)) {
+    return null
+  }
+  return data[crumb]
+}
+          
+  </code></pre>
+      <pre><code class="language-js">
+modelProvider(function*() {
+  const items = yield 'cart.items'
+  const item = items.reduce(
+  (left, right) =&gt; left.price &gt; right.price ? left :right)
+  const details = yield  `products.${ item.id }`
+  console.log(details)
+})
+  </code></pre>
+      <pre><code class="language-js">
+function modelProvider(paths) {
+  const g = paths()
+  pull()
+  function pull(data) {
+    const { value, done } = g.next(data)
+    if (done) {
+      return
+    }
+    fetch(`model?query=${ encodeURIComponent(value)}`).then(response=&gt; response.json()).then(data=&gt; pull(data))
+  }
+}
+  </code></pre>
+
+      <pre><code class="language-js">
+fetch(`/model?query=${ encodeURIComponent(value)}`)
+.then(response =&gt; response.json())
+.then(data =&gt; pull(data))
+.catch(err =&gt; g.throw(err))
+      </code></pre>
+      <pre><code class="language-js">
+modelProvider(function*() {
+  try {
+    console.log('items in the cart:', yield 'cart.items')
+  } catch (e) {
+    console.error('uh oh, failed to fetch model.cart.items!', e)
+  }
+  try {
+    console.log(`these are our products: ${ yield 'products' }`)
+  } catch (e) {
+    console.error('uh oh, failed to fetch model.products!', e)
+  }
+})
+      </code></pre>
+      <h3 id="4-3-8">
+        4-3-8 代表產生器進行回傳
+      </h3>
+      <pre><code class="language-js">
+function* numbers() {
+  yield 1
+  yield 2
+  yield 3
+}
+const g = numbers() 
+console.log(g.next()) 
+// { done: false, value: 1 }
+console.log(g.return())
+// { done: true }
+console.log(g.next()) 
+// { done: true }
+      </code></pre>
+      <pre><code class="language-js">
+function* numbers() {
+  try {
+    yield 1
+  } finally {
+    yield 2
+    yield 3
+  }
+  yield 4
+  yield 5
+}
+const g = numbers()
+console.log(g.next())
+// { done: false, value: 1 }
+console.log(g.return(-1))
+// { done: false, value: 2 }
+console.log(g.next())
+// { done: false, value: 3 }
+console.log(g.next())
+// { done: true , value : -1 }
+      </code></pre>
+      <pre><code class="language-js">
+function* numbers() {
+  yield 1
+  yield 2
+  return 3
+  yield 4
+}
+      </code></pre>
+      <pre><code class="language-js">
+console.log([...numbers()])
+// [1, 2]
+console.log(Array.from(numbers()))
+// [1, 2]
+for (const number of numbers()) {
+  console.log(number)
+  // 1 
+  // 2
+}
+      </code></pre>
+      <pre><code class="language-js">
+const g = numbers()
+console.log(g.next())
+// { done: false, value: 1 }
+console.log(g.next())
+// { done: false, value: 2 }
+console.log(g.next())
+// { done: true, value: 3 }
+console.log(g.next())
+// { done: true }
+        </code></pre>
+      <h3 id="4-3-9">4-3-9 運用產生器操作非同步 I/O</h3>
+      <pre><code class="language-js">
+saveProducts(function*(){
+  yield '/products/modern-javascript'
+  yield '/products/mastering-modular-javascript'
+  return '/wishlists/books'
+})
+        </code></pre>
+      <pre><code class="language-js">
+saveProducts(function* () {
+  const p2 = yield '/products/modern-javascript'
+  const p2 = yield '/products/mastering-modular-javascript'
+  return '/wishlists/books'
+}).then(response =&gt; {
+  //在完成儲存產品願望清單後繼續執行
+})
+        </code></pre>
+      <pre><code class="language-js">
+saveProducts(function*() {
+  yield '/products/modern-javascript'
+  yield '/products/mastering-modular-javascript'
+  if (addToCart) {
+    return '/cart'
+  }
+  return '/wishlists/books'
+})
+        </code></pre>
+      <pre><code class="language-js">
+function saveProducts(productList) {
+  const g = productList()
+  const item = g.next()
+  fetch(item.value)
+  .then(res =&gt; res.json())
+  .then(product =&gt; {})
+}
+        </code></pre>
+      <pre><code class="language-js">
+saveProducts(productList) {
+  const g = productList()
+  more(g.next())
+  function more(item) {
+    if (item.done) {
+      return
+    }
+    fetch(item.value)
+    .then(res =&gt; res.json())
+    .then(product =&gt; {
+      more(g.next(product))
+    })
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+function saveProducts (productList) {
+  const products = []
+  const g = productList()
+  more(g.next ())
+  function more(item){
+   if (item.done) {
+     save(item.value)
+    } else {
+      details(item. value)
+    }
+  }
+  function details(endpoint) {
+    fetch(endpoint)
+    .then (res =&gt; res. json())
+    .then(product =&gt; {
+      products.push (product)
+      more(g.next (product))
+    })
+  }
+  function save (endpoint){
+    fetch(endpoint, {
+      method: 'POST'
+      body: JSON.stringify({ products })
+    })
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+function saveProducts (productList) {
+  const products = []
+  const g = productList()
+  return more(g.next())
+  function more(item){
+    if (item. done) {
+      return save(item.value)
+    }
+    return details(item.value)
+  }
+  function details (endpoint) {
+    return fetch(endpoint)
+    .then(res =&gt; res.json())
+    .then (product =&gt; {
+      products.push(product)
+      return more(g.next (product))
+    })
+  }
+  function save (endpoint) {
+    return fetch(endpoint,{
+      method:'POST'
+      body: JSON. stringify({ products })
+    })
+    .then(res =&gt; res. json())
+  }
+}
+        </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

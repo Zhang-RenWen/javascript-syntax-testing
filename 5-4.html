@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-learning</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>Chapter 5 運用 ECMAScript 集合</h2>
+      <h2>5-4 的弱集合</h2>
+      <pre><code class="language-js">
+const set = new WeakSet()
+set.add('a') // TypeError
+set.add(Symbol()) // TypeError
+        </code></pre>
+      <pre><code class="language-js">
+const set = new WeakSet([  
+  new Date(),
+  {},
+  ()=&gt;{},
+  [1]
+])
+        </code></pre>
+      <pre><code class="language-js">
+const cars = new WeakSet()
+class Car {
+  constructor () {
+    cars.add(this)
+  }
+  fuelUp(){
+    if(!cars.has(this)){
+      throw new TypeError('Car#fuelUp called on a non-Car!')
+    }
+  }
+}
+        </code></pre>
+      <pre><code class="language-js">
+const circle = { cx: 20, cy: 5, r: 15 }
+circle.self = circle
+listOwnProperties({
+  circle,
+  numbers: [1, 5, 7],
+  sum: (a, b) =&gt; a + b
+})
+// circle.cx: 20
+// circle.cy: 5
+// circle.r: 15
+// circle.self: [circular]
+// numbers.0: 1
+// numbers.1: 5
+// numbers.2: 7
+// sum: (a, b) =&gt; a + b
+        </code></pre>
+      <pre><code class="language-js">
+function listOwnProperties(input){
+  recurse(input)
+
+  function recurse (source, lastPrefix, seen = new WeakSet ()) {
+    Object.keys (source). forEach(printOrRecurse)
+    function printOrRecurse(key){
+        const value = source[key]
+        const prefix = lastPrefix
+      ?
+       `${ lastPrefix }.${ key }`: key
+      const shouldRecur = (
+        isObject(value) ||
+        Array.isArray(value)
+      )
+      if (shouldRecur){
+        if (!seen.has(value)) {
+          seen.add(value)
+          recurse(value, prefix, seen)
+        } else {
+          console.log(`${ prefix }:[circular]`)
+        }
+      } else {
+        console.log(`${ prefix }: ${ value }`)
+      }
+    }
+  }
+}
+
+function isObject (value) {
+  return Object.prototype.toString.call(value) === '[object Object]'
+}
+        </code></pre>
+      <pre><code class="language-js">
+const elements = new WeakSet()
+function dommy(target) {
+  if(elements.has(target)) {
+    return
+  }
+  elements.add(target)
+  // 進行一些操作
+}
+        </code></pre>
+    </section>
+  </main>
+</body>
+<script src="./menu.js"></script>
+
+</html>

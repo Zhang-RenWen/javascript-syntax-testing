@@ -25,18 +25,18 @@
       <h2>2-1 物件實字</h2>
       <h3>2-1-1 特性值指定簡化語法</h3>
       <pre><code class="language-js">
-  // before ES6
-  var listeners = {}
-  function run(){}
-  var events = { 
-listeners: listeners,
-run: run 
-  }
-    
-  // after ES6
-  let listeners = {}
-  function run(){}
-  let events = { listeners , run }
+// before ES6
+var listeners = {}
+function run(){}
+var events = { 
+  listeners: listeners,
+  run: run 
+}
+
+// after ES6
+let listeners = {}
+function run(){}
+let events = { listeners , run }
         </code></pre>
 
       <h3>2-1-2 運算取得的特性名稱</h3>

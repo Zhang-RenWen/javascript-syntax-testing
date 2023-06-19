@@ -195,7 +195,7 @@ const proxy = new Proxy(target, handler)
       <pre><code class="language-js">
 const handler ={
   OwnKeys (target) {
-    return Reflect.ownKeys(target).filter(key => {
+    return Reflect.ownKeys(target).filter(key =&gt; {
       const isStringKey = typeof key ==='string'
       if(isStringKey){
         return !key.startswith('_')

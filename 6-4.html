@@ -215,7 +215,7 @@ proxy.hello()
       <h3 id="6-4-4">6-4-4 setPrototypeOf 機關</h3>
       <pre><code class="language-js">
 const handler = {
-  getPrototypeOf: target=> Array.prototype
+  getPrototypeOf: target=&gt; Array.prototype
 }
 const target = {}
 const proxy = new Proxy(target, handler)
@@ -229,7 +229,7 @@ console.log(proxy.push)
         </code></pre>
       <pre><code class="language-js">
 const handler = {
-  getPrototypeOf: target => Array.prototype,
+  getPrototypeOf: target =&gt; Array.prototype,
   get(target, key) {
     return(
       Reflect.get(target, key)||
