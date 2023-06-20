@@ -1,4 +1,4 @@
-const menu = [
+export const menu = [
   {
     id: "2",
     title: "Chapter 2 ES6 基礎元素",
@@ -811,9 +811,57 @@ const menu = [
       },
     ],
   },
+  {
+    id: "10",
+    title: "新標準 ES2016 (ES7)",
+    submenu: [
+      {
+        id: "10-1",
+        title: "10-1 Array.prototype.includes()",
+        href: "10-1.html",
+      },
+      {
+        id: "10-1",
+        title: "10-2 Exponentiation Operator (指數運算子)",
+        href: "10-2.html",
+      },
+    ],
+  },
+  {
+    id: "11",
+    title: "新標準 ES2017 (ES8)",
+    submenu: [
+      {
+        id: "11-1",
+        title: "11-1 ",
+        href: "11-1.html",
+      },
+      {
+        id: "11-1",
+        title: "11-2 ",
+        href: "11-2.html",
+      },
+    ],
+  },
+  {
+    id: "12",
+    title: "新標準 ES2018 (ES9)",
+    submenu: [
+      {
+        id: "12-1",
+        title: "12-1 ",
+        href: "12-1.html",
+      },
+      {
+        id: "12-1",
+        title: "12-2 ",
+        href: "12-2.html",
+      },
+    ],
+  },
 ];
 
-(function createMenu(submenu, el) {
+export function createMenu(submenu, el) {
   submenu.map((o) => {
     if (o.href) {
       const a = document.createElement("a");
@@ -838,4 +886,6 @@ const menu = [
       }
     }
   });
-})(menu, document.querySelector("aside"));
+}
+
+export const DOMaside = document.querySelector("aside")
