@@ -1,5 +1,6 @@
 import {inserted} from './clipboard.js'
-import  {menu,DOMaside,createMenu} from'./menu.js'
+import  {initMenu} from'./menu.js'
+
+initMenu()
 inserted(document)
-createMenu(menu,DOMaside)
 hljs.highlightAll();

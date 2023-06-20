@@ -866,6 +866,7 @@ export function createMenu(submenu, el) {
     if (o.href) {
       const a = document.createElement("a");
       const li = document.createElement("li");
+      li.setAttribute('data-item-id',o.id)  
       a.href = o.href;
       a.textContent = o.title;
       li.appendChild(a);
@@ -889,3 +890,32 @@ export function createMenu(submenu, el) {
 }
 
 export const DOMaside = document.querySelector("aside")
+
+export function setFocusMenuItem(){
+  const hash =window.location.hash
+  const pathname = window.location.pathname
+  const idString = hash?hash.replace('#',''):pathname.replace('.html','').replace('/','')
+  const menu_item =document.querySelector(`[data-item-id="${idString}"]`)
+  if(menu_item){
+    menu_item.classList.add('menu-item-focus')
+  }
+}
+
+export function scrollToFocusEl(){
+  const hash =window.location.hash
+  const pathname = window.location.pathname
+  const idString = hash?hash.replace('#',''):pathname.replace('.html','').replace('/','')
+  const aside =document.querySelector('aside')
+  const menu_item =document.querySelector(`[data-item-id="${idString}"]`)
+  const nav_height  =document.querySelector('nav').getBoundingClientRect().height
+  if(menu_item){
+    const menu_item_height = menu_item.getBoundingClientRect().height
+    aside.scrollTo(0,menu_item.getBoundingClientRect().bottom -menu_item_height -nav_height*2)
+  }
+}
+
+export function initMenu(){
+  createMenu(menu,DOMaside)
+  setFocusMenuItem()
+  scrollToFocusEl()
+}

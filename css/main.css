@@ -56,6 +56,10 @@ aside a{
 
 }
 aside li:hover,li:hover a{
+  background-color: #cde4d6;
+}
+
+aside li.menu-item-focus a{
   background-color: #04AA6D;
   color: #fff;
 }
