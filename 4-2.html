@@ -2,41 +2,41 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JavaScript-syntax-learning</title>
-    <link rel="stylesheet" href="./hightlight/default.min.css" />
-    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-    <link rel="stylesheet" href="./css/main.css" />
-    <script src="./hightlight/hightlight.min.js"></script>
-    <script>
-        hljs.highlightAll();
-    </script>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript-syntax-testing</title>
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script>
+    hljs.highlightAll();
+  </script>
 </head>
 
 <body>
-    <nav>
-        <h1>現代 Javascript 實務應用</h1>
-    </nav>
-    <main>
-        <aside></aside>
-        <section>
-            <h2>4-2 迭代器協議和可迭代協議</h2>
-            <h3 id="4-2-1">4-2-1 瞭解迭代原則 </h3>
-            <pre><code class="language-js">
+  <nav>
+    <h1>現代 Javascript 實務應用</h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>4-2 迭代器協議和可迭代協議</h2>
+      <h3 id="4-2-1">4-2-1 瞭解迭代原則 </h3>
+      <pre><code class="language-js">
 const sequence = [...iterable]
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const example = {}
 example[Symbol.iterator] = fn
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const example = {
    [Symbol.iterator]: fn
 }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const items = ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
 const sequence = {
   [Symbol.iterator]() {
@@ -52,7 +52,7 @@ const sequence = {
   }
 }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 for (const item of sequence){
    console.log(item)
    // 'i'
@@ -65,7 +65,7 @@ for (const item of sequence){
    // 'e'
 }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 console.log([...sequence])
 // ['i', 't', 'e', 'r', 'a', 'b', 'l', 'e']
 console.log(Array.from(sequence))
@@ -73,21 +73,21 @@ console.log(Array.from(sequence))
 console.log(Array.from( {0: 'a' , 1: 'b' , 2: 'c', length:3} ))
 // ['a', 'b', 'c']
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const random = {
    [Symbol.iterator]:()=&gt;({
     next: () =&gt; ({ value: Math.random()}) 
    })
 }
      </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const [one, another] = random
 console.log(one)
 // 0.23235511826351285
 console.log(another)
 // 0.28749457537196577
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 for (const value of random) {
    if (value &gt; 0.8) {
      break
@@ -95,7 +95,7 @@ for (const value of random) {
    console.log(value)
  }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 function take(sequence, amount) {
    return {
     [Symbol.iterator]() {
@@ -112,11 +112,11 @@ function take(sequence, amount) {
    }
 }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 [...take(random, 2)]
 // [0.304253100650385, 0.5851333604659]
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 function range(sequence, low = 0, high = 1) {
    return {
     [Symbol.iterator]() {
@@ -134,19 +134,19 @@ function range(sequence, low = 0, high = 1) {
   }
 }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const low = [ ...range(random, 0, 0.8)]
 // [0.68912092433311 , 0.059788614744320, 0.09396195202134]
     </code></pre>
-            <h3 id="4-2-3">4-2-3 以鍵/值配對的方式對物件映射進行迭代 </h3>
-            <pre><code class="language-js">
+      <h3 id="4-2-3">4-2-3 以鍵/值配對的方式對物件映射進行迭代 </h3>
+      <pre><code class="language-js">
 const colors = {
    green: '#0eo0',
    orange: '#f50',
    pink: '#e07'
 }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const colors = {
    green: '#0e0',
    orange: '#f50',
@@ -166,11 +166,11 @@ const colors = {
    }
 }
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 console.log([...colors])
 // [['green', '#0e0'], ['orange', '#f50'], ['pink','#e07']]
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 function keyValueIterable(target) {
    target[Symbol.iterator] = function(){
      const keys = Object.keys(target)
@@ -188,7 +188,7 @@ function keyValueIterable(target) {
    return target  
 }  
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const colors = keyValueIterable({
    green: '#0e0',
    orange: '#f50',    
@@ -201,8 +201,8 @@ for (const [ , color] of colors) {
 // '#f50'
 // '#e07'
     </code></pre>
-            <h3 id="4-2-4">4-2-4 為播放清單的迭代行為增加彈性</h3>
-            <pre><code class="language-js">
+      <h3 id="4-2-4">4-2-4 為播放清單的迭代行為增加彈性</h3>
+      <pre><code class="language-js">
 const songs = [
    'Bad moon rising ',
    "Don't stop me now" ,
@@ -210,7 +210,7 @@ const songs = [
    'Somewhere only we know '
 ]
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 function playlist(songs, repeat) {
    return {
     [Symbol.iterator]() {
@@ -235,11 +235,11 @@ function playlist(songs, repeat) {
        
     </code></pre>
 
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 console.log([...playlist(['a','b'], 3)])
 // ['a' ,'b' ,'a' ,'b']
 </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 function player (sequence) {
    const g = sequence()
    more()
@@ -252,7 +252,7 @@ function player (sequence) {
    }
 }
 </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 const songs = [
   'Bad moon rising',
   'Don't stop me now',
@@ -262,7 +262,7 @@ const songs = [
 const sequence = playlist (songs, Infinity)
 player (sequence)
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 function playlist (inputSongs, repeat, shuffle) {
    const songs = shuffle? shuffleSongs (inputSongs) : inputSongs
    return {
@@ -289,11 +289,11 @@ function shuffleSongs (songs){
   return songs.slice().sort(()=&gt; Math.random() &gt; 0.5 ? 1 : -1)
 }      
     </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 console.log([...playlist(['a','b'], 3 ,true)])
 // ['a','b','b','a','a','b']
      </code></pre>
-            <pre><code class="language-js">
+      <pre><code class="language-js">
 function shuffleSongs (songs){
    return songs.slice().sort(()=&gt; Math.random() &gt; 0.5 ? 1 : -1)
 }   
@@ -301,8 +301,8 @@ console.log([...playlist(['a','b'], 3)])
 // ['a','b','b','a','a','b']
     </code></pre>
 
-        </section>
-    </main>
+    </section>
+  </main>
 </body>
 <script src="./menu.js"></script>
 
