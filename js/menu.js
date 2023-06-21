@@ -922,7 +922,7 @@ export function resetFocusMenuItem(){
 export function getMenuItem(){
   deepPathname=deepPathname?deepPathname.replace('.html',''):''
   if(!deepPathname){
-    window.location.href ='/index.html'
+    window.location.href ='./index.html'
   }
   const hash =window.location.hash
   const idString = hash?hash.replace('#',''):deepPathname
@@ -948,9 +948,26 @@ export function scrollToFocusEl(){
   }
 }
 
+export function setMobileMenuToggleEvent(){
+const toggle_menu_button =document.querySelector('#toggle-menu')
+const aside =DOMaside
+  if(toggle_menu_button){
+    toggle_menu_button.addEventListener('click',()=>{
+      if(toggle_menu_button.classList.contains('opened')){
+        toggle_menu_button.classList.remove('opened')
+        aside.classList.remove('opened')
+      }else{
+        toggle_menu_button.classList.add('opened')
+        aside.classList.add('opened')
+      }
+    })  
+  }
+}
+
 export function initMenu(){
   createMenu(menu,DOMaside)
   aLinkClickHandler()
   setFocusMenuItem()
+  setMobileMenuToggleEvent()
   scrollToFocusEl()
 }
