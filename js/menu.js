@@ -1,3 +1,11 @@
+
+
+const focusedClassName ='menu-item-focus'
+const itemsDataAttribute = 'data-item-id'
+export const DOMaside = document.querySelector('aside')
+
+
+
 export const menu = [
   {
     id: "2",
@@ -866,7 +874,7 @@ export function createMenu(submenu, el) {
     if (o.href) {
       const a = document.createElement("a");
       const li = document.createElement("li");
-      li.setAttribute('data-item-id',o.id)  
+      li.setAttribute(itemsDataAttribute,o.id)  
       a.href = o.href;
       a.textContent = o.title;
       li.appendChild(a);
@@ -889,24 +897,44 @@ export function createMenu(submenu, el) {
   });
 }
 
-export const DOMaside = document.querySelector("aside")
+
+export function aLinkClickHandler(){
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('click',()=>{
+      resetFocusMenuItem()
+    })
+  })
+}
+
+export function resetFocusMenuItem(){
+  const focusedItem = document.querySelector(`.${focusedClassName}`)
+  if(focusedItem){
+    focusedItem.classList.remove(focusedClassName)
+  }
+  setTimeout(() => {
+    setFocusMenuItem()
+  }, 0);
+}
+
+
 
 export function setFocusMenuItem(){
   const hash =window.location.hash
   const pathname = window.location.pathname
   const idString = hash?hash.replace('#',''):pathname.replace('.html','').replace('/','')
-  const menu_item =document.querySelector(`[data-item-id="${idString}"]`)
+  const menu_item =document.querySelector(`[${itemsDataAttribute}="${idString}"]`)
   if(menu_item){
-    menu_item.classList.add('menu-item-focus')
+    menu_item.classList.add(focusedClassName)
   }
+
 }
 
 export function scrollToFocusEl(){
   const hash =window.location.hash
   const pathname = window.location.pathname
   const idString = hash?hash.replace('#',''):pathname.replace('.html','').replace('/','')
-  const aside =document.querySelector('aside')
-  const menu_item =document.querySelector(`[data-item-id="${idString}"]`)
+  const aside =DOMaside
+  const menu_item =document.querySelector(`[${itemsDataAttribute}="${idString}"]`)
   const nav_height  =document.querySelector('nav').getBoundingClientRect().height
   if(menu_item){
     const menu_item_height = menu_item.getBoundingClientRect().height
@@ -916,6 +944,7 @@ export function scrollToFocusEl(){
 
 export function initMenu(){
   createMenu(menu,DOMaside)
+  aLinkClickHandler()
   setFocusMenuItem()
   scrollToFocusEl()
 }
