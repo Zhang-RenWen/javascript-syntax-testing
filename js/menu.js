@@ -2,7 +2,9 @@
 
 const focusedClassName ='menu-item-focus'
 const itemsDataAttribute = 'data-item-id'
-const deepPathname = window.location.pathname.split('/').filter(Boolean).filter((o)=>o.includes('.html'))[0].replace('.html','');
+let deepPathname = window.location.pathname.split('/').filter(Boolean).filter((o)=>o.includes('.html'))[0];
+
+
 const DOMaside = document.querySelector('aside')
 
 
@@ -918,6 +920,10 @@ export function resetFocusMenuItem(){
 
 
 export function getMenuItem(){
+  deepPathname=deepPathname?deepPathname.replace('.html',''):''
+  if(!deepPathname){
+    window.location.href ='/index.html'
+  }
   const hash =window.location.hash
   const idString = hash?hash.replace('#',''):deepPathname
   const menu_item =document.querySelector(`[${itemsDataAttribute}="${idString}"]`)
