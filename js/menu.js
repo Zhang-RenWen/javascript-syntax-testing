@@ -2,8 +2,8 @@
 
 const focusedClassName ='menu-item-focus'
 const itemsDataAttribute = 'data-item-id'
-export const DOMaside = document.querySelector('aside')
-
+const deepPathname = window.location.pathname.split('/').filter(Boolean).filter((o)=>o.includes('.html'))[0].replace('.html','');
+const DOMaside = document.querySelector('aside')
 
 
 export const menu = [
@@ -917,12 +917,15 @@ export function resetFocusMenuItem(){
 }
 
 
+export function getMenuItem(){
+  const hash =window.location.hash
+  const idString = hash?hash.replace('#',''):deepPathname
+  const menu_item =document.querySelector(`[${itemsDataAttribute}="${idString}"]`)
+  return menu_item
+}
 
 export function setFocusMenuItem(){
-  const hash =window.location.hash
-  const pathname = window.location.pathname
-  const idString = hash?hash.replace('#',''):pathname.replace('.html','').replace('/','')
-  const menu_item =document.querySelector(`[${itemsDataAttribute}="${idString}"]`)
+  const menu_item =getMenuItem()
   if(menu_item){
     menu_item.classList.add(focusedClassName)
   }
@@ -930,11 +933,8 @@ export function setFocusMenuItem(){
 }
 
 export function scrollToFocusEl(){
-  const hash =window.location.hash
-  const pathname = window.location.pathname
-  const idString = hash?hash.replace('#',''):pathname.replace('.html','').replace('/','')
+  const menu_item =getMenuItem()
   const aside =DOMaside
-  const menu_item =document.querySelector(`[${itemsDataAttribute}="${idString}"]`)
   const nav_height  =document.querySelector('nav').getBoundingClientRect().height
   if(menu_item){
     const menu_item_height = menu_item.getBoundingClientRect().height
