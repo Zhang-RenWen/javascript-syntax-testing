@@ -27,10 +27,34 @@
     <section>
       <h2>新標準 ES2016 (ES7)</h2>
       <h3 id="10-1">10-1 Array.prototype.includes()</h3>
+      </code></pre>
+      <p>
+        ES7 之前我們判斷一個陣列裡面是否包含指定元素
+      </p>
       <pre><code class="language-js">
-
+let arr = ['JOJO', 'Joseph Joestar', 'Caesar', 'Kars'];
+if (arr.indexOf('JOJO') !== -1) {
+  console.log('Hi~ JOJO');
+}
         </code></pre>
-      <div class="border-block"></div>
+      <p>
+        ES7 之後可以寫成這樣
+      </p>
+      <pre><code class="language-js">
+let arr = ['JOJO', 'Joseph Joestar', 'Caesar', 'Kars'];
+if (arr.includes('JOJO')) {  // ES7 Array.prototype.includes()
+  console.log('Hi~ JOJO');
+}
+        </code></pre>
+      <p>
+        實際應用做條件判斷部分情境下可以代換 if..else
+      </p>
+      <pre><code class="language-js">
+let conditionsA =[(()=>{return true;})(),false,(()=>{return false;})()]
+console.log(conditionsA.includes(true))  // true
+let conditionsB = [(()=>{return false;})(),false,(()=>{return false;})()]
+console.log(conditionsB.includes(true))  // false
+        </code></pre>
     </section>
   </main>
 </body>
