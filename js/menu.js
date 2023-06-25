@@ -831,7 +831,7 @@ export const menu = [
         href: "10-1.html",
       },
       {
-        id: "10-1",
+        id: "10-2",
         title: "10-2 Exponentiation Operator (指數運算子)",
         href: "10-2.html",
       },

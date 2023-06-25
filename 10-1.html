@@ -38,7 +38,7 @@ if (arr.indexOf('JOJO') !== -1) {
 }
         </code></pre>
       <p>
-        ES7 之後可以寫成這樣
+        ES7 之後可以寫成這樣,會更加直覺‧
       </p>
       <pre><code class="language-js">
 let arr = ['JOJO', 'Joseph Joestar', 'Caesar', 'Kars'];
@@ -50,10 +50,36 @@ if (arr.includes('JOJO')) {  // ES7 Array.prototype.includes()
         實際應用做條件判斷部分情境下可以代換 if..else
       </p>
       <pre><code class="language-js">
-let conditionsA =[(()=>{return true;})(),false,(()=>{return false;})()]
+let conditionsA =[(()=&gt;{return true;})(),false,(()=&gt;{return false;})()]
 console.log(conditionsA.includes(true))  // true
-let conditionsB = [(()=>{return false;})(),false,(()=>{return false;})()]
+let conditionsB = [(()=&gt;{return false;})(),false,(()=&gt;{return false;})()]
 console.log(conditionsB.includes(true))  // false
+        </code></pre>
+
+
+
+      <pre><code class="language-js">
+console.log([NaN].includes(NaN));  // true
+console.log([null].includes(null));  // true
+console.log([undefined].includes(undefined)); // true
+
+// 物件因為不同參考故無法做比對
+// 若要比對必須指向同一參考變數。
+
+console.log([{a:1}].includes({a:1})); // false
+const obj = {a:1}
+console.log([obj].includes(obj)); // true
+
+// 萬國碼比對
+const array = ['🥗', '🍔', '🍰'];
+array.includes('🍰'); // true
+
+
+// Symbol 比對
+const symbol = Symbol('symbol');
+const array = [symbol];
+array.includes(symbol); // true
+[Symbol('symbol')].includes(Symbol('symbol')) // false
         </code></pre>
     </section>
   </main>
