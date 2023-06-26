@@ -837,22 +837,37 @@ export const menu = [
       },
     ],
   },
-  // {
-  //   id: "11",
-  //   title: "新標準 ES2017 (ES8)",
-  //   submenu: [
-  //     {
-  //       id: "11-1",
-  //       title: "11-1 ",
-  //       href: "11-1.html",
-  //     },
-  //     {
-  //       id: "11-1",
-  //       title: "11-2 ",
-  //       href: "11-2.html",
-  //     },
-  //   ],
-  // },
+  {
+    id: "11",
+    title: "新標準 ES2017 (ES8)",
+    submenu: [
+      {
+        id: "11-1",
+        title: "11-1 String.padStart()",
+        href: "11-1.html",
+      },
+      {
+        id: "11-2",
+        title: "11-2 String.padEnd()",
+        href: "11-2.html",
+      },
+      {
+        id: "11-3",
+        title: "11-3 Trailing Commas",
+        href: "11-3.html",
+      },
+      {
+        id: "11-4",
+        title: "11-4 Object:entries() and values()",
+        href: "11-4.html",
+      },
+      {
+        id: "11-5",
+        title: "11-5 Async and Await",
+        href: "11-5.html",
+      },
+    ],
+  },
   // {
   //   id: "12",
   //   title: "新標準 ES2018 (ES9)",
