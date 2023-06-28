@@ -27,8 +27,48 @@
     <section>
       <h2>新標準 ES2017 (ES8)</h2>
       <h3 id="11-2">11-2 String.padEnd()</h3>
+      <p>
+        padEnd() 會將用給定用於填充的字串，以重複的方式，插入到目標字串的尾端(右側)，直到目標字串到達指定長度。
+      </p>
+      <h4>Syntax</h4>
+      <p>str.padEnd(targetLength [, padString])</p>
+      <h4>
+        Parameters
+      </h4>
+      <h5>targetLength</h5>
+      <p>
+        目標字串被填充後的長度。如果此參數小於原字串的長度，那將直接返回原字串。
+      </p>
+      <h5>padString (選擇性) </h5>
+      <p>
+        用來填充的字串。如果填充字串太長，則由左側開始，擷取所需要的長度。此參數預設值是空白 " "
+      </p>
       <pre><code class="language-js">
+const str1 = 'Breaded Mushrooms';
+
+console.log(str1.padEnd(25, '.'));
+// Expected output: "Breaded Mushrooms........"
+
+const str2 = '200';
+
+console.log(str2.padEnd(5));
+// Expected output: "200  "
         </code></pre>
+      <pre><code class="language-js">
+"abc".padEnd(10); // "abc       "
+"abc".padEnd(10, "foo"); // "abcfoofoof"
+"abc".padEnd(6, "123456"); // "abc123"
+"abc".padEnd(1); // "abc"
+        </code></pre>
+      <p> 資料來源:</p>
+      <p>
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padEnd">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padEnd</a>
+      </p>
+      <p>
+        <a
+          href="https://www.tabnine.com/code/javascript/functions/builtins/String/padEnd">https://www.tabnine.com/code/javascript/functions/builtins/String/padEnd</a>
+      </p>
     </section>
   </main>
 </body>
