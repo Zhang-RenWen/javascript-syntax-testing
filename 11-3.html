@@ -27,8 +27,77 @@
     <section>
       <h2>新標準 ES2017 (ES8)</h2>
       <h3 id="11-3">11-3 Trailing Commas</h3>
-      <pre><code class="language-js">
+      <h4>Array</h4>
+      <pre><code class="language-diff">
+ [
+    'foo',
++   'baz',
+    'bar',
+-   'baz',
+ ]
         </code></pre>
+      <pre><code class="language-js">
+const arr = [
+  1,
+  2,
+  3,
+];
+arr; // [1, 2, 3]
+arr.length; // 3
+      </code></pre>
+      <pre><code class="language-js">
+const arr = [1, 2, 3, , ,];
+arr.length; // 5
+      </code></pre>
+      <h4>Objects</h4>
+      <pre><code class="language-js">
+const object = {
+  foo: 'bar',
+  baz: 'qwerty',
+  age: 42,
+};
+      </code></pre>
+      <pre><code class="language-js">
+function f(p) {}
+function f(p,) {}
+
+(p) => {};
+(p,) => {};
+      </code></pre>
+      <pre><code class="language-js">
+class C {
+  one(a,) {}
+  two(a, b,) {}
+}
+
+const obj = {
+  one(a,) {},
+  two(a, b,) {},
+};
+      </code></pre>
+      <h4>Function calls</h4>
+      <pre><code class="language-js">
+f(p);
+f(p,);
+
+Math.max(10, 20);
+Math.max(10, 20,);
+      </code></pre>
+      <h4>Illegal trailing commas</h4>
+      <pre><code class="language-js"></code></pre>
+      <h4>Trailing commas in destructuring</h4>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <h4>Trailing commas in JSON</h4>
+      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js"></code></pre>
+      <h4>Trailing commas in named imports and named exports</h4>
+      <h4>Named imports</h4>
+      <pre><code class="language-js"></code></pre>
+      <h4>Named exports</h4>
+      <pre><code class="language-js "></code></pre>
+      <h4>Quantifier prefix</h4>
+      <pre><code class="language-js"></code></pre>
     </section>
   </main>
 </body>
