@@ -110,8 +110,41 @@ pre code.hljs {
     width: 100%;
   }
   
+  /* error-code */
+  .hljs.error-code{
+    background: #fbe5eb ;
+    color: #1e1e1e;
+  }
   
+  .error-code .hljs-title,
+  .error-code .hljs-function{
+    color: #d30038;
+  }
   
+  .error-code .hljs-params{
+    color: #1e1e1e;
+  }
+
+  pre .error-code ~ .btnIcon{
+    color: #1e1e1e;
+  }
+
+  .hljs.correct-code{
+    background: #e5f1eb  ;
+    color: #1e1e1e;
+  }
   
+  /* correct-code */
+  .correct-code .hljs-title{
+    color: #569cd6;
+  }
   
-  
+  .correct-code .hljs-params{
+    color: #1e1e1e;
+  }
+  .correct-code .hljs-string {
+    color: #608b4e;
+  }
+  pre .correct-code ~ .btnIcon{
+    color: #1e1e1e;
+  }
