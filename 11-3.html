@@ -61,8 +61,8 @@ const object = {
 function f(p) {}
 function f(p,) {}
 
-(p) => {};
-(p,) => {};
+(p) =&gt; {};
+(p,) =&gt; {};
       </code></pre>
       <pre><code class="language-js">
 class C {
@@ -84,13 +84,23 @@ Math.max(10, 20);
 Math.max(10, 20,);
       </code></pre>
       <h4>Illegal trailing commas</h4>
-      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js error-code">
+function f(,) {} // SyntaxError: missing formal parameter
+(,) =&gt; {};       // SyntaxError: expected expression, got ','
+f(,)             // SyntaxError: expected expression, got ','
+
+function f(...p,) {} // SyntaxError: parameter after rest parameter
+(...p,) =&gt; {}        // SyntaxError: expected closing parenthesis, got ','
+      </code></pre>
       <h4>Trailing commas in destructuring</h4>
       <pre><code class="language-js"></code></pre>
       <pre><code class="language-js"></code></pre>
       <h4>Trailing commas in JSON</h4>
       <pre><code class="language-js"></code></pre>
-      <pre><code class="language-js"></code></pre>
+      <pre><code class="language-js correct-code">
+JSON.parse('[1, 2, 3, 4 ]');
+JSON.parse('{1foo1 : 1 }');
+      </code></pre>
       <h4>Trailing commas in named imports and named exports</h4>
       <h4>Named imports</h4>
       <pre><code class="language-js"></code></pre>
