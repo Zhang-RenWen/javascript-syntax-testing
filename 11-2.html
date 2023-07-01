@@ -41,24 +41,24 @@
       </p>
       <h5>padString (選擇性) </h5>
       <p>
-        用來填充的字串。如果填充字串太長，則由左側開始，擷取所需要的長度。此參數預設值是空白 " "
+        用來填充的字串。如果填充字串太長，則由左側開始，擷取所需要的長度。此參數預設值是空白 ' '
       </p>
       <pre><code class="language-js">
 const str1 = 'Breaded Mushrooms';
 
 console.log(str1.padEnd(25, '.'));
-// Expected output: "Breaded Mushrooms........"
+// Expected output: 'Breaded Mushrooms........'
 
 const str2 = '200';
 
 console.log(str2.padEnd(5));
-// Expected output: "200  "
+// Expected output: '200  '
         </code></pre>
       <pre><code class="language-js">
-"abc".padEnd(10); // "abc       "
-"abc".padEnd(10, "foo"); // "abcfoofoof"
-"abc".padEnd(6, "123456"); // "abc123"
-"abc".padEnd(1); // "abc"
+'abc'.padEnd(10); // 'abc       '
+'abc'.padEnd(10, 'foo'); // 'abcfoofoof'
+'abc'.padEnd(6, '123456'); // 'abc123'
+'abc'.padEnd(1); // 'abc'
         </code></pre>
       <p> 資料來源:</p>
       <p>

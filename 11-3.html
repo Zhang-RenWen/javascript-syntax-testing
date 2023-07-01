@@ -111,13 +111,13 @@ const [a, ...b,] = [1, 2, 3];
       <h4>Trailing commas in JSON</h4>
       <pre><code class="language-js error-code">
 JSON.parse('[1, 2, 3, 4, ]');
-JSON.parse('{'foo' : 1, }');
+JSON.parse('{"foo" : 1, }');
 // SyntaxError JSON.parse: unexpected character
 // at line 1 column 14 of the JSON data
       </code></pre>
       <pre><code class="language-js correct-code">
 JSON.parse('[1, 2, 3, 4 ]');
-JSON.parse('{'foo' : 1 }');
+JSON.parse('{"foo" : 1 }');
       </code></pre>
       <h4>Trailing commas in named imports and named exports</h4>
       <h4>Named imports</h4>
