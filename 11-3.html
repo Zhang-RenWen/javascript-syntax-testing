@@ -27,7 +27,11 @@
     <section>
       <h2>新標準 ES2017 (ES8)</h2>
       <h3 id="11-3">11-3 Trailing Commas</h3>
+      <p>
+        以往早期的 Javascript 版本在陣列和物件屬性最後加上逗號是會出錯。另外 function 放置參數的括號內也會出錯。
+      </p>
       <h4>Array</h4>
+      <p>版本控制上可以獲得好處。如下範例所示，在看差異時不會連同新增刪減的逗號也一併標記進去，增加可讀性。</p>
       <pre><code class="language-diff">
  [
     'foo',
@@ -36,6 +40,7 @@
 -   'baz',
  ]
         </code></pre>
+      <p>結尾逗號不會影響陣列長度</p>
       <pre><code class="language-js">
 const arr = [
   1,
@@ -45,18 +50,29 @@ const arr = [
 arr; // [1, 2, 3]
 arr.length; // 3
       </code></pre>
+      <p>連續結尾逗號代表新增空白元素。</p>
       <pre><code class="language-js">
 const arr = [1, 2, 3, , ,];
 arr.length; // 5
+arr[3]; // undefined
       </code></pre>
       <h4>Objects</h4>
+      <p>物件屬性不可連續使用結尾逗號</p>
       <pre><code class="language-js">
 const object = {
   foo: 'bar',
   baz: 'qwerty',
   age: 42,
 };
+
+const object2 = {
+  foo: 'bar',
+  baz: 'qwerty',
+  age: 42,,
+};
+// SyntaxError: Unexpected token ','
       </code></pre>
+      <p>ES6 以後允許 function 使用結尾逗號。以下幾個版本的函式結果相等。</p>
       <pre><code class="language-js">
 function f(p) {}
 function f(p,) {}
@@ -64,6 +80,7 @@ function f(p,) {}
 (p) =&gt; {};
 (p,) =&gt; {};
       </code></pre>
+      <p>其他案例: class 及 物件內 function</p>
       <pre><code class="language-js">
 class C {
   one(a,) {}
@@ -104,11 +121,13 @@ const o = {
 };
 const { p, q, } = o;
       </code></pre>
+      <p>也無法用在展開運算子</p>
       <pre><code class="language-js error-code">
 const [a, ...b,] = [1, 2, 3];
 // SyntaxError: rest element may not have a trailing comma
       </code></pre>
       <h4>Trailing commas in JSON</h4>
+      <p>JSON 不支援。</p>
       <pre><code class="language-js error-code">
 JSON.parse('[1, 2, 3, 4, ]');
 JSON.parse('{"foo" : 1, }');
