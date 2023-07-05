@@ -27,7 +27,22 @@
     <section>
       <h2>新標準 ES2017 (ES8)</h2>
       <h3 id="11-4">11-4 Object:entries() and values()</h3>
+      <p>
+        Object:entries() : 返回一個由傳入物件自有的可列舉字串鍵屬性的鍵值對組成的數組。每個鍵值對都是一個包含兩個元素的數組：第一個元素是屬性的鍵（始終是字串），第二個元素是屬性值。
+      </p>
       <pre><code class="language-js">
+const object1 = {
+  a: 'someString',
+  b: 42
+};
+console.log(Object.entries(object1));
+for (const [key, value] of Object.entries(object1)) {
+  console.log(`${key}: ${value}`);
+}
+// Expected output:
+// [['a', 'someString'], ['b', 42]]
+// 'a: someString'
+// 'b: 42'
         </code></pre>
     </section>
   </main>
