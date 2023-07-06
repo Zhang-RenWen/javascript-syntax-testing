@@ -28,7 +28,7 @@
       <h2>新標準 ES2017 (ES8)</h2>
       <h3 id="11-4">11-4 Object:entries() and values()</h3>
       <p>
-        Object:entries() : 返回一個由傳入物件自有的可列舉字串鍵屬性的鍵值對組成的數組。每個鍵值對都是一個包含兩個元素的數組：第一個元素是屬性的鍵（始終是字串），第二個元素是屬性值。
+        Object:entries() : 返回一個由傳入物件自有的可列舉字串鍵屬性的鍵值對組成的陣列。每個鍵值對都是一個包含兩個元素的陣列：第一個元素是屬性的鍵（始終是字串），第二個元素是屬性值。
       </p>
       <pre><code class="language-js">
 const object1 = {
@@ -44,6 +44,104 @@ for (const [key, value] of Object.entries(object1)) {
 // 'a: someString'
 // 'b: 42'
         </code></pre>
+      <p>Object.entries() 返回一個陣列，其元素是直接在 object 上找到相應的可列舉字串鍵屬性的鍵值對陣列。這與使用 for...in 循環叠代相同，只是使用 for...in
+        循環也列舉原型鏈中的屬性。Object.entries() 返回的陣列順序和 for...in 循環提供的順序相同。如果只需要屬性的鍵，請使用 Object.keys()。如果只需要屬性的值，請使用
+        Object.values()。</p>
+      <h4>通用範例</h4>
+      <pre><code class="language-js">
+const obj = { foo: 'bar', baz: 42 };
+console.log(Object.entries(obj)); // [ ['foo', 'bar'], ['baz', 42] ]
+
+// 類陣列物件
+const obj = { 0: 'a', 1: 'b', 2: 'c' };
+console.log(Object.entries(obj)); // [ ['0', 'a'], ['1', 'b'], ['2', 'c'] ]
+
+// 隨機排序的類陣列物件
+const anObj = { 100: 'a', 2: 'b', 7: 'c' };
+console.log(Object.entries(anObj)); // [ ['2', 'b'], ['7', 'c'], ['100', 'a'] ]
+
+// getFoo 為一個不可列舉的屬性
+const myObj = Object.create(
+  {},
+  {
+    getFoo: {
+      value() {
+        return this.foo;
+      },
+    },
+  },
+);
+myObj.foo = 'bar';
+console.log(Object.entries(myObj)); // [ ['foo', 'bar'] ]
+        </code></pre>
+      <h4>用於基本型別中範例</h4>
+      <p>非物件參數會強制轉換成物件。只有字串可以有自己的可列舉屬性，所有其他基本類型均返回一個空陣列。</p>
+      <pre><code class="language-js">
+// 字串具有索引作為可列舉的自有属性
+console.log(Object.entries('foo')); // [ ['0', 'f'], ['1', 'o'], ['2', 'o'] ]
+
+// 其他基本型別沒有自有屬性
+console.log(Object.entries(100)); // []
+Object.entries(NaN) // []
+Object.entries(Math.PI) // []
+Object.entries(Infinity) // []
+Object.entries(-Infinity) // []
+Object.entries(0) // []
+Object.entries(-0) // []
+Object.entries(false) // []
+Object.entries(true) // []
+Object.entries('') // []
+Object.entries(Symbol()) // []
+Object.entries(()=&gt;{}) // []
+Object.entries(/^[a-zA-Z0-9]{4,16}$/) // []
+Object.entries(null) // TypeError: Cannot convert undefined or null to object
+Object.entries(undefined ) // TypeError: Cannot convert undefined or null to object
+        </code></pre>
+      <h4>將 Object 轉換成 Map</h4>
+      <p>Map() 構造函數接受一個 entries 可叠代對象。使用 Object.entries ，你可以很容易地將 Object 轉換成 Map :</p>
+      <pre><code class="language-js">
+const obj = { foo: 'bar', baz: 42 };
+const map = new Map(Object.entries(obj));
+console.log(map); // Map(2) {'foo' =&gt; 'bar', 'baz' =&gt; 42}
+        </code></pre>
+      <h4>遍歷物件</h4>
+      <pre><code class="language-js">
+// 使用 for...of 迴圈
+const obj = { a: 5, b: 7, c: 9 };
+for (const [key, value] of Object.entries(obj)) {
+  console.log(`${key} ${value}`); // 'a 5', 'b 7', 'c 9'
+}
+
+// 使用陣列方法
+Object.entries(obj).forEach(([key, value]) =&gt; {
+  console.log(`${key} ${value}`); // 'a 5', 'b 7', 'c 9'
+});
+        </code></pre>
+      <h4>其他範例</h4>
+      <pre><code class="language-js"></code>
+// polyfills/Object/entries/tests.js/it
+it('accepts number primitives', function() {
+  if (objectKeysWorksWithPrimitives) {
+    proclaim.equal(Object.entries(0).length, 0, '0 has zero entries');
+    proclaim.equal(Object.entries(-0).length, 0, '-0 has zero entries');
+    proclaim.equal(Object.entries(Infinity).length, 0, 'Infinity has zero entries');
+    proclaim.equal(Object.entries(-Infinity).length, 0, '-Infinity has zero entries');
+    proclaim.equal(Object.entries(NaN).length, 0, 'NaN has zero entries');
+    proclaim.equal(Object.entries(Math.PI).length, 0, 'Math.PI has zero entries');
+  } else {
+    this.skip();
+  }
+});
+      </code></pre>
+      <p> 資料來源:</p>
+      <p>
+        <a
+          href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/entries">https://developer.mozilla.org/en-US/docs/Web/JavaScript/...</a>
+      </p>
+      <p>
+        <a
+          href="https://www.tabnine.com/code/javascript/query/%22Object.entries%22">https://www.tabnine.com/code/javascript/....</a>
+      </p>
     </section>
   </main>
 </body>
