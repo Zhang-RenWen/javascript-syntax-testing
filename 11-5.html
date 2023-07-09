@@ -27,8 +27,48 @@
     <section>
       <h2>新標準 ES2017 (ES8)</h2>
       <h3 id="11-5">11-5 Async and Await</h3>
+      <h4>說明:</h4>
+      <p>
+        await 通常用於拆開 promise 的包裝，使用方法是傳遞一個 Promise 作為 expression。使用 await 總會暫停當前異步函數的執行，在該
+        Promise 敲定 (settled ， 指兌現或拒絕) 後繼續執行。函數的執行恢覆 (resume) 時， await 表達式的值已經變成了 Promise 兌現的值。若該 Promise 被拒絕 (rejected)
+        ， await
+        表達式會把拒絕的原因拋出。當前函數(await 所在的函數)會出現在拋出的錯誤的棧追蹤 (stack trace) ，否則當前函數就不會在棧追蹤出現。await 總會同步地對表達式求值並處理，處理的行為與
+        Promise.resolve() 一致，不屬於原生 Promise 的值全都會被隱式地轉換為 Promise 實例後等待。處理的規則為，若表達式：是一個原生 Promise(原生Promise
+        的實例或其派生類的實例，且滿足 expression.constructor === Promise)，會被直接用於等待，等待由原生代碼實現，該對象的 then()不會被調用。是 thenable 對象(包括非原生的
+        Promise 實例、polyfill、Proxy、派生類等)，會構造一個新 Promise 用於等待，構造時會調用該對象的 then() 方法。不是 thenable 對象，會被包裝進一個已兌現的 Promise
+        用於等待，其結果就是表達式的值。
+      </p>
       <pre><code class="language-js">
         </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <pre><code class="language-js">
+        </code></pre>
+      <p> 資料來源:</p>
+      <p>
+        <a
+          href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/await">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/...</a>
+      </p>
     </section>
   </main>
 </body>
