@@ -39,30 +39,193 @@
         用於等待，其結果就是表達式的值。
       </p>
       <pre><code class="language-js">
+function resolveAfter2Seconds(x) {
+  return new Promise(resolve =&gt; {
+    setTimeout(() =&gt; {
+      resolve(x);
+    }, 2000);
+  });
+}
+
+async function f1() {
+  let x = await resolveAfter2Seconds(10);
+  console.log(x); // 10
+}
+
+f1();
         </code></pre>
       <pre><code class="language-js">
+async function f3() {
+  const y = await 20;
+  console.log(y); // 20
+
+  const obj = {};
+  console.log((await obj) === obj); // true
+}
+
+f3();
         </code></pre>
       <pre><code class="language-js">
+async function f4() {
+  try {
+    const z = await Promise.reject(30);
+  } catch (e) {
+    console.error(e); // 30
+  }
+}
+
+f4();
         </code></pre>
       <pre><code class="language-js">
+const response = await promisedFunction().catch((err) =&gt; {
+  console.error(err);
+  return 'default response';
+});
+// response will be "default response" if the promise is rejected
         </code></pre>
       <pre><code class="language-js">
+// fetch request
+const colors = fetch('../data/colors.json').then((response) =&gt; response.json());
+
+export default await colors;
+
+        
         </code></pre>
       <pre><code class="language-js">
+async function foo(name) {
+  console.log(name, 'start');
+  console.log(name, 'middle');
+  console.log(name, 'end');
+}
+
+foo('First');
+foo('Second');
+
+// First start
+// First middle
+// First end
+// Second start
+// Second middle
+// Second end
+
         </code></pre>
       <pre><code class="language-js">
+function foo(name) {
+  return new Promise((resolve) =&gt; {
+    console.log(name, 'start');
+    console.log(name, 'middle');
+    console.log(name, 'end');
+    resolve();
+  });
+}
+
         </code></pre>
       <pre><code class="language-js">
+async function foo(name) {
+  console.log(name, 'start');
+  await console.log(name, 'middle');
+  console.log(name, 'end');
+}
+
+foo('First');
+foo('Second');
+
+// First start
+// First middle
+// Second start
+// Second middle
+// First end
+// Second end
         </code></pre>
       <pre><code class="language-js">
+function foo(name) {
+  return new Promise((resolve) =&gt; {
+    console.log(name, 'start');
+    resolve(console.log(name, 'middle'));
+  }).then(() =&gt; {
+    console.log(name, 'end');
+  });
+}
         </code></pre>
       <pre><code class="language-js">
+let i = 0;
+
+queueMicrotask(function test() {
+  i++;
+  console.log('microtask', i);
+  if (i &lt; 3) {
+    queueMicrotask(test);
+  }
+});
+
+(async () =&gt; {
+  console.log('async function start');
+  for (let i = 1; i &lt; 3; i++) {
+    await null;
+    console.log('async function resume', i);
+  }
+  await null;
+  console.log('async function end');
+})();
+
+queueMicrotask(() =&gt; {
+  console.log('queueMicrotask() after calling async function');
+});
+
+console.log('script sync part end');
+
+// Logs:
+// async function start
+// script sync part end
+// microtask 1
+// async function resume 1
+// queueMicrotask() after calling async function
+// microtask 2
+// async function resume 2
+// microtask 3
+// async function end
+
         </code></pre>
       <pre><code class="language-js">
+async function noAwait() {
+  // Some actions...
+
+  return /* await */ lastAsyncTask();
+}
+
         </code></pre>
       <pre><code class="language-js">
+async function lastAsyncTask() {
+  await null;
+  throw new Error("failed");
+}
+
+async function noAwait() {
+  return lastAsyncTask();
+}
+
+noAwait();
+
+// Error: failed
+//    at lastAsyncTask
+
         </code></pre>
       <pre><code class="language-js">
+async function lastAsyncTask() {
+  await null;
+  throw new Error('failed');
+}
+
+async function withAwait() {
+  return await lastAsyncTask();
+}
+
+withAwait();
+
+// Error: failed
+//    at lastAsyncTask
+//    at async withAwait
+
         </code></pre>
       <p> 資料來源:</p>
       <p>
