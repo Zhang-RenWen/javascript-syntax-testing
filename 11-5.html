@@ -33,11 +33,18 @@
         Promise 敲定 (settled ， 指兌現或拒絕) 後繼續執行。函數的執行恢覆 (resume) 時， await 表達式的值已經變成了 Promise 兌現的值。若該 Promise 被拒絕 (rejected)
         ， await
         表達式會把拒絕的原因拋出。當前函數(await 所在的函數)會出現在拋出的錯誤的棧追蹤 (stack trace) ，否則當前函數就不會在棧追蹤出現。await 總會同步地對表達式求值並處理，處理的行為與
-        Promise.resolve() 一致，不屬於原生 Promise 的值全都會被隱式地轉換為 Promise 實例後等待。處理的規則為，若表達式：是一個原生 Promise(原生Promise
-        的實例或其派生類的實例，且滿足 expression.constructor === Promise)，會被直接用於等待，等待由原生代碼實現，該對象的 then()不會被調用。是 thenable 對象(包括非原生的
-        Promise 實例、polyfill、Proxy、派生類等)，會構造一個新 Promise 用於等待，構造時會調用該對象的 then() 方法。不是 thenable 對象，會被包裝進一個已兌現的 Promise
-        用於等待，其結果就是表達式的值。
+        Promise.resolve() 一致，不屬於原生 Promise 的值全都會被隱式地轉換為 Promise 實例後等待。處理的規則為，若表達式：
+      <ul>
+        <li>。 是一個原生 Promise(原生 Promise 的實例或其派生類的實例，且滿足 expression.constructor === Promise)，會被直接用於等待，等待由原生代碼實現，該對象的
+          then()不會被調用。
+        </li>
+        <li>。 是 thenable 對象(包括非原生的 Promise 實例、polyfill、Proxy、派生類等)，會構造一個新 Promise 用於等待，構造時會調用該對象的 then() 方法。
+        </li>
+        <li>。 不是 thenable 對象，會被包裝進一個已兌現的 Promise 用於等待，其結果就是表達式的值。</li>
+      </ul>
       </p>
+      <h4>等待 Promise 的兌現</h4>
+      <p>當一個 Promise 被傳遞給 await 操作符， await 將等待該 Promise 兌現，並在兌現後返回該 Promise 兌現的值。/p>
       <pre><code class="language-js">
 function resolveAfter2Seconds(x) {
   return new Promise(resolve =&gt; {
@@ -54,6 +61,8 @@ async function f1() {
 
 f1();
         </code></pre>
+      <h4>轉換為 promise</h4>
+      <p>若表達式的值不是 Promise ， await 會把該值轉換為已兌現的 Promise ，然後返回其結果。</p>
       <pre><code class="language-js">
 async function f3() {
   const y = await 20;
@@ -65,6 +74,8 @@ async function f3() {
 
 f3();
         </code></pre>
+      <h4>promise 被拒絕</h4>
+      <p>如果 Promise 被拒絕，則拋出拒絕的原因。</p>
       <pre><code class="language-js">
 async function f4() {
   try {
@@ -76,6 +87,10 @@ async function f4() {
 
 f4();
         </code></pre>
+      <h4>處理被拒絕的 promise</h4>
+      <p>
+        你可以鏈式調用 catch() (而不是使用 try)以在等待 promise 兌現之前處理被拒絕的 promise。
+      </p>
       <pre><code class="language-js">
 const response = await promisedFunction().catch((err) =&gt; {
   console.error(err);
@@ -83,14 +98,20 @@ const response = await promisedFunction().catch((err) =&gt; {
 });
 // response will be "default response" if the promise is rejected
         </code></pre>
+      <h4>在頂層使用 await</h4>
+      <p>在模組的頂層，你可以單獨使用關鍵字 await (異步函數的外面)。也就是說一個模組如果包含用了 await 的子魔ㄉㄨ，該模組就會等待該子模組，這一過程並不會阻塞其他子模組。</p>
+      <p>下面是一個在 export 表達式中使用了 Fetch API 的例子。任何文件只要導入這個模組，後面的代碼就會等待，直到 fetch 完成。</p>
       <pre><code class="language-js">
 // fetch request
 const colors = fetch('../data/colors.json').then((response) =&gt; response.json());
 
-export default await colors;
-
-        
+export default await colors; 
         </code></pre>
+      <h4>await 對執行過程的影響</h4>
+      <p>
+        當函數執行到 await 時，被等待的表達式會立即執行，所有依賴該表達式的值的代碼會被暫停，並推送進微任務佇列 (microtask queue)。然後主線程被釋放出來，用於事件循環中的下一個任務。即使等待的值是已經敲定的
+        promise 或不是 promise，也會發生這種情況。例如，考慮以下代碼：
+      </p>
       <pre><code class="language-js">
 async function foo(name) {
   console.log(name, 'start');
@@ -109,6 +130,7 @@ foo('Second');
 // Second end
 
         </code></pre>
+      <p>對應到 Promise 的寫法是：</p>
       <pre><code class="language-js">
 function foo(name) {
   return new Promise((resolve) =&gt; {
@@ -120,6 +142,7 @@ function foo(name) {
 }
 
         </code></pre>
+      <p>執行到 await 時，後面的代碼就會整體被安排進一個新的微任務，此後的函數體變為異步執行。</p>
       <pre><code class="language-js">
 async function foo(name) {
   console.log(name, 'start');
@@ -137,6 +160,7 @@ foo('Second');
 // First end
 // Second end
         </code></pre>
+      <p>對應到 Promise 的寫法是：</p>
       <pre><code class="language-js">
 function foo(name) {
   return new Promise((resolve) =&gt; {
@@ -147,6 +171,11 @@ function foo(name) {
   });
 }
         </code></pre>
+      <p>
+        雖然這里的 then() 看起來很多餘，其中的代碼完全可以被合並到構造器的回調裡，但不管該 Promise 的狀態如何，then() 的回調總會被異步執行，await 的行為也一樣。因此，只要情況不是必須或可能需要等待
+        Promise 的結果，就應該避免使用 await。
+      </p>
+      <P>其他微任務能在函數執行恢復之前執行：</P>
       <pre><code class="language-js">
 let i = 0;
 
@@ -186,6 +215,12 @@ console.log('script sync part end');
 // async function end
 
         </code></pre>
+      <p>
+        此案例中，test() 總會在異步函數恢復執行前被調用，呈現輪流的調度。微任務被執行的順序通常就是入列的先後順序，而 console.log("queueMicrotask() after calling async
+        function"); 比 await 晚入列，因此 "queueMicrotask() after calling async function" 在異步函數第一次恢復之後才輸出。
+      </p>
+      <h4>改善棧追蹤</h4>
+      <p>有時，當異步函數直接返回一個 Promise 時我們會省略 await。</p>
       <pre><code class="language-js">
 async function noAwait() {
   // Some actions...
@@ -194,6 +229,9 @@ async function noAwait() {
 }
 
         </code></pre>
+      <p>
+        但是假如這個 Promise 的由來是調用了異步函數，且該異步函數的異步部分拋出了錯誤：
+      </p>
       <pre><code class="language-js">
 async function lastAsyncTask() {
   await null;
@@ -210,6 +248,9 @@ noAwait();
 //    at lastAsyncTask
 
         </code></pre>
+      <p>棧追蹤中只出現了 lastAsyncTask，這是因為拋出錯誤時 noAwait 已經返回——某種意義上該 Promise 已經與 noAwait 無關。若要改善棧追蹤，你可以用 await
+        提前等待，錯誤就會在函數體結束前拋出，接著該錯誤會被包裝進一個新的 Promise，因錯誤被 await 在主調函數的函數體拋出，主調函數將會出現在棧追蹤。</p>
+      <p>但是，這樣會有一點性能犧牲，畢竟 Promise 會被拆裝了又再次包裝。</p>
       <pre><code class="language-js">
 async function lastAsyncTask() {
   await null;
