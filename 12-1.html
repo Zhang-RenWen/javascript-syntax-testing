@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./public/favicon.ico" />
+  <meta http-equiv="cache-control" content="no-cache">
+  <title>JavaScript-syntax-testing</title>
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/copybutton.css" />
+  <link rel="stylesheet" href="./css/hightlight.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+</head>
+
+<body>
+  <nav>
+    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>新標準 ES2018 (ES9)</h2>
+      <h3 id="12-1">12-1 Spread 展開運算子 / Rest 其餘參數</h3>
+      <pre><code class="language-js">
+const obj1 = { foo: 'bar', x: 42 };
+const obj2 = { foo: 'baz', y: 13 };
+
+const clonedObj = { ...obj1 };
+// Object { foo: 'bar', x: 42 }
+
+const mergedObj = { ...obj1, ...obj2 };
+// Object { foo: 'baz', x: 42, y: 13 }
+        </code></pre>
+      <pre><code class="language-js">
+let obj1 = { foo: 'bar', x: 42 };
+let obj2 = { foo: 'baz', y: 13 };
+const merge = (...objects) =&gt; ({ ...objects });
+
+let mergedObj1 = merge(obj1, obj2);
+// Object { 0: { foo: 'bar', x: 42 }, 1: { foo: 'baz', y: 13 } }
+
+let mergedObj2 = merge({}, obj1, obj2);
+// Object { 0: {}, 1: { foo: 'bar', x: 42 }, 2: { foo: 'baz', y: 13 } }
+
+        </code></pre>
+      <pre><code class="language-js">
+const obj = { key1: 'value1' };
+const array = [...obj]; // TypeError: obj is not iterable
+        </code></pre>
+      <pre><code class="language-js">
+// 深淺拷貝 測試 
+// Object.assign() 對照
+        </code></pre>
+      <p> 資料來源:</p>
+      <p>
+        <a
+          href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Operators/Spread_syntax">https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/.../Spread_syntax</a>
+      </p>
+    </section>
+  </main>
+</body>
+<script type="module" src="./js/main.js"></script>
+
+
+</html>
