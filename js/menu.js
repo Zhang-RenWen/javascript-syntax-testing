@@ -868,22 +868,22 @@ export const menu = [
       },
     ],
   },
-  // {
-  //   id: "12",
-  //   title: "新標準 ES2018 (ES9)",
-  //   submenu: [
-  //     {
-  //       id: "12-1",
-  //       title: "12-1 ",
-  //       href: "12-1.html",
-  //     },
-  //     {
-  //       id: "12-1",
-  //       title: "12-2 ",
-  //       href: "12-2.html",
-  //     },
-  //   ],
-  // },
+  {
+    id: "12",
+    title: "新標準 ES2018 (ES9)",
+    submenu: [
+      {
+        id: "12-1",
+        title: "12-1 Spread 展開運算子 / Rest 其餘參數",
+        href: "12-1.html",
+      },
+      {
+        id: "12-1",
+        title: "12-2 ",
+        href: "12-2.html",
+      },
+    ],
+  },
 ];
 
 export function createMenu(submenu, el) {
