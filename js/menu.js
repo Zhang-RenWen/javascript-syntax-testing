@@ -878,11 +878,32 @@ export const menu = [
         href: "12-1.html",
       },
       {
-        id: "12-1",
-        title: "12-2 ",
+        id: "12-2",
+        title: "12-2 正則表達式- Capturing group: (...)",
         href: "12-2.html",
       },
-    ],
+      {
+        id: "12-3",
+        title: "12-3 正則表達式 - 反向斷言",
+        href: "12-3.html",
+      },
+      {
+        id: "12-4",
+        title: "12-4 正則表達式 - dotAll 模式",
+        href: "12-4.html",
+      },
+
+      {
+        id: "12-5",
+        title: "12-5 Promise.finally()",
+        href: "12-5.html",
+      },
+      {
+        id: "12-6",
+        title: "12-6 異步迭代 for await...of",
+        href: "12-6.html",
+      },
+    ], 
   },
 ];
 
