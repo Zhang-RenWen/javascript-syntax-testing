@@ -27,8 +27,69 @@
     <section>
       <h2></h2>
       <h3 id="12-2">12-2 正則表達式- Capturing group: (...)</h3>
+      <p>ES9 以前遇到一個需求如需提取標籤屬性標籤屬性值等資訊實作方式如下</p>
       <pre><code class="language-js">
+let str = '&lt;a href="https://zhang-renwen.github.io/javascript-syntax-testing/index.html">現代 Javascript 實務應用&lt;/a&gt;';
+// 提取 URL 與 標籤網址
+const reg=/&lt;a href="(.*)"&gt;(.*)&lt;\/a&gt;/;
 
+const result = reg.exec(str);
+/**
+* [
+*  "&lt;a href=\"https://zhang-renwen.github.io/javascript-syntax-testing/index.html\"&gt;現代 Javascript 實務應用&lt;/a&gt;",
+*  "https://zhang-renwen.github.io/javascript-syntax-testing/index.html",
+*  "現代 Javascript 實務應用"
+* ]
+*/ 
+
+      </code></pre>
+      <p>ES9 之後我們可以這樣做</p>
+      <pre><code class="language-js">
+let str = '&lt;a href="https://zhang-renwen.github.io/javascript-syntax-testing/index.html">現代 Javascript 實務應用&lt;/a&gt;';
+const.reg= /&lt;a href="(?&lt;url&gt;.*)"&gt;(?&lt;text&gt;.*)&lt;\/a&gt;/;
+const result = reg.exec(str);
+/**
+* [
+*  "&lt;a href=\"https://zhang-renwen.github.io/javascript-syntax-testing/index.html\"&gt;現代 Javascript 實務應用&lt;/a&gt;",
+*  "https://zhang-renwen.github.io/javascript-syntax-testing/index.html",
+*  "現代 Javascript 實務應用"
+* ],
+* groups:{
+*   text: "現代 Javascript 實務應用",
+*    url: "https://zhang-renwen.github.io/javascript-syntax-testing/index.html"
+* },
+* index: 0,
+* length: 3
+*/ 
+      </code></pre>
+      <p>
+        可以觀察到，使用 ES9 語法產生的結果相較於 ES9 以前的結果額外多出了 groups 這個屬性‧將 key value 分組，從此無需再做額外處理‧使用起來更加簡潔方便‧
+      </p>
+      <p>
+        以下還有其他好用的案例:
+      </p>
+      <h4>Matching date</h4>
+      <pre><code class="language-js">
+function parseDate(input) {
+  const parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input);
+  if (!parts) {
+    return null;
+  }
+  return parts.slice(1).map((p) => parseInt(p, 10));
+}
+
+parseDate('2019-01-01'); // [2019, 1, 1]
+parseDate('2019-06-19'); // [2019, 6, 19]
+        </code></pre>
+      <h4>Pairing quotes</h4>
+      <pre><code class="language-js">
+function parseTitle(metaString) {
+  return metaString.match(/title=(["'])(.*?)\1/)[2];
+}
+
+parseTitle('title="foo"'); // 'foo'
+parseTitle("title='foo' lang='en'"); // 'foo'
+parseTitle('title="Named capturing groups\' advantages"'); // "Named capturing groups' advantages"
         </code></pre>
       <p> 資料來源:</p>
       <p>
