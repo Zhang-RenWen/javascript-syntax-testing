@@ -32,24 +32,98 @@
       </p>
       <pre><code class="language-js">
 let str = `
-<ul>
-  <li>
-    <a>超夢的逆襲</a>
-    <p>上映日期: 1998/07/18</p>
-  </li>
-  <li>
-    <a>洛奇亞爆誕</a>
-    <p>上映日期: 1999/07/17</p>
-  </li>
-  <li>
-    <a>結晶塔帝王</a>
-    <p>上映日期: 2000/07/08</p>
-  </li>
-</ul>
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;a&gt;超夢的逆襲&lt;/a&gt;
+    &lt;p&gt;上映日期: 1998/07/18&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a&gt;洛奇亞爆誕&lt;/a&gt;
+    &lt;p&gt;上映日期: 1999/07/17&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;a&gt;結晶塔帝王&lt;/a&gt;
+    &lt;p&gt;上映日期: 2000/07/08&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 `
+// \s 代表匹配任何空白字串，包括空格、制表符、換頁符等等。
+// (.*) 代表匹配任意內容物。 為了被免貪婪 還得加 ?。
 
-const reg = //
+const reg = /&lt;li&gt;\s+&lt;a&gt;(.*?)&lt;\/a&gt;\s+&lt;p&gt;(.*?)&lt;\/p&gt;/
+
+reg.exec(str)
+// 只提取了一個 li 內容。
+// [
+//   str, 
+//   '超夢的逆襲',
+//   '上映日期: 1998/07/18'
+// ]
         </code></pre>
+      <p>
+        從以上結果只有單一筆 li 內容被提取就需要寫這麼多正則內容，感覺還是挺難受的。要是需要提取的內容很多的話則會造成工作量呈指數級別上升。顯然以上正則表達式的解法並不理想。
+      </p>
+      <p>這時候我們就需要 dotAll 模式。具體做法是在結尾處加上模式修正符 s 來操作。
+      </p>
+      <pre><code class="language-js">
+const reg = /&lt;li&gt;.*?&lt;a&gt;(.*?)&lt;\/a&gt;.*?&lt;p&gt;(.*?)&lt;\/p&gt;/s // 匹配單個
+reg.exec(str)
+// [
+//   str, 
+//   '超夢的逆襲',
+//   '上映日期: 1998/07/18'
+// ]
+</code></pre>
+      <p>每次操作只會回傳一個結果，下次操作會跳過上一次的結果接著匹配，如果不再匹配到了則會回傳 null。</p>
+      <pre><code class="language-js">
+const reg = /&lt;li&gt;.*?&lt;a&gt;(.*?)&lt;\/a&gt;.*?&lt;p&gt;(.*?)&lt;\/p&gt;/gs // 匹配多個
+reg.exec(str)
+// [
+//   str, 
+//   '超夢的逆襲',
+//   '上映日期: 1998/07/18'
+// ]
+reg.exec(str)
+// [
+//   str, 
+//   '洛奇亞爆誕',
+//   '上映日期: 1999/07/17'
+// ]
+reg.exec(str)
+// [
+//   str, 
+//   '結晶塔帝王',
+//   '上映日期: 2000/07/08'
+// ]
+reg.exec(str)
+// null
+
+</code></pre>
+      <p>迴圈提取標籤轉換成陣列資料，並保存結果。</p>
+      <pre><code class="language-js">
+let result 
+let data = []
+
+while(result = reg.exec(str)) {
+  data.push({title:result[1], content:result[2]})
+}
+
+console.log(data)
+
+// [{
+//   title: '超夢的逆襲',
+//   content: '上映日期: 1998/07/18'
+// },
+// {
+//   title: '洛奇亞爆誕',  
+//   content: '上映日期: 1999/07/17'
+// },
+// {
+//   title: '結晶塔帝王',
+//   content: '上映日期: 2000/07/08'    
+// }]
+
+      </code></pre>
       <p> 資料來源:</p>
       <p>
         <a
