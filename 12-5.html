@@ -27,17 +27,48 @@
     <section>
       <h2></h2>
       <h3 id="12-5">12-5 Promise.finally()</h3>
+      <p><strong><code>finally()</code></strong> 方法會回傳一個<code>Promise</code>。當 promise 被
+        settled 後，無論其結果是 fulfilled 還是 rejected ，都會執行指定的回呼函數。它提供了一個讓 <code>Promise</code> 在被確認後，無論是 fulfilled 或是 rejected
+        都會執行某些程式碼的一種手段。</p>
+      <p>這樣可以避免你在 promise 的 <code>then()</code> 和 <code>catch()</code> 重複處理相同的程式碼。
+      </p>
+      <h4>Syntax</h4>
       <pre><code class="language-js">
-// 緊急事件緊急
+p.finally(onFinally);
+
+p.finally(function () {
+  // settled(fulfilled 或 rejected)
+});
+
         </code></pre>
+      <pre><code class="language-js">
+let isLoading = true;
+
+fetch(myRequest)
+  .then(function (response) {
+    var contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return response.json();
+    }
+    throw new TypeError("Oops, we haven't got JSON!");
+  })
+  .then(function (json) {
+    /* process your JSON further */
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+  .finally(function () {
+    isLoading = false;
+  });
+
+</code></pre>
       <p> 資料來源:</p>
       <p>
         <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Capturing_group">https://developer.mozilla.org/en-US/docs/Web/JavaScript/...Capturing_group</a>
+          href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Promise/finally">https://developer.mozilla.org/.../Promise/finally</a>
       </p>
-      <p>
-        <a href="https://www.youtube.com/watch?v=kTJf2zVnEDw">https://www.youtube.com/watch?v=kTJf2zVnEDw</a>
-      </p>
+
     </section>
   </main>
 </body>
