@@ -25,10 +25,9 @@
   <main>
     <aside></aside>
     <section>
-      <h2></h2>
-      <h3 id="12-3">12-3 正則表達式 - Lookbehind assertion 反向斷言</h3>
+      <h2 id="12-3">12-3 正則表達式 - Lookbehind assertion 反向斷言</h2>
       <p>斷言的就是判斷的意思。判斷我們這次的匹配結果是正確還是不正確。</p>
-      <h4>lookahead assertion 正向斷言</h4>
+      <h3>lookahead assertion 正向斷言</h3>
       <p>需求：取出字串中的動態數字。我們可以根據句子中固定的詞句作為擷取點的區分。</p>
       <p>以下案例簡單來說就是由字串中『後面』的內容是不是符合括號內條件，是的話才滿足前面匹配到的數字。
       </p>
@@ -56,7 +55,7 @@ console.log("This is a First peach in a month.".match(regex)); // null
       <pre><code class="language-js">
 console.log(/\d+(?!\.)/g.exec("3.141")); // [ '141', index: 2, input: '3.141' ]
         </code></pre>
-      <h4>Lookbehind assertion 反向斷言</h4>
+      <h3>Lookbehind assertion 反向斷言</h3>
       <p>以跟正向斷言相，反向斷言是由字串中『前面』的內容是不是符合括號內條件，是的話才滿足後面匹配到的數字。
       </p>
       <pre><code class="language-js">

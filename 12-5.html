@@ -25,14 +25,13 @@
   <main>
     <aside></aside>
     <section>
-      <h2></h2>
-      <h3 id="12-5">12-5 Promise.finally()</h3>
+      <h2 id="12-5">12-5 Promise.finally()</h2>
       <p><strong><code>finally()</code></strong> 方法會回傳一個<code>Promise</code>。當 promise 被
         settled 後，無論其結果是 fulfilled 還是 rejected ，都會執行指定的回呼函數。它提供了一個讓 <code>Promise</code> 在被確認後，無論是 fulfilled 或是 rejected
         都會執行某些程式碼的一種手段。</p>
       <p>這樣可以避免你在 promise 的 <code>then()</code> 和 <code>catch()</code> 重複處理相同的程式碼。
       </p>
-      <h4>Syntax</h4>
+      <h3>Syntax</h3>
       <pre><code class="language-js">
 p.finally(onFinally);
 

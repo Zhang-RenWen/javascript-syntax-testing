@@ -30,7 +30,7 @@
       <p>
         以往早期的 Javascript 版本在陣列和物件屬性最後加上逗號是會出錯。另外 function 放置參數的括號內也會出錯。
       </p>
-      <h4>Array</h4>
+      <h3>Array</h3>
       <p>版本控制上可以獲得好處。如下範例所示，在看差異時不會連同新增刪減的逗號也一併標記進去，增加可讀性。</p>
       <pre><code class="language-diff">
  [
@@ -56,7 +56,7 @@ const arr = [1, 2, 3, , ,];
 arr.length; // 5
 arr[3]; // undefined
       </code></pre>
-      <h4>Objects</h4>
+      <h3>Objects</h3>
       <p>物件屬性不可連續使用結尾逗號</p>
       <pre><code class="language-js">
 const object = {
@@ -92,7 +92,7 @@ const obj = {
   two(a, b,) {},
 };
       </code></pre>
-      <h4>Function calls</h4>
+      <h3>Function calls</h3>
       <pre><code class="language-js">
 f(p);
 f(p,);
@@ -100,7 +100,7 @@ f(p,);
 Math.max(10, 20);
 Math.max(10, 20,);
       </code></pre>
-      <h4>Illegal trailing commas</h4>
+      <h3>Illegal trailing commas</h3>
       <pre><code class="language-js error-code">
 function f(,) {} // SyntaxError: missing formal parameter
 (,) =&gt; {};       // SyntaxError: expected expression, got ','
@@ -109,7 +109,7 @@ f(,)             // SyntaxError: expected expression, got ','
 function f(...p,) {} // SyntaxError: parameter after rest parameter
 (...p,) =&gt; {}        // SyntaxError: expected closing parenthesis, got ','
       </code></pre>
-      <h4>Trailing commas in destructuring</h4>
+      <h3>Trailing commas in destructuring</h3>
       <pre><code class="language-js">
 // array destructuring with trailing comma
 [a, b,] = [1, 2];
@@ -126,7 +126,7 @@ const { p, q, } = o;
 const [a, ...b,] = [1, 2, 3];
 // SyntaxError: rest element may not have a trailing comma
       </code></pre>
-      <h4>Trailing commas in JSON</h4>
+      <h3>Trailing commas in JSON</h3>
       <p>JSON 不支援。</p>
       <pre><code class="language-js error-code">
 JSON.parse('[1, 2, 3, 4, ]');
@@ -138,8 +138,8 @@ JSON.parse('{"foo" : 1, }');
 JSON.parse('[1, 2, 3, 4 ]');
 JSON.parse('{"foo" : 1 }');
       </code></pre>
-      <h4>Trailing commas in named imports and named exports</h4>
-      <h4>Named imports</h4>
+      <h3>Trailing commas in named imports and named exports</h3>
+      <h3>Named imports</h3>
       <pre><code class="language-js">
 import {
   A,
@@ -151,7 +151,7 @@ import { X, Y, Z, } from 'W';
 
 import { A as B, C as D, E as F, } from 'Z';
       </code></pre>
-      <h4>Named exports</h4>
+      <h3>Named exports</h3>
       <pre><code class="language-js ">
 export {
   A,
@@ -163,7 +163,7 @@ export { A, B, C, };
 
 export { A as B, C as D, E as F, };
       </code></pre>
-      <h4>Quantifier prefix</h4>
+      <h3>Quantifier prefix</h3>
       <pre><code class="language-js">
 /x{2}/; // Exactly 2 occurrences of 'x'; equivalent to /xx/
 /x{2,}/; // At least 2 occurrences of 'x'; equivalent to /xx+/
