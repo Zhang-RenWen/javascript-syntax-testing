@@ -25,8 +25,7 @@
   <main>
     <aside></aside>
     <section>
-      <h2></h2>
-      <h3 id="12-2">12-2 正則表達式- Capturing group: (...)</h3>
+      <h2 id="12-2">12-2 正則表達式- Capturing group: (...)</h2>
       <p>ES9 以前遇到一個需求如需提取標籤屬性標籤屬性值等資訊實作方式如下</p>
       <pre><code class="language-js">
 let str = '&lt;a href="https://zhang-renwen.github.io/javascript-syntax-testing/index.html">現代 Javascript 實務應用&lt;/a&gt;';
@@ -68,7 +67,7 @@ const result = reg.exec(str);
       <p>
         以下還有其他好用的案例:
       </p>
-      <h4>Matching date</h4>
+      <h3>Matching date</h3>
       <pre><code class="language-js">
 function parseDate(input) {
   const parts = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input);
@@ -81,7 +80,7 @@ function parseDate(input) {
 parseDate('2019-01-01'); // [2019, 1, 1]
 parseDate('2019-06-19'); // [2019, 6, 19]
         </code></pre>
-      <h4>Pairing quotes</h4>
+      <h3>Pairing quotes</h3>
       <pre><code class="language-js">
 function parseTitle(metaString) {
   return metaString.match(/title=(["'])(.*?)\1/)[2];

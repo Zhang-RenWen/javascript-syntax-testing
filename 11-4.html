@@ -25,8 +25,7 @@
   <main>
     <aside></aside>
     <section>
-      <h2>新標準 ES2017 (ES8)</h2>
-      <h3 id="11-4">11-4 Object:entries() and values()</h3>
+      <h2 id="11-4">11-4 Object:entries() and values()</h2>
       <h3>Object.entries()</h3>
       <p>
         Object.entries() : 返回一個由傳入物件自有的可列舉字串鍵屬性的鍵值對組成的陣列。每個鍵值對都是一個包含兩個元素的陣列：第一個元素是屬性的鍵（始終是字串），第二個元素是屬性值。
@@ -48,7 +47,7 @@ for (const [key, value] of Object.entries(object1)) {
       <p>Object.entries() 返回一個陣列，其元素是直接在 object 上找到相應的可列舉字串鍵屬性的鍵值對陣列。這與使用 for...in 循環叠代相同，只是使用 for...in
         循環也列舉原型鏈中的屬性。Object.entries() 返回的陣列順序和 for...in 循環提供的順序相同。如果只需要屬性的鍵，請使用 Object.keys()。如果只需要屬性的值，請使用
         Object.values()。</p>
-      <h4>通用範例</h4>
+      <h3>通用範例</h3>
       <pre><code class="language-js">
 const obj = { foo: 'bar', baz: 42 };
 console.log(Object.entries(obj)); // [ ['foo', 'bar'], ['baz', 42] ]
@@ -75,7 +74,7 @@ const myObj = Object.create(
 myObj.foo = 'bar';
 console.log(Object.entries(myObj)); // [ ['foo', 'bar'] ]
         </code></pre>
-      <h4>用於基本型別中範例</h4>
+      <h3>用於基本型別中範例</h3>
       <p>非物件參數會強制轉換成物件。只有字串可以有自己的可列舉屬性，所有其他基本類型均返回一個空陣列。</p>
       <pre><code class="language-js">
 // 字串具有索引作為可列舉的自有属性
@@ -98,14 +97,14 @@ Object.entries(/^[a-zA-Z0-9]{4,16}$/) // []
 Object.entries(null) // TypeError: Cannot convert undefined or null to object
 Object.entries(undefined ) // TypeError: Cannot convert undefined or null to object
         </code></pre>
-      <h4>將 Object 轉換成 Map</h4>
+      <h3>將 Object 轉換成 Map</h3>
       <p>Map() 構造函數接受一個 entries 可叠代對象。使用 Object.entries ，你可以很容易地將 Object 轉換成 Map :</p>
       <pre><code class="language-js">
 const obj = { foo: 'bar', baz: 42 };
 const map = new Map(Object.entries(obj));
 console.log(map); // Map(2) {'foo' =&gt; 'bar', 'baz' =&gt; 42}
         </code></pre>
-      <h4>遍歷物件</h4>
+      <h3>遍歷物件</h3>
       <pre><code class="language-js">
 // 使用 for...of 迴圈
 const obj = { a: 5, b: 7, c: 9 };
@@ -118,7 +117,7 @@ Object.entries(obj).forEach(([key, value]) =&gt; {
   console.log(`${key} ${value}`); // 'a 5', 'b 7', 'c 9'
 });
         </code></pre>
-      <h4>其他範例</h4>
+      <h3>其他範例</h3>
       <pre><code class="language-js">
 // polyfills/Object/entries/tests.js/it
 it('accepts number primitives', function() {
@@ -151,7 +150,7 @@ console.log(Object.values(object1));
       <p>Object.values() 返回一個陣列，其元素是直接在 object 上找到的可列舉字串鍵屬性值。這與使用 for...in 迴圈叠代相同，只是 for...in
         迴圈還列舉原型鏈中的屬性。Object.values() 返回的陣列順序和 for...in 迴圈提供的陣列順序相同。如果需要屬性鍵，請使用 Object.keys()。如果屬性的鍵和值都需要，請使用
         Object.entries()。</p>
-      <h4>通用範例</h4>
+      <h3>通用範例</h3>
       <pre><code class="language-js">
 const obj = { foo: 'bar', baz: 42 };
 console.log(Object.values(obj)); // ['bar', 42]
