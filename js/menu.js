@@ -905,6 +905,201 @@ export const menu = [
       },
     ], 
   },
+  {
+    id: "13",
+    title: "新標準 ES2019 (ES10)",
+    submenu: [
+      {
+        id: "13-1",
+        title: "13-1 Array.prototype.flat()",
+        href: "13-1.html",
+      },
+      {
+        id: "13-2",
+        title: "13-2 Array.prototype.flatMap()",
+        href: "13-2.html",
+      },
+      {
+        id: "13-3",
+        title: "13-3 String.prototype.trimStart()",
+        href: "13-3.html",
+      },
+      {
+        id: "13-4",
+        title: "13-4 String.prototype.trimEnd()",
+        href: "13-4.html",
+      },
+
+      {
+        id: "13-5",
+        title: "13-5 Symbol.prototype.description",
+        href: "13-5.html",
+      },
+      {
+        id: "13-6",
+        title: "13-6 Object.fromEntries()",
+        href: "13-6.html",
+      },
+      {
+        id: "13-7",
+        title: "13-7 Well-formed JSON.stringify",
+        href: "13-7.html",
+      },
+      {
+        id: "13-8",
+        title: "13-8 JSON superset",
+        href: "13-8.html",
+      }
+    ], 
+  },
+  // {
+  //   id: "14",
+  //   title: "新標準 ES2020 (ES11)",
+  //   submenu: [
+  //     {
+  //       id: "14-1",
+  //       title: "14-1 ",
+  //       href: "14-1.html",
+  //     },
+  //     {
+  //       id: "14-2",
+  //       title: "14-2 ",
+  //       href: "14-2.html",
+  //     },
+  //     {
+  //       id: "14-3",
+  //       title: "14-3 ",
+  //       href: "14-3.html",
+  //     },
+  //     {
+  //       id: "14-4",
+  //       title: "14-4 ",
+  //       href: "14-4.html",
+  //     },
+
+  //     {
+  //       id: "14-5",
+  //       title: "14-5 ",
+  //       href: "14-5.html",
+  //     },
+  //     {
+  //       id: "14-6",
+  //       title: "14-6 ",
+  //       href: "14-6.html",
+  //     },
+  //   ], 
+  // },
+  // {
+  //   id: "15",
+  //   title: "新標準 ES2021 (ES12)",
+  //   submenu: [
+  //     {
+  //       id: "15-1",
+  //       title: "15-1 ",
+  //       href: "15-1.html",
+  //     },
+  //     {
+  //       id: "15-2",
+  //       title: "15-2 ",
+  //       href: "15-2.html",
+  //     },
+  //     {
+  //       id: "15-3",
+  //       title: "15-3 ",
+  //       href: "15-3.html",
+  //     },
+  //     {
+  //       id: "15-4",
+  //       title: "15-4 ",
+  //       href: "15-4.html",
+  //     },
+
+  //     {
+  //       id: "15-5",
+  //       title: "15-5 ",
+  //       href: "15-5.html",
+  //     },
+  //     {
+  //       id: "15-6",
+  //       title: "15-6 ",
+  //       href: "15-6.html",
+  //     },
+  //   ], 
+  // },
+  // {
+  //   id: "16",
+  //   title: "新標準 ES2022 (ES13)",
+  //   submenu: [
+  //     {
+  //       id: "16-1",
+  //       title: "16-1 ",
+  //       href: "16-1.html",
+  //     },
+  //     {
+  //       id: "16-2",
+  //       title: "16-2 ",
+  //       href: "16-2.html",
+  //     },
+  //     {
+  //       id: "16-3",
+  //       title: "16-3 ",
+  //       href: "16-3.html",
+  //     },
+  //     {
+  //       id: "16-4",
+  //       title: "16-4 ",
+  //       href: "16-4.html",
+  //     },
+
+  //     {
+  //       id: "16-5",
+  //       title: "16-5 ",
+  //       href: "16-5.html",
+  //     },
+  //     {
+  //       id: "16-6",
+  //       title: "16-6 ",
+  //       href: "16-6.html",
+  //     },
+  //   ], 
+  // },
+  // {
+  //   id: "17",
+  //   title: "新標準 ES2023 (ES14)",
+  //   submenu: [
+  //     {
+  //       id: "17-1",
+  //       title: "17-1 ",
+  //       href: "17-1.html",
+  //     },
+  //     {
+  //       id: "17-2",
+  //       title: "17-2 ",
+  //       href: "17-2.html",
+  //     },
+  //     {
+  //       id: "17-3",
+  //       title: "17-3 ",
+  //       href: "17-3.html",
+  //     },
+  //     {
+  //       id: "17-4",
+  //       title: "17-4 ",
+  //       href: "17-4.html",
+  //     },
+
+  //     {
+  //       id: "17-5",
+  //       title: "17-5 ",
+  //       href: "17-5.html",
+  //     },
+  //     {
+  //       id: "17-6",
+  //       title: "17-6 ",
+  //       href: "17-6.html",
+  //     },
+  //   ], 
+  // },
 ];
 
 export function createMenu(submenu, el) {
