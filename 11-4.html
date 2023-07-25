@@ -98,7 +98,7 @@ Object.entries(null) // TypeError: Cannot convert undefined or null to object
 Object.entries(undefined ) // TypeError: Cannot convert undefined or null to object
         </code></pre>
       <h3>將 Object 轉換成 Map</h3>
-      <p>Map() 構造函數接受一個 entries 可叠代對象。使用 Object.entries ，你可以很容易地將 Object 轉換成 Map :</p>
+      <p>Map() 構造函數接受一個 entries 可叠代物件。使用 Object.entries ，你可以很容易地將 Object 轉換成 Map :</p>
       <pre><code class="language-js">
 const obj = { foo: 'bar', baz: 42 };
 const map = new Map(Object.entries(obj));
