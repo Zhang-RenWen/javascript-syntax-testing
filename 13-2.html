@@ -26,13 +26,40 @@
     <aside></aside>
     <section>
       <h2 id="13-2">13-2 Array.prototype.flatMap()</h2>
+      <p>可以看作是 map 和 depth 為 1 的 flat 的組合。</p>
       <pre><code class="language-js">
+console.time();
+const words = [`hello`, `world`];
+const r1 = words.map((item) => item.split(``)).flat();
+console.log(r1);
+console.timeEnd();
+// ['h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd']
 
+console.time();
+const r2 = words.flatMap((item) => item.split(``));
+console.log(r2);
+console.timeEnd();
+// ['h', 'e', 'l', 'l', 'o', 'w', 'o', 'r', 'l', 'd']
+
+        </code></pre>
+      <p>看起來是不是結果都一樣？但是第二種方法的性能會高一些，畢竟第一種要跑兩次方法，中間循環多次。如果後面遇到需要先 map 再 flat 一層的情況，我們就可以優先使用 flatMap因為性能較好。</p>
+      <p>flatMap 的使用我們也不能局限到上面的場景，看上面方法的定義，只要是返回一個陣列就可以。那麽我們就可以實現對結果的新增、刪除、修改</p>
+      <pre><code class="language-js">
+const words = [`hello`, `world`];
+const r3 = words.flatMap((item, index) =>
+  (index === 0 ? item.split(``).concat(`,`) : item.split(``)));
+console.log(r3);// 給單字的間隔加了一個逗號
+// ['h', 'e', 'l', 'l', 'o', ',', 'w', 'o', 'r', 'l', 'd']
+
+const number = [1, 2, 3];
+const r4 = number.flatMap((item) => [item, item ** item]);
+console.log(r4);
+// [1, 1, 2, 4, 3, 27]
         </code></pre>
       <p> 資料來源:</p>
       <p>
         <a
-          href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for-await...of">https://developer.mozilla.org/.../for-await...of</a>
+          href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap">https://developer.mozilla.org/.../flatMap</a>
       </p>
       <p>
         <a href="https://juejin.cn/post/7023895016384757796">https://juejin.cn/post/7023895016384757796</a>
