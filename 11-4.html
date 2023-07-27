@@ -44,8 +44,8 @@ for (const [key, value] of Object.entries(object1)) {
 // 'a: someString'
 // 'b: 42'
         </code></pre>
-      <p>Object.entries() 返回一個陣列，其元素是直接在 object 上找到相應的可列舉字串鍵屬性的鍵值對陣列。這與使用 for...in 循環叠代相同，只是使用 for...in
-        循環也列舉原型鏈中的屬性。Object.entries() 返回的陣列順序和 for...in 循環提供的順序相同。如果只需要屬性的鍵，請使用 Object.keys()。如果只需要屬性的值，請使用
+      <p>Object.entries() 返回一個陣列，其元素是直接在 object 上找到相應的可列舉字串鍵屬性的鍵值對陣列。這與使用 for...in 迴圈叠代相同，只是使用 for...in
+        迴圈也列舉原型鏈中的屬性。Object.entries() 返回的陣列順序和 for...in 迴圈提供的順序相同。如果只需要屬性的鍵，請使用 Object.keys()。如果只需要屬性的值，請使用
         Object.values()。</p>
       <h3>通用範例</h3>
       <pre><code class="language-js">
@@ -183,7 +183,7 @@ console.log(Object.values(myObj)); // ['bar']
       <pre><code class="language-js">
 // bin/cli.js/Object.values.reduce
 Object.values(commands).reduce(
- (memo, { spec }) => ({
+ (memo, { spec }) =&gt; ({
   ...spec,
   ...memo,
  }),
