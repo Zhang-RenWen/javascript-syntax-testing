@@ -937,11 +937,6 @@ export const menu = [
         id: "13-7",
         title: "13-7 Well-formed JSON.stringify",
         href: "13-7.html",
-      },
-      {
-        id: "13-8",
-        title: "13-8 JSON superset",
-        href: "13-8.html",
       }
     ], 
   },
