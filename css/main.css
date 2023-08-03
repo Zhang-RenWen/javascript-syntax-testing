@@ -93,8 +93,8 @@ td {
   padding: 0.5rem;
 }
 
-ul,
-li {
+aside ul,
+aside u li {
   list-style-type: "";
 }
 
@@ -170,4 +170,7 @@ h3 {
     padding: 0 1rem 0 1rem;
     width: 100%;
   } 
+}
+code{
+  background-color: #F3F2F2;
 }
