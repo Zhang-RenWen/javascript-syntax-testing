@@ -946,34 +946,39 @@ export const menu = [
   submenu: [
     {
       id: "14-1",
-      title: "14-1 ",
+      title: "14-1 私有屬性和私有方法",
       href: "14-1.html",
     },
     {
       id: "14-2",
-      title: "14-2 ",
+      title: "14-2 Promise allSettled",
       href: "14-2.html",
     },
     {
       id: "14-3",
-      title: "14-3 ",
+      title: "14-3 String.prototype.matchAll()",
       href: "14-3.html",
     },
     {
       id: "14-4",
-      title: "14-4 ",
+      title: "14-4 Operators-Optional chaining (?.)",
       href: "14-4.html",
     },
 
     {
       id: "14-5",
-      title: "14-5 ",
+      title: "14-5 動態 import",
       href: "14-5.html",
     },
     {
       id: "14-6",
-      title: "14-6 ",
+      title: "14-6 BigInt 類型",
       href: "14-6.html",
+    },
+    {
+      id: "14-7",
+      title: "14-7 絕對全域物件 globalThis",
+      href: "14-7.html",
     },
   ], 
 },

@@ -305,7 +305,7 @@ fetch('/products/table')
             </code></pre>
             <pre><code class="language-js">
 Promise
-. all([
+.all([
 fetch('/products/chair'),
 fetch('/products/table')
 ])
@@ -314,7 +314,7 @@ fetch('/products/table')
             <pre><code class="language-js">
 Promise
 .all([
- f etch('/products/chair'),
+  fetch('/products/chair'),
   fetch('/products/table')
 ])
 .then(([chair, table]) =&gt; console.log(chair, table))
