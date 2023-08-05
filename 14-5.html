@@ -26,16 +26,31 @@
     <aside></aside>
     <section>
       <h2 id="14-5">14-5 動態 import</h2>
+      <p>ES6 時候的 import 屬於靜態載入。ES11 以後可以實現按需載入。</p>
       <pre><code class="language-js">
+// hello.js
+export function hello(){
+  alert('Hello')
+}
 
+// app.js
+// import * as m1 from "./hello.js" // 靜態加載  ;
+
+const btn = document.getElementById('btn');
+btn.onclick = function(){
+  import('./hello.js').then(module => { // 懶加載
+  module.hello(); // Hello
+});
+}
+        
         </code></pre>
       <p> 資料來源:</p>
       <p>
         <a
-          href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/for-await...of">https://developer.mozilla.org/.../for-await...of</a>
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import">https://developer.mozilla.org/.../import</a>
       </p>
       <p>
-        <a href="https://juejin.cn/post/7023895016384757796">https://juejin.cn/post/7023895016384757796</a>
+        <a href="https://www.youtube.com/watch?v=0Q2jP8XE2Co">https://www.youtube.com/watch?v=0Q2jP8XE2Co</a>
       </p>
     </section>
   </main>
