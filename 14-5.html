@@ -44,6 +44,48 @@ btn.onclick = function(){
 }
         
         </code></pre>
+      <p>不要輸出命名為 then 的 function 。 這將造成跟靜態引入不同的結果。</p>
+      <pre><code class="language-js error-code">
+// my-module.js
+export function then(resolve) {
+  console.log("then() called");
+  resolve(1);
+}
+        </code></pre>
+      <pre><code class="language-js">
+// main.js
+import * as mod from "/my-module.js";
+
+import("/my-module.js").then((mod2) => {
+  // Logs "then() called"
+  console.log(mod === mod2); // false
+});
+        </code></pre>
+      <h3>Side Effects</h3>
+      <p>補充：以下範例當程式跑到 b.js 時 所印出的訊息就是所謂的 side effects</p>
+      <pre><code class="language-js">
+//a.js
+export function print1()
+{
+  console.log("export print1 is working");
+}
+
+function print2()
+{
+  console.log("non-export print2 is working");
+}
+
+print1();
+print2();
+
+//b.js
+import "a.js";
+        </code></pre>
+
+
+
+
+
       <p> 資料來源:</p>
       <p>
         <a
