@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./public/favicon.ico" />
+  <meta http-equiv="cache-control" content="no-cache">
+  <title>JavaScript-syntax-testing</title>
+  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+  <link rel="stylesheet" href="./hightlight/default.min.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/copybutton.css" />
+  <link rel="stylesheet" href="./css/hightlight.css" />
+  <script src="./hightlight/hightlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+</head>
+
+<body>
+  <nav>
+    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+  </nav>
+  <main>
+    <aside></aside>
+    <section>
+      <h2>window 物件</h2>
+      <h3 id=""></h3>
+      <pre><code class="language-js">
+window.subWindows = []
+
+function closeAllSubWindows(){
+  for(let url in window.subWindows){
+    const item = window.subWindows[url]
+    if(item.close){
+      item.close()
+    }
+  }
+}
+
+window.subWindows.push(window.open('https://www.google.com.tw/?hl=zh_TW', '_blank')) 
+window.subWindows.push(window.open('https://github.com/Zhang-RenWen/', '_blank')) 
+
+
+window.subWindows[0].close() // google 無法關閉
+window.subWindows[1].close() // 其他頁面就可以正常關閉
+
+// 關閉主畫面時連帶把由主畫面開啟的子畫面一並關閉
+window.addEventListener("beforeunload", closeAllSubWindows)
+        </code></pre>
+      <div class="border-block"></div>
+    </section>
+  </main>
+</body>
+<script type="module" src="./js/main.js"></script>
+
+
+</html>
