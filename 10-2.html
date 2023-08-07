@@ -25,9 +25,8 @@
   <main>
     <aside></aside>
     <section>
-      <h2>新標準 ES2016 (ES7)</h2>
-      <h3 id="10-2">10-2 Exponentiation Operator (指數運算子)</h3>
-      <h4>ES6之前的 Math.pow()</h4>
+      <h2 id="10-2">10-2 Exponentiation Operator (指數運算子)</h2>
+      <h3>ES6之前的 Math.pow()</h3>
       <P>
         過去要進行指數運算 (即計算 a 的 n 次方 , a 為底數， n 為指數，通常指數寫成上標，放在底數的右邊)，常用的是 Math.pow()
       </P>
@@ -54,7 +53,7 @@ let cube = x =&gt; Math.pow(x, 3);
 console.log(square(6));  // 36
 console.log(cube(3));    // 27
         </code></pre>
-      <h4>現代的 Exponentiation Operator</h4>
+      <h3>現代的 Exponentiation Operator</h3>
       <P>
         在 ES2016 (ES7) 提供了 exponentiation operator (指數運算子)，用於指數運算。
       </P>
@@ -90,7 +89,7 @@ null ** 2 // 0
 2n ** BigInt(2); // 4n
 Number(2n) ** 2; // 4
         </code></pre>
-      <h4>Associativity</h4>
+      <h3>Associativity</h3>
       <p>exponentiation 運算子的 associativity 是 right-associative</p>
       <pre><code class="language-js">
 console.log(2 ** 3 ** 2);    // 512
@@ -110,7 +109,7 @@ console.log((2 ** 3) ** 2);  // 64
 // 2. 8 ** 2
 // 3. 64
 </code></pre>
-      <h4>Usage with unary operators</h4>
+      <h3>Usage with unary operators</h3>
       <p>搭配其他運算子使用錯誤案例如下:</p>
       <pre><code class="language-js">
 let a = 2;
@@ -138,7 +137,7 @@ typeof a ** n;
       <pre><code class="language-js">
 (-2) ** 2; // 4
   </code></pre>
-      <h4>Exponentiation assignment (**=)</h4>
+      <h3>Exponentiation assignment (**=)</h3>
       <pre><code class="language-js">
 let a = 3;
 
