@@ -101,7 +101,7 @@ const arr = [
   { name: `A男`, age: 26 },
   { name: `B男`, age: 18 },
 ];
-const obj3 = Object.fromEntries(arr.map(({ name, age }) => [name, age]));
+const obj3 = Object.fromEntries(arr.map(({ name, age }) =&gt; [name, age]));
 console.log(obj3);
 // { 'A男': 26, 'B男': 18 }
         </code></pre>
