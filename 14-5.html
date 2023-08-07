@@ -38,7 +38,7 @@ export function hello(){
 
 const btn = document.getElementById('btn');
 btn.onclick = function(){
-  import('./hello.js').then(module => { // 懶加載
+  import('./hello.js').then(module =&gt; { // 懶加載
   module.hello(); // Hello
 });
 }
@@ -56,13 +56,13 @@ export function then(resolve) {
 // main.js
 import * as mod from "/my-module.js";
 
-import("/my-module.js").then((mod2) => {
+import("/my-module.js").then((mod2) =&gt; {
   // Logs "then() called"
   console.log(mod === mod2); // false
 });
         </code></pre>
       <h3>Side Effects</h3>
-      <p>補充：以下範例當程式跑到 b.js 時 所印出的訊息就是所謂的 side effects</p>
+      <p>補充：以下範例當程式跑到 b.js 時 所印出的訊息就是所謂的 side effects 。代表沒有被輸出的函式也會跟著被執行</p>
       <pre><code class="language-js">
 //a.js
 export function print1()
@@ -76,16 +76,68 @@ function print2()
 }
 
 print1();
-print2();
+print2(); // 沒有被輸出的函式也會跟著被執行
 
 //b.js
 import "a.js";
         </code></pre>
+      <h3>引入 ESM 模組</h3>
+      <p>執行 package 以及匯入 package 所引用的依賴。</p>
+      <pre><code class="language-js">
+(async () =&gt; {
+  if (somethingIsTrue) {
+    // import module for side effects
+    await import("/modules/my-module.js");
+  }
+})();
+      </code></pre>
+      <h3>給定模組執行回傳結果預設值</h3>
+      <pre><code class="language-js">
+(async () =&gt; {
+  if (somethingIsTrue) {
+    const {
+      default: myDefault,
+      foo,
+      bar,
+    } = await import("/modules/my-module.js");
+  }
+})();
+      </code></pre>
+      <h3>根據使用這行為動態加載模組</h3>
+      <pre><code class="language-js">
+const main = document.querySelector("main");
+for (const link of document.querySelectorAll("nav > a")) {
+  link.addEventListener("click", (e) =&gt; {
+    e.preventDefault();
 
+    import("/modules/my-module.js")
+      .then((module) =&gt; {
+        module.loadPageInto(main);
+      })
+      .catch((err) =&gt; {
+        main.textContent = err.message;
+      });
+  });
+}
+      </code></pre>
+      <h3>根據不同環境變數動態加載模組</h3>
+      <pre><code class="language-js">
+let myModule;
 
-
-
-
+if (typeof window === "undefined") {
+  myModule = await import("module-used-on-server");
+} else {
+  myModule = await import("module-used-in-browser");
+}
+      </code></pre>
+      <h3>可以使用字串樣板動態加載資源模組</h3>
+      <pre><code class="language-js">
+Promise.all(
+  Array.from({ length: 10 }).map((_, index) =&gt;
+    import(`/modules/module-${index}.js`),
+  ),
+).then((modules) =&gt; modules.forEach((module) =&gt; module.load()));
+      </code></pre>
       <p> 資料來源:</p>
       <p>
         <a
