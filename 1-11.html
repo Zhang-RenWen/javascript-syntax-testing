@@ -27,6 +27,7 @@
     <section>
       <h2>window 物件</h2>
       <h3 id=""></h3>
+      <p>現在有一個需求是要開啟子頁籤做其他操作，在母頁籤關閉時子頁籤也要跟著全部關閉以防使用者做出非預期地操作，實作方式如下：</p>
       <pre><code class="language-js">
 window.subWindows = []
 
@@ -49,6 +50,31 @@ window.subWindows[1].close() // 其他頁面就可以正常關閉
 // 關閉主畫面時連帶把由主畫面開啟的子畫面一並關閉
 window.addEventListener("beforeunload", closeAllSubWindows)
         </code></pre>
+      <p>ES11 以後在瀏覽器中使用 <code><a href="14-7.html">globalThis</a></code> 也會指向 window。下列案例執行結果和前面一個相同。
+      </p>
+      <pre><code class="language-js">
+globalThis.subWindows = []
+
+function closeAllSubWindows(){
+  for(let url in globalThis.subWindows){
+    const item = globalThis.subWindows[url]
+    if(item.close){
+      item.close()
+    }
+  }
+}
+
+globalThis.subWindows.push(window.open('https://www.google.com.tw/?hl=zh_TW', '_blank')) 
+globalThis.subWindows.push(window.open('https://github.com/Zhang-RenWen/', '_blank')) 
+
+
+globalThis.subWindows[0].close() // google 無法關閉
+globalThis.subWindows[1].close() // 其他頁面就可以正常關閉
+
+// 關閉主畫面時連帶把由主畫面開啟的子畫面一並關閉
+window.addEventListener("beforeunload", closeAllSubWindows)
+        </code></pre>
+
       <div class="border-block"></div>
     </section>
   </main>
