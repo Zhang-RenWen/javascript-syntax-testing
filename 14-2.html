@@ -60,10 +60,10 @@ Promise.allSettled('') // Promise {&lt;fulfilled&gt;: Array(0)}
       </p>
       <pre><code class="language-js">
 const promise1 = Promise.resolve(3);
-const promise2 = new Promise((resolve, reject) => setTimeout(reject, 100, 'foo'));
+const promise2 = new Promise((resolve, reject) =&gt; setTimeout(reject, 100, 'foo'));
 const promises = [promise1, promise2];
 
-Promise.allSettled(promises).then((results) => results.forEach((result) => console.log(result.status)));
+Promise.allSettled(promises).then((results) =&gt; results.forEach((result) =&gt; console.log(result.status)));
 
 // Expected output:
 // "fulfilled"
@@ -73,17 +73,18 @@ Promise.allSettled(promises).then((results) => results.forEach((result) => conso
       <h3>描述</h3>
       <div>
         <p><code>Promise.allSettled()</code> 方法是 promise 開發方法之一。在你有多個不依賴於彼此成功完成的異步任務時，或者你總是想知道每個 promise 的結果時，使用
-          <code>Promise.allSettled()</code> 。</p>
+          <code>Promise.allSettled()</code> 。
+        </p>
         <p>相比之下，如果任務相互依賴，或者如果你想在任何 promise 被拒絕時立即拒絕，<code><a href="/4-1.html#4-1-6">Promise.all</a></code> 返回的 Promise
           可能更合適。</p>
       </div>
       <pre><code class="language-js">
 Promise.allSettled([
   Promise.resolve(33),
-  new Promise((resolve) => setTimeout(() => resolve(66), 0)),
+  new Promise((resolve) =&gt; setTimeout(() =&gt; resolve(66), 0)),
   99,
   Promise.reject(new Error("一個錯誤")),
-]).then((values) => console.log(values));
+]).then((values) =&gt; console.log(values));
 
 // [
 //   { status: 'fulfilled', value: 33 },
