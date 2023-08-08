@@ -6,6 +6,7 @@ let deepPathname = window.location.pathname.split('/').filter(Boolean).filter((o
 
 
 const DOMaside = document.querySelector('aside')
+const DOMmain = document.querySelector('main')
 
 
 export const menu = [
@@ -980,6 +981,11 @@ export const menu = [
       title: "14-7 絕對全域物件 globalThis",
       href: "14-7.html",
     },
+    {
+      id: "14-8",
+      title: "14-8 Nullish coalescing operator (??)",
+      href: "14-8.html",
+    },
   ], 
 },
 {
@@ -988,34 +994,49 @@ export const menu = [
   submenu: [
     {
       id: "15-1",
-      title: "15-1 ",
+      title: "15-1 String.prototype.replaceAll",
       href: "15-1.html",
     },
     {
       id: "15-2",
-      title: "15-2 ",
+      title: "15-2 Promise.any()",
       href: "15-2.html",
     },
     {
       id: "15-3",
-      title: "15-3 ",
+      title: "15-3 AggregateError",
       href: "15-3.html",
     },
     {
       id: "15-4",
-      title: "15-4 ",
+      title: "15-4 Nullish Coalescing Assignment(??=)",
       href: "15-4.html",
     },
 
     {
       id: "15-5",
-      title: "15-5 ",
+      title: "15-5 Logical AND assignment(&&=)",
       href: "15-5.html",
     },
     {
       id: "15-6",
-      title: "15-6 ",
+      title: "15-6 Logical OR assignment(||=)",
       href: "15-6.html",
+    },
+    {
+      id: "15-7",
+      title: "15-7 WeakRef",
+      href: "15-7.html",
+    },
+    {
+      id: "15-8",
+      title: "15-8 FinalizationRegistry",
+      href: "15-8.html",
+    },
+    {
+      id: "15-9",
+      title: "15-9 Numeric separator( _ )",
+      href: "15-9.html",
     },
   ], 
 },
@@ -1173,16 +1194,39 @@ export function scrollToFocusEl(){
 }
 
 export function setMobileMenuToggleEvent(){
-const toggle_menu_button =document.querySelector('#toggle-menu')
-const aside =DOMaside
+  const toggle_menu_button = document.querySelector('#toggle-menu')
+  const aside = DOMaside
+  const main = DOMmain
+  function getAsideMask(){
+    return document.querySelector('#aside-mask')
+  }
+  function openAside(){
+    const asideMask =  getAsideMask()
+    asideMask.classList.add('mask')
+    toggle_menu_button.classList.add('opened')
+    aside.classList.add('opened')
+  }
+  function closeAside(){
+    const asideMask =  getAsideMask()
+    toggle_menu_button.classList.remove('opened')
+    aside.classList.remove('opened')
+    asideMask.classList.remove('mask')
+  }
+
   if(toggle_menu_button){
+    const asideMask = document.createElement("div");
+    asideMask.setAttribute("id", "aside-mask");
+    main.appendChild(asideMask); 
+    asideMask.addEventListener('click',()=>{
+      if(toggle_menu_button.classList.contains('opened')){
+        closeAside()
+      }
+    })  
     toggle_menu_button.addEventListener('click',()=>{
       if(toggle_menu_button.classList.contains('opened')){
-        toggle_menu_button.classList.remove('opened')
-        aside.classList.remove('opened')
+        closeAside()
       }else{
-        toggle_menu_button.classList.add('opened')
-        aside.classList.add('opened')
+        openAside()
       }
     })  
   }
