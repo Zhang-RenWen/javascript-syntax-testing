@@ -79,6 +79,7 @@ aside li.menu-item-focus a{
   width: 0;
   height: 0;
   z-index: 3;
+  pointer-events: none;
 }
 
 section {
@@ -194,6 +195,7 @@ code{
   }
   #aside-mask.mask{
     background-color: rgba(0,0,0,0.5);
+    pointer-events: initial;
   }
 }
 
