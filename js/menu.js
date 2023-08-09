@@ -1077,43 +1077,43 @@ export const menu = [
     },
   ], 
 },
-{
-  id: "17",
-  title: "新標準 ES2023 (ES14)",
-  submenu: [
-    {
-      id: "17-1",
-      title: "17-1 ",
-      href: "17-1.html",
-    },
-    {
-      id: "17-2",
-      title: "17-2 ",
-      href: "17-2.html",
-    },
-    {
-      id: "17-3",
-      title: "17-3 ",
-      href: "17-3.html",
-    },
-    {
-      id: "17-4",
-      title: "17-4 ",
-      href: "17-4.html",
-    },
+// {
+//   id: "17",
+//   title: "新標準 ES2023 (ES14)",
+//   submenu: [
+//     {
+//       id: "17-1",
+//       title: "17-1 ",
+//       href: "17-1.html",
+//     },
+//     {
+//       id: "17-2",
+//       title: "17-2 ",
+//       href: "17-2.html",
+//     },
+//     {
+//       id: "17-3",
+//       title: "17-3 ",
+//       href: "17-3.html",
+//     },
+//     {
+//       id: "17-4",
+//       title: "17-4 ",
+//       href: "17-4.html",
+//     },
 
-    {
-      id: "17-5",
-      title: "17-5 ",
-      href: "17-5.html",
-    },
-    {
-      id: "17-6",
-      title: "17-6 ",
-      href: "17-6.html",
-    },
-  ], 
-},
+//     {
+//       id: "17-5",
+//       title: "17-5 ",
+//       href: "17-5.html",
+//     },
+//     {
+//       id: "17-6",
+//       title: "17-6 ",
+//       href: "17-6.html",
+//     },
+//   ], 
+// },
 ];
 
 export function createMenu(submenu, el) {
