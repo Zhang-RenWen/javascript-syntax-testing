@@ -27,15 +27,89 @@
     <section>
       <h2 id="14-8">14-8 Nullish coalescing operator (??)</h2>
       <pre><code class="language-js">
+const foo = null ?? 'default string';
+console.log(foo);
+// Expected output: "default string"
+
+const baz = 0 ?? 42;
+console.log(baz);
+// Expected output: 0
+      </code></pre>
+      <pre><code class="language-js">
+const nullValue = null;
+const emptyText = ""; // falsy
+const someNumber = 42;
+
+const valA = nullValue ?? "default for A";
+const valB = emptyText ?? "default for B";
+const valC = someNumber ?? 0;
+
+console.log(valA); // "default for A"
+console.log(valB); // "" (as the empty string is not null or undefined)
+console.log(valC); // 42
+      </code></pre>
+      <pre><code class="language-js">
+let foo;
+
+// foo is never assigned any value so it is still undefined
+const someDummyText = foo || "Hello!";
+      </code></pre>
+      <pre><code class="language-js">
+const count = 0;
+const text = "";
+
+const qty = count || 42;
+const message = text || "hi!";
+console.log(qty); // 42 and not 0
+console.log(message); // "hi!" and not ""
+      </code></pre>
+      <pre><code class="language-js">
+const myText = ""; // An empty string (which is also a falsy value)
+
+const notFalsyText = myText || "Hello world";
+console.log(notFalsyText); // Hello world
+
+const preservingFalsy = myText ?? "Hi neighborhood";
+console.log(preservingFalsy); // '' (as myText is neither undefined nor null)
+      </code></pre>
+      <pre><code class="language-js error-code">
+function A() {
+  console.log("A was called");
+  return undefined;
+}
+function B() {
+  console.log("B was called");
+  return false;
+}
+function C() {
+  console.log("C was called");
+  return "foo";
+}
+
+console.log(A() ?? C());
+// Logs "A was called" then "C was called" and then "foo"
+// as A() returned undefined so both expressions are evaluated
+
+console.log(B() ?? C());
+// Logs "B was called" then "false"
+// as B() returned false (and not null or undefined), the right
+// hand side expression was not evaluated
+      </code></pre>
+      <pre><code class="language-js correct-code">
+(null || undefined) ?? "foo"; // return "foo"
+      </code></pre>
+      <pre><code class="language-js">
+const foo = { someFooProp: "hi" };
+
+console.log(foo.someFooProp?.toUpperCase() ?? "not available"); // "HI"
+console.log(foo.someBarProp?.toUpperCase() ?? "not available"); // "not available"
       </code></pre>
       <p> 資料來源:</p>
       <p>
         <a
-          href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/globalThis">https://developer.mozilla.org/.../globalThis</a>
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">https://developer.mozilla.org/.../Nullish_coalescing</a>
       </p>
-      <p>
-        <a href="https://www.youtube.com/watch?v=_VvUXvTQUTE">https://www.youtube.com/watch?v=_VvUXvTQUTE</a>
-      </p>
+
     </section>
   </main>
 </body>
