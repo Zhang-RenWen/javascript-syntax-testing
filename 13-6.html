@@ -101,7 +101,7 @@ const arr = [
   { name: `A男`, age: 26 },
   { name: `B男`, age: 18 },
 ];
-const obj3 = Object.fromEntries(arr.map(({ name, age }) => [name, age]));
+const obj3 = Object.fromEntries(arr.map(({ name, age }) =&gt; [name, age]));
 console.log(obj3);
 // { 'A男': 26, 'B男': 18 }
         </code></pre>
@@ -114,7 +114,7 @@ console.log(obj4);
       <p> 資料來源:</p>
       <p>
         <a
-          href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries">https://developer.mozilla.org/.../Object/fromEntries</a>
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries">https://developer.mozilla.org/.../Object/fromEntries</a>
       </p>
       <p>
         <a href="https://juejin.cn/post/7023895016384757796">https://juejin.cn/post/7023895016384757796</a>
