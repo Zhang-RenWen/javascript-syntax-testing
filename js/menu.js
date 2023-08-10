@@ -1232,10 +1232,25 @@ export function setMobileMenuToggleEvent(){
   }
 }
 
+
+// Safari 
+function setCorrectViewHeight() {
+  const windowsVH = window.innerHeight
+  document.documentElement.style.setProperty('--vh', windowsVH + 'px')
+}
+
+function safariHacks() {
+  window.addEventListener('resize', setCorrectViewHeight)
+}
+
+
+
 export function initMenu(){
   createMenu(menu,DOMaside)
   aLinkClickHandler()
   setFocusMenuItem()
   setMobileMenuToggleEvent()
   scrollToFocusEl()
+  safariHacks()
+  setCorrectViewHeight()
 }
