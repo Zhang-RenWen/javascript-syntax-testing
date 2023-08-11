@@ -72,7 +72,7 @@ console.log(notFalsyText); // Hello world
 const preservingFalsy = myText ?? "Hi neighborhood";
 console.log(preservingFalsy); // '' (as myText is neither undefined nor null)
       </code></pre>
-      <pre><code class="language-js error-code">
+      <pre><code class="language-js">
 function A() {
   console.log("A was called");
   return undefined;
@@ -95,9 +95,21 @@ console.log(B() ?? C());
 // as B() returned false (and not null or undefined), the right
 // hand side expression was not evaluated
       </code></pre>
+      <p>搭配 <code>||</code> 或者 <code>&&</code> 一起使用會出現異常。</p>
+      <pre><code class="language-js error-code">
+null || undefined ?? "foo"; // raises a SyntaxError
+true && undefined ?? "foo"; // raises a SyntaxError
+      </code></pre>
+      <p>若要搭配 <code>||</code> 或者 <code>&&</code> 一起使用，建議使用<code>()</code> 將表達式包裹起來。如此一來表達式內容會優先執行並回傳結果，接著執行
+        <code>??</code>
+        判斷。
+      </p>
       <pre><code class="language-js correct-code">
 (null || undefined) ?? "foo"; // return "foo"
       </code></pre>
+      <p>可以搭配 <a href="14-4.html">Operators-Optional chaining (?.)</a> 一同使用，如以下範例。先使用 (?.) 判斷 foo 中是否存在指定欄位，有的話執行
+        <code>toUpperCase()</code> 並回傳結果，沒有的話回傳 <code>??</code> 右側的例外處理。
+      </p>
       <pre><code class="language-js">
 const foo = { someFooProp: "hi" };
 
