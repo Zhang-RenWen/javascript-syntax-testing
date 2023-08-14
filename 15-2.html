@@ -26,7 +26,7 @@
     <aside></aside>
     <section>
       <h2 id="15-2">15-2 Promise.any()</h2>
-      <p>Promise.any() 靜態方法將一個 Promise 疊代物件作為輸入，並返回一個 Promise。當輸入的任何一個 Promise 實現時，這個返回的 Promise 將會實現，並返回第一個實現的值。當所有輸入
+      <p>Promise.any() 方法將一個 Promise 疊代物件作為傳入參數，並回傳一個 Promise。當輸入的任何一個 Promise 實現時，這個回傳的 Promise 將會實現，並回傳第一個實現的值。當所有輸入
         Promise 都被拒絕（包括傳遞了空的可迭代物件）時，它會以一個包含拒絕原因陣列的 AggregateError 拒絕。</p>
       <pre><code class="language-js">
 const promise1 = Promise.reject(0);
@@ -42,23 +42,23 @@ Promise.any(promises).then((value) => console.log(value));
         </code></pre>
       <h3>傳入參數</h3>
       <p><code>iterable</code> 可迭代物件</p>
-      <h3>返回值</h3>
+      <h3>回傳值</h3>
       <p>
       <ul>
         <li>已拒絕(already rejected)，如果傳入的 iterable 為空的話。</li>
-        <li>異步實現(asynchronously filfilled)，當給定的 iterable 中的任何一個 Promise 被實現時，返回的 Promise 就會被實現。其實現值是第一個實現的 Promise 的實現值。
+        <li>異步實現(asynchronously filfilled)，當給定的 iterable 中的任何一個 Promise 被實現時，回傳的 Promise 就會被實現。其實現值是第一個實現的 Promise 的實現值。
         </li>
         <li>Promise.any()中的 Promise 序列只要有一個執行通過，則認為成功，如果全部拒絕，則認為失敗；</li>
       </ul>
       </p>
       <p>描述</p>
-      <p>Promise.any() 方法是 Promise 並發方法之一。該方法對於返回第一個實現的 Promise 非常有用。一旦有一個 Promise 實現，它就會立即返回，因此不會等待其他 Promise 完成。</p>
-      <p>與 Promise.all() 返回一個實現值陣列不同的是，我們只會得到一個實現值（假設至少有一個 Promise 被實現）。此方法對於那些如果我們只需要一個 Promise
+      <p>Promise.any() 是 Promise 併發方法之一。一旦有一個 Promise 實現，它就會立刻回傳，所以不會等待其他 Promise 實現。</p>
+      <p>與 Promise.all() 回傳一個實現值陣列不同的是，我們只會得到一個實現值（假設至少有一個 Promise 被實現）。此方法對於那些如果我們只需要一個 Promise
         被實現，但不在意哪一個被實現的情況更有益。請注意另一個區別：該方法在接收到空的可碟代物件時會拒絕，因為實際上，該可迭代物件不包含任何實現的項。你可以將 Promise.any() 和 Promise.all() 與
         Array.prototype.some() 和 Array.prototype.every() 進行比較。</p>
-      <p>同時，與 Promise.race() 返回第一個敲定（無論是實現還是拒絕）的值不同的是，該方法返回第一個實現的值。該方法忽略所有被拒絕的 Promise，直到第一個被實現的 Promise。</p>
+      <p>同時，與 Promise.race() 回傳第一個完成（無論是實現還是拒絕）的值不同的是，該方法回傳第一個實現的值。該方法忽略所有被拒絕的 Promise，直到第一個被實現的 Promise。</p>
       <h3>示範</h3>
-      <p>Promise.any() 會以第一個實現的 Promise 來實現，即使有 Promise 先被拒絕。這與 Promise.race() 不同，後者會使用第一個敲定的 Promise 來實現或拒絕。</p>
+      <p>Promise.any() 會以第一個實現的 Promise 來確定實現，即使有 Promise 先被拒絕。這與 Promise.race() 不同，後者會使用第一個完成的 Promise 來確定實現或拒絕。</p>
       <pre><code class="language-js">
 const pErr = new Promise((resolve, reject) => {
   reject("Always fails");
@@ -79,7 +79,7 @@ Promise.any([pErr, pSlow, pFast]).then((value) => {
 // Logs:
 // Done quick
         </code></pre>
-      <h3>拒絕並返回 AggregateError</h3>
+      <h3>拒絕並回傳 AggregateError</h3>
       <p>如果沒有 Promise 被實現，Promise.any() 將使用 AggregateError 進行拒絕。</p>
       <pre><code class="language-js">
 const failure = new Promise((resolve, reject) => {
@@ -92,7 +92,7 @@ Promise.any([failure]).catch((err) => {
 // AggregateError: No Promise in Promise.any was resolved
         </code></pre>
       <h3>經典案例：顯示第一張已載入的圖片 </h3>
-      <p>在這個例子，我們有一個獲取圖片並返回 blob 的函數，我們使用 Promise.any() 來獲取一些圖片並顯示第一張可用的圖片（即最先解決的那個 promise）。</p>
+      <p>在這個例子，我們有一個獲取圖片並回傳 blob 的函數，我們使用 Promise.any() 來獲取一些圖片並顯示第一張可用的圖片（即最先解決的那個 promise）。</p>
       <pre><code class="language-js">
 async function fetchAndDecode(url, description) {
   const res = await fetch(url);
