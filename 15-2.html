@@ -30,12 +30,12 @@
         Promise 都被拒絕（包括傳遞了空的可迭代物件）時，它會以一個包含拒絕原因陣列的 AggregateError 拒絕。</p>
       <pre><code class="language-js">
 const promise1 = Promise.reject(0);
-const promise2 = new Promise((resolve) => setTimeout(resolve, 100, 'quick'));
-const promise3 = new Promise((resolve) => setTimeout(resolve, 500, 'slow'));
+const promise2 = new Promise((resolve) =&gt; setTimeout(resolve, 100, 'quick'));
+const promise3 = new Promise((resolve) =&gt; setTimeout(resolve, 500, 'slow'));
 
 const promises = [promise1, promise2, promise3];
 
-Promise.any(promises).then((value) => console.log(value));
+Promise.any(promises).then((value) =&gt; console.log(value));
 
 // Expected output: "quick"
 
@@ -60,19 +60,19 @@ Promise.any(promises).then((value) => console.log(value));
       <h3>示範</h3>
       <p>Promise.any() 會以第一個實現的 Promise 來確定實現，即使有 Promise 先被拒絕。這與 Promise.race() 不同，後者會使用第一個完成的 Promise 來確定實現或拒絕。</p>
       <pre><code class="language-js">
-const pErr = new Promise((resolve, reject) => {
+const pErr = new Promise((resolve, reject) =&gt; {
   reject("Always fails");
 });
 
-const pSlow = new Promise((resolve, reject) => {
+const pSlow = new Promise((resolve, reject) =&gt; {
   setTimeout(resolve, 500, "Done eventually");
 });
 
-const pFast = new Promise((resolve, reject) => {
+const pFast = new Promise((resolve, reject) =&gt; {
   setTimeout(resolve, 100, "Done quick");
 });
 
-Promise.any([pErr, pSlow, pFast]).then((value) => {
+Promise.any([pErr, pSlow, pFast]).then((value) =&gt; {
   console.log(value);
   // pFast fulfills first
 });
@@ -82,11 +82,11 @@ Promise.any([pErr, pSlow, pFast]).then((value) => {
       <h3>拒絕並回傳 AggregateError</h3>
       <p>如果沒有 Promise 被實現，Promise.any() 將使用 AggregateError 進行拒絕。</p>
       <pre><code class="language-js">
-const failure = new Promise((resolve, reject) => {
+const failure = new Promise((resolve, reject) =&gt; {
   reject("Always fails");
 });
 
-Promise.any([failure]).catch((err) => {
+Promise.any([failure]).catch((err) =&gt; {
   console.log(err);
 });
 // AggregateError: No Promise in Promise.any was resolved
@@ -107,14 +107,14 @@ const coffee = fetchAndDecode("coffee.jpg", "Coffee");
 const tea = fetchAndDecode("tea.jpg", "Tea");
 
 Promise.any([coffee, tea])
-  .then(([blob, description]) => {
+  .then(([blob, description]) =&gt; {
     const objectURL = URL.createObjectURL(blob);
     const image = document.createElement("img");
     image.src = objectURL;
     image.alt = description;
     document.body.appendChild(image);
   })
-  .catch((e) => {
+  .catch((e) =&gt; {
     console.error(e);
   });
         </code></pre>
