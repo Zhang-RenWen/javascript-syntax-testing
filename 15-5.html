@@ -27,15 +27,58 @@
     <section>
       <h2 id="15-5">15-5 Logical AND assignment(&&=)</h2>
       <pre><code class="language-js">
+let a = 1;
+let b = 0;
 
+a &&= 2;
+console.log(a);
+// Expected output: 2
+
+b &&= 2;
+console.log(b);
+// Expected output: 0
+
+        </code></pre>
+      <pre><code class="language-js">
+x &&= y
+        </code></pre>
+      <pre><code class="language-js">
+x && (x = y);
+        </code></pre>
+      <pre><code class="language-js">
+const x = 0;
+x &&= 2;
+        </code></pre>
+      <pre><code class="language-js">
+const x = {
+  get value() {
+    return 0;
+  },
+  set value(v) {
+    console.log("Setter called");
+  },
+};
+
+x.value &&= 2;
+        </code></pre>
+      <pre><code class="language-js">
+const x = 0;
+x &&= console.log("y evaluated");
+// Logs nothing
+        </code></pre>
+      <pre><code class="language-js">
+let x = 0;
+let y = 1;
+
+x &&= 0; // 0
+x &&= 1; // 0
+y &&= 1; // 1
+y &&= 0; // 0
         </code></pre>
       <p> 資料來源:</p>
       <p>
         <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of">https://developer.mozilla.org/.../for-await...of</a>
-      </p>
-      <p>
-        <a href="https://juejin.cn/post/7023895016384757796">https://juejin.cn/post/7023895016384757796</a>
+          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND_assignment">https://developer.mozilla.org/.../Logical_AND_assignment</a>
       </p>
     </section>
   </main>
