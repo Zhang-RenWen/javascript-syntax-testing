@@ -26,7 +26,8 @@
     <aside></aside>
     <section>
       <h2 id="15-4">15-4 Nullish Coalescing Assignment(??=)</h2>
-      <p>判斷 <code>??=</code>左邊變數為空值時(null or undefined) 對<code>??=</code>左邊的變數賦予等號右側的值。</p>
+      <p>判斷 <code>??=</code>左邊變數為 <strong>空值(null or undefined)</strong>
+        對<code>??=</code>左邊的變數賦予<code>??=</code>右側的值。最後回傳賦值運算後的結果。</p>
       <p>範例如下：</p>
       <pre><code class="language-js">
 const a = { duration: 50 };
@@ -41,18 +42,18 @@ console.log(a.speed);
 
         </code></pre>
       <h3>語法</h3>
-      <p><code>x ??= y</code></p>
       <pre><code class="language-js">
-// 寫法1:
 x ??= y
-// 相同於寫法2:
+      </code></pre>
+      <p>下列舉另外一種寫法表示，方便理解本章運算子的義涵。</p>
+      <pre><code class="language-js">
 x ?? (x = y);
         </code></pre>
-      <p>x 不為空值的話，等號左側的部份不會被賦值。</p>
+      <p>x 不為 <strong>空值時(null or undefined)</strong> 的話，<code>??=</code>左側的部份不會被賦值。</p>
       <pre><code class="language-js">
 const x = 1;
 x ??= 2;
-// 1
+// Expected output: 1
         </code></pre>
       <p>配合物件修飾符 get/set 的範例</p>
       <pre><code class="language-js">
@@ -66,9 +67,9 @@ const x = {
 };
 
 x.value ??= 2;
-// 1
+// Expected output: 1
         </code></pre>
-      <p>若左側不為空值，事實上符號右側的程式並不會執行。</p>
+      <p>若 <code>??=</code> 左側為 <strong>空值時(null or undefined)</strong>，除了不會賦值外，事實上<code>??=</code>右側的程式連執行都不會發生。</p>
       <pre><code class="language-js">
 const x = 1;
 x ??= console.log("y evaluated");
