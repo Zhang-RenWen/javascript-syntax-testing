@@ -54,6 +54,10 @@ x ?? (x = y);
 const x = 1;
 x ??= 2;
 // Expected output: 1
+x = '';
+// Expected output: ''
+x = null;
+// Expected output: 2
         </code></pre>
       <p>配合物件修飾符 get/set 的範例</p>
       <pre><code class="language-js">
