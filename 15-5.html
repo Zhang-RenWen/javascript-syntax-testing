@@ -26,6 +26,10 @@
     <aside></aside>
     <section>
       <h2 id="15-5">15-5 Logical AND assignment(&&=)</h2>
+      <p>Logical AND assignment <code> &&=</code> 左側的值若為 <strong>Truthy</strong> ,就會將 <code>&&=</code> 右側的值賦予
+        <code>&&=</code>
+        左側，並回傳賦值運算後的結果。
+      </p>
       <pre><code class="language-js">
 let a = 1;
 let b = 0;
@@ -39,16 +43,21 @@ console.log(b);
 // Expected output: 0
 
         </code></pre>
+      <h3>語法</h3>
       <pre><code class="language-js">
 x &&= y
         </code></pre>
+      <p>下列舉另外一種寫法表示，方便理解本章運算子的義涵。</p>
       <pre><code class="language-js">
 x && (x = y);
         </code></pre>
+      <p>x 為 <strong>Falsy</strong> 的話，<code> &&=</code> 左側的部份不會被賦值。</p>
       <pre><code class="language-js">
 const x = 0;
 x &&= 2;
+// Expected output: 0
         </code></pre>
+      <p>配合物件修飾符 get/set 的範例</p>
       <pre><code class="language-js">
 const x = {
   get value() {
@@ -61,11 +70,13 @@ const x = {
 
 x.value &&= 2;
         </code></pre>
+      <p>若 <code> &&=</code> 左側為 <strong>Falsy</strong>，除了不會賦值外，事實上 <code> &&=</code> 右側的程式連執行都不會發生。</p>
       <pre><code class="language-js">
 const x = 0;
 x &&= console.log("y evaluated");
 // Logs nothing
         </code></pre>
+      <p>更多示範案例加深理解：</p>
       <pre><code class="language-js">
 let x = 0;
 let y = 1;
