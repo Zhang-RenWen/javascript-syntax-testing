@@ -149,6 +149,12 @@ code{
   background-color: #F3F2F2;
 }
 
+blockquote {
+  border-left: 4px solid #cdcdcd;
+  margin: 0;
+  margin-bottom: 2rem;
+  padding: 1rem 2rem;
+}
 
 @media screen and (max-width: 768px){
   main {
