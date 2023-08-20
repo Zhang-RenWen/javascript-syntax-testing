@@ -26,6 +26,10 @@
     <aside></aside>
     <section>
       <h2 id="14-8">14-8 Nullish coalescing operator (??)</h2>
+      <p>空值合並運算子（??）是一個邏輯運算子，當左側的操作數為 null 或者 undefined 時，返回其右側操作數，否則返回左側操作數。
+      <p>與邏輯或運算子（||）不同，邏輯運算子會在左側操作數為 falsy 時返回右側操作數。也就是說，如果使用 || 來為某些變數設置默認值，可能會遇到意料之外的行為。比如為假值(例如，'' 或 0 ) 時。見下面的例子。
+      </p>
+      </p>
       <pre><code class="language-js">
 const foo = null ?? 'default string';
 console.log(foo);
@@ -35,6 +39,7 @@ const baz = 0 ?? 42;
 console.log(baz);
 // Expected output: 0
       </code></pre>
+      <p>在這個例子中，我們使用 Nullish coalescing operator 為變數提供預設值，保證變數不為 null 或者 undefined。</p>
       <pre><code class="language-js">
 const nullValue = null;
 const emptyText = ""; // falsy
@@ -48,12 +53,16 @@ console.log(valA); // "default for A"
 console.log(valB); // "" (as the empty string is not null or undefined)
 console.log(valC); // 42
       </code></pre>
+      <h3>為變數提供預設值</h3>
+      <p>以往，如果想為一個變數給定預設值，通常的做法是使用邏輯或運算子(||):</p>
       <pre><code class="language-js">
 let foo;
 
 // foo is never assigned any value so it is still undefined
 const someDummyText = foo || "Hello!";
       </code></pre>
+      <P>然而，由於 || 是一個布林邏輯運算子，左側的操作數會被強制轉換成布林值用於求值。任何 falsy（0， ''， NaN， null， undefined）都不會被返回。這導致如果你使用0，''或 NaN
+        作為有效值，就會出現不可預期的結果。 </P>
       <pre><code class="language-js">
 const count = 0;
 const text = "";
@@ -63,6 +72,7 @@ const message = text || "hi!";
 console.log(qty); // 42 and not 0
 console.log(message); // "hi!" and not ""
       </code></pre>
+      <p>空值合並運算符 Nullish coalescing operator 可以避免這種陷阱，其只在第一個操作數為 null 或 undefined 時（而不是其他falsy）返回第二個操作數：</p>
       <pre><code class="language-js">
 const myText = ""; // An empty string (which is also a falsy value)
 
@@ -72,6 +82,8 @@ console.log(notFalsyText); // Hello world
 const preservingFalsy = myText ?? "Hi neighborhood";
 console.log(preservingFalsy); // '' (as myText is neither undefined nor null)
       </code></pre>
+      <h3>短路</h3>
+      <p>與 OR 和 AND 邏輯運算符相似，當左表達式不為 null 或 undefined 時，不會對右表達式進行求值。</p>
       <pre><code class="language-js">
 function A() {
   console.log("A was called");
