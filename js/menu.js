@@ -1046,34 +1046,49 @@ export const menu = [
   submenu: [
     {
       id: "16-1",
-      title: "16-1 ",
+      title: "16-1 Array.prototype.at()",
       href: "16-1.html",
     },
     {
       id: "16-2",
-      title: "16-2 ",
+      title: "16-2 RegExp.prototype.hasIndices",
       href: "16-2.html",
     },
     {
       id: "16-3",
-      title: "16-3 ",
+      title: "16-3 Object.hasOwn()",
       href: "16-3.html",
     },
     {
       id: "16-4",
-      title: "16-4 ",
+      title: "16-4 Error.cause",
       href: "16-4.html",
     },
 
     {
       id: "16-5",
-      title: "16-5 ",
+      title: "16-5 await: Use at module top level",
       href: "16-5.html",
     },
     {
       id: "16-6",
-      title: "16-6 ",
+      title: "16-6 Private class features",
       href: "16-6.html",
+    },
+    {
+      id: "16-7",
+      title: "16-7 Private class methods",
+      href: "16-7.html",
+    },
+    {
+      id: "16-8",
+      title: "16-8 Static methods and fields",
+      href: "16-8.html",
+    },
+    {
+      id: "16-9",
+      title: "16-9 Class static initialization blocks",
+      href: "16-9.html",
     },
   ], 
 },

@@ -98,7 +98,7 @@ const response = await promisedFunction().catch((err) =&gt; {
 // response will be "default response" if the promise is rejected
         </code></pre>
       <h3>在頂層使用 await</h3>
-      <p>在模組的頂層，你可以單獨使用關鍵字 await (異步函數的外面)。也就是說一個模組如果包含用了 await 的子魔ㄉㄨ，該模組就會等待該子模組，這一過程並不會阻塞其他子模組。</p>
+      <p>在模組的頂層，你可以單獨使用關鍵字 await (異步函數的外面)。也就是說一個模組如果包含用了 await 的子模組，該模組就會等待該子模組，這一過程並不會阻塞其他子模組。</p>
       <p>下面是一個在 export 表達式中使用了 Fetch API 的例子。任何文件只要導入這個模組，後面的代碼就會等待，直到 fetch 完成。</p>
       <pre><code class="language-js">
 // fetch request
