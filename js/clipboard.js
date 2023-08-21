@@ -1,5 +1,5 @@
   // Code to append a click to copy button 
-export function inserted(el) {
+export function initClipboard(el) {
     const blocks = el.querySelectorAll('pre code')
     Array.from(blocks).forEach(hljs.highlightBlock)
     function button(label, ariaLabel, icon, className) {
