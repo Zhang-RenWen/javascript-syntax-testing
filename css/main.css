@@ -12,6 +12,9 @@
   --notecard-background-information: rgba(0,133,242,.1);
   --notecard-border-information: #0085f2;
   --notecard-elem-radius: 0.25rem;
+  /* Table */
+  --table-background-color:#f9f9fb;
+  --table-border-color:#cdcdcd
 }
 
 * {
@@ -185,6 +188,19 @@ blockquote {
   position: absolute;
   top: 1.6rem;
   width: 1rem;
+}
+
+table{
+  border: 1px solid var(--table-border-color);
+  border-collapse: collapse;
+  width: 100%;
+}
+table thead th{
+  line-height: 1.5;
+  text-align: left;
+}
+tr:nth-child(odd) td, table.standard-table tr:nth-child(odd) th {
+  background-color: var(--table-background-color);
 }
 
 @media screen and (max-width: 768px){
