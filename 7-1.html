@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" href="./public/favicon.ico" />
-      <meta http-equiv="cache-control" content="no-cache">
-      <title>JavaScript-syntax-testing</title>
-      <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-      <link rel="stylesheet" href="./hightlight/default.min.css" />
-      <link rel="stylesheet" href="./css/main.css" />
-      <link rel="stylesheet" href="./css/copybutton.css" />
-      <link rel="stylesheet" href="./css/hightlight.css" />
-      <script src="./hightlight/hightlight.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-</head>
-
-<body>
-      <header>
-            <nav>
-                  <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-            </nav>
-      </header>
-      <main>
-            <aside>
-                  <nav></nav>
-            </aside>
-            <article>
-                  <h2>Chapter 7 ES6 內建功能優化</h2>
-                  <h2>7-1 數值</h2>
-                  <h3 id="7-1-1">7-1-1 二進位和八進位實字</h3>
-                  <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>Chapter 7 ES6 內建功能優化</h2>
+        <h2>7-1 數值</h2>
+        <h3 id="7-1-1">7-1-1 二進位和八進位實字</h3>
+        <pre><code class="language-js">
 console.log(0b000) // 0 
 console.log(0b001) // 1
 console.log(0b010) // 2
@@ -41,25 +43,25 @@ console.log(0b101) // 5
 console.log(0b110) // 6
 console.log(0b111) // 7
           </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(parseInt('01')) // 1
 console.log(parseInt('012')) // 10
 console.log(parseInt('012', 10)) // 12
 </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(parseInt ('100', 8)) // 64
          </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(0o001) // 1
 console.log(0o010) // 8
 console.log(0o100) // 64
                  </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(0x0ff) // 255
 console.log(0xf00) // 3840
       </code></pre>
-                  <h3 id="7-1-2">7-1-2 Number.isNaN</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-2">7-1-2 Number.isNaN</h3>
+        <pre><code class="language-js">
 Number.isNaN(123)
 // false，整數不是 NaN
 Number.isNaN(Infinity)
@@ -71,18 +73,18 @@ Number.isNaN(NaN)
 Number.isNaN('a hundred'/ 'two')
 // true
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 isNaN('a hundred')
 // true，因為 Number('a hundred')是 NaN
 isNaN(new Date())
 // false, 因為 Number(new Date()) 使用 Date#valueOf 會回傳一個 unix timestamp 數值
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function isNumber(value){
   return typeof value === 'number' && !Number.isNaN(value)
 }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 isNumber(1)
 // true
 isNumber(Infinity)
@@ -94,8 +96,8 @@ isNumber('two")
 isNumber(new Date())
 // false
       </code></pre>
-                  <h3 id="7-1-3">7-1-3 Number.isFinite</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-3">7-1-3 Number.isFinite</h3>
+        <pre><code class="language-js">
 isFinite(NaN)
 // false
 isFinite(Infinity)
@@ -109,7 +111,7 @@ isFinite(-13)
 isFinite('10')
 // true ，因為 Number(10) 為 10 
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Number.isFinite(NaN)
 // false
 Number.isFinite(Infinity)
@@ -123,30 +125,30 @@ Number.isFinite(-13)
 Number.isFinite('10')
 // false ，因為 Number('10') 因為 '10' 不是一個數值
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function numberIsFinite(value) {
   return typeof value ==='number' && isFinite(value)
 }
       </code></pre>
 
-                  <h3 id="7-1-4">7-1-4 Number.parseInt</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-4">7-1-4 Number.parseInt</h3>
+        <pre><code class="language-js">
 console.log(Number.parseInt === parseInt)
 // true
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 parseInt('0xf00")
 // 3840
 parseInt('0xf00', 16)
 // 3840
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 parseInt('0xf00',10)
 // 0
 parseInt('5xf00',10)
 // 5 舉例說明此處並無任何的特別的動作
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 parseInt('0b011')
 // 0
 parseInt('0b011', 2)
@@ -156,25 +158,25 @@ parseInt('0o100')
 parseInt('0o100' , 8)
 // 0
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 parseInt('0b011'.slice(2),2)
 // 3
 parseInt('0o110'.slice(2), 8)
 // 72
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Number('0b011')
 // 3
 Number('0o110')
 // 72
       </code></pre>
-                  <h3 id="7-1-5">7-1-5 Number.parseFloat</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-5">7-1-5 Number.parseFloat</h3>
+        <pre><code class="language-js">
 console.log(Number.parseFloat === parseFloat)
 // true
       </code></pre>
-                  <h3 id="7-1-6">7-1-6 Number.isInteger</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-6">7-1-6 Number.isInteger</h3>
+        <pre><code class="language-js">
 console.log(Number.isInteger(Infinity)) // false
 console.log(Number.isInteger(-Infinity)) // false
 console.log(Number.isInteger(NaN)) // false
@@ -183,59 +185,59 @@ console.log(Number.isInteger(0)) // true
 console.log(Number.isInteger(-10)) // true
 console.log(Number.isInteger(10.3)) //  false
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function numberIsInteger(value){
   return Number.isFinite(value) && value % 1 === 0
 }
       </code></pre>
-                  <h3 id="7-1-7">7-1-7 Number.EPSILON</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-7">7-1-7 Number.EPSILON</h3>
+        <pre><code class="language-js">
 Number.EPSILON
 // 2.220446049250313e -16
 Number.EPSILON.toFixed(20)
 // 0.00000000000000022204"
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 0.1 + 0.2
 // 0.30000000000000004
 0.1 + 0.2  === 0.3
 // false
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 0.1 + 0.2 - 0.3
 // 5.551115123125783e-17
 5.551115123125783e-17.toFixed(20)
 // '0.00000000000000005551'
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 5.551115123125783e-17 &lt; Number.EPSILON
 // true
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function withinMargin0fError(left, right){
   return Math.abs(left - right) &lt; Number.EPSILON
 }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 withinMarginOfError(0.1 + 0.2, 0.3)
 // true
 withinMarginOfError(0.2 + 0.2, 0.3)
 // false
       </code></pre>
-                  <h3 id="7-1-8">7-1-8 Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-8">7-1-8 Number.MAX_SAFE_INTEGER 和 Number.MIN_SAFE_INTEGER</h3>
+        <pre><code class="language-js">
 Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1
 // true
 Number.MAX_SAFE_INTEGER === 9007199254740991
 // true
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Number.MIN_SAFE_INTEGER === -Number.MAX_SAFE_INTEGER
 // true
 Number.MIN_SAFE_INTEGER === -9007199254740991
 // true
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 1 === 2
 // false
 Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2
@@ -243,8 +245,8 @@ Number.MAX_SAFE_INTEGER + 1 === Number.MAX_SAFE_INTEGER + 2
 Number.MIN_SAFE_INTEGER - 1 === Number.MIN_SAFE_INTEGER - 2
 // true
         </code></pre>
-                  <h3 id="7-1-9">7-1-9 Number.isSafeInteger</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-1-9">7-1-9 Number.isSafeInteger</h3>
+        <pre><code class="language-js">
 Number.isSafeInteger('one') // false
 Number.isSafeInteger('0') // false
 Number.isSafeInteger(null) // false
@@ -258,7 +260,7 @@ Number.isSafeInteger(1.2) // false
 Number.isSafeInteger(Number.MAX_SAFE_INTEGER) // true
 Number.isSafeInteger(Number.MAX_SAFE_INTEGER + 1) // false
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
       
 Number.isSafeInteger(9007199254740000)
 // true
@@ -269,11 +271,11 @@ Number.isSafeInteger(9007199254740000+ 993)
 9007199254740000 + 993
 // 9007199254740992, should be 9007199254740993
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 9007199254740000 + 994
 // 9007199254740994
             </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Number.isSafeInteger(9007199254740993)
 // false
 Number.isSafeInteger(990)
@@ -283,7 +285,7 @@ Number.isSafeInteger(9007199254740993 + 990)
 9007199254740993 + 990
 // 9007199254741982，應該是9907199254741983
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Number.isSafeInteger(9007199254740993)
 // false
 Number.isSafeInteger(990)
@@ -293,7 +295,7 @@ Number.isSafeInteger(9007199254740993 - 990)
 9007199254740993 - 990
 // 9097199254740002，應該是 9007199254740003
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Number.isSafeInteger(9087199254740995)
 // false
 Number.isSafeInteger(9007199254740993)
@@ -303,7 +305,7 @@ Number.isSafeInteger(9007199254740995  - 9007199254740993)
 9007199254740995 - 9007199254740993
 // 4，應該是2
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function safeOp(result, ...operands){
   const values = [ result, ...operands]
   if (!values.every(Number.isSafeInteger)) {
@@ -312,7 +314,7 @@ function safeOp(result, ...operands){
   return result
 }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 safeOp(9007199254740000 + 993 , 9007199254740000, 993)
 // RangeError: 運算無法被信任
 safeOp(9997199254740993 + 990 , 9007199254740993, 990)
@@ -327,10 +329,8 @@ safeOp(9807199254740993 - 9007199254740995,
 safeOp (1 + 2, 1, 2)
 // 3
         </code></pre>
-            </article>
-      </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

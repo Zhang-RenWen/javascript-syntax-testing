@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>2-3 解構賦值</h2>
-      <h3>2-3-1 物件解構賦值</h3>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>2-3 解構賦值</h2>
+        <h3>2-3-1 物件解構賦值</h3>
+        <pre><code class="language-js">
 var character = {
   name: 'Bruce',
   pseudonym: 'Batman',
@@ -76,8 +77,8 @@ console.log(boot) // { size:10 }
 
         </code></pre>
 
-      <h3>2-3-2 陣列解構賦值</h3>
-      <pre><code class="language-js">
+        <h3>2-3-2 陣列解構賦值</h3>
+        <pre><code class="language-js">
 // 抽取陣列值
 var coordinates = [12 , -7]
 var [ x , y ] = coordinates
@@ -107,8 +108,8 @@ var right = 7
 [left,right] = [right,left]
         </code></pre>
 
-      <h3>2-3-3 函式參數指定初始值</h3>
-      <pre><code class="language-js">
+        <h3>2-3-3 函式參數指定初始值</h3>
+        <pre><code class="language-js">
 // 一般函式
 function powerOf( base , exponent = 2 ) {
   return Math.pow( base , exponent)
@@ -135,12 +136,11 @@ carFactory() // 'Volkswagen' , 1999
 carFactory({ make: 2000}) // undefined , 2000
 
         </code></pre>
-      <h3>2-3-4 函式參數解構賦值</h3>
-      承上節討論，比起只提供一個初始物件，更好的做法是將 options
-      物件完全解構。 並為每一個特性指定初始值。
-      但還是會有一個問題，就是當未指定任何 options 時 即 只單純調用
-      carFactory() 會丟失初始值。
-      <pre><code class="language-js">
+        <h3>2-3-4 函式參數解構賦值</h3>
+        承上節討論，比起只提供一個初始物件，更好的做法是將 options 物件完全解構。
+        並為每一個特性指定初始值。 但還是會有一個問題，就是當未指定任何 options 時 即 只單純調用
+        carFactory() 會丟失初始值。
+        <pre><code class="language-js">
 function carFactory({ brand = 'Volkswagen' , make = 1999}) {
   console.log(brand);
   console.log(make);
@@ -150,8 +150,8 @@ carFactory({make:2000}) // 'Volkswagen' , 2000
 carFactory() //VM71:1 Uncaught TypeError: Cannot read properties of undefined (reading 'brand') at carFactory 
 
         </code></pre>
-      以下寫法可以解決此問題 思路：解構一個空物件並且指定預設值
-      <pre><code class="language-js">
+        以下寫法可以解決此問題 思路：解構一個空物件並且指定預設值
+        <pre><code class="language-js">
 function carFactory({ brand = 'Volkswagen' , make = 1999} = {}) {
   console.log(brand);
   console.log(make);
@@ -161,8 +161,8 @@ carFactory({make:2000}) // 'Volkswagen' , 2000
 carFactory() // 'Volkswagen' , 1999
 carFactory({}) // 'Volkswagen' , 1999
         </code></pre>
-      如果一個函式只需要物件的部分特性來操作，也可以在傳參處做部分解構。
-      <pre><code class="language-js">
+        如果一個函式只需要物件的部分特性來操作，也可以在傳參處做部分解構。
+        <pre><code class="language-js">
 var car = {
   owner: {
     id:'e2c3503a4181968c',
@@ -194,9 +194,9 @@ console.log(getCarProductModel(car))
 // } 
         </code></pre>
 
-      <h3>2-3-5 解構賦值使用情境</h3>
-      避免中繼變數增加可讀性
-      <pre><code class="language-js">
+        <h3>2-3-5 解構賦值使用情境</h3>
+        避免中繼變數增加可讀性
+        <pre><code class="language-js">
 // before ES6
 function getCoordinates(){
   return { x:10, y:22, z:-1, type:'3d'}
@@ -211,17 +211,17 @@ function getCoordinates(){
 var { x , y } = getCoordinates() // 沒有中繼變數 point 直接獲取回傳物件中的屬性
 console.log(x, y) 
         </code></pre>
-      運用函式參數初始值減少重複動作。 以下範例 有一個 random 函式，會亂數介於
-      max , min 參數之間的整數值
-      <pre><code class="language-js">
+        運用函式參數初始值減少重複動作。 以下範例 有一個 random 函式，會亂數介於 max , min
+        參數之間的整數值
+        <pre><code class="language-js">
 function random ({ min:1 , max:10 } = {}){
   return Math.floor(Math.random() * (max-min)) + min
 }
 console.log(random()) // 7
 console.log(random({max:24})) // 18
         </code></pre>
-      也適合運用在正規表達式
-      <pre><code class="language-js">
+        也適合運用在正規表達式
+        <pre><code class="language-js">
 function splitDate(date){
   var RegExpDate = /(\d+).(\d+).(\d+)/
   return  RegExpDate.exec(date)
@@ -258,10 +258,8 @@ if(match){
   console.log( year, month, day) 
 }
         </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

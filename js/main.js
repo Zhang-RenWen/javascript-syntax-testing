@@ -1,7 +1,7 @@
-import { initMenu } from'./menu.js'
+import { initMenu } from './menu.js'
 import { initClipboard } from './clipboard.js'
 import { initCodeLine } from './codeline.js'
 initMenu()
-hljs.highlightAll();
+hljs.highlightAll()
 initClipboard(document)
 initCodeLine()

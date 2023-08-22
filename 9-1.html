@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>Chapter 9 實務操作的考量</h2>
-      <h2>9-1 變數宣告</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>Chapter 9 實務操作的考量</h2>
+        <h2>9-1 變數宣告</h2>
+        <pre><code class="language-js">
 if (condition){
   // 在宣告敘述之前無法存取,`isReady`
   const isReady = true
@@ -39,7 +40,7 @@ if (condition){
 }
 // 無法存取 `isReady`，因為位於包含該繫結的區塊作用域之外
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function prettySize(input) {
   let value = input
   let unit = 'MB'
@@ -61,7 +62,7 @@ if (value &gt;= 1024) {
   unit = 'PB'
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function toLargestUnit(value, unit ='MB' ) {
   const units = ['MB','GB','TB' ]
   const i = units.indexOf(unit)
@@ -72,13 +73,13 @@ function toLargestUnit(value, unit ='MB' ) {
   return { value, unit }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function prettySize(input) {
   const { value, unit } = toLargestUnit(input)
   return `${ value.toFixed(1) } ${ unit }`
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function makeCollection(size){
   let result = []
   if(size &gt; 0) {
@@ -97,7 +98,7 @@ makeCollection(1) // [1, 2]
 makeCollection(2) // [1, 2, 3, 4]
 makeCollection(3) // [1, 2, 3, 4, 5, 6]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function makeCollection(size){
   const result = []
   if(size &gt; 0){
@@ -116,7 +117,7 @@ makeCollection(1) // [1, 2]
 makeCollection(2) // [1, 2, 3, 4]
 makeCollection(3) // [1, 2, 3, 4, 5, 6]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 let completionText = 'in progress'
 if (completionPercent &gt;= 85) {
   completionText= 'almost done'
@@ -124,7 +125,7 @@ if (completionPercent &gt;= 85) {
   completionText= 'reticulating splines'
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const completionText = getCompletionText(completionPercent)
 // ...
 function getCompletionText (progress) {
@@ -137,11 +138,9 @@ function getCompletionText (progress) {
   return 'in progress'
 }
         </code></pre>
-      <div class="border-block"></div>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+        <div class="border-block"></div>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>
