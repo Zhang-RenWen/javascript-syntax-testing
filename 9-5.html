@@ -1,36 +1,37 @@
-<!DOCTyPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="x-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="x-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>9-5 探究各類函式宣告方法</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>9-5 探究各類函式宣告方法</h2>
+        <pre><code class="language-js">
 printSum(2, 3)
 function printSum(x, y) {
   return print(sum(x, y))
@@ -42,7 +43,7 @@ function print(message) {
   console.log( `printing: ${ message }` )
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 var printSum = function (x, y) {
   return print (sum(x, y))
 }
@@ -55,7 +56,7 @@ var print = function (message) {
 }
 printSum(2, 3)
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 var sum = function (x, y) {
   return x + y
 }
@@ -67,7 +68,7 @@ var printSum = function (x, y) {
 }
 printSum(2, 3)
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 var sumMany = function sum(accumulator = 0, ...values) {
   if (values. length === 0) {
     return accumulator
@@ -80,7 +81,7 @@ console.log(sumMany(0, 1, 2, 3, 4))
 console.log(sum())
 // ReferenceError: sum 未被定義
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const sum = (x,y)=&gt;{ return x + y }
 const multiply = (x,y)=&gt; x*y
 const double = x &gt; x * 2
@@ -88,16 +89,16 @@ const print = x = &gt; {
   console.log(x) 
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const makeArray = (first, second) =&gt; [ first, second]
 const makeSlice = (discarded, ...items) =&gt; items
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const getPerson = name =&gt; ({
   name:'Nico'
 })
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 wait(5000).then(function(){
   console.log('waited 5 seconds!')
 })
@@ -110,7 +111,7 @@ function wait(delay) {
   })
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 wait(5000).then(() =&gt; console.log('waited 5 seconds!'))
 function wait (delay) {
   return new Promise(resolve=&gt;
@@ -118,7 +119,7 @@ function wait (delay) {
   )
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const pistol ={
   caliber: 50,
   trigger(){
@@ -130,7 +131,7 @@ const pistol ={
 }
 pistol.trigger()
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const pistol= {
   caliber: 50,
   trigger() {
@@ -141,11 +142,8 @@ const pistol= {
 }
 pistol.trigger()
         </code></pre>
-
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

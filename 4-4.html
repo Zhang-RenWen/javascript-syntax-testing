@@ -1,39 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>4-4 非同步函式</h2>
-      <h3 id="4-4-1">
-        4-4-1 非同步函式的意義
-      </h3>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>4-4 非同步函式</h2>
+        <h3 id="4-4-1">4-4-1 非同步函式的意義</h3>
+        <pre><code class="language-js">
 function getRandomArticle(){
   return fetch('/articles/random', {
     headers: new Headers({
@@ -43,14 +42,14 @@ function getRandomArticle(){
   .then(res =&gt; res.json())
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 getRandomArticle()
 .then(model =&gt; renderView(model))
 .then(html =&gt; setPageContents(html))
 .then(() =&gt; console.log('Successfully changed page!'))
 .catch(err =&gt; console.error (err))
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 getRandomArticle( (err, model) =&gt;{
   if (err) {
     return console.error(err)
@@ -68,7 +67,7 @@ getRandomArticle( (err, model) =&gt;{
   })
 })
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async.waterfall([
   getRandomArticle,
   renderView,
@@ -81,7 +80,7 @@ async.waterfall([
   }
 )
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function getRandomArticle(gen) {
   const g = gen()
   fetch('/articles/random', {
@@ -94,16 +93,14 @@ function getRandomArticle(gen) {
   .catch(err =&gt; g.throw(err))
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 getRandomArticle( function* printRandomArticle() {
   const json = yield
   // render view
 })
         </code></pre>
-      <h3 id="4-4-2">
-        4-4-2 使用 async/await
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-4-2">4-4-2 使用 async/await</h3>
+        <pre><code class="language-js">
 async function read() {
   try {
     const model = await getRandomArticle()
@@ -117,7 +114,7 @@ async function read() {
 
 read()
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function read() {
   const model = await getRandomArticle()
   const html = await renderView(model)
@@ -129,23 +126,23 @@ read()
 .then(message =&gt; console.log (message))
 .catch(err =&gt; console.error (err))
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function read() {
   const model = await getRandomArticle()
   const html = await renderView(model)
   return html
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 read().then(html =&gt; console.log(html))
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function write() {
   const html = await read()
   console.log(html)
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function concurrent (){
   const p1 = new Promise(resolve=&gt;
   setTimeout(resolve, 500,'fast')
@@ -161,7 +158,7 @@ async function concurrent (){
   const r3 = await p3
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function concurrent (){
   const p1 = new Promise(resolve=&gt;
     setTimeout(resolve, 500,'fast')
@@ -177,7 +174,7 @@ async function concurrent (){
   //'fast','faster','fastest'
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function race (){
   const p1 = new Promise(resolve=&gt;
     setTimeout(resolve, 500,'fast')
@@ -193,30 +190,26 @@ async function race (){
   // 'fastest'
 }
               </code></pre>
-      <h3 id="4-4-4">
-        4-4-4 錯誤處理
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-4-4">4-4-4 錯誤處理</h3>
+        <pre><code class="language-js">
         read()
         .then(html=&gt; console.log(html))
         .catch(err =&gt; console.error (err))
       </code></pre>
-      <h3 id="4-4-5">
-        4-4-5 了解非同步函式的內部運作
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-4-5">4-4-5 了解非同步函式的內部運作</h3>
+        <pre><code class="language-js">
 async function example(a, b, c) {
  // example 函式內容
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function example(a, b, c) {
   return spawn (function* () {
     // example 函式內容
   })
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function spawn (generator) {
   // 將所有項目包裹於一個 Promise 物件中
   return new Promise((resolve, reject) =&gt; {
@@ -251,7 +244,7 @@ function spawn (generator) {
   })
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function exercise() {
   const r1 = await new Promise(resolve =&gt; setTimeout(resolve, 500, 'slowest'))
   const r2 = await new Promise(resolve =&gt; setTimeout(resolve, 200, 'slow'))
@@ -261,7 +254,7 @@ async function exercise() {
 exercise().then(result =&gt; console.log(result))
 // ['slowest', 'slow']
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function exercise() {
   return spawn(function* () {
    const r1 = yield new Promise(resolve =&gt; setTimeout(resolve, 500,'slowest'))
@@ -272,7 +265,7 @@ function exercise() {
 exercise().then(result=&gt; console.log(result))
 // ['slowest ','s1ow']
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function spawn (generator) {
   // 將所有項目包裹於一個 Promise 物件中
   return new Promise((resolve, reject) =&gt;{
@@ -283,7 +276,7 @@ function spawn (generator) {
   })
 }        
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function step(nextFn) {
   const next = runNext(nextFx)
   // -
@@ -298,10 +291,10 @@ function runNext (nextFn) {
   }
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 yield new Promise(resolve =&gt; setTimeout(resolve, 500,'slowest'))
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function step (nextFn){
   const next = runNext (nextFn)
   if (next.done) {
@@ -318,14 +311,14 @@ function step (nextFn){
   )
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // 回到產生器函式，我們將 'slowest' 指派給 r1。
 const r1 = yield new Promise(resolve =&gt;setTimeout(resolve, 500,'slowest'))
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 yield new Promise(resolve=&gt; setTimeout(resolve, 200, 'slow'))
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // 接下來會執行到產生器函式的回傳敘述。再一次，產生器函式的運行會終止，並回傅給迭代。
 return [r1, r2]
 // 此處， next 方法會回傳下方的物件。
@@ -343,7 +336,7 @@ if (next. done){
 exercise().then(result =&gt; console.log (result))
 // ['slowest,'slow']
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function getUserProfiles(){
   const users = await findAllUsers()
   const models = await Promise.all(users.map(toUserModel))
@@ -351,7 +344,7 @@ async function getUserProfiles(){
   return profiles
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function getUserProfiles(){
   const userPromise = findAllUsers()
   const modelPromise = userPromise.then(users =&gt;
@@ -363,10 +356,8 @@ function getUserProfiles(){
   return profilePromise
 }
       </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

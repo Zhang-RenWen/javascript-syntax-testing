@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="./public/favicon.ico" />
-        <meta http-equiv="cache-control" content="no-cache">
-        <title>JavaScript-syntax-testing</title>
-        <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-        <link rel="stylesheet" href="./hightlight/default.min.css" />
-        <link rel="stylesheet" href="./css/main.css" />
-        <link rel="stylesheet" href="./css/copybutton.css" />
-        <link rel="stylesheet" href="./css/hightlight.css" />
-        <script src="./hightlight/hightlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-        <header>
-                <nav>
-                        <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-                </nav>
-        </header>
-        <main>
-                <aside>
-                        <nav></nav>
-                </aside>
-                <article>
-                        <h2>9-3 簡化語法與物件解構賦值</h2>
-                        <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>9-3 簡化語法與物件解構賦值</h2>
+        <pre><code class="language-js">
 const unitPrice = 1.25
 const tomato = {
   name: 'Tomato',
@@ -38,7 +39,7 @@ const tomato = {
   unitPrice
 }
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 function getGroceryModel({ name, unitPrice }, units) {
   return {
      name,
@@ -58,10 +59,10 @@ getGroceryModel(tomato, 4)
 }
 */
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const { totalPrice } = getGroceryModel(tomato, 4)
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 function getGroceryModel({ name, unitPrice }, units) {
   return {
     name,
@@ -71,45 +72,42 @@ function getGroceryModel({ name, unitPrice }, units) {
   }
 }
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const { name, totalPrice } = getGroceryModel(tomato, 4)
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const model = getGroceryModel(tomato, 4)
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const summary = `${ model.units }x ${ model.name }
 ($${ model.unitPrice }) = $${ model.totalPrice }`
 // '4x Tomato ($1.25) = $5'
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const { name, units, unitPrice, totalPrice } = model
 const summary = `${ units }x ${ name } ($${ unitPrice })= $${ totalPrice }`
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const { name } = model
 const summary = `This is a ${ name } summary`
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const summary =  `This is a ${ model.name } summary`
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const summary = `This is a summary for ${ model.units }x ${ model.name }`
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const { name, units } = model
 const = summary = `This is a summary for ${ units }x ${ name }`
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 const { name } = model
 const summary = `This is a ${ name } summary`
 const description =  `${ name } is a grocery item`
         </code></pre>
-
-                </article>
-        </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

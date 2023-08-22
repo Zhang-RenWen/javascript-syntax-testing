@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>3-1 類別</h2>
-      <h3>3-1-1 類別基本元素</h3>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>3-1 類別</h2>
+        <h3>3-1-1 類別基本元素</h3>
+        <pre><code class="language-js">
   function Fruit(name, calories) {
   this.name = name
   this.calories = calories
@@ -52,7 +53,7 @@
   this.pieces--
         }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
   const person = { satiety: 0 }  
   const apple = new Fruit('apple', 140)
   apple.chop()
@@ -68,7 +69,7 @@
   console.log(apple.calories)
   // 35
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Fruit {
     constructor(name, calories) {
     this.name = name
@@ -91,18 +92,18 @@ class Fruit {
     }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 new Person()// ReferenceError:Person 未被定義
 class Person {}
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const Person = class {
     constructor(name) {
         this.name = name
     }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const createPersonClass = name =&gt; class extends Person { 
     constructor() {
     super(name)
@@ -113,12 +114,12 @@ const jake = new JakePerson()
 console.log(jake) // Person {name: 'Jake'}
         </code></pre>
 
-      <h3>3-1-2 類別中的特性與方法</h3>
-      <pre><code class="language-js">
+        <h3>3-1-2 類別中的特性與方法</h3>
+        <pre><code class="language-js">
 class Fruit {}
 function Fruit() {}
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Log {
   constructor(...args) {
     console.log(args)
@@ -127,7 +128,7 @@ class Log {
 
 new Log('a', 'b', 'c') // ['a' 'b' 'c']
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Counter {
   constructor(start) {
     this.count = start
@@ -137,7 +138,7 @@ class Counter {
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
     const counter = new Counter(2)
     console.log(counter.next)
     // 2
@@ -146,7 +147,7 @@ class Counter {
     console.log(counter.next)
     // 4
    </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class LocalStorage {
   constructor(key) {
     this.key = key
@@ -161,12 +162,12 @@ class LocalStorage {
   }
 }
   </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const ls = new LocalStorage('groceries')
 ls.data = ['apples', 'bananas', 'grapes']
 console.log(ls.data)  // ['apples', 'bananas', 'grapes']
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Person {
   constructor() {
     this.satiety = 0
@@ -184,7 +185,7 @@ const person = new Person()
 person.eat(plum)
 console.log(person.satiety) // 40
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function Person() {
   this.hunger = 100
 }
@@ -197,7 +198,7 @@ Person.isPerson = function (person) {
   return person instanceof Person
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class MathHelper {
   static sum(...numbers) {
     return numbers.reduce((a, b) =&gt; a + b)
@@ -205,8 +206,8 @@ class MathHelper {
 }
 console.log(MathHelper.sum(1,2,3,4,5)) // 15
         </code></pre>
-      <h3>3-1-3 延伸 JavaScript 類別</h3>
-      <pre><code class="language-js">
+        <h3>3-1-3 延伸 JavaScript 類別</h3>
+        <pre><code class="language-js">
 function Banana() {
   Fruit.call(this, 'banana', 105)
 }
@@ -215,7 +216,7 @@ Banana.prototype.slice = function (){
   this.pieces = 12
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const util = require('util')
 function Banana() {
   Fruit.call(this, 'banana', 105)
@@ -225,7 +226,7 @@ Banana.prototype.slice = function () {
   this.pieces = 12
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const person =  {satiety: 0}
 const banana = new Banana()
 banana.slice()
@@ -234,7 +235,7 @@ console.log(person.satiety) // 8.75
 console.log(banana.pieces) // 11
 console.log(banana.calories) // 96.25
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Banana extends Fruit {
   constructor() {
     super('banana', 105)
@@ -245,7 +246,7 @@ class Banana extends Fruit {
   }
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const createJuicyFruit = (...params) =&gt;
 class JuicyFruit extends Fruit {
   constructor() {
@@ -264,10 +265,8 @@ class JuicyFruit extends Fruit {
 }
 class Plum extends createJuicyFruit('plum', 30) {}
       </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>
