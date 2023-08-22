@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>Chapter 5 運用 ECMAScript 集合</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>Chapter 5 運用 ECMAScript 集合</h2>
+        <pre><code class="language-js">
 const registry = {}
 function set (name, meta) {
   registry[name] = meta
@@ -43,7 +44,7 @@ set ('dragula', { description: 'Drag and drop' })
 set ('woofmark' { description: 'Markdown and WYSIWYG editor '})
         </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const registry = {}
 function set (name, meta) {
   registry['pkg:' + name ] = meta
@@ -52,7 +53,7 @@ function get (name) {
   return registry[ 'pkg:' + name ]
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const registry = Object.create(null)
 function set (name, meta) {
   registry['pkg:' + name ] = meta
@@ -61,13 +62,13 @@ function get (name) {
   return registry[ 'pkg:' + name ]
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const registry = Object.create(null)
 function list() {
   return Object.keys(registry).map(key =&gt; [key, registry[key]])
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const registry = Object.create(null)
   registry[Symbol.iterator]= ()=&gt;{
   const keys = Object.keys(registry)
@@ -82,8 +83,8 @@ const registry = Object.create(null)
 }
 console.log([...registry])
       </code></pre>
-      <h3 id="5-1-1">5-1-1 初探 ES6 的映射</h3>
-      <pre><code class="language-js">
+        <h3 id="5-1-1">5-1-1 初探 ES6 的映射</h3>
+        <pre><code class="language-js">
 const map = new Map()
 map.set('contra', { description:'Asynchronous flow control' })
 map.set('dragula', { description:'Drag and drop'})
@@ -93,12 +94,12 @@ console.log([...map])
 // 1 : (2) ['dragula', {description:…}]
 // 2 : (2) ['woofmark', {description:…}]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 map.has('contra') //  true
 map.has('jquery') // false
         </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map([[1, 'the number one']])
 map.has(1)
 // true
@@ -106,16 +107,16 @@ map.has('1')
 // false
         </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 map.get('contra')
 // { description:'Asynchronous flow control' }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 map.delete('contra' )
 map.get('contra' )
 // undefined
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map([[1, 2], [3, 4], [5, 6]])
 map.has(1)
 // true
@@ -125,7 +126,7 @@ map.has(1)
 [...map]
 // []
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map([[1, 2], [3, 4], [5, 6]])
 map.size
 // 3
@@ -136,13 +137,13 @@ map.clear()
 map.size
 // 0
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map()
 map.set (new Date(), function today(){})
 map.set(() =&gt;'key', { key:'door'  })
 map.set(Symbol('items'), [1, 2])
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map ()
 const key = Symbol('items' )
 map.set(key, [1, 2])
@@ -151,7 +152,7 @@ map.get(Symbol('items')) // 與'key'的参考不同
 map.get(key)
 // [1, 2]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const items =[
   [new Date(), function today() {}],
   [() =&gt;'key', { key:'door'}],
@@ -162,13 +163,13 @@ for (const [key, value] of items) {
   map.set(key, value)
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const copy = new Map()
 for (const [key, value] of map) {
   copy.set(key, value)
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const items =[
   [new Date(), function today(){}],
   [() =&gt;'key', { key:'door'}],
@@ -176,10 +177,10 @@ const items =[
 ]
 const map = new Map(items)
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const copy = new Map(map)
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map()
 map.set(1,'one')
 map.set(2,'two')
@@ -187,7 +188,7 @@ map.set(3,'three')
 console.log([...map])
 // [[1,'one'], [2, 'two'], [3, 'three' ]]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map()
 map.set(1,'one')
 map.set(2,'two')
@@ -200,7 +201,7 @@ for (const [key, value] of map) {
 // '3: three'
 
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map()
 map.set('a', 1)
 map.set('a', 2)
@@ -208,7 +209,7 @@ map.set('a', 3)
 console.log([...map])
 // [['a', 3]]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(NaN === NaN)
 //false
 console.log(-0 === +0)
@@ -221,11 +222,11 @@ map.set(+0,'four')
 console.log([...map])
 // [[NaN,'two'], [0,'four' ]]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(map[Symbol.iterator] === map.entries)
 // true
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map([[1, 2], [3, 4], [5, 6]])
 console.log([...map.keys()])
 // [1, 3, 5]
@@ -234,7 +235,7 @@ console.log([...map.values()])
 console.log([...map.entries()])
 // [[1, 2], [3, 4], [5, 6]]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map([
   [NaN, 1],
   [Symbol(), 2],
@@ -247,8 +248,8 @@ map.forEach((value, key) =&gt; console.log(key, value))
 // 'key' 'value'
 // { name:, 'Kent' }  'is a person'
         </code></pre>
-      <h3 id="5-1-2">5-1-2 Hash-map 雜湊表和 DOM射</h3>
-      <pre><code class="language-js">
+        <h3 id="5-1-2">5-1-2 Hash-map 雜湊表和 DOM射</h3>
+        <pre><code class="language-js">
 const map = []
 function customThing(el){
   const mapped = findByElement(el)
@@ -282,7 +283,7 @@ function destroy (entry) {
 }
         
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map()
 function customThing(el) {
   const mapped= findByElement(el)
@@ -307,7 +308,7 @@ function destroy(el) {
   map.delete(el)
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = new Map()
 function customThing(el){
   const mapped = map.get(el)
@@ -322,10 +323,8 @@ function customThing(el){
   return api
 }
         </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

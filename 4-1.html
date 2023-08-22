@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./public/favicon.ico" />
-    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache" />
     <title>JavaScript-syntax-testing</title>
     <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
     <link rel="stylesheet" href="./hightlight/default.min.css" />
@@ -15,32 +14,35 @@
     <link rel="stylesheet" href="./css/hightlight.css" />
     <script src="./hightlight/hightlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
     <header>
-        <nav>
-            <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-        </nav>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
     </header>
     <main>
-        <aside>
-            <nav></nav>
-        </aside>
-        <article>
-            <h2>4-1 Promise</h2>
-            <h3 id="4-1-1">4-1-1 開始學習 Promise</h3>
-            <pre><code class="language-js">
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>4-1 Promise</h2>
+        <h3 id="4-1-1">4-1-1 開始學習 Promise</h3>
+        <pre><code class="language-js">
 fetch('/items ')
  </code></pre>
 
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 fetch('/items').then(response =&gt; {
   // 執行某些動作
 })
  </code></pre>
 
-            <pre><code class="language-js">
+        <pre><code class="language-js">
  const p = fetch('/items')
  p.then(res =&gt; {
   // 處理回應
@@ -51,7 +53,7 @@ fetch('/items').then(response =&gt; {
  })
  </code></pre>
 
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p = fetch('/items')
 p.then(
 res =&gt;{
@@ -62,7 +64,7 @@ err =&gt; {
 })
  </code></pre>
 
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p = fetch('/items')
 p.then(res =&gt; {
   // 處理回應
@@ -72,9 +74,9 @@ p.then(null, err =&gt; {
   // 處理錯誤
 })
  </code></pre>
-            <div class="border-block">
-                <h3>以Promise 作為回呼函式與事件的替代方案</h3>
-                <pre><code class="language-js">
+        <div class="border-block">
+          <h3>以Promise 作為回呼函式與事件的替代方案</h3>
+          <pre><code class="language-js">
 fetch('/items', (err, res) =&gt; {
 if (err) {
     // 處理錯誤
@@ -84,7 +86,7 @@ if (err) {
 })
 </code></pre>
 
-                <pre><code class="language-js">
+          <pre><code class="language-js">
 fetch('/items ')
 .on('error', err =&gt; {
    // 處理錯誤
@@ -93,9 +95,8 @@ fetch('/items ')
   // 處理回應
 })
 </code></pre>
-
-            </div>
-            <pre><code class="language-js">
+        </div>
+        <pre><code class="language-js">
 new Promise(function (resolve, reject) {
     setTimeout(function () {
         if (Math.random() > 0.5) {
@@ -107,13 +108,13 @@ new Promise(function (resolve, reject) {
 })
 </code></pre>
 
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise
 .resolve({result:123})
 .then(data =&gt;console.log(data.result))
 //  123
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise
 .resolve(2)
 .then(x=&gt;x*7)
@@ -122,7 +123,7 @@ Promise
 // 11
             </code></pre>
 
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise
 .resolve(2)
 .then(x =&gt; new Promise(function (resolve) {
@@ -131,55 +132,55 @@ Promise
 .then(x =console.log(x))
 // 2000
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p = fetch('/items')
 .then(res =&gt; { throw new Error('unexpectedly')})
 .catch(err =&gt; console.error(err))
             </code></pre>
-            <h3 id="4-1-2">4-1-2 Promise 物件的再開始和連結</h3>
-            <pre><code class="language-js">
+        <h3 id="4-1-2">4-1-2 Promise 物件的再開始和連結</h3>
+        <pre><code class="language-js">
 new Promise((resolve, reject) =&gt; reject(new Error('oops'))).catch(err=&gt; console.error(err))
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 new Promise((resolve, reject) =&gt; {
     throw new Error('oops')
 }).catch(err =&gt;console.error(err))
              </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise.resolve(2).then(x =&gt; {throw new Error('failed') })
 .catch(err =&gt;console.error(err))           
            </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = Promise.resolve(2) 
 const p2 = p1.then(x =&gt; { throw newError('failed')})
 const p3 = p2.catch(err =&gt; console.error(err))               
              </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = Promise.resolve(2)
 const p2 = p1.then(x =&gt; { throw new Error('failed')})
 const p3 = p2.then(x=&gt;x *2)
 const p4 = p3.catch(err =&gt; console.error(err))
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = Promise.resolve(2)
 const p2 = p1.then(x =&gt; { throw new Error('failed') })
 const p3 = p2.catch(err =&gt; console.error(err))
 const p4 = p3.then(() =&gt; console.log('crisis averted'))
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = Promise.resolve(2)
 const p2 = p1.then(x =&gt; { throw new Error('failed')})
 const p3 = p2.catch(err =&gt; { throw new Error('oops') })
 const p4 = p3.catch(err =&gt; console.error(err))
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 fetch('/items')
 .then(res =&gt; res.a.prop.that.does.not.exist)
 .catch(err =&gt;console.error(err.message))
 .catch(err =&gt; console.error(err.message))
 // 'cannot read property "prop" of undefined'
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p = fetch('/items').then(res =&gt;
     res.a.prop.that.does.not.exist
 )
@@ -188,22 +189,22 @@ p.catch(err =&gt;console.error(err.message))
 //  'Cannot read property "prop" of undefined"
 //  'Cannot read property "prop" of undefined"
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = fetch('/items')
 const p2 = p1.then(res =&gt; res.a.prop.that.does.not.exist)
 const p3 = p2.catch(err =&gt; {})
 const p4 = p3.catch(err=&gt;console.error(err.message))
             </code></pre>
-            <h3 id="4-1-3">4-1-3 從頭開始建立一個 Promise</h3>
-            <pre><code class="language-js">
+        <h3 id="4-1-3">4-1-3 從頭開始建立一個 Promise</h3>
+        <pre><code class="language-js">
 new Promise(resolve =&gt; resolve('result'))
 new Promise((resolve, reject) =&gt; reject(new Error('reason')))
 
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 new Promise(resolve =&gt; setTimeout(resolve, 2000))
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 function resolveUnderThreeSeconds(delay) {
     return new Promise(function (resolve, reject) {
         setTimeout(resolve,delay)
@@ -213,48 +214,48 @@ function resolveUnderThreeSeconds(delay) {
 resolveUnderThreeSeconds(2000) // 2秒後變為已實現狀態
 resolveUnderThreeSeconds(7000) // 3秒後變為已拒絕狀態
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 new Promise(resolve =&gt; resolve(fetch('/items')))
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 new Promise(resolve =&gt; resolve(12))
     </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise.resolve(12)
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise.resolve({ then:resolve=&gt; resolve(12)}).then(x=&gt; console.log(x)) // 12
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise.reject(reason)
 etch('/items').then(() =&gt;
     Promise.reject(new Error('arbitrarily'))
 )
 fetch('/items').then(()=&gt; { throw new Error('arbitrarily')})
 </code></pre>
-            <h3 id="4-1-4">4-1-4 Promise 狀態和結果</h3>
-            <pre><code class="language-js">
+        <h3 id="4-1-4">4-1-4 Promise 狀態和結果</h3>
+        <pre><code class="language-js">
 fetch('/items ')
 .then(() =&gt; fetch('/item/first'))
 .then(() =&gt; console.log('done'))
 </code></pre>
 
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 fetch('/items')
 .then(res =&gt; res.json())
 .then(items =&gt; fetch(`/item/${items[0].slug }`))
 .then(res =&gt; res.json())
 .then(item =&gt; console.log(item))
     </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise
 .resolve([1,2,3])
 .then(values =&gt; values.map(value =&gt; value * 2))
 .then(values =&gt; console.log(values))
 // [2, 4, 6]
     </code></pre>
-            <h3 id="4-1-5">4-1-5 Promise#finally提案</h3>
-            <pre><code class="language-js">
+        <h3 id="4-1-5">4-1-5 Promise#finally提案</h3>
+        <pre><code class="language-js">
 function finally(p, fn) {
     return p.then(
          fn,
@@ -262,7 +263,7 @@ function finally(p, fn) {
      )
 }
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 function finally(p, fn) {
     return p.then(
       () =&gt; fn(),
@@ -270,19 +271,19 @@ function finally(p, fn) {
     )
 }
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = Promise. resolve('value')
 const p2 = p1.finally(() =&gt; {})
 const p3 = p2.then(data =&gt; console.log(data))
 //  'value'
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = Promise. resolve('value')
 const p2 = p1.then(()=&gt; {},()=&gt;{})
 const p3 = p2.then(data =&gt; console.log(data))
 //  undefined
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
     function finally(p, fn) {
         return p.then(
           result =&gt; resolve(fn()).then(()=&gt;result),
@@ -291,14 +292,14 @@ const p3 = p2.then(data =&gt; console.log(data))
        }
        
 </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
     const p1 = Promise.resolve('value') 
     const p2 = p1.finally(() =&gt; Promise.reject('oops'))
     const p3 = p2.catch(err =&gt; console.log(err))
     //  'oops'
 </code></pre>
-            <h3 id="4-1-6">4-1-6 善用 Promise.all 和 Promise.race</h3>
-            <pre><code class="language-js">
+        <h3 id="4-1-6">4-1-6 善用 Promise.all 和 Promise.race</h3>
+        <pre><code class="language-js">
 fetch('/products/chair')
 .then(r =&gt; r.json())
 .then(p=&gt; console.log(p))
@@ -307,7 +308,7 @@ fetch('/products/table')
 .then(r =&gt; r.json())
 .then(p=&gt; console.log(p))
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise
 .all([
 fetch('/products/chair'),
@@ -315,7 +316,7 @@ fetch('/products/table')
 ])
 .then(products =&gt;console.log(products[0], products[1]))
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise
 .all([
   fetch('/products/chair'),
@@ -323,7 +324,7 @@ Promise
 ])
 .then(([chair, table]) =&gt; console.log(chair, table))
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 const p1 = Promise.reject('failed')
 const p2 = fetch('/products/chair')
 const p3 = fetch('/products/table')
@@ -332,7 +333,7 @@ const p = Promise
 .catch(err=&gt;console.log(err))
 //  'failed'
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 Promise
 .race([
   new Promise(resolve =&gt; setTimeout(() =&gt; resolve(1),1000)),
@@ -341,7 +342,7 @@ Promise
 .then(result=&gt; console.log(result))
 // 1
             </code></pre>
-            <pre><code class="language-js">
+        <pre><code class="language-js">
 function timeout(delay) {
     return new Promise(function (resolve, reject) {
         setTimeout(() =&gt; reject('timeout'), delay)
@@ -355,10 +356,8 @@ Promise
 .then(res =&gt; console.log(res))
 .catch(err =&gt; console.log(err))
             </code></pre>
-        </article>
+      </article>
     </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

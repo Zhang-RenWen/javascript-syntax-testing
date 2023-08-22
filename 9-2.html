@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>9-2 字串樣板</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>9-2 字串樣板</h2>
+        <pre><code class="language-js">
 'Hello,'+ name + '!' // ES6 之前
 `He11o, ${ name }!` // ES6 之後
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 '&lt;div&gt;'`
   '&lt;p&gt;'`
     '&lt;span&gt;Hello&lt;/span&gt;'`
@@ -42,7 +44,7 @@
   '&lt;/p&gt;'`
 '&lt;/div&gt;'
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 `&lt;div&gt;
   &lt;p&gt;
     &lt;span&gt;Hello&lt;/span&gt;
@@ -51,34 +53,34 @@
   &lt;/p&gt;
 &lt;/div&gt;`
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 'Alfred\'s cat suit is "slick".'
 "Alfred's cat suit is \"slick\"."
 `Alfred's cat suit is "slick".`
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const suitKind = `cat`
 console.log( `Alfred's ${ suitKind } suit is "slick".`)
 // Alfred's cat suit is "slick".
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const suitKind = 'cat'
 console.log('Alfred\'s ' + suitKind + ' suit is "slick".')
 // Alfred's cat suit is "slick".
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 JSON.parse('{ "payload":`message`}')
 // SyntaxError
 JSON.stringify({ payload: `message`})
 // '{"payload": "message"}'
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const alfred = {`suit kind`: `cat`}
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const alfred ={ [`suit kind`]:`cat` }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const brand = `Porsche`
 const car = {
   `wheels`:4,
@@ -86,15 +88,15 @@ const car = {
   `is ${ brand } `: `you wish`
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 import { SayHel1o } from `./World`
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 'use strict' //啟用嚴格模式
 "use strict" // 啟用嚴格模式
 `use strict` // 無任何動作發生
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 {
   "env":{
     "es6": true
@@ -105,20 +107,18 @@ import { SayHel1o } from `./World`
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 {
   "scripts": {
     "lint": "eslint --fix ."
   }
 }
         </code></pre>
-      <pre><code class="language-bash hljs">
+        <pre><code class="language-bash hljs">
 » npm run lint
 </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

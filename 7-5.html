@@ -1,89 +1,91 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" href="./public/favicon.ico" />
-      <meta http-equiv="cache-control" content="no-cache">
-      <title>JavaScript-syntax-testing</title>
-      <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-      <link rel="stylesheet" href="./hightlight/default.min.css" />
-      <link rel="stylesheet" href="./css/main.css" />
-      <link rel="stylesheet" href="./css/copybutton.css" />
-      <link rel="stylesheet" href="./css/hightlight.css" />
-      <script src="./hightlight/hightlight.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-</head>
-
-<body>
-      <header>
-            <nav>
-                  <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-            </nav>
-      </header>
-      <main>
-            <aside>
-                  <nav></nav>
-            </aside>
-            <article>
-                  <h2>7-5 陣列</h2>
-                  <h3 id="7-5-1">7-5-1 Array.from</h3>
-                  <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>7-5 陣列</h2>
+        <h3 id="7-5-1">7-5-1 Array.from</h3>
+        <pre><code class="language-js">
 function cast(){
   return Array.prototype.slice.call(arguments)
 }
 cast('a','b')
 //['a', 'b']
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function cast(){
   return [...arguments]
 }
 cast('a','b')
 // ['a', 'b']
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function cast(...params){
   return params
 }
 cast('a','b')
 // ['a','b']
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 [...document.querySelectorAll('div')]
 // [&lt;div&gt;, &lt;div&gt;, &lt;div&gt;, ...]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 [...$('div')]
 // [&lt;div&gt;, &lt;div&gt;, &lt;div&gt;, ...]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Array.from($('div'))
 // [&lt;div&gt;, &lt;div&gt;, &lt;div&gt;, ...]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 [].slice.call(document.querySelectorAll('div'), 1)
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Array.from(document.querySelectorAll('div')).slice(1)
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function typesOf(){
   return Array.from(arguments, value =&gt; typeof value)
 }
 typesOf(null, [], NaN)
 // ['object','object','number' ]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function typesOf(...all){
   return all.map(value =&gt; typeof value)
 }
 typesOf(null, [], NaN)
 //['object','object','number']
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 const apple = {
   type: 'fruit'
   name: 'Apple'
@@ -104,13 +106,13 @@ Array.from(groceries)
 Array.from(groceries, grocery=&gt; grocery.type)
 // ['fruit' , 'vegetable']
       </code></pre>
-                  <h3 id="7-5-2">7-5-2 Array.of</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-2">7-5-2 Array.of</h3>
+        <pre><code class="language-js">
 function arrayOf(...items){
   return items
 }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 new Array() // []
 new Array(undefined) // [undefined]
 new Array(1) // [undefined x 1]
@@ -120,7 +122,7 @@ new Array(1, 2) // [1, 2]
 new Array(-1, -2) // [-1, -2]
 new Array(-1) // RangeError：無效的陣列長度
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(Array.of()) // []
 console.log(Array.of(undefined)) // [undefined]
 console.log(Array.of(1)) // [1]
@@ -130,25 +132,25 @@ console.log(Array.of(1, 2)) // [1, 2]
 console.log(Array.of(-1,-2)) // [-1, -2]
 console.log(Array.of(-1)) // [-1]
       </code></pre>
-                  <h3 id="7-5-3">7-5-3 Array#copyWithin</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-3">7-5-3 Array#copyWithin</h3>
+        <pre><code class="language-js">
 Array.prototype.copyWithin(target, start = 0, end = this.length)
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 const items = [1, 2, 3, , , , , , , ,]
 // [1, 2, 3, undefined x 7]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 const items = [1, 2, 3, ,]
 items.copyWithin(6,1,3)
 // [1,2,3,undefined x 3, 2,3,undefined x 2]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 const items = [1, 2, 3, , , , , , , ,]
 const copy = items.slice(1,3)
 // [2, 3]
 </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 const items = [1, 2, 3,
 const copy = items.slice(1,3)
 // [2, 3]
@@ -156,7 +158,7 @@ items.splice(6, 3 - 1,...copy)
 console.log(items)
 // [1, 2, 3, undefined x 3, 2, 3, undefined x 2]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function copyWithin(items, target, start = 0, end = items.length){
   const copy = items.slice(start, end)
   const removed = end - start
@@ -164,31 +166,31 @@ function copyWithin(items, target, start = 0, end = items.length){
   return items
 }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 copyWithin([1, 2, 3, , , , , , , ,], 6, 1, 3)
 // [1, 2, 3, undefined x 3, 2, 3, undefined x 2]</code></pre>
-                  <h3 id="7-5-4">7-5-4 Array#fill</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-4">7-5-4 Array#fill</h3>
+        <pre><code class="language-js">
 ['a','b','c'].fill('x') // [ 'x','x','x']
 new Array(3).fill('x') // [ 'x','x','x']
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 ['a', 'b' ,'c', , ,].fill('x',2)
 // ['a', 'b', 'x', 'x', 'x']
 new Array(5).fill('x', 0, 1)
 // [ 'x', undefined x 4]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 new Array(3).fill({})
 // [{}, {}, {}]
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 const map = i =&gt; i*2
 new Array(3).fill(map)
 // [map, map, map]
       </code></pre>
-                  <h3 id="7-5-5">7-5-5 Array#find 和 Array#findIndex</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-5">7-5-5 Array#find 和 Array#findIndex</h3>
+        <pre><code class="language-js">
 ['a','b','c','d','e'].find(item =&gt; item === 'c')
 // 'c'
 ['a','b','c','d','e'].find((item,i)&gt; i === 0)
@@ -196,7 +198,7 @@ new Array(3).fill(map)
 ['a','b','c','d','e'].find(item=&gt; item === 'z')
 // undefined
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 ['a','b','c','d','e'].findIndex(item =&gt; item === 'c')
 // 2
 ['a','b','c','d','e'].findIndex((item,i)&gt; i === 0)
@@ -204,12 +206,12 @@ new Array(3).fill(map)
 ['a','b','c','d','e'].findIndex(item=&gt; item === 'z')
 // -1
       </code></pre>
-                  <h3 id="7-5-6">7-5-6 Array.keys</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-6">7-5-6 Array.keys</h3>
+        <pre><code class="language-js">
 ['a','b' ,'c' ,'d'].keys() 
 // ArrayIterator{}
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 for(const key of ['a' ,'b' ,'c' ,'d'].keys()){
   console.log(key)
   // 0
@@ -218,43 +220,43 @@ for(const key of ['a' ,'b' ,'c' ,'d'].keys()){
   // 3
 }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 Object.keys(new Array(4))
 // []
 [...new Array(4).keys()]
 // [0, 1, 2, 3]
       </code></pre>
-                  <h3 id="7-5-7">7-5-7 Array.values</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-7">7-5-7 Array.values</h3>
+        <pre><code class="language-js">
 ['a' ,'b' ,'c' ,'d'].values()
 // ArrayIterator{}
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 [...['a','b','c','d'].values()]
 // ['a','b','c','d']
       </code></pre>
-                  <h3 id="7-5-8">7-5-8 Array.entries</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-8">7-5-8 Array.entries</h3>
+        <pre><code class="language-js">
 ['a' ,'b' ,'c' ,'d'].entries()
 // ArrayIterator{}
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 [...['a' ,'b' ,'c' ,'d'].entries()]
 // [[0,'a'],[1,'b'],[2,'c'],[3,'d']]
       </code></pre>
-                  <h3 id="7-5-9">7-5-9 Array.prototype[Symbol.iterator]</h3>
-                  <pre><code class="language-js">
+        <h3 id="7-5-9">7-5-9 Array.prototype[Symbol.iterator]</h3>
+        <pre><code class="language-js">
 const list = ['a', 'b' ,'c' ,'d']
 list[Symbol.iterator] === list.values
 // true
 [...list[Symbol.iterator]()]
 //['a' ,'b' ,'c' ,'d']
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 [...['a', 'b' ,'c' ,'d'][Symbol.iterator]()]
 // ['a', 'b' ,'c' ,'d']
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 // 讓我們來逐步拆解。首先，有一個陣列如下
 ['a', 'b' ,'c' ,'d']
 
@@ -266,10 +268,8 @@ list[Symbol.iterator] === list.values
 [...['a' ,'b' ,'c' ,'d'][Symbol.iterator]()] // ['a', 'b' ,'c' ,'d']
 
       </code></pre>
-            </article>
-      </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

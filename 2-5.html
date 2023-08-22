@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>2-5 字串樣板</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>2-5 字串樣板</h2>
+        <pre><code class="language-js">
 // 宣告方式
 var text = `This is my first template literal`
 
 // 遇到單雙引號無需字元跳脫
 var text = `I'm "amazed" at these opportunities !`
 </code></pre>
-      <h3>2-5-1 字串插值</h3>
-      <pre><code class="language-js">
+        <h3>2-5-1 字串插值</h3>
+        <pre><code class="language-js">
 // 插入變數
 var name = 'Shannon'
 var text = `Hello, ${ name }`
@@ -52,8 +53,8 @@ console.log(text) // 'Hello, Shannon'
 `This template literal ${ `is ${ 'nested' }`}` // 'This template literal is nested'
 </code></pre>
 
-      <h3>2-5-2 多行文字字串樣板</h3>
-      <pre><code class="language-js">
+        <h3>2-5-2 多行文字字串樣板</h3>
+        <pre><code class="language-js">
 // before ES6
 var escaped = 
 'The first line \n\
@@ -70,10 +71,11 @@ he second line
 he third line
 `
 </code></pre>
-      <p>以往生成 html 需要用迴圈迭代的方式產生字串還要拼接起來，最終產生 html 內容。 ES6
-        中則可以使用表達式運算生成後的值直接帶入。代碼輸出後可能會出現非預期的換行字元，所以還需要實作工具函式將回傳文字結果去除換行字元。
-      </p>
-      <pre><code class="language-js">
+        <p>
+          以往生成 html 需要用迴圈迭代的方式產生字串還要拼接起來，最終產生 html 內容。 ES6
+          中則可以使用表達式運算生成後的值直接帶入。代碼輸出後可能會出現非預期的換行字元，所以還需要實作工具函式將回傳文字結果去除換行字元。
+        </p>
+        <pre><code class="language-js">
  function unindent(text){
   return text
   .split('\n')
@@ -83,19 +85,19 @@ he third line
 }
 </code></pre>
 
-      <h3>2-5-3 標籤樣板</h3>
-      <h4>忽略跳脫字元</h4>
+        <h3>2-5-3 標籤樣板</h3>
+        <h4>忽略跳脫字元</h4>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 var text = String.raw`"\n" is taken literally.
 It'll be escaped instead of interpreted.`
 console.log(text)
 // "\n" is taken literally.
 // It'll be escaped instead of interpreted.`
 </code></pre>
-      <h4>使用前綴函式解析樣板參數</h4>
+        <h4>使用前綴函式解析樣板參數</h4>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function tag(parts, ...values){
   // parts 為字串模板拆解後所有固定文字組成的的陣列
   // values 展開後每一個獨立參數為字串模板中的各個變數值
@@ -108,9 +110,9 @@ console.log(text)
 // Hello, Maurice. I am thrilled to meet you !
 
 </code></pre>
-      <h4>其他應用舉例(模板內變數值強轉大寫)</h4>
+        <h4>其他應用舉例(模板內變數值強轉大寫)</h4>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
  function upper(parts, ...values){
   return parts.reduce((all, part, index)=&gt; all + values[index - 1].toUpperCase() + part)
  }
@@ -120,9 +122,9 @@ console.log(text)
  console.log(text)
  // Hello, MAURICE. I am THRILLED to meet you !
 </code></pre>
-      <h4>處理輸入文字防止 XSS 攻擊</h4>
+        <h4>處理輸入文字防止 XSS 攻擊</h4>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function removeIframe(string){
   return string.replace(/(&lt;iframe.*?&gt;.*?&lt;\/iframe&gt;)/g,"")
 }
@@ -140,10 +142,8 @@ console.log(html, htmlClear)
 
 
 </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

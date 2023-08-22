@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="14-8">14-8 Nullish coalescing operator (??)</h2>
+        <p>
+          空值合並運算子（??）是一個邏輯運算子，當左側的操作數為 null 或者 undefined
+          時，返回其右側操作數，否則返回左側操作數。
+        </p>
+        <p>
+          與邏輯或運算子（||）不同，邏輯運算子會在左側操作數為 falsy
+          時返回右側操作數。也就是說，如果使用 ||
+          來為某些變數設置默認值，可能會遇到意料之外的行為。比如為假值(例如，'' 或 0 )
+          時。見下面的例子。
+        </p>
 
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2 id="14-8">14-8 Nullish coalescing operator (??)</h2>
-      <p>空值合並運算子（??）是一個邏輯運算子，當左側的操作數為 null 或者 undefined 時，返回其右側操作數，否則返回左側操作數。
-      <p>與邏輯或運算子（||）不同，邏輯運算子會在左側操作數為 falsy 時返回右側操作數。也就是說，如果使用 || 來為某些變數設置默認值，可能會遇到意料之外的行為。比如為假值(例如，'' 或 0 ) 時。見下面的例子。
-      </p>
-      </p>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const foo = null ?? 'default string';
 console.log(foo);
 // Expected output: "default string"
@@ -43,8 +51,11 @@ const baz = 0 ?? 42;
 console.log(baz);
 // Expected output: 0
       </code></pre>
-      <p>在這個例子中，我們使用 Nullish coalescing operator 為變數提供預設值，保證變數不為 null 或者 undefined。</p>
-      <pre><code class="language-js">
+        <p>
+          在這個例子中，我們使用 Nullish coalescing operator 為變數提供預設值，保證變數不為 null
+          或者 undefined。
+        </p>
+        <pre><code class="language-js">
 const nullValue = null;
 const emptyText = ""; // falsy
 const someNumber = 42;
@@ -57,17 +68,20 @@ console.log(valA); // "default for A"
 console.log(valB); // "" (as the empty string is not null or undefined)
 console.log(valC); // 42
       </code></pre>
-      <h3>為變數提供預設值</h3>
-      <p>以往，如果想為一個變數給定預設值，通常的做法是使用邏輯或運算子(||):</p>
-      <pre><code class="language-js">
+        <h3>為變數提供預設值</h3>
+        <p>以往，如果想為一個變數給定預設值，通常的做法是使用邏輯或運算子(||):</p>
+        <pre><code class="language-js">
 let foo;
 
 // foo is never assigned any value so it is still undefined
 const someDummyText = foo || "Hello!";
       </code></pre>
-      <P>然而，由於 || 是一個布林邏輯運算子，左側的操作數會被強制轉換成布林值用於求值。任何 falsy（0， ''， NaN， null， undefined）都不會被返回。這導致如果你使用0，''或 NaN
-        作為有效值，就會出現不可預期的結果。 </P>
-      <pre><code class="language-js">
+        <p>
+          然而，由於 || 是一個布林邏輯運算子，左側的操作數會被強制轉換成布林值用於求值。任何
+          falsy（0， ''， NaN， null， undefined）都不會被返回。這導致如果你使用0，''或 NaN
+          作為有效值，就會出現不可預期的結果。
+        </p>
+        <pre><code class="language-js">
 const count = 0;
 const text = "";
 
@@ -76,8 +90,11 @@ const message = text || "hi!";
 console.log(qty); // 42 and not 0
 console.log(message); // "hi!" and not ""
       </code></pre>
-      <p>空值合並運算符 Nullish coalescing operator 可以避免這種陷阱，其只在第一個操作數為 null 或 undefined 時（而不是其他falsy）返回第二個操作數：</p>
-      <pre><code class="language-js">
+        <p>
+          空值合並運算符 Nullish coalescing operator 可以避免這種陷阱，其只在第一個操作數為 null 或
+          undefined 時（而不是其他falsy）返回第二個操作數：
+        </p>
+        <pre><code class="language-js">
 const myText = ""; // An empty string (which is also a falsy value)
 
 const notFalsyText = myText || "Hello world";
@@ -86,9 +103,11 @@ console.log(notFalsyText); // Hello world
 const preservingFalsy = myText ?? "Hi neighborhood";
 console.log(preservingFalsy); // '' (as myText is neither undefined nor null)
       </code></pre>
-      <h3>短路</h3>
-      <p>與 OR 和 AND 邏輯運算符相似，當左表達式不為 null 或 undefined 時，不會對右表達式進行求值。</p>
-      <pre><code class="language-js">
+        <h3>短路</h3>
+        <p>
+          與 OR 和 AND 邏輯運算符相似，當左表達式不為 null 或 undefined 時，不會對右表達式進行求值。
+        </p>
+        <pre><code class="language-js">
 function A() {
   console.log("A was called");
   return undefined;
@@ -111,37 +130,56 @@ console.log(B() ?? C());
 // as B() returned false (and not null or undefined), the right
 // hand side expression was not evaluated
       </code></pre>
-      <p>搭配 <code>||</code> 或者 <code>&&</code> 一起使用會出現異常。</p>
-      <pre><code class="language-js error-code">
+        <p>
+          搭配
+          <code>||</code>
+          或者
+          <code>&&</code>
+          一起使用會出現異常。
+        </p>
+        <pre><code class="language-js error-code">
 null || undefined ?? "foo"; // raises a SyntaxError
 true && undefined ?? "foo"; // raises a SyntaxError
       </code></pre>
-      <p>若要搭配 <code>||</code> 或者 <code>&&</code> 一起使用，建議使用<code>()</code> 將表達式包裹起來。如此一來表達式內容會優先執行並回傳結果，接著執行
-        <code>??</code>
-        判斷。
-      </p>
-      <pre><code class="language-js correct-code">
+        <p>
+          若要搭配
+          <code>||</code>
+          或者
+          <code>&&</code>
+          一起使用，建議使用
+          <code>()</code>
+          將表達式包裹起來。如此一來表達式內容會優先執行並回傳結果，接著執行
+          <code>??</code>
+          判斷。
+        </p>
+        <pre><code class="language-js correct-code">
 (null || undefined) ?? "foo"; // return "foo"
       </code></pre>
-      <p>可以搭配 <a href="14-4.html">Operators-Optional chaining (?.)</a> 一同使用，如以下範例。先使用 (?.) 判斷 foo 中是否存在指定欄位，有的話執行
-        <code>toUpperCase()</code> 並回傳結果，沒有的話回傳 <code>??</code> 右側的例外處理。
-      </p>
-      <pre><code class="language-js">
+        <p>
+          可以搭配
+          <a href="14-4.html">Operators-Optional chaining (?.)</a>
+          一同使用，如以下範例。先使用 (?.) 判斷 foo 中是否存在指定欄位，有的話執行
+          <code>toUpperCase()</code>
+          並回傳結果，沒有的話回傳
+          <code>??</code>
+          右側的例外處理。
+        </p>
+        <pre><code class="language-js">
 const foo = { someFooProp: "hi" };
 
 console.log(foo.someFooProp?.toUpperCase() ?? "not available"); // "HI"
 console.log(foo.someBarProp?.toUpperCase() ?? "not available"); // "not available"
       </code></pre>
-      <p> 資料來源:</p>
-      <p>
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">https://developer.mozilla.org/.../Nullish_coalescing</a>
-      </p>
-
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+        <p>資料來源:</p>
+        <p>
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing"
+          >
+            https://developer.mozilla.org/.../Nullish_coalescing
+          </a>
+        </p>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

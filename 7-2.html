@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="./public/favicon.ico" />
-        <meta http-equiv="cache-control" content="no-cache">
-        <title>JavaScript-syntax-testing</title>
-        <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-        <link rel="stylesheet" href="./hightlight/default.min.css" />
-        <link rel="stylesheet" href="./css/main.css" />
-        <link rel="stylesheet" href="./css/copybutton.css" />
-        <link rel="stylesheet" href="./css/hightlight.css" />
-        <script src="./hightlight/hightlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-        <header>
-                <nav>
-                        <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-                </nav>
-        </header>
-        <main>
-                <aside>
-                        <nav></nav>
-                </aside>
-                <article>
-                        <h2>7-2 Math 物件</h2>
-                        <h3 id="7-2-1">7-2-1 Math.sign</h3>
-                        <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>7-2 Math 物件</h2>
+        <h3 id="7-2-1">7-2-1 Math.sign</h3>
+        <pre><code class="language-js">
 Math.sign(1) // 1
 Math.sign(0) // 0
 Math.sign(-0) // -0
@@ -41,8 +42,8 @@ Math.sign('one') // NaN，因為 Number('one')是 NaN
 Math.sign('0') // 0，因為 Number('0') 是 0
 Math.sign('7') // 1，因為 Number('7') 是 7
         </code></pre>
-                        <h3 id="7-2-2">7-2-2 Math.trunc</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-2">7-2-2 Math.trunc</h3>
+        <pre><code class="language-js">
 Math.trunc(12.34567) // 12
 Math.trunc(-13.58) // -13
 Math.trunc(-0.1234) // -0
@@ -50,24 +51,24 @@ Math.trunc(NaN) // NaN
 Math.trunc('one') // NaN，因為 Number('one")是 NaN
 Math.trunc('123.456') // 123，因為 Number('123.456')是 123.456
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 function mathTrunc (value) {
   return value &gt; 0 ? Math.floor(value) : Math.ceil(value)
 }
         </code></pre>
-                        <h3 id="7-2-3">7-2-3 Math.cbrt</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-3">7-2-3 Math.cbrt</h3>
+        <pre><code class="language-js">
 Math.cbrt(-1) //-1
 Math.brt(3) // 1.4422495703074083
 Math.cbrt(8) // -2
 Math.cbrt(27) // 3
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 Math.cbrt('8') // 2，因為 Number('8') 是 8
 Math.cbrt('one') // NaN ，因為 Number('one') 是 NaN
         </code></pre>
-                        <h3 id="7-2-4">7-2-4 Math.expm1</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-4">7-2-4 Math.expm1</h3>
+        <pre><code class="language-js">
 function expm1(value) {
   return Math.pow(Math.E, value) - 1
 }
@@ -76,7 +77,7 @@ function expm1(value){
   return Math.exp(value) - 1
 }
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 expm1(1e-20)
 // 0
 Math.expm1(1e-20)
@@ -88,43 +89,43 @@ Math.expm1(1e-10)
 
 // Math.expm1 的反向函式為 Math.log1p
         </code></pre>
-                        <h3 id="7-2-5">7-2-5 Math.log1p</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-5">7-2-5 Math.log1p</h3>
+        <pre><code class="language-js">
 function log1p(value) {
   return Math.log(value + 1)
 }
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 log1p(1.00000000005e - 10)
 // 1.000000082690371e -10
 Math.log1p(1.00000000005e - 10)
 // 1e - 10 ，的確是 Math.expm1(1e - 10) 的反向計算結果
         </code></pre>
-                        <h3 id="7-2-6">7-2-6 Math.log10</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-6">7-2-6 Math.log10</h3>
+        <pre><code class="language-js">
 Math.log10(1000) // 3
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 function mathLog10(value) {
   return Math.log(value) / Math.LN10
 }
         </code></pre>
-                        <h3 id="7-2-7">7-2-7 Math.log2</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-7">7-2-7 Math.log2</h3>
+        <pre><code class="language-js">
 Math.log2(1024) // 10
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 function mathLog2(value) {
   return Math.log(value) / Math.LN2
 }
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 Math.log2(1 &lt;&lt; 29) // 原生版本
 // 29
 mathLog2(1 &lt;&lt; 29) // 向下相容版本
 // 29.000000000000004
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 0b00000001 // 1
 0b00000001 &lt;&lt; 2 // 向左移動兩個位置
 0b00000100 //4
@@ -134,27 +135,27 @@ mathLog2(1 &lt;&lt; 29) // 向下相容版本
 0b11010000 // 208
         </code></pre>
 
-                        <h3 id="7-2-8">7-2-8 三角函數</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-8">7-2-8 三角函數</h3>
+        <pre><code class="language-js">
 Math.hypot(1, 2, 3)
 // 3.741657386773941，也就是 (1*1 + 2*2 + 3*3) 的總和再開根號
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 function mathHypot(...values){
   const accumulateSquares (total, value) &gt; total + value * value
   const squares = values.reduce(accumulateSquares, 0)
   return Math.sqrt(squares)
 }
         </code></pre>
-                        <pre><code class="language-js">
+        <pre><code class="language-js">
 Math.hypot(1, 2, 3) // 原生版本
 // 3.741657386773941
 mathHypot (1, 2, 3) // 向下相容的版本
 // 3.7416573867739413
         </code></pre>
-                        <h3 id="7-2-10">7-2-10 位元運算輔助器</h3>
-                        <h3>Math.clz32</h3>
-                        <pre><code class="language-js">
+        <h3 id="7-2-10">7-2-10 位元運算輔助器</h3>
+        <h3>Math.clz32</h3>
+        <pre><code class="language-js">
 Math.clz32(0) // 32
 Math.clz32(1) // 31
 Math.clz32(1 &lt; 1) // 30
@@ -162,14 +163,12 @@ Math.clz32(1 &lt; 2) // 29
 Math.clz32(1 &lt; 29) // 2
 Math.clz32(1 &lt; 31) // 0
         </code></pre>
-                        <h3>Math.imul</h3>
-                        <p>回傳一個類似 C 語言 32位元乘法的結果。</p>
-                        <h3>Math.fround</h3>
-                        <p>將 value 四捨五入至最接近的 32 位元浮點數值。</p>
-                </article>
-        </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+        <h3>Math.imul</h3>
+        <p>回傳一個類似 C 語言 32位元乘法的結果。</p>
+        <h3>Math.fround</h3>
+        <p>將 value 四捨五入至最接近的 32 位元浮點數值。</p>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

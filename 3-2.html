@@ -1,51 +1,52 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>3-2 符號</h2>
+        <h3 id="3-2-1">3-2-1 區域符號</h3>
 
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>3-2 符號</h2>
-      <h3 id="3-2-1">3-2-1 區域符號</h3>
-
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 new Symbol() // TypeError:Symbol不是一個建構子
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const mystery = Symbol('my symbol')
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(Number(3) === Number(3)) // true
 console.log(Symbol() === Symbol()) // false
 console.log(Symbol('my symbol') === Symbol('my symbol')) // false
 console.log(typeof Symbol()) // 'symbol'
 console.log(typeof Symbol('my symbol')) // 'symbol'
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
   const weapon = Symbol('weapon')
   const character = {
     name: 'Penguin',
@@ -53,23 +54,23 @@ console.log(typeof Symbol('my symbol')) // 'symbol'
   }
   console.log(character[weapon]) // 'umbrella'
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
   for (let key in character) {
     console.log(key) // 'name'
   }
   console.log(Object.keys(character)) // ['name']
   console.log(Object.getownPropertyNames(character) // ['name']
 </code></pre>
-      <p>JSON 描述也會忽略 Symbol 特性</p>
-      <pre><code class="language-js">
+        <p>JSON 描述也會忽略 Symbol 特性</p>
+        <pre><code class="language-js">
   console.log(JSON.stringify(character)) // '{"name" : "Penguin"}'
 </code></pre>
-      <p>實際上 Symbol 是可以被列舉，需要透過 Object.getownpropertysymbols</p>
-      <pre><code class="language-js">
+        <p>實際上 Symbol 是可以被列舉，需要透過 Object.getownpropertysymbols</p>
+        <pre><code class="language-js">
   console.log(Object.getOwnPropertySymbols(character)) // [Symbol(weapon) ]
 </code></pre>
-      <h3 id="3-2-2">3-2-2 符號的實際案例</h3>
-      <pre><code class="language-js">
+        <h3 id="3-2-2">3-2-2 符號的實際案例</h3>
+        <pre><code class="language-js">
 const cache = Symbol('calendar')
 function createCalendar(el) {
   if(cache in el){  //符號是否存在於元件中?
@@ -81,7 +82,7 @@ function createCalendar(el) {
   return api
 }
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
   const character = {
     name: 'Thor',
     toJSON: () =&gt; ({
@@ -90,14 +91,14 @@ function createCalendar(el) {
   }
   console.log(JSON.stringify(character)) //  '"["key" : "value")"'
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
   const character = {
     name: 'Thor',
     toJSON: true
   }
   console.log(JSON.stringify(character)) //  '"{"name":"Thor" ,"toJSON": true}"'
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const json = Symbol('alternative to toJSON')
 const character = {
   name: 'Thor',
@@ -114,26 +115,26 @@ function stringify(target) {
 }
         </code></pre>
 
-      <h3 id="3-2-3">3-2-3 全域符號註冊表</h3>
-      <pre><code class="language-js">
+        <h3 id="3-2-3">3-2-3 全域符號註冊表</h3>
+        <pre><code class="language-js">
 const example = Symbol.for('example')
 console.log(example === Symbol.for('example')) // true
         </code></pre>
-      <h3>運用Symbol.keyFor(symbol)擷取符號鍵</h3>
-      <pre><code class="language-js">
+        <h3>運用Symbol.keyFor(symbol)擷取符號鍵</h3>
+        <pre><code class="language-js">
 const example = Symbol.for('example')
 console.log(Symbol.keyFor(example)) // 'example'
   </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
     console.log(Symbol.keyFor(Symbol())) // undefined
   </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const example = Symbol.for('example')
 console.log(Symbol.keyFor(Symbol('example'))) // undefined
   </code></pre>
 
-      <h3>最佳實務案例與考量因子</h3>
-      <pre><code class="language-js">
+        <h3>最佳實務案例與考量因子</h3>
+        <pre><code class="language-js">
 const d = document
 const frame = d.body.appendChild(d.createElement('iframe'))
 const framed = frame.contentWindow
@@ -141,8 +142,8 @@ const s1 = window.Symbol.for('example')
 const s2 = framed.Symbol.for('example')
 console.log(s1 === s2) // true
         </code></pre>
-      <h3 id="3-2-4">3-2-4 通用符號</h3>
-      <pre><code class="language-js">
+        <h3 id="3-2-4">3-2-4 通用符號</h3>
+        <pre><code class="language-js">
 
   const morphling = {
     [Symbol.toprimitive](hint) {
@@ -167,7 +168,7 @@ console.log(s1 === s2) // true
   //  '[object.Morphling] is powerful'
 
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
   const text = '/an example string/'
   const regex = /an example string/
   regex[Symbol.match] = false
@@ -175,19 +176,17 @@ console.log(s1 === s2) // true
   //  true
 </code></pre>
 
-      <h3>不透過註冊表於程式領域進行分享</h3>
-      <pre><code class="language-js">
+        <h3>不透過註冊表於程式領域進行分享</h3>
+        <pre><code class="language-js">
   const frame = document.createElement('iframe')
   document.body.appendChild(frame)
   Symbol.iterator === frame.contentWindow.Symbol.iterator //  true
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
   console.log(Symbol.keyFor(Symbol.iterator)) //  undefined
 </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

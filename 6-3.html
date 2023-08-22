@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>6-3 代理器機關處理器</h2>
-      <h3 id="6-3-1">6-3-1 是否設定機關一 has</h3>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>6-3 代理器機關處理器</h2>
+        <h3 id="6-3-1">6-3-1 是否設定機關一 has</h3>
+        <pre><code class="language-js">
 const handler = {
   get(target, key) {
     invariant(key,'get')
@@ -54,7 +55,7 @@ function invariant (key, action) {
   }
 }
                 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target = {
   _secret:'securely-stored-value'
   wellKnown:'publicly-known-value'
@@ -67,12 +68,12 @@ console.log('_secret' in proxy)
 console.log('_secret' in target)
 // true
                           </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(Proxy.hasOwnProperty( _secret'))
 // true
      </code></pre>
-      <h3 id="6-3-2">6-3-2 deleteProperty 機關</h3>
-      <pre><code class="language-js">
+        <h3 id="6-3-2">6-3-2 deleteProperty 機關</h3>
+        <pre><code class="language-js">
 const cat = { furBall: true }
 cat.furBall = undefined
 console.log('furBall' in cat)
@@ -81,7 +82,7 @@ delete cat.furBall
 console.log('furBall' in cat)
 // false
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target = { _secret: 'foo' }
 const proxy = new Proxy(target, handler)
 console.log('_secret' in proxy)
@@ -92,7 +93,7 @@ delete proxy._secret
 console.log(secret'in target)
 // false
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   get(target, key){
     invariant(key,'get')
@@ -113,7 +114,7 @@ function invariant (key, action) {
   }
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target = { _secret: 'foo' }
 const proxy = new Proxy(target, handler)
 console.log('_secret' in proxy)
@@ -121,9 +122,9 @@ console.log('_secret' in proxy)
 delete proxy._secret
 // Error：無法刪除 "_secret" 私有特性
       </code></pre>
-      <h3 id="6-3-3">6-3-3 defineProperty 機關</h3>
+        <h3 id="6-3-3">6-3-3 defineProperty 機關</h3>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const pizza = {}
 pizza.topping ='ham',
 Object.defineProperty(pizza, 'extraCheese', { value: true })
@@ -142,7 +143,7 @@ console.log(Object.getOwnPropertyDescriptor(pizza,'extraCheese'))
 //  configurable: false
 // }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = { 
   defineProperty(target, key, descriptor){
     return false
@@ -154,7 +155,7 @@ proxy.extraCheese = false
 // TypeError：代理器上的 'defineProperty'：機關回傳結果為 false
       </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   defineProperty(target, key, descriptor) {
     invariant (key,'define')
@@ -167,15 +168,15 @@ function invariant (key, action) {
   } 
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target= {}
 const proxy = new Proxy(target, handler)
 proxy.topping = 'cheese'
 proxy._ secretIngredient = 'salsa'
 // Error:'無法定義 "secretIngredient" 私有特性'
       </code></pre>
-      <h3 id="6-3-4">6-3-4 ownkeys 機關</h3>
-      <pre><code class="language-js">
+        <h3 id="6-3-4">6-3-4 ownkeys 機關</h3>
+        <pre><code class="language-js">
 const handler = {
   OwnKeys(target){
     return Reflect.ownKeys(target)
@@ -183,7 +184,7 @@ const handler = {
 }
       </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target = {
   [Symbol('id' )]: 'ba3dfcc0'
   _secret:'sauce'
@@ -199,7 +200,7 @@ const proxy = new Proxy(target, handler)
 }
         </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler ={
   OwnKeys (target) {
     return Reflect.ownKeys(target).filter(key =&gt; {
@@ -213,7 +214,7 @@ const handler ={
 }
         </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target = {
   [Symbol( 'id' )]:'ba3dfcc0',
   _secret:'sauce'
@@ -226,7 +227,7 @@ for (const key of Object.keys(proxy)){
   // 'toppings'
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target ={
   [Symbol('id')]:'ba3dfcc0',
   _secret: 'sauce'
@@ -239,10 +240,8 @@ for (const key of Object.getOwnPropertySymbols(proxy)) {
   // Symbol(id)
 }
         </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

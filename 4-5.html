@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>4-5 非同步迭代</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>4-5 非同步迭代</h2>
+        <pre><code class="language-js">
 const sequence = {
   [Symbol.iterator](){
   const items = ['i', 't','e', 'r','a','b', 'l', 'e']
@@ -43,7 +44,7 @@ const sequence = {
   }
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 [...sequence]
 // ['i', 't','e', 'r','a','b', 'l', 'e']
  Array.from(sequence)
@@ -60,10 +61,8 @@ for (const item of sequence) {
   // 'e'
 }
       </code></pre>
-      <h3 id="4-5-1">
-        4-5-1 非同步迭代器
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-5-1">4-5-1 非同步迭代器</h3>
+        <pre><code class="language-js">
 const sequence = {
   [Symbol.asyncIterator](){
     const items = ['i', 't' , 'e', 'r' , 'a' , 'b', 'l', 'e']
@@ -76,7 +75,7 @@ const sequence = {
   }
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const interval = duration =&gt; ({
   [Symbol.asyncIterator]:()=&gt; ({
     i: 0,
@@ -91,7 +90,7 @@ const interval = duration =&gt; ({
   })
 })
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function print (){
   for await (const i of interval(1000)) {
     console.log(`${ i } seconds elapsed.` )
@@ -99,17 +98,15 @@ async function print (){
 }
 print()
       </code></pre>
-      <h3 id="4-5-2">
-        4-5-2 非同步產生器
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-5-2">4-5-2 非同步產生器</h3>
+        <pre><code class="language-js">
 async function* fetchInterval (duration,...params) {
   for await (const i of interval (duration)){
      yield await fetch(... params)
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 async function process() {
   for await (const response of fetchInterval(1000, '/api/status' )) {
     const data = await response.json()
@@ -118,10 +115,8 @@ async function process() {
 }
 process()
         </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

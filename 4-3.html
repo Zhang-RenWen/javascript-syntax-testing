@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>4-3 產生器函式和產生器物件</h2>
-      <h3 id="4-3-1">4-3-1 產生器基礎元素</h3>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>4-3 產生器函式和產生器物件</h2>
+        <h3 id="4-3-1">4-3-1 產生器基礎元素</h3>
+        <pre><code class="language-js">
 function* abc(){
   yield 'a'
   yield 'b'
   yield 'c'
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const chars = abc()
 typeof chars[Symbol.iterator] === 'function'
 typeof chars.next === 'function'
@@ -49,16 +50,14 @@ console.log([...chars])
 // ['a','b','c']
       </code></pre>
 
-
-
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log([...numbers ()])
 // 'a'
 // 'b'
 // 'c'
 // [1, 2, 3]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 for (const number of numbers ()) {
   console.log(number)
 }      
@@ -69,7 +68,7 @@ for (const number of numbers ()) {
 // 3
 // 'c'
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* numbers () {
   yield 1
   console.log('a' )
@@ -80,14 +79,14 @@ function* numbers () {
 }
         </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* salute() {
   yield* 'hello'
 } 
 console.log([...salute()])
 // ['h','e','l','l','o']
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* salute(name) {
   yield* 'hello '
   yield* name
@@ -95,7 +94,7 @@ function* salute(name) {
 console.log([...salute('you' )])
 //['h','e','l','l','o','', 'y', 'o', 'u']
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const salute = {
   [Symbol.iterator](){
     const items = ['h','e','l','l','o']
@@ -121,11 +120,11 @@ function* trailmix(){
 }
 console.log([...trailmix()])
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 ['h', 'e','l', 'l', 'o', 0, 1, 2, 5, 7, [9, 12], 20, 25]
         </code></pre>
-      <h3 id="4-3-2">4-3-2 手動迭代產生器</h3>
-      <pre><code class="language-js">
+        <h3 id="4-3-2">4-3-2 手動迭代產生器</h3>
+        <pre><code class="language-js">
 const g = numbers()
 while (true) {
   const item = g.next()
@@ -135,7 +134,7 @@ while (true) {
   console.log(item.value)
 }   
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* generator() {
   yield 'only'
 }
@@ -147,8 +146,8 @@ function* generator() {
   console.log(g.next())
   // {done: true}
       </code></pre>
-      <h3 id="4-3-3">4-3-3 於可迭代物件加入產生器</h3>
-      <pre><code class="language-js">
+        <h3 id="4-3-3">4-3-3 於可迭代物件加入產生器</h3>
+        <pre><code class="language-js">
 function* fibonacci(){
   let previous = 0 
   let current = 1
@@ -169,7 +168,7 @@ console.log(g.next()) // { value: 8, done: false }
 console.log(g.next()) // { value: 13, done: false }
 console.log(g.next()) // { value: 21, done: false }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const fibonacci = {
   [Symbol.iterator]() {
   let previous = 0
@@ -195,7 +194,7 @@ console.log(sequence.next()) // { value: 8, done: false }
 console.log(sequence.next()) // { value: 13, done: false }
 console.log(sequence.next()) // { value: 21, done: false }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const fibonacci = {
   [Symbol.iterator](){
     let previous = 0
@@ -218,7 +217,7 @@ console.log(g.next()) // { value: 8, done: false}
 console.log(g.next()) // { value: 13, done: false }
 console.log(g.next()) // { value: 21, done: false }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 for (const value of fibonacci) {
   console.log(value)
   if (value > 20) {
@@ -234,10 +233,8 @@ for (const value of fibonacci) {
 // 13
 // 21
       </code></pre>
-      <h3 id="4-3-4">
-        4-3-4 利用產生器巡訪樹狀結構資料
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-3-4">4-3-4 利用產生器巡訪樹狀結構資料</h3>
+        <pre><code class="language-js">
 class Node {
   constructor(value, ...children) {
     this.value = value
@@ -245,7 +242,7 @@ class Node {
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const root = new Node(1, 
   new Node(2),
   new Node(3,
@@ -262,7 +259,7 @@ const root = new Node(1,
   )
 )
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* depthFirst(node) {
   yield node.value
   for (const child of node.children) {
@@ -272,7 +269,7 @@ function* depthFirst(node) {
 console.log([...depthFirst(root)])
 // [1,2,3,4,5,6,7,8,9,10]
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Node {
   constructor(value,...children) {
   this.value = value
@@ -288,7 +285,7 @@ class Node {
 console.log([...root])
 //[1,2,3,4,5,6,7,8,9,10]
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Node {
   constructor(value, ...children) {
     this.value = value
@@ -307,10 +304,8 @@ class Node {
 console.log([...root])
 // [1,2,3,8,4,9,10,5,7,6]
         </code></pre>
-      <h3 id="4-3-5">
-        4-3-5 利用產生器函式增加彈性
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-3-5">4-3-5 利用產生器函式增加彈性</h3>
+        <pre><code class="language-js">
 modelProvider(function*() {
   const items = yield 'cart.items'
   const item = items.reduce((left, right) =&gt; left.price &gt; right.price ? left : right)
@@ -318,7 +313,7 @@ modelProvider(function*() {
   console.log(details)
 })
   </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const model = {
   cart: {
     items: [item1, ..., itemN]
@@ -350,7 +345,7 @@ function followCrumbs(data, crumb) {
 }
           
   </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 modelProvider(function*() {
   const items = yield 'cart.items'
   const item = items.reduce(
@@ -359,7 +354,7 @@ modelProvider(function*() {
   console.log(details)
 })
   </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function modelProvider(paths) {
   const g = paths()
   pull()
@@ -373,13 +368,13 @@ function modelProvider(paths) {
 }
   </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 fetch(`/model?query=${ encodeURIComponent(value)}`)
 .then(response =&gt; response.json())
 .then(data =&gt; pull(data))
 .catch(err =&gt; g.throw(err))
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 modelProvider(function*() {
   try {
     console.log('items in the cart:', yield 'cart.items')
@@ -393,10 +388,8 @@ modelProvider(function*() {
   }
 })
       </code></pre>
-      <h3 id="4-3-8">
-        4-3-8 代表產生器進行回傳
-      </h3>
-      <pre><code class="language-js">
+        <h3 id="4-3-8">4-3-8 代表產生器進行回傳</h3>
+        <pre><code class="language-js">
 function* numbers() {
   yield 1
   yield 2
@@ -410,7 +403,7 @@ console.log(g.return())
 console.log(g.next()) 
 // { done: true }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* numbers() {
   try {
     yield 1
@@ -431,7 +424,7 @@ console.log(g.next())
 console.log(g.next())
 // { done: true , value : -1 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* numbers() {
   yield 1
   yield 2
@@ -439,7 +432,7 @@ function* numbers() {
   yield 4
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log([...numbers()])
 // [1, 2]
 console.log(Array.from(numbers()))
@@ -450,7 +443,7 @@ for (const number of numbers()) {
   // 2
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const g = numbers()
 console.log(g.next())
 // { done: false, value: 1 }
@@ -461,15 +454,15 @@ console.log(g.next())
 console.log(g.next())
 // { done: true }
         </code></pre>
-      <h3 id="4-3-9">4-3-9 運用產生器操作非同步 I/O</h3>
-      <pre><code class="language-js">
+        <h3 id="4-3-9">4-3-9 運用產生器操作非同步 I/O</h3>
+        <pre><code class="language-js">
 saveProducts(function*(){
   yield '/products/modern-javascript'
   yield '/products/mastering-modular-javascript'
   return '/wishlists/books'
 })
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 saveProducts(function* () {
   const p2 = yield '/products/modern-javascript'
   const p2 = yield '/products/mastering-modular-javascript'
@@ -478,7 +471,7 @@ saveProducts(function* () {
   //在完成儲存產品願望清單後繼續執行
 })
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 saveProducts(function*() {
   yield '/products/modern-javascript'
   yield '/products/mastering-modular-javascript'
@@ -488,7 +481,7 @@ saveProducts(function*() {
   return '/wishlists/books'
 })
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function saveProducts(productList) {
   const g = productList()
   const item = g.next()
@@ -497,7 +490,7 @@ function saveProducts(productList) {
   .then(product =&gt; {})
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 saveProducts(productList) {
   const g = productList()
   more(g.next())
@@ -513,7 +506,7 @@ saveProducts(productList) {
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function saveProducts (productList) {
   const products = []
   const g = productList()
@@ -541,7 +534,7 @@ function saveProducts (productList) {
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function saveProducts (productList) {
   const products = []
   const g = productList()
@@ -569,10 +562,8 @@ function saveProducts (productList) {
   }
 }
         </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

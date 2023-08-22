@@ -1,39 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2 id="12-4">12-4 正則表達式 - dotAll 模式</h2>
-      <p>正則中 dot . 的意思，代表除換行符號外任意單個字符。 dotAll 針對 HTML 做數據提取的時候特別好用。
-        我們想把以下標籤內的數據提出來分組。在 dotAll 出來以前。我們會向下列方式處理，而這麼做會有一個難點稍後說明。
-      </p>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="12-4">12-4 正則表達式 - dotAll 模式</h2>
+        <p>
+          正則中 dot . 的意思，代表除換行符號外任意單個字符。 dotAll 針對 HTML
+          做數據提取的時候特別好用。 我們想把以下標籤內的數據提出來分組。在 dotAll
+          出來以前。我們會向下列方式處理，而這麼做會有一個難點稍後說明。
+        </p>
+        <pre><code class="language-js">
 let str = `
 &lt;ul&gt;
   &lt;li&gt;
@@ -63,12 +66,12 @@ reg.exec(str)
 //   '上映日期: 1998/07/18'
 // ]
         </code></pre>
-      <p>
-        從以上結果只有單一筆 li 內容被提取就需要寫這麼多正則內容，感覺還是挺難受的。要是需要提取的內容很多的話則會造成工作量呈指數級別上升。顯然以上正則表達式的解法並不理想。
-      </p>
-      <p>這時候我們就需要 dotAll 模式。具體做法是在結尾處加上模式修正符 s 來操作。
-      </p>
-      <pre><code class="language-js">
+        <p>
+          從以上結果只有單一筆 li
+          內容被提取就需要寫這麼多正則內容，感覺還是挺難受的。要是需要提取的內容很多的話則會造成工作量呈指數級別上升。顯然以上正則表達式的解法並不理想。
+        </p>
+        <p>這時候我們就需要 dotAll 模式。具體做法是在結尾處加上模式修正符 s 來操作。</p>
+        <pre><code class="language-js">
 const reg = /&lt;li&gt;.*?&lt;a&gt;(.*?)&lt;\/a&gt;.*?&lt;p&gt;(.*?)&lt;\/p&gt;/s // 匹配單個
 reg.exec(str)
 // [
@@ -77,8 +80,11 @@ reg.exec(str)
 //   '上映日期: 1998/07/18'
 // ]
 </code></pre>
-      <p>每次操作只會回傳一個結果，下次操作會跳過上一次的結果接著匹配，如果不再匹配到了則會回傳 null。</p>
-      <pre><code class="language-js">
+        <p>
+          每次操作只會回傳一個結果，下次操作會跳過上一次的結果接著匹配，如果不再匹配到了則會回傳
+          null。
+        </p>
+        <pre><code class="language-js">
 const reg = /&lt;li&gt;.*?&lt;a&gt;(.*?)&lt;\/a&gt;.*?&lt;p&gt;(.*?)&lt;\/p&gt;/gs // 匹配多個
 reg.exec(str)
 // [
@@ -102,8 +108,8 @@ reg.exec(str)
 // null
 
 </code></pre>
-      <p>迴圈提取標籤轉換成陣列資料，並保存結果。</p>
-      <pre><code class="language-js">
+        <p>迴圈提取標籤轉換成陣列資料，並保存結果。</p>
+        <pre><code class="language-js">
 let result 
 let data = []
 
@@ -127,18 +133,21 @@ console.log(data)
 // }]
 
       </code></pre>
-      <p> 資料來源:</p>
-      <p>
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/dotAll">https://developer.mozilla.org/en-US/docs/Web/JavaScript/...dotAll</a>
-      </p>
-      <p>
-        <a href="https://www.youtube.com/watch?v=92aDmorH1sI">https://www.youtube.com/watch?v=92aDmorH1sI</a>
-      </p>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+        <p>資料來源:</p>
+        <p>
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/dotAll"
+          >
+            https://developer.mozilla.org/en-US/docs/Web/JavaScript/...dotAll
+          </a>
+        </p>
+        <p>
+          <a href="https://www.youtube.com/watch?v=92aDmorH1sI">
+            https://www.youtube.com/watch?v=92aDmorH1sI
+          </a>
+        </p>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

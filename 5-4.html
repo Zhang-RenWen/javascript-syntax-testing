@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>Chapter 5 運用 ECMAScript 集合</h2>
-      <h2>5-4 的弱集合</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>Chapter 5 運用 ECMAScript 集合</h2>
+        <h2>5-4 的弱集合</h2>
+        <pre><code class="language-js">
 const set = new WeakSet()
 set.add('a') // TypeError
 set.add(Symbol()) // TypeError
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const set = new WeakSet([  
   new Date(),
   {},
@@ -44,7 +45,7 @@ const set = new WeakSet([
   [1]
 ])
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const cars = new WeakSet()
 class Car {
   constructor () {
@@ -57,7 +58,7 @@ class Car {
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const circle = { cx: 20, cy: 5, r: 15 }
 circle.self = circle
 listOwnProperties({
@@ -74,7 +75,7 @@ listOwnProperties({
 // numbers.2: 7
 // sum: (a, b) =&gt; a + b
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function listOwnProperties(input){
   recurse(input)
 
@@ -107,7 +108,7 @@ function isObject (value) {
   return Object.prototype.toString.call(value) === '[object Object]'
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const elements = new WeakSet()
 function dommy(target) {
   if(elements.has(target)) {
@@ -117,10 +118,8 @@ function dommy(target) {
   // 進行一些操作
 }
         </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

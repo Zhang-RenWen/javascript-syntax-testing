@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>2-6 let 和 const 敘述</h2>
 
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>2-6 let 和 const 敘述</h2>
-
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function isItTwo(value){
   if( value === 2 ){
       var two = true
@@ -42,7 +43,7 @@ isItTwo(2) // true
 isItTwo('two') // undefined
     </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function isItTwo(value) {
   var two
   if (value === 2) {
@@ -52,17 +53,15 @@ function isItTwo(value) {
 }
     </code></pre>
 
+        <h2>2-6-1 區塊作用域與 let 敘述句</h2>
 
-      <h2>2-6-1 區塊作用域與 let 敘述句</h2>
-
-
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 {{{{{ var deep = 'This is available from outer scope.'; }}}}}
 console.log(deep)
 // 'This is available from outer scope.'
 </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 let topmost = {}
 {
   {
@@ -79,7 +78,7 @@ console.log(innermost)
 // Uncaught ReferenceError: inner is not defined
 // Uncaught ReferenceError: innermost is not defined
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 for (let i =0; i &lt; 2; i++) {
   console.log(i) 
   // 0 
@@ -89,7 +88,7 @@ console.log(i)
 // Uncaught ReferenceError: i is not defined
       </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function printNumbers() {
   for (var i = 0; i  &lt; 3; i++) {
     setTimeout(function () {
@@ -103,7 +102,7 @@ printNumbers()
 // 3
 </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function printNumbers() {
   for (let i = 0; i  &lt; 3; i++) {
     setTimeout(function () {
@@ -116,8 +115,8 @@ printNumbers()
 // 1
 // 2
 </code></pre>
-      <h2>2-6-2 暫時性死區</h2>
-      <pre><code class="language-js">
+        <h2>2-6-2 暫時性死區</h2>
+        <pre><code class="language-js">
 console.log(name) // 比如程式執行到這段，後面同作用域中尚未執行的部分都稱作暫時性死區
 // Uncaught ReferenceError: name is not defined
 let name = 'Stephen Hawking'
@@ -150,8 +149,8 @@ let name
 console.log(readName())
 // undefined
 </code></pre>
-      <h2>2-6-3 Const 敘述</h2>
-      <pre><code class="language-js">
+        <h2>2-6-3 Const 敘述</h2>
+        <pre><code class="language-js">
 const pi = 3.1415
 {
 const pi = 6
@@ -162,27 +161,26 @@ console.log(pi)
 // 3.1415
       </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const pi = 3.1415
 const e // Uncaught SyntaxError: Missing initializer in const declaration
 </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const people = ['Tesla', 'Musk']
 people = []
 console.log(people)
 // ['Tesla', 'Musk']
       </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const people = ['Tesla', 'Musk']
 people.push('Berners-Lee')
 console.log(people)
 // ['Tesla', 'Musk', 'Berners-Lee']
 </code></pre>
 
-
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const people = ['Tesla', 'Musk']
 var humans = people
 humans = 'evil'
@@ -190,15 +188,15 @@ console.log(people) // ['Tesla', 'Musk']
 console.log(humans)   // 'evil'
 </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const frozen = Object.freeze(
 ['Ice', 'Icicle', 'Ice cube'])
 frozen.push('Water')
 // Uncaught TypeError: Cannot add property 3, object is not extensible
 </code></pre>
-      <h2>2-6-4 Const 與 let 敘述的優點</h2>
+        <h2>2-6-4 Const 與 let 敘述的優點</h2>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 var items = ['a', 'b', 'c']
 var todo = checklist(items)
 todo.check()
@@ -214,10 +212,8 @@ return {
 }
  }
 </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

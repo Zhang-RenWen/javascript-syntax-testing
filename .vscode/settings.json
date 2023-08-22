@@ -51,5 +51,5 @@
     "woofmark",
     "w̅o̅r̅l̅d̅"
   ],
-  "editor.defaultFormatter": "vscode.html-language-features"
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

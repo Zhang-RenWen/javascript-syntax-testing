@@ -1,36 +1,37 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>Chapter 8 JavaScript 模組</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>Chapter 8 JavaScript 模組</h2>
+        <pre><code class="language-js">
 function has(list, item){
   return list.includes(item)
 }
@@ -42,19 +43,19 @@ function union(list, item){
 }
 module.exports = union
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const union = require('./union.js')
 console.log(union([1, 2], 3))
 // [1, 2, 3]
 console.log(union([1, 2], 2))
 // [1, 2]
       </code></pre>
-      <pre><code class="language-bash hljs">
+        <pre><code class="language-bash hljs">
 » node app.js
 # [1, 2, 3]
 # [1, 2]
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // views/item.js
 module.exports = model =&gt;`
 &lt;li&gt;
@@ -63,7 +64,7 @@ module.exports = model =&gt;`
 &lt;span&gt;${ model.name }&lt;/span&gt;
 &lt;/li&gt;`
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // app.js
 const renderItem = require('./views/item.js')
 const html = renderItem({
@@ -72,14 +73,14 @@ const html = renderItem({
 })
 console.log(html)
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // views/list.js
 const renderItem = require('./item.js')
 module.exports = model =&gt;`&lt;ul&gt;
   ${ model.map(renderItem).join('\n') }
 &lt;/ul&gt;`
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // app.js
 const renderList = require('./views/list.js')
 const html = renderList([{
@@ -91,13 +92,13 @@ const html = renderList([{
 }])
 console.log(html)
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // render.js
 module.exports = function render(template, model){
   return require(`./views/${ template }`.js)(model)
 }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 // app. js
 const render = require('./render.js')
 console.log(render('item', {
@@ -111,10 +112,8 @@ console.log(render('list', [{
   amount: 25
 }]))
       </code></pre>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

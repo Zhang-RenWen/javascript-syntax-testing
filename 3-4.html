@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>3-4 修飾器</h2>
 
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>3-4 修飾器</h2>
-
-      <h3 id="3-4-1">3-4-1 初談 JavaScript 修飾器</h3>
-      <pre><code class="language-js">
+        <h3 id="3-4-1">3-4-1 初談 JavaScript 修飾器</h3>
+        <pre><code class="language-js">
  
 @decorators.frozen 是有效的修飾器
 @decorators.frozen(true )是有效的修飾器
@@ -54,7 +55,7 @@ reconcile() {}
 }
 </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 
 interface MemberDescriptor {
   kind: "Property"
@@ -65,7 +66,7 @@ interface MemberDescriptor {
   finisher?: (constructor): void;
 }
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function readonly({ descriptor, ...rest }) {
     return {
     ...rest,
@@ -76,25 +77,23 @@ function readonly({ descriptor, ...rest }) {
   }
 }
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function readonlyMembers(ctor, heritage, members) {
   return members.map(member =&gt; readonly(member))
 }
 </code></pre>
-      <h3 id="3-4-3">3-4-3 使用案例:C#的Attributes</h3>
-      <p>
-        依賴反射遊戲管理 NPC
-      </p>
+        <h3 id="3-4-3">3-4-3 使用案例:C#的Attributes</h3>
+        <p>依賴反射遊戲管理 NPC</p>
 
-      <h3 id="3-4-4">3-4-4 於 JavaScript 中標記特性</h3>
+        <h3 id="3-4-4">3-4-4 於 JavaScript 中標記特性</h3>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 class Dog {
   @commandProperty('game-master')
 }
 
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function commandProperty(writeLevel, readLevel = writeLevel){
   return ({ key, ...rest }) =&gt; ({
     key,
@@ -114,7 +113,7 @@ function commandProperty(writeLevel, readLevel = writeLevel){
   })
 }
 </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function getCommandProperties(ctor) {
   const symbol = Symbol.for('commandProperties')
   const properties = ctor[symbol] || []
@@ -127,12 +126,8 @@ getCommandProperties(Dog)
 //    writeLevel:  'game-master' 
 // }]
       </code></pre>
-
-    </article>
-
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

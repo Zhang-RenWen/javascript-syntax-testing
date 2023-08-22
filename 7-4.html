@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>7-4 正規表示式</h2>
-      <h3 id="7-4-1">7-4-1 黏著比對模式 /y</h3>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>7-4 正規表示式</h2>
+        <h3 id="7-4-1">7-4-1 黏著比對模式 /y</h3>
+        <pre><code class="language-js">
 function matcher (regex, input) {
   return () =&gt; {
     const match = regex.exec(input)
@@ -50,7 +51,7 @@ function matcher (regex, input) {
   console.log(nextSticky()) // { lastIndex: 4, match: ['ha'] }
   console.log(nextSticky()) // { lastIndex: 0, match: null }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const sticky = /ha/y
 const nextSticky = matcher(sticky, input)
 console.log(nextSticky()) // { lastIndex: 2, match: ['ha'] }
@@ -58,35 +59,35 @@ console.log(nextSticky()) // { lastIndex: 4, match: ['ha'] }
 sticky.lastIndex = 5
 console.log(nextSticky()) // { lastIndex: 7, match: ['ha'] }
         </code></pre>
-      <h3 id="7-4-2">7-4-2 萬國碼比對模式 /u</h3>
-      <pre><code class="language-js">
+        <h3 id="7-4-2">7-4-2 萬國碼比對模式 /u</h3>
+        <pre><code class="language-js">
 /\a/.test('ab') // true
           </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 /\a/u.test('ab') // SyntaxError：無效的字元跳脫/\a/
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 /\u{1f40e}/.test('🐎') // false
 /\u{1f40e}/.test('u{1f40e}') // true
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 /\u{1f40e}/u.test('🐎')
 // true
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const rdot = /^.$/
 rdot.test('a') // true
 rdot.test('\n') // false
 rdot.test('\u{1d11e}') // false
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const rdot = /^.$/u
 rdot.test('a') // true
 rdot.test('\n') // false
 rdot.test('\u{1d11e}') // true
       </code></pre>
-      <h3 id="7-4-3">7-4-3 命名匹配群</h3>
-      <pre><code class="language-js">
+        <h3 id="7-4-3">7-4-3 命名匹配群</h3>
+        <pre><code class="language-js">
 function parseKeyValuePair(input){
   const rattribute = /([a-z]+)=([a-z]+)/
   const [, key, value] = attribute.exec(input)
@@ -95,7 +96,7 @@ function parseKeyValuePair(input){
 parseKeyValuePair('strong=true')
 // { key:'strong',value:'true'}
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function parseKeyValuePair(input){
   const rattribute = /([a-z]+)(?:=|\sis\s) ([a-z]+)/
   const [, key, value] = rattribute.exec(input)
@@ -106,7 +107,7 @@ parseKeyValuePair('strong is true')
 parseKeyValuePair('flexible=too")
 // { key: 'flexible', value:'too'}
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function parseKeyValuePair(input){
   const rattribute = (/(?&lt;key&gt;[a-z]+)(?:=|\sis\s)(?&lt;value&gt;[a-z]+)/)
   const { groups } = rattribute.exec(input)
@@ -117,7 +118,7 @@ parseKeyValuePair('strong=true')
 parseKeyValuePair('flexible=too')
 // { key:'flexible', value:'too' }
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function hasSameUserAndPassword(input){
   const rduplicate = /([^:]+):\1/
   return rduplicate.exec(input) !== null
@@ -125,7 +126,7 @@ function hasSameUserAndPassword(input){
 hasSameUserAndPassword('root:root') // true
 hasSameUserAndPassword('root:pF6GGlyPhoy1!9i') // false
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function hasSameUserAndPassword(input){
   const rduplicate = /(?&lt;user&gt;[^:]+):\k&lt;user&gt;/u
   return rduplicate.exec(input) !== null
@@ -133,7 +134,7 @@ function hasSameUserAndPassword(input){
 hasSameUserAndPassword('root:root') // true
 hasSameUserAndPassword('root: pF6GGlyPhoy1!9i' ) // false
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function americanDateToHungarianFormat(input){
   const ramerican =(/(?&lt;month&gt;\d{2})\/(?&lt;day&gt;\d{2})\/(?&lt;year&gt;\d{4})/)
   const hungarian = input.replace(ramerican,`$&lt;year&gt;-$&lt;month&gt;-$&lt;day&gt;`)
@@ -141,7 +142,7 @@ function americanDateToHungarianFormat(input){
 }
 americanDateToHungarianFormat('06/09/1988') // '1988-09-06
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function americanDateToHungarianFormat(input){
   const ramerican =(/(?&lt;month&gt;\d{2})\/(?&lt;day&gt;\d{2})\/(?&lt;year&gt;\d{4})/)
   const hungarian = input.replace(ramerican, (...rest) =&gt; {
@@ -154,22 +155,22 @@ function americanDateToHungarianFormat(input){
 americanDateToHungarianFormat('06/09/1988') //'1988-09-06'
       </code></pre>
 
-      <h3 id="7-4-4">7-4-4 萬國碼特性跳脫</h3>
-      <pre><code class="language-js">
+        <h3 id="7-4-4">7-4-4 萬國碼特性跳脫</h3>
+        <pre><code class="language-js">
 function isGreekSymbol(input){
   const rgreek=/^\p{Script=Greek}$/u
   return rgreek.test(input)
 }
 isGreekSymbol('?') // true
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function isNonGreekSymbol(input){
   const rgreek = /^\P{Script=Greek}$/u
   return rgreek.test(input)
 }
 isNonGreekSymbol('?') // false
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function isDecimalNumber(input){
   const rdigits = /^\p{Decimal_Number}+$/u
   return rdigits.test(input)
@@ -192,8 +193,8 @@ isDecimalNumber('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻�
 9	𝟗	𝟡	𝟫	𝟵	  𝟿
 
       </code></pre>
-      <h3 id="7-4-5">7-4-5 左合子樣式</h3>
-      <pre><code class="language-js">
+        <h3 id="7-4-5">7-4-5 左合子樣式</h3>
+        <pre><code class="language-js">
 function getJavaScriptFilename(input){
   const rfile=/^(?&lt;filename&gt;[a-z]+)(?=\.js)\.[a-z]+$/u
   const match = rfile.exec(input)
@@ -205,7 +206,7 @@ function getJavaScriptFilename(input){
 getJavaScriptFilename('index.js') // 'index'
 getJavaScriptFilename('index.php') // null
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function getNonJavaScriptFilename(input){
   const rfile = /^(?&lt;filename&gt;[a-z]+)(?!\.js)\.[a-z]+$/u
   const match = file.exec(input)
@@ -217,7 +218,7 @@ function getNonJavaScriptFilename(input){
 getNonJavaScriptFilename('index.js') // null
 getNonJavaScriptFilename('index.php') // 'index'
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function getDollarAmount(input){
   const dollars = /^(?&lt;=\$)(?&lt;amount&gt;\d+(?:\.\d+)?)$/u
   const match = dollars.exec(input)
@@ -229,7 +230,7 @@ function getDollarAmount(input){
 getDollarAmount('$12.34') // '12.34'
 getDo11arAmount('€12.34') // null
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function getDollarAmount(input){
   const dollars = /^(?&lt;!\$)(?&lt;amount&gt;\d+(?:\.\d+)?)$/u
   const match = dollars.exec(input)
@@ -241,28 +242,28 @@ function getDollarAmount(input){
 getDollarAmount('$12.34') // null
 getDo11arAmount('€12.34') // '12.34'
       </code></pre>
-      <h3 id="7-4-6">7-4-6 全新的 /s 'dotAll' 模式</h3>
-      <pre><code class="language-js">
+        <h3 id="7-4-6">7-4-6 全新的 /s 'dotAll' 模式</h3>
+        <pre><code class="language-js">
 const rcharacter = /^.$/
 rcharacter.test('a') // true
 rcharacter.test('\t') // true
 rcharacter.test('\n') // false
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const rcharacter = /[\s\S]$/
 rcharacter.test('a') // true
 rcharacter.test('\t') // true
 rcharacter.test('\n') // true
       </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const rcharacter= /^.$/s
 rcharacter.test('a') // true
 rcharacter.test('\t') // true
 rcharacter.test('\n') // true
       </code></pre>
 
-      <h3 id="7-4-7">7-4-7 String#matchAll</h3>
-      <pre><code class="language-js">
+        <h3 id="7-4-7">7-4-7 String#matchAll</h3>
+        <pre><code class="language-js">
 function* parseAttributes(input){
   const rattributes = /(\w+)="([^"]+)"\s/ig
   while (true){
@@ -281,7 +282,7 @@ console.log(...parseAttributes(html))
 //  ['placeholder', 'hello@mjavascript.com']
 // ]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* matchAll(regex, input){
   while(true){
     const match = regex.exec(input)
@@ -304,7 +305,7 @@ console.log(...parseAttributes(html))
 //  ['placeholder', 'hello@mjavascript.com']
 // ]
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const attributes = /(\w+)="([^"]+)"\s/ig
 const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
 const emailMatcher = matchAll(rattributes, email)
@@ -315,7 +316,7 @@ console.log(emailMatcher.next().value)
 console.log(addressMatcher.next().value)
 //['laceholder',Enter your business address']
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function* matchAll(regex, input) {
   let lastIndex = 0
   while (true) {
@@ -344,7 +345,7 @@ console.log(emailMatcher.next().value)
 console.log(addressMatcher.next().value)
 // ['placeholder', 'Enter your business address']
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const attributes = /(?&lt;key&gt;w+)="(?&lt;value&gt;[^"]+)"\s/igu
 const email = '&lt;input type="email" placeholder="hello@mjavascript.com"/&gt;'
 for (const match of email.matchAll(rattributes)){
@@ -354,11 +355,8 @@ for (const match of email.matchAll(rattributes)){
 // type: email
 // placeholder: hello@mjavascript.com
         </code></pre>
-
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

@@ -1,36 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="icon" href="./public/favicon.ico" />
-      <meta http-equiv="cache-control" content="no-cache">
-      <title>JavaScript-syntax-testing</title>
-      <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-      <link rel="stylesheet" href="./hightlight/default.min.css" />
-      <link rel="stylesheet" href="./css/main.css" />
-      <link rel="stylesheet" href="./css/copybutton.css" />
-      <link rel="stylesheet" href="./css/hightlight.css" />
-      <script src="./hightlight/hightlight.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-</head>
-
-<body>
-      <header>
-            <nav>
-                  <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-            </nav>
-      </header>
-      <main>
-            <aside>
-                  <nav></nav>
-            </aside>
-            <article>
-                  <h2>8-2 JavaScript 模組</h2>
-                  <h3 id="8-2-2">8-2-2 export 輸出敘述</h3>
-                  <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>8-2 JavaScript 模組</h2>
+        <h3 id="8-2-2">8-2-2 export 輸出敘述</h3>
+        <pre><code class="language-js">
 // 輸出任何類型的值都可以
 
 module.exports = 'hello'
@@ -41,8 +43,8 @@ module.exports = ['hello' ,'world' ]
 
 module.exports = function hello(){}
       </code></pre>
-                  <h4>輸出預設的繫結</h4>
-                  <pre><code class="language-js">
+        <h4>輸出預設的繫結</h4>
+        <pre><code class="language-js">
 // 另一種寫法
 
 export default 'hello'
@@ -53,45 +55,45 @@ export default ['hello','world' ]
 
 export default function hello(){}
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function initialize() {
   module.exports = 'hello!'
   initialize()
 }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 function initialize() {
   export default 'hello!' // SyntaxError
 }
 initialize()
       </code></pre>
-                  <h4>命名輸出</h4>
-                  <pre><code class="language-js">
+        <h4>命名輸出</h4>
+        <pre><code class="language-js">
 module.exports.counter = 0
 module.exports.count = ()=&gt; module.exports.counter++
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 export let counter = 0
 export const count = ()=&gt; counter++
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 let counter = 0
 const count = ()=&gt; counter++
 export counter // SyntaxError
 export count
       </code></pre>
-                  <h4>輸出串列</h4>
-                  <pre><code class="language-js">
+        <h4>輸出串列</h4>
+        <pre><code class="language-js">
 let counter = 0
 const count = ()=&gt; counter++
 export { counter, count }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 let counter = 0
 const count = ()=&gt; counter++
 export { counter, count as increment }
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 //下面兩者相同
 
 let counter = 0
@@ -102,12 +104,12 @@ let counter = const count = ()=&gt; counter++
 export default counter
 export { count as increment }
       </code></pre>
-                  <h4>繫結，而不是值</h4>
-                  <pre><code class="language-js">
+        <h4>繫結，而不是值</h4>
+        <pre><code class="language-js">
 export let fungible = { name: 'bound' }
 setTimeout(()=&gt; fungible = [0, 1, 2], 5000)
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import { fungible } from '/fungible.js'
 console.log(fungible) //  { name: 'bound' }
 setInterval(()=&gt; console.log(fungible), 2000)
@@ -117,56 +119,56 @@ setInterval(()=&gt; console.log(fungible), 2000)
 // [0, 1, 2]
 // [0, 1, 2]
       </code></pre>
-                  <h4>自另一個模組輸出</h4>
-                  <pre><code class="language-js">
+        <h4>自另一個模組輸出</h4>
+        <pre><code class="language-js">
 export { increment } from '/counter.js'
 increment()
 // ReferenceError :increment 未定義
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 export { increment as add } from '/counter.js'
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 export * from './counter.js'
       </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 export { default as counter } from './counter.js'
       </code></pre>
-                  <h3 id="8-2-3">8-2-3 import 載入敘述</h3>
-                  <pre><code class="language-js">
+        <h3 id="8-2-3">8-2-3 import 載入敘述</h3>
+        <pre><code class="language-js">
 let counter = 0
 const increment = ()=&gt; counter++
 const decrement = ()=&gt; counter--
 export { counter as default, increment, decrement }
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import '/counter.js'
       </code></pre>
-                  <h4>載入預設的輸出</h4>
-                  <pre><code class="language-js">
+        <h4>載入預設的輸出</h4>
+        <pre><code class="language-js">
 const counter = require('./counter.js')
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import counter from './counter.js'
 console.log(counter)
 // 0
         </code></pre>
-                  <h4>載入名稱的輸出</h4>
-                  <pre><code class="language-js">
+        <h4>載入名稱的輸出</h4>
+        <pre><code class="language-js">
 import { increment } from './counter.js'
 //  欲載入多個繫結，可用逗號將它們分隔。
 import { increment, decrement } from './counter.js'
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import { increment as add } from './counter.js'
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import counter, { increment } from './counter.js'
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import { default as counter, increment } from './counter.js'
         </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import counter, { increment } from './counter.js'
 console.log(counter) // 0
 increment()
@@ -174,21 +176,21 @@ console.log(counter) // 1
 increment()
 console.log(counter) // 2
         </code></pre>
-                  <h4>萬用字元載入敘述</h4>
-                  <pre><code class="language-js">
+        <h4>萬用字元載入敘述</h4>
+        <pre><code class="language-js">
 import * as counter from './counter.js'
 counter.increment()
 counter.increment()
 console.log(counter.default) // 2
         </code></pre>
 
-                  <h3 id="8-2-4">8-2-4 動態 import()</h3>
-                  <pre><code class="language-js">
+        <h3 id="8-2-4">8-2-4 動態 import()</h3>
+        <pre><code class="language-js">
 import localizationService from './localizationService.js'
 import(`./localizations/${ navigator.language }.json`)
 .then(module =&gt; localizationService.use(module))
 </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 import('./vendor/jquery.js')
 .then($ =&gt; {
   //使用jquery
@@ -197,7 +199,7 @@ import('./vendor/jquery.js')
   // 無法載入 jquery
 })
 </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 const specifiers = [
    './vendor/jquery.js',
    './vendor/backbone.js',
@@ -209,7 +211,7 @@ Promise
   // 使用模組
 })
 </code></pre>
-                  <pre><code class="language-js">
+        <pre><code class="language-js">
 // 類似的方式，你可以利用同步迥圈或 async/await 來載入模組，如下範例。
 async function load(){
    const { map } = await import('./vendor/jquery.js')
@@ -223,10 +225,8 @@ async function load(){
 }
 load()
 </code></pre>
-            </article>
-      </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>
