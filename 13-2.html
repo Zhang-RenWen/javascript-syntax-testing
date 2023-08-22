@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="13-2">13-2 Array.prototype.flatMap()</h2>
       <p>flatMap() 方法是一個疊代方法。可以看作是 map 和 depth 為 1 的 flat 的組合。</p>
       <pre><code class="language-js">
@@ -158,7 +162,7 @@ console.log(
       <p>
         <a href="https://juejin.cn/post/7023895016384757796">https://juejin.cn/post/7023895016384757796</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

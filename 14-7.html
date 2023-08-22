@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="14-7">14-7 絕對全域物件 globalThis</h2>
       <p>
         全域屬性 globalThis 包含全域的 this 值，類似於全域物件(global object)。
@@ -83,7 +87,7 @@ if (typeof globalThis.setTimeout !== "function") {
       <p>
         <a href="https://www.youtube.com/watch?v=_VvUXvTQUTE">https://www.youtube.com/watch?v=_VvUXvTQUTE</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

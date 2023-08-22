@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="14-2">14-2 Promise allSettled</h2>
       <h3>語法測試</h3>
       <p>語法: Promise.allSettled(iterable)</p>
@@ -102,7 +106,7 @@ Promise.allSettled([
       <p>
         <a href="https://www.youtube.com/watch?v=X7lWl5jp3UI">https://www.youtube.com/watch?v=X7lWl5jp3UI</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>Chapter 5 運用 ECMAScript 集合</h2>
       <h2>5-4 的弱集合</h2>
       <pre><code class="language-js">
@@ -113,7 +117,7 @@ function dommy(target) {
   // 進行一些操作
 }
         </code></pre>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

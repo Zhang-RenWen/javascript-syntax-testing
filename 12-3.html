@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="12-3">12-3 正則表達式 - Lookbehind assertion 反向斷言</h2>
       <p>斷言的就是判斷的意思。判斷我們這次的匹配結果是正確還是不正確。</p>
       <h3>lookahead assertion 正向斷言</h3>
@@ -101,7 +105,7 @@ console.log(ripeOranges); // [ 'ripe orange A', 'ripe orange C' ]
       <p>
         <a href="https://www.youtube.com/watch?v=rZcZRcxg0XM">https://www.youtube.com/watch?v=rZcZRcxg0XM</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

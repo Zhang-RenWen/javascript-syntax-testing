@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>3-3 物件的內建功能強化</h2>
       <p>
         Object 物件新推出的建靜態方法: Object.assign / Object.is /
@@ -143,7 +147,7 @@ const cat = Object.setPrototypeOf( { name: 'smallBlackDot'} , baseCat )
       <p>
         注意 !!! Object.setPrototypeOf 較 Object.create 差‧應避免使用‧
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

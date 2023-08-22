@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="15-6">15-6 Logical OR assignment(||=)</h2>
       <p>Logical OR assignment <code> ||=</code> 左側的值若為 <strong>Falsy</strong> ,就會將 <code>||=</code> 右側的值賦予
         <code>||=</code>
@@ -84,7 +88,7 @@ document.getElementById("lyrics").textContent ||= "No lyrics.";
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR_assignment">https://developer.mozilla.org/.../Logical_OR_assignment</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

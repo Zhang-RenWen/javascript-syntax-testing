@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="15-2">15-2 Promise.any()</h2>
       <p>Promise.any() 方法將一個 Promise 疊代物件作為傳入參數，並回傳一個 Promise。當輸入的任何一個 Promise 實現時，這個回傳的 Promise 將會實現，並回傳第一個實現的值。當所有輸入
         Promise 都被拒絕（包括傳遞了空的可迭代物件）時，它會以一個包含拒絕原因陣列的 AggregateError 拒絕。</p>
@@ -46,7 +50,8 @@ Promise.any(promises).then((value) =&gt; console.log(value));
       <p>
       <ul>
         <li>已拒絕(already rejected)，如果傳入的 iterable 為空的話。</li>
-        <li>異步實現(asynchronously filfilled)，當給定的 iterable 中的任何一個 Promise 被實現時，回傳的 Promise 就會被實現。其實現值是第一個實現的 Promise 的實現值。
+        <li>異步實現(asynchronously filfilled)，當給定的 iterable 中的任何一個 Promise 被實現時，回傳的 Promise 就會被實現。其實現值是第一個實現的 Promise
+          的實現值。
         </li>
         <li>Promise.any()中的 Promise 序列只要有一個執行通過，則認為成功，如果全部拒絕，則認為失敗；</li>
       </ul>
@@ -127,7 +132,7 @@ Promise.any([coffee, tea])
         <a
           href="https://www.zhangxinxu.com/wordpress/2021/05/promise-all-race-any/">https://www.zhangxinxu.com/wordpress/2021/05/promise-all-race-any/</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

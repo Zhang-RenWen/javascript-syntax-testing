@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>4-4 非同步函式</h2>
       <h3 id="4-4-1">
         4-4-1 非同步函式的意義
@@ -359,7 +363,7 @@ function getUserProfiles(){
   return profilePromise
 }
       </code></pre>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

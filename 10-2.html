@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="10-2">10-2 Exponentiation Operator (指數運算子)</h2>
       <h3>ES6之前的 Math.pow()</h3>
       <P>
@@ -171,7 +175,7 @@ console.log(Math.pow(2n, 3n));  // TypeError: Cannot convert a BigInt value to a
           assignment (**=)n</a>
       </p>
 
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

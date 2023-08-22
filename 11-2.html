@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="11-2">11-2 String.padEnd()</h2>
       <p>
         padEnd() 會將用給定用於填充的字串，以重複的方式，插入到目標字串的尾端(右側)，直到目標字串到達指定長度。
@@ -68,7 +72,7 @@ console.log(str2.padEnd(5));
         <a
           href="https://www.tabnine.com/code/javascript/functions/builtins/String/padEnd">https://www.tabnine.com/code/javascript/....</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

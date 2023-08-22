@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>新標準 ES2021 (ES12)</h2>
       <h2 id="15-1">15-1 String.prototype.replaceAll</h2>
       <p> 第一個參數可以是正則表達式或是單一字串代表要取代的篩選條件，第二個參數要是取代舊字串的文字。我們現在可以使用
@@ -78,7 +82,7 @@ console.log(safeRedactName(report, "ha.*er")); // "A hacker called [REDACTED] us
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replaceAll">https://developer.mozilla.org/.../replaceAll</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

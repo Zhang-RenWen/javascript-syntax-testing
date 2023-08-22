@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="14-3">14-3 String.prototype.matchAll()</h2>
       <p>matchAll() 方法返回一個疊代器，該疊代器包含了檢索字串與正則表達式進行匹配的所有結果（包括捕獲組）。</p>
       <p>一個匹配結果的可疊代疊代器物件（它不可重新開始）。每個匹配結果都是一個陣列，其形狀與 RegExp.prototype.exec() 的返回值相同。</p>
@@ -45,7 +49,8 @@ console.log(array[1]);
       <p>matchAll(regexp)</p>
       <h4>參數<strong>regexp</strong>規則</h4>
       <p>
-        一個正則表達式物件，或者是任何具有 Symbol.matchAll 方法的物件。如果 regexp 不是一個 RegExp 物件，並且沒有 Symbol.matchAll 方法，它將通過 new RegExp(regexp,
+        一個正則表達式物件，或者是任何具有 Symbol.matchAll 方法的物件。如果 regexp 不是一個 RegExp 物件，並且沒有 Symbol.matchAll 方法，它將通過 new
+        RegExp(regexp,
         'g') 被隱式轉換為一個 RegExp 物件。如果 regexp 是一個正則表達式，那麽它必須設置了全域(g)標志，否則會拋出 TypeError 異常。</p>
       <p>Regexp.prototype.exec() 和 matchAll()</p>
       <p>如果沒有 matchAll() 方法，仍然可以使用帶有 g 標志的正則表達式調用 regexp.exec() 來在迴圈中獲取所有匹配結果：</p>
@@ -62,7 +67,8 @@ while ((match = regexp.exec(str)) !== null) {
 // 找到 football 起始位置=6 结束位置=14。
 // 找到 foosball 起始位置=16 结束位置=24。
         </code></pre>
-      <p>如果有 matchAll() 方法，則可以避免使用 while 迴圈和帶有 g 標志的 exec。相反，你可以獲得一個疊代器，以便使用更方便的 for...of 迴圈、陣列展開語法或 Array.from() 構造函數：
+      <p>如果有 matchAll() 方法，則可以避免使用 while 迴圈和帶有 g 標志的 exec。相反，你可以獲得一個疊代器，以便使用更方便的 for...of 迴圈、陣列展開語法或 Array.from()
+        構造函數：
       </p>
       <pre><code class="language-js">
 const regexp = /foo[a-z]*/g;
@@ -136,7 +142,7 @@ str.matchAll({
       <p>
         <a href="https://www.youtube.com/watch?v=3IbCKkrjZog">https://www.youtube.com/watch?v=3IbCKkrjZog</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

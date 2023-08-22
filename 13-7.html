@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="13-7">13-7 Well-formed JSON.stringify</h2>
       <p>當後端返回一個 JSON 時需要將 JSON 編碼成 UTF-8 格式。但是當使用 JSON.stringify 來序列化的時候，不能將一些非成對的 UTF-16
         的代碼單元(0xD800-0xDFFF) 編碼成 UTF-8 。可以了解到 UTF-16 代理對是由一個高代理(U+D800-U+DBFF 1,024 個代碼點)+ 一個低代理(U+DC00—U+DFFF 1,024
@@ -56,7 +60,7 @@ console.log(JSON.stringify(`\u{D800}`) === `"\ud800"`);
       <p>
         <a href="https://juejin.cn/post/7023895016384757796">https://juejin.cn/post/7023895016384757796</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

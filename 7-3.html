@@ -18,12 +18,16 @@
 </head>
 
 <body>
-      <nav>
-            <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-      </nav>
+      <header>
+            <nav>
+                  <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+            </nav>
+      </header>
       <main>
-            <aside></aside>
-            <section>
+            <aside>
+                  <nav></nav>
+            </aside>
+            <article>
                   <h2>7-3 字串和萬國碼</h2>
                   <pre><code class="language-js">
 function greet(name){
@@ -391,7 +395,7 @@ normal === irregular
 compare(normal, irregular)
 // true
             </code></pre>
-            </section>
+            </article>
       </main>
 </body>
 <script type="module" src="./js/main.js"></script>

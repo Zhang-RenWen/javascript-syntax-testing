@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>2-2 箭頭函式</h2>
       <h3>2-2-1 語彙範圍</h3>
       <ul>
@@ -103,7 +107,7 @@ const normal = new Normal()
 console.log(normal) // 
 const arrow = new Arrow() // Uncaught TypeError: Arrow is not a constructor
 </code></pre>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>
