@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>Chapter 6 運用代理器管理特性存取</h2>
-      <h2>6-1 代理器初探</h2>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>Chapter 6 運用代理器管理特性存取</h2>
+        <h2>6-1 代理器初探</h2>
+        <pre><code class="language-js">
 const target = {}
 const handler = {}
 const proxy = new Proxy(target, handler)
@@ -41,8 +42,8 @@ console.log(target.exposed)
 console.log(proxy.somethingElse)
 // undefined
         </code></pre>
-      <h3 id="6-1-1">6-1-1 定義 get 機關攔截擷取操作</h3>
-      <pre><code class="language-js">
+        <h3 id="6-1-1">6-1-1 定義 get 機關攔截擷取操作</h3>
+        <pre><code class="language-js">
 const handler = {
   get(target, key) {
     console.log( `Get on property"${ key }"`)
@@ -59,7 +60,7 @@ proxy['something-else']
 // 'Get on property"something-else"'
 // undefined
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   get(target, key) {
     console.log( `Get on property "${ key }"` )
@@ -69,7 +70,7 @@ const handler = {
 const target = {}
 const proxy = new Proxy(target, handler)
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   get(target, key) {
     if (key.startsWith('_')) {
@@ -83,8 +84,8 @@ const proxy = new Proxy(target, handler)
 proxy._secret
 // Uncaught Error: "_secret" 特性不允許存取。
         </code></pre>
-      <h3 id="6-1-2">6-1-2 定義 set 機關攔截擷取操作</h3>
-      <pre><code class="language-js">
+        <h3 id="6-1-2">6-1-2 定義 set 機關攔截擷取操作</h3>
+        <pre><code class="language-js">
 const handler = {
   get(target, key) {
     invariant(key, 'get')
@@ -111,7 +112,7 @@ proxy._secret
 proxy._secret = 'invalidate'
 // Error：無法設定私有的 "_secret" 特性
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function proxied(){
   const target = {}
   const handler = {
@@ -132,7 +133,7 @@ function invariant (key, action){
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function concealWithPrefix(original, prefix=''){
   const handler = {
     get (original, key){
@@ -158,8 +159,8 @@ const target = {
 const proxy = concealWithPrefix(target)
 // 提供 proxy 予使用者操作
         </code></pre>
-      <h3 id="6-1-3">6-1-3 以代理器進行格式驗證</h3>
-      <pre><code class="language-js">
+        <h3 id="6-1-3">6-1-3 以代理器進行格式驗證</h3>
+        <pre><code class="language-js">
 const validations = new Map()
 const validator={
   set(target, key, value) {     
@@ -181,7 +182,7 @@ function validateAge (value) {
   return true
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const person = {}
 const proxy = new Proxy (person, validator)
 proxy.age = 'twenty three'
@@ -194,26 +195,24 @@ proxy.age = 28
 console.log (person.age)
 // 28
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 
         </code></pre>
-      <div class="border-block"></div>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+        <div class="border-block"></div>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>

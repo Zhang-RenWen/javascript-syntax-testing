@@ -1,15 +1,15 @@
 :root {
   --vh: 100vh;
-  --nav-height:56px;
-  --aside-width:270px;
+  --nav-height: 56px;
+  --aside-width: 270px;
   /* hight-light */
-  --hljs-main-color:#1e1e1e;
-  --hljs-main-correct-bg-color:#e5f1eb;
-  --hljs-main-error-bg-color:#fbe5eb;
-  --hljs-code-line-color:gray;
-  --hljs-code-line-border:1px solid rgba(171, 171, 171, 0.2);
+  --hljs-main-color: #1e1e1e;
+  --hljs-main-correct-bg-color: #e5f1eb;
+  --hljs-main-error-bg-color: #fbe5eb;
+  --hljs-code-line-color: gray;
+  --hljs-code-line-border: 1px solid rgba(171, 171, 171, 0.2);
   /* notecard */
-  --notecard-background-information: rgba(0,133,242,.1);
+  --notecard-background-information: rgba(0, 133, 242, 0.1);
   --notecard-border-information: #0085f2;
   --notecard-elem-radius: 0.25rem;
 }
@@ -19,7 +19,9 @@
 }
 
 body {
-  font-family:InterVariable,LiHei Pro,黑體-繁,微軟正黑體,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  font-family: InterVariable, LiHei Pro, 黑體-繁, 微軟正黑體, ui-sans-serif, system-ui,
+    -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   margin: 0;
   overflow: hidden;
 }
@@ -35,15 +37,15 @@ header nav {
   z-index: 4;
 }
 
-h1 a{
+h1 a {
   display: inline-block;
   cursor: pointer;
   width: 100%;
-  color:#000;
+  color: #000;
 }
 
-#toggle-menu{
- display: none;   
+#toggle-menu {
+  display: none;
 }
 
 main {
@@ -55,40 +57,40 @@ main {
   background-color: #fff;
 }
 
-aside nav{
+aside nav {
   overflow-y: auto;
-  width: var( --aside-width);
+  width: var(--aside-width);
   max-height: calc(var(--vh) - var(--nav-height));
   padding: 1rem 0 0 0;
   background-color: #fff;
   border-right: #ccc 1px solid;
   font-size: 0.7rem;
 }
-aside nav>div{
+aside nav > div {
   padding-left: 0.3rem;
   padding-bottom: 0.3rem;
   font-weight: bold;
-  font-size:0.8rem
+  font-size: 0.8rem;
 }
-aside nav a{
+aside nav a {
   display: inline-block;
   cursor: pointer;
   width: 100%;
-  color:inherit;
-  padding:  0.3rem 0.6rem;
-
+  color: inherit;
+  padding: 0.3rem 0.6rem;
 }
-aside nav li:hover, aside nav li:hover a{
+aside nav li:hover,
+aside nav li:hover a {
   background-color: #cde4d6;
 }
 
-aside nav li.menu-item-focus a{
-  background-color: #04AA6D;
+aside nav li.menu-item-focus a {
+  background-color: #04aa6d;
   color: #fff;
 }
 
-#aside-mask{
-  background-color: rgba(0,0,0,0.0);
+#aside-mask {
+  background-color: rgba(0, 0, 0, 0);
   transition: all 0.3s ease-out;
   position: absolute;
   top: 0;
@@ -102,7 +104,7 @@ aside nav li.menu-item-focus a{
 article {
   overflow-y: auto;
   padding: 0 30% 0 3rem;
-  width: calc(100% - var( --aside-width));
+  width: calc(100% - var(--aside-width));
 }
 
 table {
@@ -125,16 +127,16 @@ td {
 
 aside nav ul,
 aside nav ul li {
-  list-style-type: "";
+  list-style-type: '';
 }
 
-ul{
+ul {
   margin-block-start: 0;
   padding-inline-start: 0rem;
 }
 
-
-article li,p {
+article li,
+p {
   font-size: 0.9rem;
   line-height: 1.5rem;
 }
@@ -143,15 +145,13 @@ a {
   text-decoration: none;
 }
 
-
 h3 {
   margin: 0;
   padding-top: 1.5rem;
 }
 
-
-code{
-  background-color: #F3F2F2;
+code {
+  background-color: #f3f2f2;
 }
 
 blockquote {
@@ -161,7 +161,7 @@ blockquote {
   padding: 1rem 2rem;
 }
 
-.notecard{
+.notecard {
   background-color: var(--notecard-background-information);
   border-left: 4px solid var(--notecard-border-information);
   border-radius: var(--notecard-elem-radius);
@@ -169,10 +169,10 @@ blockquote {
   position: relative;
 }
 .notecard::before {
-  content:"";
+  content: '';
   background-color: var(--notecard-border-information);
-  -webkit-mask-image:url('../assets/icons/note-info.svg');
-  mask-image:url('../assets/icons/note-info.svg');
+  -webkit-mask-image: url('../assets/icons/note-info.svg');
+  mask-image: url('../assets/icons/note-info.svg');
   -webkit-mask-position: center;
   mask-position: center;
   -webkit-mask-repeat: no-repeat;
@@ -187,7 +187,7 @@ blockquote {
   width: 1rem;
 }
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   main {
     padding-top: 3rem;
   }
@@ -195,18 +195,18 @@ blockquote {
     padding-left: 0;
     height: 3rem;
   }
-  h1{
-    margin:0.6rem;
+  h1 {
+    margin: 0.6rem;
   }
-  h1 a{
-  font-size: 1.2rem;
-  width: calc(100% - 1.8rem);
+  h1 a {
+    font-size: 1.2rem;
+    width: calc(100% - 1.8rem);
   }
-  #toggle-menu{
+  #toggle-menu {
     display: inline-block;
     cursor: pointer;
-    margin-right:1rem;
-    padding:3px 0.1rem;
+    margin-right: 1rem;
+    padding: 3px 0.1rem;
     transform-style: preserve-3d;
     transition: transform 0.3s;
   }
@@ -215,37 +215,35 @@ blockquote {
     content: url('../assets/icons/line-angle-right-icon.svg');
     width: 0.6rem;
     height: 0.6rem;
-
   }
 
-  #toggle-menu.opened{
+  #toggle-menu.opened {
     transform: rotateY(180deg);
   }
 
-  aside nav{
-    position:fixed;
+  aside nav {
+    position: fixed;
     transform-style: preserve-3d;
     transition: left 0.3s;
     max-height: calc(var(--vh) - var(--nav-height));
-    left:  calc(var(--aside-width) * -1);
+    left: calc(var(--aside-width) * -1);
     z-index: 4;
   }
-  aside nav.opened{
-    left:0;
+  aside nav.opened {
+    left: 0;
   }
 
   article {
     overflow-y: auto;
     padding: 0 1rem 0 1rem;
     width: 100%;
-  } 
-  #aside-mask{
+  }
+  #aside-mask {
     width: 100%;
     height: var(--vh);
   }
-  #aside-mask.mask{
-    background-color: rgba(0,0,0,0.5);
+  #aside-mask.mask {
+    background-color: rgba(0, 0, 0, 0.5);
     pointer-events: initial;
   }
 }
-

@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>JavaScript-syntax-testing</title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="./public/favicon.ico" />
-  <meta http-equiv="cache-control" content="no-cache">
-  <title>JavaScript-syntax-testing</title>
-  <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
-  <link rel="stylesheet" href="./hightlight/default.min.css" />
-  <link rel="stylesheet" href="./css/main.css" />
-  <link rel="stylesheet" href="./css/copybutton.css" />
-  <link rel="stylesheet" href="./css/hightlight.css" />
-  <script src="./hightlight/hightlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
-
-</head>
-
-<body>
-  <header>
-    <nav>
-      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-    </nav>
-  </header>
-  <main>
-    <aside>
-      <nav></nav>
-    </aside>
-    <article>
-      <h2>6-4 進階的代理器機關</h2>
-      <h3 id="6-4-1">6-4-1 getOwnPropertyDescriptor 機關</h3>
-      <pre><code class="language-js">
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html">現代 Javascript 實務應用</a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>6-4 進階的代理器機關</h2>
+        <h3 id="6-4-1">6-4-1 getOwnPropertyDescriptor 機關</h3>
+        <pre><code class="language-js">
 const handler = {
   getOwnPropertyDescriptor(target, key) {
     invariant(key,'get property descriptor for')
@@ -48,7 +49,7 @@ const proxy = new Proxy(target, handler)
 Reflect.getOwnPropertyDescriptor(proxy,'_secret')
 // Error：無法取得私有特性 '_secret' 的特性描述子
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   getOwnPropertyDescriptor(target, key) {
    if (key.startswith('_')){
@@ -80,23 +81,23 @@ console.log(proxy.hasOwnProperty('topping'))
 console.log(proxy.hasOwnProperty('_secret'))
 // false
         </code></pre>
-      <h3 id="6-4-2">6-4-2 apply 機關</h3>
+        <h3 id="6-4-2">6-4-2 apply 機關</h3>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 proxy('cats','dogs')
 proxy(...['cats','dogs' ])
 proxy.call(null,'cats','dogs')
 proxy.apply(null, ['cats','dogs' ])
 Reflect.apply(proxy, null, ['cat','dogs'])
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   apply(target, ctx, args) {
     return Reflect.apply(target, ctx, args)
   }
 }   
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const twice= {
   apply(target, ctx, args) {
     return Reflect.apply(target, ctx, args) * 2
@@ -109,15 +110,15 @@ const proxy = new Proxy(sum, twice)
 console.log(proxy(1, 2))
 // 6
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const logger = {
   return this
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 logger.test = logger.test.bind(logger)   
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const selfish = {
   get (target, key) {
     const value = Reflect.get(target, key)
@@ -130,7 +131,7 @@ const selfish = {
 const proxy = new Proxy (logger, selfish)
           
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const something
 console.log(logger.test() === logger)
 // true
@@ -142,11 +143,11 @@ console.log(proxy.test.call(something) === logger)
 // true
           
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(proxy.test !== proxy.test)
 // true  
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 function selfish(target) {
   const cache = new WeakMap()
   const handler = {
@@ -166,7 +167,7 @@ function selfish(target) {
 }
           
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const selfishLogger = selfish(logger)
 console.log(selfishLogger.test === selfishLogger.test)
 // true
@@ -176,9 +177,9 @@ console.log(selfishLogger.test.call(something) selfishLogger)
 // true
           
         </code></pre>
-      <h3 id="6-4-3">6-4-3 setPrototypeOf 機關</h3>
+        <h3 id="6-4-3">6-4-3 setPrototypeOf 機關</h3>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   construct (Target, args) {
     return new Target(...args)
@@ -186,14 +187,14 @@ const handler = {
 }
         </code></pre>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   construct(Target, args) {
     return Reflect.construct(Target, args)
   }
 }     
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   construct(Target, args) {
     const [ name ] = args
@@ -208,7 +209,7 @@ const handler = {
 }
           
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target= new Target()
 target.name = 'Nicolás'
 target.hello()
@@ -219,8 +220,8 @@ const proxy = new ProxiedTarget('Nicolás' )
 proxy.hello()
 // 'Hello, Nicolás'
         </code></pre>
-      <h3 id="6-4-4">6-4-4 setPrototypeOf 機關</h3>
-      <pre><code class="language-js">
+        <h3 id="6-4-4">6-4-4 setPrototypeOf 機關</h3>
+        <pre><code class="language-js">
 const handler = {
   getPrototypeOf: target=&gt; Array.prototype
 }
@@ -230,11 +231,11 @@ console.log(proxy instanceof Array)
 // true
           
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(proxy.push)
 // undefined
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler = {
   getPrototypeOf: target =&gt; Array.prototype,
   get(target, key) {
@@ -248,15 +249,15 @@ const target = {}
 const proxy = new Proxy(target, handler)
           
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 console.log(proxy.push)
 // function push(){ [native code] }
 proxy.push('first','second' )
 console.log(proxy)
 // {0: 'first', 1:'second' , length: 2 }
         </code></pre>
-      <h3 id="6-4-5">6-4-5 setPrototypeOf 機關</h3>
-      <pre><code class="language-js">
+        <h3 id="6-4-5">6-4-5 setPrototypeOf 機關</h3>
+        <pre><code class="language-js">
 const handler{
   setPrototypeOf(target, proto) {
     Object.setPrototypeOf(target, proto)
@@ -269,7 +270,7 @@ proxy.setPrototypeOf(proxy, base)
 console.log(proxy.prototype === base)
 // true
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const handler={
   setPrototypeOf(target, proto){
     throw new Error('Changing the prototype is forbidden' )
@@ -281,9 +282,9 @@ const proxy = new Proxy(Target, handler)
 proxy.setPrototypeOf(proxy, base)
 // Error: Changing the prototype is forbidden
         </code></pre>
-      <h3 id="6-4-6">6-4-6 preventExtensions 機關</h3>
+        <h3 id="6-4-6">6-4-6 preventExtensions 機關</h3>
 
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const canExtend = new WeakSet()
 const handler = {
   preventExtensions(target) {
@@ -295,7 +296,7 @@ const handler = {
   }
 }
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target = {}
 const proxy = new Proxy(target, handler)
 canExtend.add(target)
@@ -303,7 +304,7 @@ Object.preventExtensions(proxy)
 // TypeError:'preventExtensions'於 proxy:
 // 機關回傳錯誤
         </code></pre>
-      <pre><code class="language-js">
+        <pre><code class="language-js">
 const target = {}
 const proxy = new Proxy(target, handler)
 canExtend.add(target)
@@ -312,14 +313,10 @@ Object.preventExtensions(proxy)
 console.log(Object.isExtensible(proxy))
 // false
         </code></pre>
-      <h3 id="6-4-7">
-        6-4-7 isExtensible 機關
-      </h3>
-      <p>description...</p>
-    </article>
-  </main>
-</body>
-<script type="module" src="./js/main.js"></script>
-
-
+        <h3 id="6-4-7">6-4-7 isExtensible 機關</h3>
+        <p>description...</p>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
 </html>
