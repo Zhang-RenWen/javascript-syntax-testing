@@ -18,12 +18,16 @@
 </head>
 
 <body>
-      <nav>
-            <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-      </nav>
+      <header>
+            <nav>
+                  <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+            </nav>
+      </header>
       <main>
-            <aside></aside>
-            <section>
+            <aside>
+                  <nav></nav>
+            </aside>
+            <article>
                   <h2>7-5 陣列</h2>
                   <h3 id="7-5-1">7-5-1 Array.from</h3>
                   <pre><code class="language-js">
@@ -262,7 +266,7 @@ list[Symbol.iterator] === list.values
 [...['a' ,'b' ,'c' ,'d'][Symbol.iterator]()] // ['a', 'b' ,'c' ,'d']
 
       </code></pre>
-            </section>
+            </article>
       </main>
 </body>
 <script type="module" src="./js/main.js"></script>

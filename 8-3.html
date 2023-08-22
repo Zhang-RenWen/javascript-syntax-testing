@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>8-3 ES 模組操作的實務考量</h2>
       <pre><code class="language-js">
 const random = (function(){
@@ -38,7 +42,7 @@ const calc = n=&gt;Math.floor(Math.random() * n)
 const range = (max = 1, min = 0)=&gt;calc(max + 1 - min) + min
 export { range }
         </code></pre>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

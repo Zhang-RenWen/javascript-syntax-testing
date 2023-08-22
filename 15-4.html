@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="15-4">15-4 Nullish Coalescing Assignment(??=)</h2>
       <p>判斷 <code>??=</code>左邊變數為 <strong>空值(null or undefined)</strong>
         對<code>??=</code>左邊的變數賦予<code>??=</code>右側的值。最後回傳賦值運算後的結果。</p>
@@ -95,7 +99,7 @@ config({}); // { duration: 100, speed: 25 }
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment">https://developer.mozilla.org/.../Nullish_coalescing_assignment</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

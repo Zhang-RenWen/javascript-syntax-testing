@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="16-3">16-3 Object.hasOwn()</h2>
       <p>靜態方法<code><strong>Object.hasOwn()</strong></code>在檢測的目標物件有指定屬性時回傳 <code>true</code>，如果屬性是來自繼承或者是不存在則回傳
         <code>false</code>
@@ -128,8 +132,10 @@ Object.hasOwn(fruits, 3); // true ('Orange')
 Object.hasOwn(fruits, 4); // false - not defined
         </code></pre>
       <p>
-      <p>本部分證明了影響 <code>hasOwnProperty</code> 的問題對 <code>hasOwn()</code> 是免疫的。首先，它可以與重新實現的 <code>hasOwnProperty()</code>
-        一起使用：</p>
+      <p>本部分證明了影響 <code>hasOwnProperty</code> 的問題對 <code>hasOwn()</code> 是免疫的。首先，它可以與重新實現的
+        <code>hasOwnProperty()</code>
+        一起使用：
+      </p>
       </p>
       <pre><code class="language-js">
 const foo = {
@@ -160,7 +166,7 @@ foo.hasOwnProperty() // Uncaught TypeError: foo.hasOwnProperty is not a function
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn">https://developer.mozilla.org/.../hasOwn</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

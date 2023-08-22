@@ -5,7 +5,7 @@ const itemsDataAttribute = 'data-item-id'
 let deepPathname = window.location.pathname.split('/').filter(Boolean).filter((o)=>o.includes('.html'))[0];
 
 
-const DOMaside = document.querySelector('aside')
+const DOMaside = document.querySelector('aside').querySelector('nav')
 const DOMmain = document.querySelector('main')
 
 
@@ -1201,10 +1201,10 @@ export function setFocusMenuItem(){
 export function scrollToFocusEl(){
   const menu_item =getMenuItem()
   const aside =DOMaside
-  const nav_height  =document.querySelector('nav').getBoundingClientRect().height
+  const header_nav_height  =document.querySelector('header').querySelector('nav').getBoundingClientRect().height
   if(menu_item){
     const menu_item_height = menu_item.getBoundingClientRect().height
-    aside.scrollTo(0,menu_item.getBoundingClientRect().bottom -menu_item_height -nav_height*2)
+    aside.scrollTo(0,menu_item.getBoundingClientRect().bottom - menu_item_height - header_nav_height*2)
   }
 }
 

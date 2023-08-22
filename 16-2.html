@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="16-2">16-2 RegExp.prototype.hasIndices</h2>
       <p><code>hasIndices</code>屬於正則表達式物件 <code>RegExp</code>實例中的方法。用來檢測是否有 <code>/d</code> 標記搭配正則表達式一起使用。</p>
       <pre><code class="language-js">
@@ -74,7 +78,7 @@ console.log(regex2.exec(str2).indices); // undefined
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/hasIndices">https://developer.mozilla.org/.../hasIndices</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

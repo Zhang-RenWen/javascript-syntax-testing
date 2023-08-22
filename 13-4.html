@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="13-4">13-4 String.prototype.trimEnd()</h2>
       <p>trimEnd() 方法會刪除字串末尾的空白字符。trimRight() 是這個方法的別名。</p>
 
@@ -46,7 +50,8 @@ trimEnd()
 trimRight()
         </code></pre>
       <p>
-        為了與 String.prototype.padEnd 等函數保持一致，標準方法名稱為 trimEnd。但是，出於 Web 兼容性原因，trimRight 仍然是 trimEnd 的別名。在某些引擎中，這意味著： </p>
+        為了與 String.prototype.padEnd 等函數保持一致，標準方法名稱為 trimEnd。但是，出於 Web 兼容性原因，trimRight 仍然是 trimEnd 的別名。在某些引擎中，這意味著：
+      </p>
       <pre><code class="language-js">
 String.prototype.trimRight.name === "trimEnd";
         </code></pre>
@@ -68,7 +73,7 @@ console.log(str); // '   foo'
       <p>
         <a href="https://juejin.cn/post/7023895016384757796">https://juejin.cn/post/7023895016384757796</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

@@ -18,12 +18,16 @@
 </head>
 
 <body>
-      <nav>
-            <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-      </nav>
+      <header>
+            <nav>
+                  <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+            </nav>
+      </header>
       <main>
-            <aside></aside>
-            <section>
+            <aside>
+                  <nav></nav>
+            </aside>
+            <article>
                   <h2>Chapter 7 ES6 內建功能優化</h2>
                   <h2>7-1 數值</h2>
                   <h3 id="7-1-1">7-1-1 二進位和八進位實字</h3>
@@ -323,7 +327,7 @@ safeOp(9807199254740993 - 9007199254740995,
 safeOp (1 + 2, 1, 2)
 // 3
         </code></pre>
-            </section>
+            </article>
       </main>
 </body>
 <script type="module" src="./js/main.js"></script>
