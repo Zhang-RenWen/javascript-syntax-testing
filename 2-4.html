@@ -19,15 +19,20 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>2-4 其餘參數和展開運算子</h2>
       <p>
-        ES6 以前函式對不定量參數操作較為複雜。必須透過 arguments 類陣列。通常透過 Array.prototype.slice.call(arguments) 來將 arguments轉換為陣列。 以下列例子作為展示：
+        ES6 以前函式對不定量參數操作較為複雜。必須透過 arguments 類陣列。通常透過 Array.prototype.slice.call(arguments) 來將 arguments轉換為陣列。
+        以下列例子作為展示：
       </p>
       <pre><code class="language-js">
 function join(){
@@ -185,7 +190,7 @@ new Date(...[2015,11,31]) // Thu Dec 31 2015 00:00:00 GMT+0800 (台北標準時�
           <td>new Date(...[2015,31,8])</td>
         </tr>
       </table>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

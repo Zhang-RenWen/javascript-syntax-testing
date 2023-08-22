@@ -19,15 +19,20 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="12-5">12-5 Promise.finally()</h2>
       <p><strong><code>finally()</code></strong> 方法會回傳一個<code>Promise</code>。當 promise 被
-        settled 後，無論其結果是 fulfilled 還是 rejected ，都會執行指定的回呼函數。它提供了一個讓 <code>Promise</code> 在被確認後，無論是 fulfilled 或是 rejected
+        settled 後，無論其結果是 fulfilled 還是 rejected ，都會執行指定的回呼函數。它提供了一個讓 <code>Promise</code> 在被確認後，無論是 fulfilled 或是
+        rejected
         都會執行某些程式碼的一種手段。</p>
       <p>這樣可以避免你在 promise 的 <code>then()</code> 和 <code>catch()</code> 重複處理相同的程式碼。
       </p>
@@ -40,7 +45,7 @@ p.finally(function () {
 });
 
         </code></pre>
-      <div class="section-content">
+      <div class="article-content">
         <p>當你希望在 promise settled 後且不關心它的結果為何時，執行一些處理或清理的工作， <code>finally()</code> 方法會很有幫助。</p>
         <p><code>finally()</code> 方法非常類似於 <code>.then(onFinally, onFinally)</code> 的呼叫方式，但仍有一些差異：</p>
         <ul>
@@ -57,7 +62,7 @@ p.finally(function () {
             </ul>
           </li>
         </ul>
-        <div class="notecard note" id="sect1">
+        <div class="notecard">
           <p><strong>備註：</strong> 在 finally 回呼中使用 throw (或回傳 rejected promise)會導致新的 promise 被 reject，reject 的原因則是呼叫
             throw() 時所指定的值。</p>
         </div>
@@ -90,7 +95,7 @@ fetch(myRequest)
           href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Reference/Global_Objects/Promise/finally">https://developer.mozilla.org/.../Promise/finally</a>
       </p>
 
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

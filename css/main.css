@@ -8,6 +8,10 @@
   --hljs-main-error-bg-color:#fbe5eb;
   --hljs-code-line-color:gray;
   --hljs-code-line-border:1px solid rgba(171, 171, 171, 0.2);
+  /* notecard */
+  --notecard-background-information: rgba(0,133,242,.1);
+  --notecard-border-information: #0085f2;
+  --notecard-elem-radius: 0.25rem;
 }
 
 * {
@@ -16,10 +20,11 @@
 
 body {
   font-family:InterVariable,LiHei Pro,黑體-繁,微軟正黑體,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-  margin: 0
+  margin: 0;
+  overflow: hidden;
 }
 
-nav {
+header nav {
   position: fixed;
   width: 100%;
   height: var(--nav-height);
@@ -50,7 +55,7 @@ main {
   background-color: #fff;
 }
 
-aside {
+aside nav{
   overflow-y: auto;
   width: var( --aside-width);
   max-height: calc(var(--vh) - var(--nav-height));
@@ -59,13 +64,13 @@ aside {
   border-right: #ccc 1px solid;
   font-size: 0.7rem;
 }
-aside>div{
+aside nav>div{
   padding-left: 0.3rem;
   padding-bottom: 0.3rem;
   font-weight: bold;
   font-size:0.8rem
 }
-aside a{
+aside nav a{
   display: inline-block;
   cursor: pointer;
   width: 100%;
@@ -73,11 +78,11 @@ aside a{
   padding:  0.3rem 0.6rem;
 
 }
-aside li:hover,li:hover a{
+aside nav li:hover, aside nav li:hover a{
   background-color: #cde4d6;
 }
 
-aside li.menu-item-focus a{
+aside nav li.menu-item-focus a{
   background-color: #04AA6D;
   color: #fff;
 }
@@ -94,7 +99,7 @@ aside li.menu-item-focus a{
   pointer-events: none;
 }
 
-section {
+article {
   overflow-y: auto;
   padding: 0 30% 0 3rem;
   width: calc(100% - var( --aside-width));
@@ -118,8 +123,8 @@ td {
   padding: 0.5rem;
 }
 
-aside ul,
-aside u li {
+aside nav ul,
+aside nav ul li {
   list-style-type: "";
 }
 
@@ -129,7 +134,7 @@ ul{
 }
 
 
-section li,p {
+article li,p {
   font-size: 0.9rem;
   line-height: 1.5rem;
 }
@@ -156,11 +161,37 @@ blockquote {
   padding: 1rem 2rem;
 }
 
+.notecard{
+  background-color: var(--notecard-background-information);
+  border-left: 4px solid var(--notecard-border-information);
+  border-radius: var(--notecard-elem-radius);
+  padding: 0.5rem 1rem 0.5rem 3rem;
+  position: relative;
+}
+.notecard::before {
+  content:"";
+  background-color: var(--notecard-border-information);
+  -webkit-mask-image:url('../assets/icons/note-info.svg');
+  mask-image:url('../assets/icons/note-info.svg');
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  display: block;
+  height: 1rem;
+  left: 1rem;
+  position: absolute;
+  top: 1.6rem;
+  width: 1rem;
+}
+
 @media screen and (max-width: 768px){
   main {
     padding-top: 3rem;
   }
-  nav {
+  header nav {
     padding-left: 0;
     height: 3rem;
   }
@@ -191,7 +222,7 @@ blockquote {
     transform: rotateY(180deg);
   }
 
-  aside {
+  aside nav{
     position:fixed;
     transform-style: preserve-3d;
     transition: left 0.3s;
@@ -199,11 +230,11 @@ blockquote {
     left:  calc(var(--aside-width) * -1);
     z-index: 4;
   }
-  aside.opened{
+  aside nav.opened{
     left:0;
   }
 
-  section {
+  article {
     overflow-y: auto;
     padding: 0 1rem 0 1rem;
     width: 100%;

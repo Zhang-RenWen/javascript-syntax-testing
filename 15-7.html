@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="15-7">15-7 WeakRef</h2>
       <h3>以下資訊來自 mozilla MDN Web document：</h3>
       <p>A <strong><code>WeakRef</code></strong> object lets you hold a weak reference to another object, without
@@ -43,25 +47,30 @@
       </p>
       <h3>Avoid where possible 盡量避免使用</h3>
       <p>Correct use of <code>WeakRef</code> takes careful thought, and it's best avoided if possible. It's also
-        important to avoid relying on any specific behaviors not guaranteed by the specification. When, how, and whether
-        garbage collection occurs is down to the implementation of any given JavaScript engine. Any behavior you observe
+        important to avoid relying on any specific behaviors not guaranteed by the specification. When, how, and
+        whether
+        garbage collection occurs is down to the implementation of any given JavaScript engine. Any behavior you
+        observe
         in one engine may be different in another engine, in another version of the same engine, or even in a slightly
         different situation with the same version of the same engine. Garbage collection is a hard problem that
         JavaScript engine implementers are constantly refining and improving their solutions to.</p>
       </p>
-      <p>Here are some specific points included by the authors in the proposal that introduced <code>WeakRef</code>:</p>
+      <p>Here are some specific points included by the authors in the proposal that introduced <code>WeakRef</code>:
+      </p>
       <blockquote>
         <p>Garbage collectors are complicated. If an application or library depends on GC cleaning up a WeakRef or
           calling a finalizer [cleanup callback] in a timely, predictable manner, it's likely to be disappointed: the
           cleanup may happen much later than expected, or not at all. Sources of variability include:</p>
         <ul>
-          <li>One object might be garbage-collected much sooner than another object, even if they become unreachable at
+          <li>One object might be garbage-collected much sooner than another object, even if they become unreachable
+            at
             the same time, e.g., due to generational collection.</li>
           <li>Garbage collection work can be split up over time using incremental and concurrent techniques.</li>
           <li>Various runtime heuristics can be used to balance memory usage, responsiveness.</li>
           <li>The JavaScript engine may hold references to things which look like they are unreachable (e.g., in
             closures, or inline caches).</li>
-          <li>Different JavaScript engines may do these things differently, or the same engine may change its algorithms
+          <li>Different JavaScript engines may do these things differently, or the same engine may change its
+            algorithms
             across versions.</li>
           <li>Complex factors may lead to objects being held alive for unexpected amounts of time, such as use with
             certain APIs.</li>
@@ -161,7 +170,7 @@ setTimeout(() => {
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakRef">https://developer.mozilla.org/.../WeakRef</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

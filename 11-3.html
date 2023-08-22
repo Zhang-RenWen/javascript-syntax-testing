@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="11-3">11-3 Trailing Commas</h2>
       <p>
         以往早期的 Javascript 版本在陣列和物件屬性最後加上逗號是會出錯。另外 function 放置參數的括號內也會出錯。
@@ -168,7 +172,7 @@ export { A as B, C as D, E as F, };
 /x{2,}/; // At least 2 occurrences of 'x'; equivalent to /xx+/
 /x{2,4}/; // 2 to 4 occurrences of 'x'; equivalent to /xxx?x?/
       </code></pre>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

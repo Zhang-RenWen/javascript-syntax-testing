@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>新標準 ES2019 (ES10)</h2>
       <h2 id="13-1">13-1 Array.prototype.flat()</h2>
       <p>flat 的作用就如其名一般，將一個嵌套的陣列壓平，通過傳入一個 depth 參數，可以將指定深度嵌套的陣列解開壓平，最終合並成一個新的陣列返回。如果不傳遞 depth 參數，默認為 depth 為
@@ -72,7 +76,7 @@ console.log(Array.prototype.flat.call(arrayLike));
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat">https://developer.mozilla.org/.../flat</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>
