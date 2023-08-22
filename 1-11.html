@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>window 物件</h2>
       <h3 id=""></h3>
       <p>現在有一個需求是要開啟子頁籤做其他操作，在母頁籤關閉時子頁籤也要跟著全部關閉以防使用者做出非預期地操作，實作方式如下：</p>
@@ -76,7 +80,7 @@ window.addEventListener("beforeunload", closeAllSubWindows)
         </code></pre>
 
       <div class="border-block"></div>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

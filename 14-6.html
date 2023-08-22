@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="14-6">14-6 BigInt 類型</h2>
       <p><code><a href="7-1.html">Number.MAX_SAFE_INTEGER</a></code> 靜態數據屬性表示在 JavaScript 中最大的安全整數(2^53 - 1)</p>
       <p>新增的 <code>BigInt</code>型別可以用來表示或計算比普通安全整數更大的整數。</p>
@@ -49,7 +53,8 @@ console.log(BigInt(max)) // 9007199254740991n
 console.log(BigInt(max) + BigInt(1)) // 9007199254740992n
 console.log(BigInt(max) +BigInt(2)) // 9007199254740993n
       </code></pre>
-      <p>警告： Number 和 BigInt 不能混和計算 — 他們必須被轉換到同一個型態。然而，在相互轉換時要注意， BigInt 在被轉換成 Number 時可能會遺失部分精度的資訊。也不能將非整數傳入 BigInt 函式。
+      <p>警告： Number 和 BigInt 不能混和計算 — 他們必須被轉換到同一個型態。然而，在相互轉換時要注意， BigInt 在被轉換成 Number 時可能會遺失部分精度的資訊。也不能將非整數傳入 BigInt
+        函式。
       </p>
       <pre><code class="language-js error-code">
 BigInt(1.1) // The number 1.1 cannot be converted to a BigInt because it is not an integer
@@ -91,7 +96,7 @@ const hugeBin = BigInt(
       <p>
         <a href="https://www.youtube.com/watch?v=-t5qBDuTB0w&t=1s">https://www.youtube.com/watch?v=-t5qBDuTB0w&t=1s</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

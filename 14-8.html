@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="14-8">14-8 Nullish coalescing operator (??)</h2>
       <p>空值合並運算子（??）是一個邏輯運算子，當左側的操作數為 null 或者 undefined 時，返回其右側操作數，否則返回左側操作數。
       <p>與邏輯或運算子（||）不同，邏輯運算子會在左側操作數為 falsy 時返回右側操作數。也就是說，如果使用 || 來為某些變數設置默認值，可能會遇到意料之外的行為。比如為假值(例如，'' 或 0 ) 時。見下面的例子。
@@ -134,7 +138,7 @@ console.log(foo.someBarProp?.toUpperCase() ?? "not available"); // "not availabl
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">https://developer.mozilla.org/.../Nullish_coalescing</a>
       </p>
 
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

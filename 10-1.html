@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>新標準 ES2016 (ES7)</h2>
       <h2 id="10-1">10-1 Array.prototype.includes()</h2>
       <p>
@@ -80,7 +84,7 @@ const array = [symbol];
 array.includes(symbol); // true
 [Symbol('symbol')].includes(Symbol('symbol')) // false
         </code></pre>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

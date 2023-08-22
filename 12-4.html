@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="12-4">12-4 正則表達式 - dotAll 模式</h2>
       <p>正則中 dot . 的意思，代表除換行符號外任意單個字符。 dotAll 針對 HTML 做數據提取的時候特別好用。
         我們想把以下標籤內的數據提出來分組。在 dotAll 出來以前。我們會向下列方式處理，而這麼做會有一個難點稍後說明。
@@ -131,7 +135,7 @@ console.log(data)
       <p>
         <a href="https://www.youtube.com/watch?v=92aDmorH1sI">https://www.youtube.com/watch?v=92aDmorH1sI</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

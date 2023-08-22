@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>7-4 正規表示式</h2>
       <h3 id="7-4-1">7-4-1 黏著比對模式 /y</h3>
       <pre><code class="language-js">
@@ -351,7 +355,7 @@ for (const match of email.matchAll(rattributes)){
 // placeholder: hello@mjavascript.com
         </code></pre>
 
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

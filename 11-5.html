@@ -19,17 +19,22 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="11-5">11-5 Async and Await</h2>
       <h3>說明:</h3>
       <p>
         await 通常用於拆開 promise 的包裝，使用方法是傳遞一個 Promise 作為 expression。使用 await 總會暫停當前異步函數的執行，在該
-        Promise 敲定 (settled ， 指兌現或拒絕) 後繼續執行。函數的執行恢覆 (resume) 時， await 表達式的值已經變成了 Promise 兌現的值。若該 Promise 被拒絕 (rejected)
+        Promise 敲定 (settled ， 指兌現或拒絕) 後繼續執行。函數的執行恢覆 (resume) 時， await 表達式的值已經變成了 Promise 兌現的值。若該 Promise 被拒絕
+        (rejected)
         ， await
         表達式會把拒絕的原因拋出。當前函數(await 所在的函數)會出現在拋出的錯誤的棧追蹤 (stack trace) ，否則當前函數就不會在棧追蹤出現。await 總會同步地對表達式求值並處理，處理的行為與
         Promise.resolve() 一致，不屬於原生 Promise 的值全都會被隱式地轉換為 Promise 實例後等待。處理的規則為，若表達式：
@@ -108,7 +113,8 @@ export default await colors;
         </code></pre>
       <h3>await 對執行過程的影響</h3>
       <p>
-        當函數執行到 await 時，被等待的表達式會立即執行，所有依賴該表達式的值的代碼會被暫停，並推送進微任務佇列 (microtask queue)。然後主線程被釋放出來，用於事件迴圈中的下一個任務。即使等待的值是已經敲定的
+        當函數執行到 await 時，被等待的表達式會立即執行，所有依賴該表達式的值的代碼會被暫停，並推送進微任務佇列 (microtask
+        queue)。然後主線程被釋放出來，用於事件迴圈中的下一個任務。即使等待的值是已經敲定的
         promise 或不是 promise，也會發生這種情況。例如，考慮以下代碼：
       </p>
       <pre><code class="language-js">
@@ -272,7 +278,7 @@ withAwait();
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await">https://developer.mozilla.org/en-US/docs/Web/JavaScript/...</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="14-5">14-5 動態 import</h2>
       <p>ES6 時候的 import 屬於靜態載入。ES11 以後可以實現按需載入。</p>
       <pre><code class="language-js">
@@ -146,7 +150,7 @@ Promise.all(
       <p>
         <a href="https://www.youtube.com/watch?v=0Q2jP8XE2Co">https://www.youtube.com/watch?v=0Q2jP8XE2Co</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

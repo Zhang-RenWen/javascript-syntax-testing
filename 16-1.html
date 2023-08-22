@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2>新標準 ES2022 (ES13)</h2>
       <h2 id="16-1">16-1 Array.prototype.at()</h2>
       <p> <code>at()</code> 是陣列實例中的一個新方法。藉由傳入一個整數作為陣列的索引值來獲取該索引值位置上的元素。</p>
@@ -117,7 +121,7 @@ console.log(Array.prototype.at.call(arrayLike, 2)); // undefined
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at">https://developer.mozilla.org/.../at</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>

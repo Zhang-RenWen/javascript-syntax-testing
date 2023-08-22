@@ -19,12 +19,16 @@
 </head>
 
 <body>
-  <nav>
-    <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
-  </nav>
+  <header>
+    <nav>
+      <h1><span id="toggle-menu"></span><a href="index.html">現代 Javascript 實務應用</a></h1>
+    </nav>
+  </header>
   <main>
-    <aside></aside>
-    <section>
+    <aside>
+      <nav></nav>
+    </aside>
+    <article>
       <h2 id="12-2">12-2 正則表達式- Capturing group: (...)</h2>
       <p>ES9 以前遇到一個需求如需提取標籤屬性標籤屬性值等資訊實作方式如下</p>
       <pre><code class="language-js">
@@ -98,7 +102,7 @@ parseTitle('title="Named capturing groups\' advantages"'); // "Named capturing g
       <p>
         <a href="https://www.youtube.com/watch?v=kTJf2zVnEDw">https://www.youtube.com/watch?v=kTJf2zVnEDw</a>
       </p>
-    </section>
+    </article>
   </main>
 </body>
 <script type="module" src="./js/main.js"></script>
