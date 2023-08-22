@@ -8,6 +8,10 @@
   --hljs-main-error-bg-color:#fbe5eb;
   --hljs-code-line-color:gray;
   --hljs-code-line-border:1px solid rgba(171, 171, 171, 0.2);
+  /* notecard */
+  --notecard-background-information: rgba(0,133,242,.1);
+  --notecard-border-information: #0085f2;
+  --notecard-elem-radius: 0.25rem;
 }
 
 * {
@@ -149,6 +153,38 @@ code{
   background-color: #F3F2F2;
 }
 
+blockquote {
+  border-left: 4px solid #cdcdcd;
+  margin: 0;
+  margin-bottom: 2rem;
+  padding: 1rem 2rem;
+}
+
+.notecard{
+  background-color: var(--notecard-background-information);
+  border-left: 4px solid var(--notecard-border-information);
+  border-radius: var(--notecard-elem-radius);
+  padding: 0.5rem 1rem 0.5rem 3rem;
+  position: relative;
+}
+.notecard::before {
+  content:"";
+  background-color: var(--notecard-border-information);
+  -webkit-mask-image:url('../assets/icons/note-info.svg');
+  mask-image:url('../assets/icons/note-info.svg');
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  display: block;
+  height: 1rem;
+  left: 1rem;
+  position: absolute;
+  top: 1.6rem;
+  width: 1rem;
+}
 
 @media screen and (max-width: 768px){
   main {
