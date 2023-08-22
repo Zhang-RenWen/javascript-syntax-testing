@@ -11,7 +11,7 @@ const DOMmain = document.querySelector('main')
 export const menu = [
   {
     id: '1',
-    title: 'Chapter 1 前端工程基礎知識點',
+    title: 'Chapter 1 前端工程通用知識點',
     submenu: [
       {
         id: '1-1',
@@ -70,6 +70,79 @@ export const menu = [
             id: '1-5-1',
             title: '1-5-1 ',
             href: '1-5.html#1-5-1'
+          }
+        ]
+      },
+      {
+        id: '1-6',
+        title: '1-6 資安議題',
+        href: `./1-6.html`,
+        anchorMenu: [
+          {
+            id: '1-6-1',
+            title: '1-6-1 ',
+            href: '1-6.html#1-6-1'
+          }
+        ]
+      },
+      {
+        id: '1-7',
+        title: '1-7 網路架構',
+        href: `./1-7.html`,
+        anchorMenu: [
+          {
+            id: '1-7-1',
+            title: '1-7-1 ',
+            href: '1-7.html#1-7-1'
+          }
+        ]
+      },
+      {
+        id: '1-8',
+        title: '1-8 程式架構規劃與設計',
+        href: `./1-8.html`,
+        anchorMenu: [
+          {
+            id: '1-8-1',
+            title: '1-8-1 ',
+            href: '1-8.html#1-8-1'
+          }
+        ]
+      },
+      {
+        id: '1-9',
+        title: '1-9 程式部署',
+        href: `./1-9.html`,
+        anchorMenu: [
+          {
+            id: '1-9-1',
+            title: '1-9-1 ',
+            href: '1-9.html#1-9-1'
+          }
+        ]
+      },
+      ,
+      {
+        id: '1-10',
+        title: '1-10 玩轉 SVG 特效',
+        href: `./1-10.html`,
+        anchorMenu: [
+          {
+            id: '1-10-1',
+            title: '1-10-1 ',
+            href: '1-10-1.html'
+          }
+        ]
+      },
+      {
+        id: '1-11',
+        title: '1-11 玩轉 Canvas 特效',
+        href: `./1-11.html`,
+        anchorMenu: [
+          {
+            id: '1-11-1',
+            title: '1-11-1 ',
+            href: '1-11-1.html'
           }
         ]
       }
@@ -1129,27 +1202,27 @@ export const menu = [
 
       {
         id: '16-5',
-        title: '16-5 await: Use at module top level',
+        title: '16-5 (開發中..)await: Use at module top level',
         href: '16-5.html'
       },
       {
         id: '16-6',
-        title: '16-6 Private class features',
+        title: '16-6 (開發中..)Private class features',
         href: '16-6.html'
       },
       {
         id: '16-7',
-        title: '16-7 Private class methods',
+        title: '16-7 (開發中..)Private class methods',
         href: '16-7.html'
       },
       {
         id: '16-8',
-        title: '16-8 Static methods and fields',
+        title: '16-8 (開發中..)Static methods and fields',
         href: '16-8.html'
       },
       {
         id: '16-9',
-        title: '16-9 Class static initialization blocks',
+        title: '16-9 (開發中..)Class static initialization blocks',
         href: '16-9.html'
       }
     ]
