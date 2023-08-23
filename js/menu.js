@@ -1,3 +1,5 @@
+import { setDocumentTitle } from './navTitle.js'
+
 const focusedClassName = 'menu-item-focus'
 const itemsDataAttribute = 'data-item-id'
 let deepPathname = window.location.pathname
@@ -1420,6 +1422,8 @@ export function setFocusMenuItem() {
   const menu_item = getMenuItem()
   if (menu_item) {
     menu_item.classList.add(focusedClassName)
+    getMenuItemObject()
+    setDocumentTitle()
   }
 }
 
@@ -1486,6 +1490,34 @@ function setCorrectViewHeight() {
 
 function safariHacks() {
   window.addEventListener('resize', setCorrectViewHeight)
+}
+
+export function getMenuItemObject() {
+  const hash = window.location.hash.replace('#', '').replace('.html', '').replaceAll('/', '')
+  const pathname = window.location.pathname.replace('.html', '').replaceAll('/', '')
+  let pageObject = null
+  function findObject(arr, id) {
+    arr.forEach(function (o) {
+      if (o.id === id) {
+        pageObject = o
+        return
+      }
+      if (o?.submenu?.length > 0) {
+        findObject(o.submenu, id)
+        return
+      }
+      if (o?.anchorMenu?.length > 0) {
+        findObject(o.anchorMenu, id)
+        return
+      }
+    })
+  }
+  if (hash) {
+    findObject(menu, hash)
+  } else {
+    findObject(menu, pathname)
+  }
+  return pageObject
 }
 
 export function initMenu() {
