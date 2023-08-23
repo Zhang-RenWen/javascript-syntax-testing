@@ -1495,6 +1495,8 @@ function safariHacks() {
 export function getMenuItemObject() {
   const hash = window.location.hash.replace('#', '').replace('.html', '').replaceAll('/', '')
   const pathname = window.location.pathname.replace('.html', '').replaceAll('/', '')
+  console.log(hash, pathname)
+  if ((!hash && !pathname) || pathname === 'index') return { title: '' }
   let pageObject = null
   function findObject(arr, id) {
     arr.forEach(function (o) {
@@ -1517,6 +1519,7 @@ export function getMenuItemObject() {
   } else {
     findObject(menu, pathname)
   }
+
   return pageObject
 }
 
