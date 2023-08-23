@@ -17,9 +17,13 @@ export const getDefaultFontSize = () => {
 }
 
 export function initCodeLine() {
+  const getRootFontSize = getComputedStyle(document.querySelector('html'))
+    .getPropertyValue('font-size')
+    .replace('px', '')
+
   const codeBlocks = document.querySelectorAll('pre .hljs')
   codeBlocks.forEach((e) => {
-    const linesCount = Math.floor((e.offsetHeight - 40) / (getDefaultFontSize() * 1.15))
+    const linesCount = Math.floor((e.offsetHeight - 40) / (Number(getRootFontSize) * 1.15))
     const codeLineContainer = document.createElement('div')
     codeLineContainer.classList.add('code-line-container')
     for (let i = 0; i < linesCount; i++) {
