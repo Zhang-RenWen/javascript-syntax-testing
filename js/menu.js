@@ -32,8 +32,63 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-2-1',
-            title: '1-2-1 ',
-            href: '1-2.html#1-2-1'
+            title: '1-2-1 排序演算法',
+            href: '1-2-1.html'
+          },
+          {
+            id: '1-2-2',
+            title: '1-2-2 主定理',
+            href: '1-2-2.html'
+          },
+          {
+            id: '1-2-3',
+            title: '1-2-3 連結串列',
+            href: '1-2-3.html'
+          },
+          {
+            id: '1-2-4',
+            title: '1-2-4 雜湊表',
+            href: '1-2-4.html'
+          },
+          {
+            id: '1-2-5',
+            title: '1-2-5 二元搜尋樹',
+            href: '1-2-5.html'
+          },
+          {
+            id: '1-2-6',
+            title: '1-2-6 優先佇列',
+            href: '1-2-6.html'
+          },
+          {
+            id: '1-2-7',
+            title: '1-2-7 霍夫曼演算法',
+            href: '1-2-7.html'
+          },
+          {
+            id: '1-2-8',
+            title: '1-2-8 最小生成樹',
+            href: '1-2-8.html'
+          },
+          {
+            id: '1-2-9',
+            title: '1-2-9 寬度優先搜尋',
+            href: '1-2-9.html'
+          },
+          {
+            id: '1-2-10',
+            title: '1-2-10 最短路徑演算法',
+            href: '1-2-10.html'
+          },
+          {
+            id: '1-2-11',
+            title: '1-2-11 戴克斯特拉演算法',
+            href: '1-2-11.html'
+          },
+          {
+            id: '1-2-12',
+            title: '1-2-12 動態規劃',
+            href: '1-2-12.html'
           }
         ]
       },
@@ -121,7 +176,6 @@ export const menu = [
           }
         ]
       },
-      ,
       {
         id: '1-10',
         title: '1-10 玩轉 SVG 特效',
@@ -143,6 +197,45 @@ export const menu = [
             id: '1-11-1',
             title: '1-11-1 ',
             href: '1-11-1.html'
+          }
+        ]
+      },
+      {
+        id: '1-12',
+        title: '1-12 工程數學',
+        href: `./1-12.html`,
+        anchorMenu: [
+          {
+            id: '1-12-1',
+            title: '1-12-1 離散數學',
+            href: '1-12-1.html'
+          },
+          {
+            id: '1-12-1',
+            title: '1-12-1 密碼學',
+            href: '1-12-1.html'
+          },
+          {
+            id: '1-12-1',
+            title: '1-12-1 線性代數',
+            href: '1-12-1.html'
+          },
+          {
+            id: '1-12-1',
+            title: '1-12-1 微積分',
+            href: '1-12-1.html'
+          }
+        ]
+      },
+      {
+        id: '1-13',
+        title: '1-13 面試題目',
+        href: `./1-13.html`,
+        anchorMenu: [
+          {
+            id: '1-13-1',
+            title: '1-13-1 ',
+            href: '1-13-1.html'
           }
         ]
       }
