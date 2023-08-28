@@ -1295,18 +1295,13 @@ export const menu = [
       },
       {
         id: '16-7',
-        title: '16-7 (開發中..)Private class methods',
+        title: '16-7 (開發中..)Static methods and fields',
         href: '16-7.html'
       },
       {
         id: '16-8',
-        title: '16-8 (開發中..)Static methods and fields',
+        title: '16-8 (開發中..)Class static initialization blocks',
         href: '16-8.html'
-      },
-      {
-        id: '16-9',
-        title: '16-9 (開發中..)Class static initialization blocks',
-        href: '16-9.html'
       }
     ]
   }
