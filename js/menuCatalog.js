@@ -1285,7 +1285,7 @@ export const menu = [
 
       {
         id: '16-5',
-        title: '16-5 (開發中..)await: Use at module top level',
+        title: '16-5 await: Use at module top level',
         href: '16-5.html'
       },
       {
