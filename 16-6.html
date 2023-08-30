@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="./public/favicon.ico" />
     <meta http-equiv="cache-control" content="no-cache" />
-    <title>JavaScript-syntax-testing</title>
+    <title></title>
     <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
     <link rel="stylesheet" href="./hightlight/default.min.css" />
     <link rel="stylesheet" href="./css/main.css" />
@@ -42,6 +42,144 @@
       </aside>
       <article>
         <h2 id="16-6">16-6 Private class features</h2>
+        <p>
+          Class 空間預設是公有的。我們可以另外透過前綴
+          <code>#</code>
+          讓 Class 成員轉換為私有。 私有屬性 Class 的封裝會被 Javascript 自動強制執行。
+        </p>
+        <h3>語法</h3>
+        <pre><code class="language-js">
+class ClassWithPrivate {
+  #privateField;
+  #privateFieldWithInitializer = 42;
+
+  #privateMethod() {
+    // …
+  }
+
+  static #privateStaticField;
+  static #privateStaticFieldWithInitializer = 42;
+
+  static #privateStaticMethod() {
+    // …
+  }
+}
+        </code></pre>
+        <p>以下列舉額外的語法限制</p>
+        <ul>
+          <li>
+            所有私有類別中的識別符號都必須是唯一的。靜態屬性和實例屬性共用命名空間，唯一的例外是定義一組
+            getter/setter。
+          </li>
+          <li>
+            私有的識別符號不能為
+            <code>#constructor</code>
+          </li>
+        </ul>
+        <p>大部分 Class 特性都有專屬的私有型態：</p>
+        <ul>
+          <li>Private fields</li>
+          <li>Private methods</li>
+          <li>Private static fields</li>
+          <li>Private static methods</li>
+          <li>Private getters</li>
+          <li>Private setters</li>
+          <li>Private static getters</li>
+          <li>Private static setters</li>
+        </ul>
+        <p>然而在 Javascript 裡 ，建構子是無法私有化的。</p>
+        <p>
+          以下有一些錯誤示範： 一個是使用
+          <code>delete</code>
+          ，另個一個則是在 Class 私有空間外去改變私有特性。
+        </p>
+        <pre><code class="language-js error-code">
+class ClassWithPrivateField {
+  #privateField;
+
+  constructor() {;
+    delete this.#privateField; // Syntax error
+    this.#undeclaredField = 42; // Syntax error
+  }
+}
+
+const instance = new ClassWithPrivateField();
+instance.#privateField; // Syntax error
+        </code></pre>
+        <p>
+          JavaScript 作為一種動態語言，由於特殊的 Hash
+          標識符語法而能夠執行這種編譯時檢查，使其在語法級別上不同於普通屬性。
+        </p>
+        <div class="notecard">
+          <p>
+            <strong>注意：</strong>
+            在 Chrome 控制台中運行的代碼可以訪問類外部的私有屬性。這是對 JavaScript 語法限制的僅限
+            DevTools 的放寬。
+          </p>
+        </div>
+        <p>
+          如果從不具有該屬性的對象訪問私有屬性，則會拋出 TypeError 而不是 undefined
+          像普通屬性那樣返回。
+        </p>
+        <pre><code class="language-js error-code">
+class C {
+  #x;
+
+  static getX(obj) {
+    return obj.#x;
+  }
+}
+
+console.log(C.getX(new C())); // undefined
+console.log(C.getX({})); // TypeError: Cannot read private member #x from an object whose class did not declare it
+        </code></pre>
+        <pre><code class="language-js correct-code">
+class C {
+  #x;
+  constructor(x) {
+    this.#x = x;
+  }
+  static getX(obj) {
+    if (#x in obj) return obj.#x;
+
+    return "obj must be an instance of C";
+  }
+}
+console.log(C.getX(new C("foo"))); // "foo"
+console.log(C.getX(new C(0.196))); // 0.196
+console.log(C.getX(new C(new Date()))); // the current date and time
+console.log(C.getX({})); // "obj must be an instance of C"
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>

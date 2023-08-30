@@ -1,6 +1,8 @@
 :root {
+  font-size: 16px;
   --vh: 100vh;
-  --nav-height: 56px;
+  --nav-height: 3.5rem;
+  --nav-height-mobile: 3rem;
   --aside-width: 270px;
   /* hight-light */
   --hljs-main-color: #1e1e1e;
@@ -43,7 +45,6 @@ header nav {
 h1 a {
   display: inline-block;
   cursor: pointer;
-  width: 100%;
   color: #000;
 }
 
@@ -206,18 +207,17 @@ table.standard-table tr:nth-child(odd) th {
 
 @media screen and (max-width: 768px) {
   main {
-    padding-top: 3rem;
+    padding-top: var(--nav-height-mobile);
   }
   header nav {
     padding-left: 0;
-    height: 3rem;
+    height: var(--nav-height-mobile);
   }
   h1 {
     margin: 0.6rem;
   }
   h1 a {
     font-size: 1.2rem;
-    width: calc(100% - 1.8rem);
   }
   #toggle-menu {
     display: inline-block;
@@ -242,7 +242,7 @@ table.standard-table tr:nth-child(odd) th {
     position: fixed;
     transform-style: preserve-3d;
     transition: left 0.3s;
-    max-height: calc(var(--vh) - var(--nav-height));
+    max-height: calc(var(--vh) - var(--nav-height-mobile));
     left: calc(var(--aside-width) * -1);
     z-index: 4;
   }
