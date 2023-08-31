@@ -208,9 +208,48 @@ new Subclass(); // In some dev tools, it shows Subclass {#privateField: 42, #sub
         <div class="notecard">
           <p>
             <strong>注意：</strong>
+            來自
+            <code>#ClassWithPrivateField</code>
+            的
+            <code>#privateField</code>
+            基本 class 對
+            <code>#ClassWithPrivateField</code>
+            來說是私有的， 不能從衍生的子類訪問。
           </p>
         </div>
+        <h3>Returning overriding object 返回覆寫物件</h3>
+        <p>
+          一個類別的建構子可以回傳不同的物件，這個物件會被衍生的 class 建構子當作新的
+          <code>this</code>
+          。這個衍生的 class
+          可能會定義私有的空間在回傳的物件上。這意味著衍生物件可能標記私有空間給不相關的物件上。
+        </p>
         <pre><code class="language-js">
+class Stamper extends class {
+  // A base class whose constructor returns the object it's given
+  constructor(obj) {
+    return obj;
+  }
+} {
+  // This declaration will "stamp" the private field onto the object
+  // returned by the base class constructor
+  #stamp = 42;
+  static getStamp(obj) {
+    return obj.#stamp;
+  }
+}
+
+const obj = {};
+new Stamper(obj);
+// `Stamper` calls `Base`, which returns `obj`, so `obj` is
+// now the `this` value. `Stamper` then defines `#stamp` on `obj`
+
+console.log(obj); // In some dev tools, it shows {#stamp: 42}
+console.log(Stamper.getStamp(obj)); // 42
+console.log(obj instanceof Stamper); // false
+
+// You cannot stamp private properties twice
+new Stamper(obj); // Error: Initializing an object twice is an error with private fields
 
         </code></pre>
         <pre><code class="language-js">
