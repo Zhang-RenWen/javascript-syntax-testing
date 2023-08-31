@@ -252,6 +252,14 @@ console.log(obj instanceof Stamper); // false
 new Stamper(obj); // Error: Initializing an object twice is an error with private fields
 
         </code></pre>
+        <div class="notecard warning">
+          <p>
+            警告：在操作上可能會有一些讓人困惑。一般來說你會建議避免從建構子回傳任何東西，尤其是跟
+            <code>this</code>
+            無關的東西。
+          </p>
+        </div>
+        <h3>Private static fields 私有靜態空間</h3>
         <pre><code class="language-js">
 
         </code></pre>

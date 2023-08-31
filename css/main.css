@@ -13,6 +13,8 @@
   /* notecard */
   --notecard-background-information: rgba(0, 133, 242, 0.1);
   --notecard-border-information: #0085f2;
+  --notecard-background-information-warning: rgba(255, 42, 81, 0.1);
+  --notecard-border-information-warning: #ff2a51;
   --notecard-elem-radius: 0.25rem;
   /* Table */
   --table-background-color: #f9f9fb;
@@ -189,6 +191,16 @@ blockquote {
   position: absolute;
   top: 1.6rem;
   width: 1rem;
+}
+.notecard.warning {
+  background-color: var(--notecard-background-information-warning);
+  border-left: 4px solid var(--notecard-border-information-warning);
+}
+.notecard.warning::before {
+  content: '';
+  background-color: var(--notecard-border-information-warning);
+  -webkit-mask-image: url('../assets/icons/note-warning.svg');
+  mask-image: url('../assets/icons/note-warning.svg');
 }
 
 table {
