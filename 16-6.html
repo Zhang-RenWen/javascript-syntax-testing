@@ -125,6 +125,19 @@ class C {
 console.log(C.getX(new C())); // undefined
 console.log(C.getX({})); // TypeError: Cannot read private member #x from an object whose class did not declare it
         </code></pre>
+        <p>
+          上面案例也演示了，在生成實體以後我們仍然可以透過靜態方法訪問私有屬性。若直接操作 class
+          則無法訪問。
+        </p>
+        <p>
+          我們也可以透過
+          <code>in</code>
+          運算子去檢查是否有私有屬性。 有的話回傳
+          <code>true</code>
+          ，否則
+          <code>false</code>
+          。
+        </p>
         <pre><code class="language-js correct-code">
 class C {
   #x;
@@ -142,10 +155,101 @@ console.log(C.getX(new C(0.196))); // 0.196
 console.log(C.getX(new C(new Date()))); // the current date and time
 console.log(C.getX({})); // "obj must be an instance of C"
         </code></pre>
+        <p>
+          請注意，私有名稱按推論始終是預先聲明且不可刪除的：如果您發現一個物件擁有當前類的一個私有屬性（無論是來自
+          <code>try...catch</code>
+          還是
+          <code>in</code>
+          check），它必須擁有所有其他私人屬性。擁有類的私有屬性的物件通常意味著它是由該類生成的（儘管並非總是如此）。
+        </p>
+        <p>
+          私有屬性不是原型繼承模型的一部分，因為它們只能在當前類的主體內訪問，並且不能由子類繼承。不同類中具有相同名稱的私有屬性完全不同，並且不能互操作。將它們視為附加到每個實例的外部元數據，由類管理。因此，
+          <code>Object.freeze()</code>
+          和
+          <code>Object.seal()</code>
+          對私有屬性沒有影響。
+        </p>
+        <h3>範例</h3>
+        <h4>Private fields 私有空間</h4>
+        <p>
+          私有空間包含 私有實例空間(private instance fields) 以及 私有靜態空間(private static
+          fields)。 Class 內部宣告私有空間的才能被訪問。
+        </p>
+        <h4>Private instance fields 私有實例空間</h4>
+        <p>就像他們的相對應的公有空間私有靜態空間：</p>
+        <ul>
+          <li>
+            在建構子執行前就被加入或者在子類別中的
+            <code>super</code>
+            被觸發後立即執行。
+          </li>
+          <li>只能在 class 實例裡面被訪問</li>
+        </ul>
         <pre><code class="language-js">
+class ClassWithPrivateField {
+  #privateField;
 
+  constructor() {
+    this.#privateField = 42;
+  }
+}
+
+class Subclass extends ClassWithPrivateField {
+  #subPrivateField;
+
+  constructor() {
+    super();
+    this.#subPrivateField = 23;
+  }
+}
+
+new Subclass(); // In some dev tools, it shows Subclass {#privateField: 42, #subPrivateField: 23}
         </code></pre>
+        <div class="notecard">
+          <p>
+            <strong>注意：</strong>
+            來自
+            <code>#ClassWithPrivateField</code>
+            的
+            <code>#privateField</code>
+            基本 class 對
+            <code>#ClassWithPrivateField</code>
+            來說是私有的， 不能從衍生的子類訪問。
+          </p>
+        </div>
+        <h3>Returning overriding object 返回覆寫物件</h3>
+        <p>
+          一個類別的建構子可以回傳不同的物件，這個物件會被衍生的 class 建構子當作新的
+          <code>this</code>
+          。這個衍生的 class
+          可能會定義私有的空間在回傳的物件上。這意味著衍生物件可能標記私有空間給不相關的物件上。
+        </p>
         <pre><code class="language-js">
+class Stamper extends class {
+  // A base class whose constructor returns the object it's given
+  constructor(obj) {
+    return obj;
+  }
+} {
+  // This declaration will "stamp" the private field onto the object
+  // returned by the base class constructor
+  #stamp = 42;
+  static getStamp(obj) {
+    return obj.#stamp;
+  }
+}
+
+const obj = {};
+new Stamper(obj);
+// `Stamper` calls `Base`, which returns `obj`, so `obj` is
+// now the `this` value. `Stamper` then defines `#stamp` on `obj`
+
+console.log(obj); // In some dev tools, it shows {#stamp: 42}
+console.log(Stamper.getStamp(obj)); // 42
+console.log(obj instanceof Stamper); // false
+
+// You cannot stamp private properties twice
+new Stamper(obj); // Error: Initializing an object twice is an error with private fields
 
         </code></pre>
         <pre><code class="language-js">
