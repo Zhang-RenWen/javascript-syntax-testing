@@ -84,7 +84,7 @@ export const menu = [
       },
       {
         id: '1-3',
-        title: '1-3 JavaScript 運作原理',
+        title: '1-3 JavaScript 核心',
         href: `./1-3.html`,
         anchorMenu: [
           {
