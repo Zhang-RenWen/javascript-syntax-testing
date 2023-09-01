@@ -260,15 +260,87 @@ new Stamper(obj); // Error: Initializing an object twice is an error with privat
           </p>
         </div>
         <h3>Private static fields 私有靜態空間</h3>
+        <p>類似相對應的公有空間，私有靜態空間有以下特性：</p>
+        <ul>
+          <li>編譯階段被加入至構造函式中</li>
+          <li>只能由本身的 class 訪問</li>
+        </ul>
         <pre><code class="language-js">
+class ClassWithPrivateStaticField {
+  static #privateStaticField = 42;
 
+  static publicStaticMethod() {
+    return ClassWithPrivateStaticField.#privateStaticField;
+  }
+}
+
+console.log(ClassWithPrivateStaticField.publicStaticMethod()); // 42
         </code></pre>
+        <p>
+          class 靜態私有空間的限制：只有定義了靜態私有空間的 class 能訪問到。使用
+          <code>this</code>
+          很有可能導致非預期錯誤。舉個例子：
+          <code>this</code>
+          指的是
+          <code>Subclass</code>
+          ，(不是
+          <code>ClassWithPrivateStaticField</code>
+          ) 當我們呼叫
+          <code>Subclass.publicStaticMethod()</code>
+          的時候會造成
+          <code>TypeError</code>
+          。
+        </p>
         <pre><code class="language-js">
+class ClassWithPrivateStaticField {
+  static #privateStaticField = 42;
 
+  static publicStaticMethod() {
+    return this.#privateStaticField;
+  }
+}
+
+class Subclass extends ClassWithPrivateStaticField {}
+
+Subclass.publicStaticMethod(); // TypeError: Cannot read private member #privateStaticField from an object whose class did not declare it
         </code></pre>
+        <p>
+          呼叫
+          <code>super</code>
+          也會有相同的問題。因為
+          <code>super</code>
+          方法無法以
+          <code>super</code>
+          類別當作
+          <code>this</code>
+          的情況被呼叫。
+        </p>
         <pre><code class="language-js">
+class ClassWithPrivateStaticField {
+  static #privateStaticField = 42;
 
+  static publicStaticMethod() {
+    // When invoked through super, `this` still refers to Subclass
+    return this.#privateStaticField;
+  }
+}
+
+class Subclass extends ClassWithPrivateStaticField {
+  static callSuperMethod() {
+    return super.publicStaticMethod();
+  }
+}
+
+Subclass.callSuperMethod(); // TypeError: Cannot read private member #privateStaticField from an object whose class did not declare it
         </code></pre>
+        <p>
+          因此你會建議盡量透過 class 名稱去訪問靜態私有變數而不是透過
+          <code>this</code>
+          。所以繼承不會打破這個方法。
+        </p>
+        <h3>Private methods 私有方法</h3>
+        <p>私有方法包括私有私有實例方法以及私有靜態方法。私有方法只能在類別宣告中被訪問</p>
+        <h3>Private instance methods 私有實例方法</h3>
         <pre><code class="language-js">
 
         </code></pre>
