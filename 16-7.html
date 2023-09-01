@@ -34,6 +34,69 @@
       </aside>
       <article>
         <h2 id="16-7">16-7 Static methods and fields</h2>
+        <p>
+          <code>static</code>
+          關鍵字定義類的靜態方法或欄位。靜態屬性（欄位和方法）是在類本身而不是每個實例上定義的。靜態方法通常用於為應用程序創建實用程序函數，而靜態欄位對於記憶體、固定配置或不需要跨實例複製的任何其他數據很有用。
+        </p>
+        <pre><code class="language-js">
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  static displayName = "Point";
+  static distance(a, b) {
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+
+    return Math.hypot(dx, dy);
+  }
+}
+
+const p1 = new Point(5, 5);
+const p2 = new Point(10, 10);
+p1.displayName; // undefined
+p1.distance; // undefined
+p2.displayName; // undefined
+p2.distance; // undefined
+
+console.log(Point.displayName); // "Point"
+console.log(Point.distance(p1, p2)); // 7.0710678118654755
+        </code></pre>
+        <h3>Field declarations 欄位宣告</h3>
+        <p>使用類欄位聲明語法，構造函數示例可以寫為：</p>
+        <pre><code class="language-js">
+class Rectangle {
+  height = 0;
+  width;
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>

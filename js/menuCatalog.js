@@ -79,6 +79,11 @@ export const menu = [
             id: '1-2-12',
             title: '1-2-12 動態規劃',
             href: '1-2-12.html'
+          },
+          {
+            id: '1-12-1',
+            title: '1-12-13 密碼學',
+            href: '1-12-13.html'
           }
         ]
       },
@@ -198,11 +203,6 @@ export const menu = [
           {
             id: '1-12-1',
             title: '1-12-1 離散數學',
-            href: '1-12-1.html'
-          },
-          {
-            id: '1-12-1',
-            title: '1-12-1 密碼學',
             href: '1-12-1.html'
           },
           {
@@ -1290,7 +1290,7 @@ export const menu = [
       },
       {
         id: '16-6',
-        title: '16-6 (開發中..)Private class features',
+        title: '16-6 Private class features',
         href: '16-6.html'
       },
       {
