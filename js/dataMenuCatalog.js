@@ -154,8 +154,13 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-8-1',
-            title: '1-8-1 ',
+            title: '1-8-1 權限',
             href: '1-8.html#1-8-1'
+          },
+          {
+            id: '1-8-2',
+            title: '1-8-2 JWT 登入',
+            href: '1-8.html#1-8-2'
           }
         ]
       },
@@ -197,35 +202,47 @@ export const menu = [
       },
       {
         id: '1-12',
-        title: '1-12 工程數學',
+        title: '1-12 通用正則表達式',
         href: `./1-12.html`,
         anchorMenu: [
           {
             id: '1-12-1',
-            title: '1-12-1 離散數學',
-            href: '1-12-1.html'
-          },
-          {
-            id: '1-12-1',
-            title: '1-12-1 線性代數',
-            href: '1-12-1.html'
-          },
-          {
-            id: '1-12-1',
-            title: '1-12-1 微積分',
+            title: '1-12-1 ',
             href: '1-12-1.html'
           }
         ]
       },
       {
         id: '1-13',
-        title: '1-13 面試題目',
+        title: '1-13 工程數學',
         href: `./1-13.html`,
         anchorMenu: [
           {
             id: '1-13-1',
-            title: '1-13-1 ',
+            title: '1-13-1 離散數學',
             href: '1-13-1.html'
+          },
+          {
+            id: '1-13-1',
+            title: '1-13-1 線性代數',
+            href: '1-13-1.html'
+          },
+          {
+            id: '1-13-1',
+            title: '1-13-1 微積分',
+            href: '1-13-1.html'
+          }
+        ]
+      },
+      {
+        id: '1-14',
+        title: '1-14 面試題目',
+        href: `./1-14.html`,
+        anchorMenu: [
+          {
+            id: '1-14-1',
+            title: '1-14-1 ',
+            href: '1-14-1.html'
           }
         ]
       }
