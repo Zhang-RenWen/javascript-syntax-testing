@@ -1295,7 +1295,7 @@ export const menu = [
       },
       {
         id: '16-7',
-        title: '16-7 (開發中..)Static methods and fields',
+        title: '16-7 Static methods and fields',
         href: '16-7.html'
       },
       {
