@@ -1,5 +1,5 @@
 import { setDocumentTitle } from './navTitle.js'
-import { menu } from './menuCatalog.js'
+import { menu } from './dataMenuCatalog.js'
 
 const focusedClassName = 'menu-item-focus'
 const itemsDataAttribute = 'data-item-id'

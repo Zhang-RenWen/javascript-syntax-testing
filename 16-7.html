@@ -65,7 +65,7 @@ console.log(Point.displayName); // "Point"
 console.log(Point.distance(p1, p2)); // 7.0710678118654755
         </code></pre>
         <h3>Field declarations 欄位宣告</h3>
-        <p>使用類欄位聲明語法，構造函數示例可以寫為：</p>
+        <p>使用類欄位宣告語法，構造函數示例可以寫為：</p>
         <pre><code class="language-js">
 class Rectangle {
   height = 0;
@@ -76,29 +76,92 @@ class Rectangle {
   }
 }
         </code></pre>
+        <p>
+          class 欄位類似於物件的屬性，不是變數，所以我們不能使用關鍵字像是
+          <code>const</code>
+          去做宣告。 在 JavaScript 的私有特徵使用特別的標示符語法。所以修飾符的關鍵字像是
+          <code>public</code>
+          和
+          <code>private</code>
+          也不能被使用。
+        </p>
+        <p>
+          如上所示，可以使用或不使用默認值來宣告欄位。沒有默認值的欄位默認為未定義。通過預先宣告欄位，類定義變得更加有可讀性。
+        </p>
+        <h3>Private class features 私有類別特性</h3>
+        <p>使用私有欄位，可以將定義細化如下。</p>
         <pre><code class="language-js">
-
+class Rectangle {
+  #height = 0;
+  #width;
+  constructor(height, width) {
+    this.#height = height;
+    this.#width = width;
+  }
+}
         </code></pre>
+        <p>
+          從類外部引用私有欄位是錯誤的；它們只能在類別內部讀取或寫入。通過定義類外部不可見的內容，您可以確保類的用戶不能依賴於內部結構，而內部結構可能會因版本而異。
+        </p>
+        <p>私有字段只能在欄位宣告中預先宣告。它們不能像普通屬性那樣通過分配來創建。</p>
+        <h3>Inheritance 繼承</h3>
+        <p>
+          <code>extends</code>
+          關鍵字在類宣告或類表達式中使用，以將類創建為另一個構造函數（類或函數）的子級。
+        </p>
         <pre><code class="language-js">
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
 
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
+
+class Dog extends Animal {
+  constructor(name) {
+    super(name); // call the super class constructor and pass in the name parameter
+  }
+
+  speak() {
+    console.log(`${this.name} barks.`);
+  }
+}
+
+const d = new Dog("戴魯比");
+d.speak(); // 戴魯比 barks.
         </code></pre>
+        <p>
+          如果子類中存在構造函數，則在使用它之前需要先調用
+          <code>super()</code>
+          。
+          <code>super</code>
+          關鍵字還可以用來調用 super class 相應的方法。
+        </p>
         <pre><code class="language-js">
+class Cat {
+  constructor(name) {
+    this.name = name;
+  }
 
-        </code></pre>
-        <pre><code class="language-js">
+  speak() {
+    console.log(`${this.name} makes a noise.`);
+  }
+}
 
-        </code></pre>
-        <pre><code class="language-js">
+class Lion extends Cat {
+  speak() {
+    super.speak();
+    console.log(`${this.name} roars.`);
+  }
+}
 
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
+const l = new Lion("Fuzzy");
+l.speak();
+// Fuzzy makes a noise.
+// Fuzzy roars.
         </code></pre>
         <p>資料來源:</p>
         <p>
