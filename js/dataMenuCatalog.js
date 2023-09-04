@@ -1317,7 +1317,7 @@ export const menu = [
       },
       {
         id: '16-8',
-        title: '16-8 (開發中..)Class static initialization blocks',
+        title: '16-8 Class static initialization blocks',
         href: '16-8.html'
       }
     ]
