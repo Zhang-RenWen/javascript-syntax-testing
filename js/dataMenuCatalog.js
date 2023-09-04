@@ -1321,42 +1321,52 @@ export const menu = [
         href: '16-8.html'
       }
     ]
-  }
-  // {
-  //   id: "17",
-  //   title: "新標準 ES2023 (ES14)",
-  //   submenu: [
-  //     {
-  //       id: "17-1",
-  //       title: "17-1 ",
-  //       href: "17-1.html",
-  //     },
-  //     {
-  //       id: "17-2",
-  //       title: "17-2 ",
-  //       href: "17-2.html",
-  //     },
-  //     {
-  //       id: "17-3",
-  //       title: "17-3 ",
-  //       href: "17-3.html",
-  //     },
-  //     {
-  //       id: "17-4",
-  //       title: "17-4 ",
-  //       href: "17-4.html",
-  //     },
+  },
+  {
+    id: '17',
+    title: '新標準 ES2023 (ES14)',
+    submenu: [
+      {
+        id: '17-1',
+        title: '17-1 Array.prototype.toSorted',
+        href: '17-1.html'
+      },
+      {
+        id: '17-2',
+        title: '17-2 Array.prototype.toReversed',
+        href: '17-2.html'
+      },
+      {
+        id: '17-3',
+        title: '17-3 Array.prototype.with',
+        href: '17-3.html'
+      },
+      {
+        id: '17-4',
+        title: '17-4 Array.prototype.findLast',
+        href: '17-4.html'
+      },
 
-  //     {
-  //       id: "17-5",
-  //       title: "17-5 ",
-  //       href: "17-5.html",
-  //     },
-  //     {
-  //       id: "17-6",
-  //       title: "17-6 ",
-  //       href: "17-6.html",
-  //     },
-  //   ],
-  // },
+      {
+        id: '17-5',
+        title: '17-5 Array.prototype.findLastIndex',
+        href: '17-5.html'
+      },
+      {
+        id: '17-6',
+        title: '17-6 Array.prototype.toSpliced',
+        href: '17-6.html'
+      },
+      {
+        id: '17-7',
+        title: '17-7 Official shebang support',
+        href: '17-7.html'
+      },
+      {
+        id: '17-8',
+        title: '17-8 Symbols as keys on weak collections',
+        href: '17-8.html'
+      }
+    ]
+  }
 ]
