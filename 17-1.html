@@ -36,14 +36,33 @@
         <h2>新標準 ES2023 (ES14)</h2>
         <h2 id="17-1">17-1 Array.prototype.toSorted</h2>
         <pre><code class="language-js">
+let arr = [5,4,2,3,1]
+arr === arr.sort(); // true - [1, 2, 3, 4, 5]
 
+arr === arr.toSorted(); // false - [1, 2, 3, 4, 5]
+        </code></pre>
+        <pre><code class="language-js">
+const numbers = [10, 5, 2, 7, 3, 9, 1, 6, 4]; 
+const sortedNumbers = numbers.toSorted((a, b) => { 
+  return b - a; 
+}); 
+console.log(sortedNumbers); // [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+        </code></pre>
+        <pre><code class="language-js">
+// Comparing objects
+const objects = [{ name: "John", age: 30 }, { name: "Jane", age: 25 }, { name: "Bill", age: 40 }, { name: "Mary", age: 20 }];
+const sortedObjects = objects.toSorted((a, b) => {
+  return a.name.localeCompare(b.name); 
+});
+console.log(sortedObjects);
+//[{"name":"Bill","age":40},{"name":"Jane","age":25},{"name":"John","age":30},{"name":"Mary","age":20}]
         </code></pre>
         <p>資料來源:</p>
         <p>
           <a
-            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for-await...of"
+            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted"
           >
-            https://developer.mozilla.org/.../for-await...of
+            https://developer.mozilla.org/.../toSorted
           </a>
         </p>
         <p>
