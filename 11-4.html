@@ -37,7 +37,7 @@
         <h3>Object.entries()</h3>
         <p>
           Object.entries() :
-          返回一個由傳入物件自有的可列舉字串鍵屬性的鍵值對組成的陣列。每個鍵值對都是一個包含兩個元素的陣列：第一個元素是屬性的鍵（始終是字串），第二個元素是屬性值。
+          回傳一個由傳入物件自有的可列舉字串鍵屬性的鍵值對組成的陣列。每個鍵值對都是一個包含兩個元素的陣列：第一個元素是屬性的鍵（始終是字串），第二個元素是屬性值。
         </p>
         <pre><code class="language-js">
 const object1 = {
@@ -54,9 +54,9 @@ for (const [key, value] of Object.entries(object1)) {
 // 'b: 42'
         </code></pre>
         <p>
-          Object.entries() 返回一個陣列，其元素是直接在 object
+          Object.entries() 回傳一個陣列，其元素是直接在 object
           上找到相應的可列舉字串鍵屬性的鍵值對陣列。這與使用 for...in 迴圈疊代相同，只是使用
-          for...in 迴圈也列舉原型鏈中的屬性。Object.entries() 返回的陣列順序和 for...in
+          for...in 迴圈也列舉原型鏈中的屬性。Object.entries() 回傳的陣列順序和 for...in
           迴圈提供的順序相同。如果只需要屬性的鍵，請使用 Object.keys()。如果只需要屬性的值，請使用
           Object.values()。
         </p>
@@ -89,7 +89,7 @@ console.log(Object.entries(myObj)); // [ ['foo', 'bar'] ]
         </code></pre>
         <h3>用於基本型別中範例</h3>
         <p>
-          非物件參數會強制轉換成物件。只有字串可以有自己的可列舉屬性，所有其他基本類型均返回一個空陣列。
+          非物件參數會強制轉換成物件。只有字串可以有自己的可列舉屬性，所有其他基本類型均回傳一個空陣列。
         </p>
         <pre><code class="language-js">
 // 字串具有索引作為可列舉的自有属性
@@ -152,7 +152,7 @@ it('accepts number primitives', function() {
 });
       </code></pre>
         <h3>Object.values()</h3>
-        <p>Object.values() : 返回一個由傳入物件自有的可列舉字串鍵屬性的值組成的陣列。</p>
+        <p>Object.values() : 回傳一個由傳入物件自有的可列舉字串鍵屬性的值組成的陣列。</p>
         <pre><code class="language-js">
 const object1 = {
   a: 'someString',
@@ -164,9 +164,9 @@ console.log(Object.values(object1));
 // Expected output: Array ['someString', 42, false]
       </code></pre>
         <p>
-          Object.values() 返回一個陣列，其元素是直接在 object 上找到的可列舉字串鍵屬性值。這與使用
+          Object.values() 回傳一個陣列，其元素是直接在 object 上找到的可列舉字串鍵屬性值。這與使用
           for...in 迴圈疊代相同，只是 for...in 迴圈還列舉原型鏈中的屬性。Object.values()
-          返回的陣列順序和 for...in 迴圈提供的陣列順序相同。如果需要屬性鍵，請使用
+          回傳的陣列順序和 for...in 迴圈提供的陣列順序相同。如果需要屬性鍵，請使用
           Object.keys()。如果屬性的鍵和值都需要，請使用 Object.entries()。
         </p>
         <h3>通用範例</h3>
@@ -179,7 +179,7 @@ const arrayLikeObj1 = { 0: 'a', 1: 'b', 2: 'c' };
 console.log(Object.values(arrayLikeObj1)); // ['a', 'b', 'c']
 
 // 具有隨機鍵排序的類陣列物件
-// 使用數字鍵對，將按鍵的數字順序返回值
+// 使用數字鍵對，將按鍵的數字順序回傳值
 const arrayLikeObj2 = { 100: 'a', 2: 'b', 7: 'c' };
 console.log(Object.values(arrayLikeObj2)); // ['b', 'c', 'a']
 

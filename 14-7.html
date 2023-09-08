@@ -50,8 +50,8 @@ console.log(canMakeHTTPRequest());
           中，它們都無法獲取，必須使用 global。
         </p>
         <p>
-          在一般模式下，可以在函數中返回 this 來獲取全域物件，但是在嚴格模式和模組環境下，this
-          會返回 undefined。你也可以使用 Function('return
+          在一般模式下，可以在函數中回傳 this 來獲取全域物件，但是在嚴格模式和模組環境下，this
+          會回傳 undefined。你也可以使用 Function('return
           this')()，但那些禁用eval()的環境，如在瀏覽器中的內容安全策略(Content-Security-Policy,
           CSP)，不允許這樣使用Function。
         </p>
