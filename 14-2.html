@@ -45,7 +45,7 @@
 Promise.allSettled() // Uncaught (in promise) TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
 Promise.allSettled('') // Promise {&lt;fulfilled&gt;: Array(0)}
       </code></pre>
-        <h3>返回值</h3>
+        <h3>回傳值</h3>
         <p>一個 Promise , 其狀態為:</p>
 
         <ul>
@@ -97,7 +97,7 @@ Promise.allSettled('') // Promise {&lt;fulfilled&gt;: Array(0)}
             </dl>
             如果傳入的
             <code>iterable</code>
-            是非空的，但不包含特定的(pending)promise ，則返回的 promise
+            是非空的，但不包含特定的(pending)promise ，則回傳的 promise
             仍然是異步實現的，而不是同步實現。
           </li>
         </ul>
@@ -127,7 +127,7 @@ Promise.allSettled(promises).then((results) =&gt; results.forEach((result) =&gt;
           <p>
             相比之下，如果任務相互依賴，或者如果你想在任何 promise 被拒絕時立即拒絕，
             <code><a href="4-1.html#4-1-6">Promise.all</a></code>
-            返回的 Promise 可能更合適。
+            回傳的 Promise 可能更合適。
           </p>
         </div>
         <pre><code class="language-js">

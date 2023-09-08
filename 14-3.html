@@ -36,11 +36,11 @@
         <h2 id="14-3">14-3 String.prototype.matchAll()</h2>
         <p>
           matchAll()
-          方法返回一個疊代器，該疊代器包含了檢索字串與正則表達式進行匹配的所有結果（包括捕獲組）。
+          方法回傳一個疊代器，該疊代器包含了檢索字串與正則表達式進行匹配的所有結果（包括捕獲組）。
         </p>
         <p>
           一個匹配結果的可疊代疊代器物件（它不可重新開始）。每個匹配結果都是一個陣列，其形狀與
-          RegExp.prototype.exec() 的返回值相同。
+          RegExp.prototype.exec() 的回傳值相同。
         </p>
         <pre><code class="language-js">
 const regexp = /t(e)(st(\d?))/g;
@@ -160,7 +160,7 @@ array[1];
         <h3>使用實現了 @@matchAll 的非正則物件調用 matchAll()</h3>
         <p>
           如果一個物件有一個 Symbol.matchAll 方法， 它可以被用作自定義匹配器。Symbol.matchAll
-          的返回值將成為 matchAll() 的返回值。
+          的回傳值將成為 matchAll() 的回傳值。
         </p>
         <pre><code class="language-js">
 const str = "Hmm, this is interesting.";

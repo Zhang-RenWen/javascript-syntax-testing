@@ -110,8 +110,8 @@ instance.#privateField; // Syntax error
           </p>
         </div>
         <p>
-          如果從不具有該屬性的對象訪問私有屬性，則會拋出 TypeError 而不是 undefined
-          像普通屬性那樣返回。
+          如果從不具有該屬性的物件訪問私有屬性，則會拋出 TypeError 而不是 undefined
+          像普通屬性那樣回傳。
         </p>
         <pre><code class="language-js error-code">
 class C {
@@ -217,7 +217,7 @@ new Subclass(); // In some dev tools, it shows Subclass {#privateField: 42, #sub
             來說是私有的， 不能從衍生的子類訪問。
           </p>
         </div>
-        <h3>Returning overriding object 返回覆寫物件</h3>
+        <h3>Returning overriding object 回傳覆寫物件</h3>
         <p>
           一個類別的建構子可以回傳不同的物件，這個物件會被衍生的 class 建構子當作新的
           <code>this</code>
@@ -432,7 +432,7 @@ console.log(ClassWithPrivateStaticMethod.publicStaticMethod()); // 42
         </code></pre>
         <p>私有靜態方法可以是生成器、異步和異步生成器函數。</p>
         <p>
-          前面提到的私有靜態欄位的相同限制也適用於私有靜態方法，並且類似地在使用它時可能會導致意外的行為。在下面的示例中，當我們嘗試調用
+          前面提到的私有靜態欄位的相同限制也適用於私有靜態方法，並且類似地在使用它時可能會導致意外的行為。在下面的範例中，當我們嘗試調用
           <code>Subclass.publicStaticMethod()</code>
           時，它引用的是
           <code>Subclass</code>
