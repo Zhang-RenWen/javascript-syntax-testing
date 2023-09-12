@@ -5,7 +5,7 @@ export const menu = [
     submenu: [
       {
         id: '1-1',
-        title: '1-1 資料結構',
+        title: '1-1 網路架構',
         href: `./1-1.html`,
         anchorMenu: [
           {
@@ -17,79 +17,19 @@ export const menu = [
       },
       {
         id: '1-2',
-        title: '1-2 演算法',
+        title: '1-2 JavaScript 核心',
         href: `./1-2.html`,
         anchorMenu: [
           {
             id: '1-2-1',
-            title: '1-2-1 排序演算法',
-            href: '1-2-1.html'
-          },
-          {
-            id: '1-2-2',
-            title: '1-2-2 主定理',
-            href: '1-2-2.html'
-          },
-          {
-            id: '1-2-3',
-            title: '1-2-3 連結串列',
-            href: '1-2-3.html'
-          },
-          {
-            id: '1-2-4',
-            title: '1-2-4 雜湊表',
-            href: '1-2-4.html'
-          },
-          {
-            id: '1-2-5',
-            title: '1-2-5 二元搜尋樹',
-            href: '1-2-5.html'
-          },
-          {
-            id: '1-2-6',
-            title: '1-2-6 優先佇列',
-            href: '1-2-6.html'
-          },
-          {
-            id: '1-2-7',
-            title: '1-2-7 霍夫曼演算法',
-            href: '1-2-7.html'
-          },
-          {
-            id: '1-2-8',
-            title: '1-2-8 最小生成樹',
-            href: '1-2-8.html'
-          },
-          {
-            id: '1-2-9',
-            title: '1-2-9 寬度優先搜尋',
-            href: '1-2-9.html'
-          },
-          {
-            id: '1-2-10',
-            title: '1-2-10 最短路徑演算法',
-            href: '1-2-10.html'
-          },
-          {
-            id: '1-2-11',
-            title: '1-2-11 戴克斯特拉演算法',
-            href: '1-2-11.html'
-          },
-          {
-            id: '1-2-12',
-            title: '1-2-12 動態規劃',
-            href: '1-2-12.html'
-          },
-          {
-            id: '1-12-1',
-            title: '1-12-13 密碼學',
-            href: '1-12-13.html'
+            title: '1-2-1 window 物件',
+            href: '1-2.html#1-2-1'
           }
         ]
       },
       {
         id: '1-3',
-        title: '1-3 JavaScript 核心',
+        title: '1-3 瀏覽器運作原理',
         href: `./1-3.html`,
         anchorMenu: [
           {
@@ -101,7 +41,7 @@ export const menu = [
       },
       {
         id: '1-4',
-        title: '1-4 瀏覽器 運作原理',
+        title: '1-4 效能調校',
         href: `./1-4.html`,
         anchorMenu: [
           {
@@ -113,7 +53,7 @@ export const menu = [
       },
       {
         id: '1-5',
-        title: '1-5 效能調校',
+        title: '1-5 資安議題',
         href: `./1-5.html`,
         anchorMenu: [
           {
@@ -125,19 +65,24 @@ export const menu = [
       },
       {
         id: '1-6',
-        title: '1-6 資安議題',
+        title: '1-6 程式架構規劃與設計',
         href: `./1-6.html`,
         anchorMenu: [
           {
             id: '1-6-1',
-            title: '1-6-1 ',
+            title: '1-6-1 權限',
             href: '1-6.html#1-6-1'
+          },
+          {
+            id: '1-6-2',
+            title: '1-6-2 JWT 登入',
+            href: '1-6.html#1-6-2'
           }
         ]
       },
       {
         id: '1-7',
-        title: '1-7 網路架構',
+        title: '1-7 程式部署',
         href: `./1-7.html`,
         anchorMenu: [
           {
@@ -149,24 +94,19 @@ export const menu = [
       },
       {
         id: '1-8',
-        title: '1-8 程式架構規劃與設計',
+        title: '1-8 通用正則表達式',
         href: `./1-8.html`,
         anchorMenu: [
           {
             id: '1-8-1',
-            title: '1-8-1 權限',
-            href: '1-8.html#1-8-1'
-          },
-          {
-            id: '1-8-2',
-            title: '1-8-2 JWT 登入',
-            href: '1-8.html#1-8-2'
+            title: '1-8-1 ',
+            href: '1-8-1.html'
           }
         ]
       },
       {
         id: '1-9',
-        title: '1-9 程式部署',
+        title: '1-9 資料結構',
         href: `./1-9.html`,
         anchorMenu: [
           {
@@ -178,73 +118,118 @@ export const menu = [
       },
       {
         id: '1-10',
-        title: '1-10 玩轉 SVG 特效',
+        title: '1-10 離散數學',
         href: `./1-10.html`,
-        anchorMenu: [
-          {
-            id: '1-10-1',
-            title: '1-10-1 ',
-            href: '1-10-1.html'
-          }
-        ]
+        anchorMenu: []
       },
       {
         id: '1-11',
-        title: '1-11 玩轉 Canvas 特效',
+        title: '1-11 線性代數',
         href: `./1-11.html`,
-        anchorMenu: [
-          {
-            id: '1-11-1',
-            title: '1-11-1 ',
-            href: '1-11-1.html'
-          }
-        ]
+        anchorMenu: []
       },
       {
         id: '1-12',
-        title: '1-12 通用正則表達式',
+        title: '1-12 微積分',
         href: `./1-12.html`,
-        anchorMenu: [
-          {
-            id: '1-12-1',
-            title: '1-12-1 ',
-            href: '1-12-1.html'
-          }
-        ]
+        anchorMenu: []
       },
       {
         id: '1-13',
-        title: '1-13 工程數學',
+        title: '1-13 三角函數',
         href: `./1-13.html`,
+        anchorMenu: []
+      },
+      {
+        id: '1-14',
+        title: '1-14 密碼學',
+        href: '1-14.html',
+        anchorMenu: []
+      },
+      {
+        id: '1-15',
+        title: '1-15 經典演算法',
+        href: `./1-15.html`,
         anchorMenu: [
           {
-            id: '1-13-1',
-            title: '1-13-1 離散數學',
-            href: '1-13-1.html'
+            id: '1-15-1',
+            title: '1-15-1 排序演算法',
+            href: '1-15-1.html'
           },
           {
-            id: '1-13-1',
-            title: '1-13-1 線性代數',
-            href: '1-13-1.html'
+            id: '1-15-2',
+            title: '1-15-2 主定理',
+            href: '1-15-2.html'
           },
           {
-            id: '1-13-1',
-            title: '1-13-1 微積分',
-            href: '1-13-1.html'
+            id: '1-15-3',
+            title: '1-15-3 連結串列',
+            href: '1-15-3.html'
+          },
+          {
+            id: '1-15-4',
+            title: '1-15-4 雜湊表',
+            href: '1-15-4.html'
+          },
+          {
+            id: '1-15-5',
+            title: '1-15-5 二元搜尋樹',
+            href: '1-15-5.html'
+          },
+          {
+            id: '1-15-6',
+            title: '1-15-6 優先佇列',
+            href: '1-15-6.html'
+          },
+          {
+            id: '1-15-7',
+            title: '1-15-7 霍夫曼演算法',
+            href: '1-15-7.html'
+          },
+          {
+            id: '1-15-8',
+            title: '1-15-8 最小生成樹',
+            href: '1-15-8.html'
+          },
+          {
+            id: '1-15-9',
+            title: '1-15-9 寬度優先搜尋',
+            href: '1-15-9.html'
+          },
+          {
+            id: '1-15-10',
+            title: '1-15-10 最短路徑演算法',
+            href: '1-15-10.html'
+          },
+          {
+            id: '1-15-11',
+            title: '1-15-11 戴克斯特拉演算法',
+            href: '1-15-11.html'
+          },
+          {
+            id: '1-15-12',
+            title: '1-15-12 動態規劃',
+            href: '1-15-12.html'
           }
         ]
       },
       {
-        id: '1-14',
-        title: '1-14 面試題目',
-        href: `./1-14.html`,
-        anchorMenu: [
-          {
-            id: '1-14-1',
-            title: '1-14-1 ',
-            href: '1-14-1.html'
-          }
-        ]
+        id: '1-16',
+        title: '1-16 電腦及作業系統',
+        href: '1-16.html',
+        anchorMenu: []
+      },
+      {
+        id: '1-17',
+        title: '1-17 終端指令集',
+        href: '1-17.html',
+        anchorMenu: []
+      },
+      {
+        id: '1-18',
+        title: '1-18 高頻面試題',
+        href: '1-18.html',
+        anchorMenu: []
       }
     ]
   },
