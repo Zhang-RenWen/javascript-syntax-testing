@@ -96,13 +96,7 @@ export const menu = [
         id: '1-8',
         title: '1-8 通用正則表達式',
         href: `./1-8.html`,
-        anchorMenu: [
-          {
-            id: '1-8-1',
-            title: '1-8-1 ',
-            href: '1-8-1.html'
-          }
-        ]
+        anchorMenu: []
       },
       {
         id: '1-9',
