@@ -5,7 +5,7 @@ export const menu = [
     submenu: [
       {
         id: '1-1',
-        title: '1-1 網路架構',
+        title: '1-1 HTML5 & CSS3',
         href: `./1-1.html`,
         anchorMenu: [
           {
@@ -22,20 +22,30 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-2-1',
-            title: '1-2-1 window 物件',
-            href: '1-2.html#1-2-1'
+            title: '1-2-1 this',
+            href: '1-2-1.html'
+          },
+          {
+            id: '1-2-2',
+            title: '1-2-2 閉包',
+            href: '1-2-2.html'
           }
         ]
       },
       {
         id: '1-3',
-        title: '1-3 瀏覽器運作原理',
+        title: '1-3 瀏覽器運作',
         href: `./1-3.html`,
         anchorMenu: [
           {
             id: '1-3-1',
             title: '1-3-1 ',
             href: '1-3.html#1-3-1'
+          },
+          {
+            id: '1-3-111',
+            title: '1-3-111 window 物件',
+            href: '1-3-111.html'
           }
         ]
       },
@@ -221,7 +231,7 @@ export const menu = [
       },
       {
         id: '1-18',
-        title: '1-18 高頻面試題',
+        title: '1-18 網路架構',
         href: '1-18.html',
         anchorMenu: []
       }
