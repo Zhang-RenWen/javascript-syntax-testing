@@ -23,12 +23,12 @@ export const menu = [
           {
             id: '1-2-1',
             title: '1-2-1 this',
-            href: '1-2.html#1-2-1'
+            href: '1-2-1.html'
           },
           {
             id: '1-2-2',
             title: '1-2-2 閉包',
-            href: '1-2.html#1-2-2'
+            href: '1-2-2.html'
           }
         ]
       },
@@ -45,7 +45,7 @@ export const menu = [
           {
             id: '1-3-111',
             title: '1-3-111 window 物件',
-            href: '1-3.html#1-3-111'
+            href: '1-3-111.html'
           }
         ]
       },
