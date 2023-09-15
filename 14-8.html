@@ -173,6 +173,57 @@ const foo = { someFooProp: "hi" };
 console.log(foo.someFooProp?.toUpperCase() ?? "not available"); // "HI"
 console.log(foo.someBarProp?.toUpperCase() ?? "not available"); // "not available"
       </code></pre>
+        <h3>比較雙驚嘆號</h3>
+        <p>
+          第一個驚嘆號作用為讓下列
+          <code>falsy</code>
+          值回傳
+          <code>false</code>
+          。
+        </p>
+        <p>
+          <code>false</code>
+          :
+          <code>0, -0, null, false, NaN, undefined, ''</code>
+        </p>
+        <p>
+          第二個驚嘆號作用是判斷第一個驚嘆號所回傳的布林值是否為
+          <strong>非</strong>
+          <code>false</code>
+          的狀態。
+        </p>
+        <p>
+          <code>true</code>
+          : 非
+          <code>false</code>
+          狀況。
+        </p>
+        <pre><code class="language-js">
+const numberZero = !!0 // false
+const stringFalse = !!'false' // true
+const numberNaN = !!NaN // false
+        </code></pre>
+        <p>
+          使用雙驚嘆號讓結果限制在只會有以下兩種：
+          <code>true</code>
+          和
+          <code>false</code>
+          。 這在做表單驗證時特別方便，比如說： 在表單輸入時，有時候會因為 API
+          所回傳的格式亦或者套件預設回傳的格式亦或者使用者的輸入行為都導致輸入框內的不盡相同，比如有時候輸入框內的值為空時，資料型態有時候是空字串
+          <code>''</code>
+          有時候卻為
+          <code>null</code>
+          。
+          在商業邏輯上來看兩這本質上都是屬於空值代表沒有填寫，如果只單用一種狀態當作驗證標準會容易出錯且不易除錯，在代碼上必須視為相同。
+        </p>
+        <p><strong>注意：使用 雙驚嘆號時如果要讓數字 0 檢核為有效輸入，則需要做額外處理</strong></p>
+        <pre><code class="language-js">
+const value = 0
+const value2 = ''
+
+const numberZero = !!value || value === 0 // true
+const numberZero2 = !!value2 || value2 === 0 // false
+        </code></pre>
         <p>資料來源:</p>
         <p>
           <a
