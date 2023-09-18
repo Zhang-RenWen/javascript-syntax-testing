@@ -110,13 +110,13 @@ export const menu = [
       },
       {
         id: '1-9',
-        title: '1-9 資料結構',
+        title: '1-9 資料結構和演算法',
         href: `./1-9.html`,
         anchorMenu: [
           {
             id: '1-9-1',
-            title: '1-9-1 ',
-            href: '1-9.html#1-9-1'
+            title: '1-9-1 Complexity and Big O Notation',
+            href: '1-9-1.html'
           }
         ]
       },
