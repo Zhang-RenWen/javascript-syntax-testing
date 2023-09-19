@@ -121,6 +121,32 @@ function fun2(n) {
           的複雜度函式製作成xy座標軸平面圖將會看到在 n 值小的時候兩者並無顯著複雜度的區別,然而隨著 n
           值越大兩者的複雜度差距則會越大。
         </p>
+        <h3>Big O Notation</h3>
+        <p>
+          Big O 是一種描述 一個演算法 的 input n 越大則相對應的時間複雜度 f(n)
+          會如何變化的工具，展示複雜度的趨勢，需要探討演算法使用過後最壞的情況是如何？。
+        </p>
+        <p>如果不了解 Big O 的概念則無法有效去優化演算法。</p>
+        <h4>計算 Big O</h4>
+        <ul>
+          <li>忽略 constant 常數</li>
+          <li>忽略 小運算項</li>
+          <li>忽略 log 的底數</li>
+        </ul>
+        <p>例題1：時間複雜度為f(n) = 3n 演算法的 Big O 值為何？答案： O(n)</p>
+        <p>例題2：時間複雜度為f(n) = 13n^3+6n+7 演算法的 Big O 值為何？答案： O(n³)</p>
+        <p>例題3：時間複雜度為f(n) = 4log₂n 演算法的 Big O 值為何？答案： O(log n)</p>
+        <p>例題4：時間複雜度為f(n) = 5 演算法的 Big O 值為何？答案： O(1)</p>
+        <h4>常見演算法的 Big O 值</h4>
+        <p>由好到壞依序為：</p>
+        <ol>
+          <li>✔️ O(1)</li>
+          <li>✔️ O(log n)</li>
+          <li>✔️ O(n)</li>
+          <li>✔️ O(n log n)</li>
+          <li>✖️ O(n²)</li>
+          <li>✖️ O(n³)</li>
+        </ol>
         <pre><code class="language-js">
         </code></pre>
       </article>
