@@ -230,9 +230,51 @@ function fun2(n) {
         <p>輸入第三個演算法：g(x) = 10x</p>
         <p>看圖可以發現當 x ≥ 0.857 時，f(n) = 3x +6 會介於 g(x) = x、 g(x) = 10x 之間。</p>
         <p>有滿足定義條件，故可以說 f(n) 的 Big Theta 為 θ(n)。</p>
+        <h3>Javascript 中 Object Array 的 Big O</h3>
+        <h4>Object</h4>
+        <p>
+          JS 中 Object 已經默認被轉換為 hash table 的型態，因為 hash table 的 Big O
+          值比較好。以下列舉操作 JS Object 動作所對應的 Big O 值。
+        </p>
+        <ul>
+          <li>Insertion - O(1)</li>
+          <li>Removal - O(1)</li>
+          <li>Searching(find key) - O(1)</li>
+          <li>Accessing(find value) - O(1)</li>
+        </ul>
+        <h4>Array</h4>
+        <ul>
+          <li>
+            Insertion -
+            <ul>
+              <li>push() - O(1)</li>
+              <li>unshift - O(n)</li>
+            </ul>
+          </li>
+          <li>
+            Removal -
+            <ul>
+              <li>pop() - O(1)</li>
+              <li>shift - O(n)</li>
+            </ul>
+          </li>
+          <li>Searching - O(n)</li>
+          <li>Accessing - O(1)</li>
+        </ul>
+        <pre><code class="language-js">
+let n = 10
+let arr =[1,2,3,4,5]
 
-        <!-- <pre><code class="language-js">
-        </code></pre> -->
+for(let i =0; i&lt;n;i++){
+  arr.push(i) // O(1)
+} // O(n)
+
+for(let i =0; i&lt;n;i++){
+  arr.unshift(i) // O(n)
+} // O(n²)
+
+
+        </code></pre>
         <p>
           <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
         </p>
