@@ -33,12 +33,39 @@
         <nav></nav>
       </aside>
       <article>
-        <h2>1-2-1 this</h2>
-        <h3 id=""></h3>
+        <h2 id="1-2-1">1-2-1 this</h2>
+        <h3>this 指向的規則</h3>
+        <ul>
+          <li>
+            在函數本體中，非顯性或隱式地簡單呼叫函數時，在嚴格模式下，函數內 的
+            <code>this</code>
+            會被綁定到 undefined 上，在非嚴格模式下則會被綁定到全域物件 window/global 上。
+          </li>
+          <li>
+            一般使用 new 方法呼叫建構函數時，建構函數內的
+            <code>this</code>
+            會被綁定到新建立的物件上。
+          </li>
+          <li>
+            一般透過 call/apply/bind 方法顯性呼叫函數時，函數本體內的
+            <code>this</code>
+            會被綁定 到指定參數的物件上。
+          </li>
+          <li>
+            一般透過上下文物件呼叫函數時，函數本體內的
+            <code>this</code>
+            會被綁定到該物件上。
+          </li>
+          <li>
+            在節頭函數中，
+            <code>this</code>
+            的指向是由外層 （函數或全域）作用域來決定的。
+          </li>
+        </ul>
+        <p></p>
         <pre><code class="language-js">
 
         </code></pre>
-        <div class="border-block"></div>
       </article>
     </main>
   </body>
