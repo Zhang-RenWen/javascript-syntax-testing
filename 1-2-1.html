@@ -62,10 +62,87 @@
             的指向是由外層 （函數或全域）作用域來決定的。
           </li>
         </ul>
-        <p></p>
+        <h3>全域環境中的 this</h3>
+        <p>
+          函數在瀏覽器全域環境中被簡單呼叫，在非嚴格模式下
+          <code>this</code>
+          指向
+          <code>window</code>
+          ，在透過
+          <code>use strict</code>
+          指明嚴格模式的情況下指向
+          <code>undefined</code>
+          。
+        </p>
         <pre><code class="language-js">
+function f1(){
+  console.log(this)
+}
 
+function f2(){
+  'use strict'
+  console.log(this)
+}
+f1() // window
+f2() // undefined
         </code></pre>
+        <p>下列案例為上一個案例的變種：</p>
+        <pre><code class="language-js">
+const foo = {
+  bar: 10,
+  fn: function(){
+    console.log(this) 
+    console.log(this.bar)
+  }
+}
+var fn1 = foo.fn
+fn1()
+// 結果如下：
+//  window
+//  undefined 
+// 因為 window[bar] === undefined
+        </code></pre>
+        <p>
+          這裡的
+          <code>this</code>
+          仍然指向
+          <code>window</code>
+          。雖然切函數在 foo 物件中用來作為物件的方法，但是在設定值給
+          <code>fn1</code>
+          之後，
+          <code>fn1</code>
+          仍然是在
+          <code>window</code>
+          的全域環境中執行的。 因此，以上程式會輸出
+          <code>window</code>
+          和
+          <code>undefined</code>
+          。
+        </p>
+        <p>
+          改變呼叫行為會改變
+          <code>this</code>
+          指向。
+        </p>
+        <pre><code class="language-js">
+const foo = {
+  bar: 10,
+  fn: function(){
+    console.log(this) 
+    console.log(this.bar)
+  }
+}
+foo.fn()
+// 結果如下：
+//  {bar: 10, fn:f()}
+//  10 
+        </code></pre>
+        <p>
+          這時，
+          <code>this</code>
+          指向的是最後呼叫它的物件。
+        </p>
+        <pre><code class="language-js"></code></pre>
       </article>
     </main>
   </body>
