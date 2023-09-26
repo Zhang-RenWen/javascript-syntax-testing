@@ -137,7 +137,7 @@ function binarySearch(arr, n) {
             </tr>
           </tbody>
         </table>
-        <h3>Counter</h3>
+        <h3>設計概念1 Counter</h3>
         <p>尋找兩集合中共相似之處可以使用的概念。</p>
         <p>案例1-尋找共同元素</p>
         <pre><code class="language-js">
@@ -204,7 +204,176 @@ sameFrequency('abba','abab') // true
 sameFrequency('aasdebasdf','adfeebed') // false
 
         </code></pre>
-        <pre><code class="language-js"> </code></pre>
+        <h3>設計概念2 Pointer</h3>
+        <p>直接看案例：</p>
+        <p>
+          現在有一個需求，寫出一個方法，從集合中找出所有兩個為一對的數字,每一對數字的平均為選定的目標數字。
+        </p>
+        <p>
+          像這樣
+          <code>averagePair([-11,0,1,2,3,9,14,17,21],1.5)</code>
+          回傳
+          <code>[[-11,14],[0,3],[1,2]]</code>
+        </p>
+        <p>實作思路：將陣列由小到大排序後，由陣列的第一個和最後一個數字開始操作。</p>
+        <p>
+          (-11+21)/2 = 5 >
+          1.5。結果不成對，接著從最後一個數字往回找，也就是17，然後再運算一次。(-11+17)/2 = 3 >
+          1.5。結果還是不成對，接著找到 14。 (-11+14)/2 = 1.5 = 1.5。找到一組後將 [-11
+          ,14]挑出來繼續找尋。 (0+9)/2 = 4.5 > 1.5 ..... 依此類推。
+        </p>
+        <pre><code class="language-js"> 
+function averagePair(array,target){
+  let result =[]
+  let pointer1 = 0
+  let pointer2 = array.length -1
+
+  for(var i=0; i &lt; array.length-1; i++){
+    if(pointer2-pointer1&gt;0){// 避免重複
+      const element1 = array[pointer1]
+      const element2 = array[pointer2]
+      if((element1+element2)/2!==target){ 
+        pointer2--
+      }else{
+        result.push([element1,element2])
+        pointer1++
+        pointer2--
+      }
+    } 
+  }
+  return result
+}
+
+
+        </code></pre>
+        <p>
+          案例2：現在有一個需求，寫一個方法判斷一個輸入的字串使否是'迴文
+          palindrome'(英文語系中正讀反讀一模一樣，都能通的詞句)。像這樣：
+        </p>
+        <pre><code class="language-js"> 
+palindrome("tacocat"); // true
+palindrome("amanaplanacanalpanama"); // true
+palindrome("asdfsafeaw"); // false
+        </code></pre>
+        <p>同樣以 Pointer 概念實作方式如下：</p>
+        <pre><code class="language-js">
+function palindrome(str) {
+  let left = 0;
+  let right = str.length - 1;
+  while (left &lt;= right) {
+    console.log(str[left], str[right]);
+    if (str[left] == str[right]) {
+      left++;
+      right--;
+    } else {
+      console.log(false);
+      return false;
+    }
+  }
+
+  console.log(true);
+  return true;
+}
+        </code></pre>
+        <p>
+          案例3：現在有一個需求，寫一個方法判斷第二個字串是否刪掉幾個字之後在順序不變的情況下可以轉變成第一個字串。像這樣：
+        </p>
+        <pre><code class="language-js"> 
+isSubsequence("hello", "hello Dear"); // true 刪掉 ' Dear'
+isSubsequence("book", "brooklyn"); // true 刪掉 'r' 'lyn'
+isSubsequence("abc", "bac"); // false (order matters)
+        </code></pre>
+        <pre><code class="language-js">
+function isSubsequence(str1, str2) {
+  if (str1.length == 0) {
+    console.log(true);
+    return true;
+  }
+
+  let pointer1 = 0;
+  let pointer2 = 0;
+
+  while (pointer2 &lt; str2.length) {
+    if (str1[pointer1] == str2[pointer2]) {
+      pointer1++;
+    }
+    if (pointer1 >= str1.length) {
+      console.log(true);
+      return true;
+    }
+    pointer2++;
+  }
+
+  console.log(false);
+  return false;
+} </code></pre>
+        <h3>Sliding Window 演算法</h3>
+        <p>
+          指定一個小於集合
+          <code>length</code>
+          的 size,將一組集合每連續 size 個元素分成一組子集合，依序將所有子集合列舉出來。
+        </p>
+        <p>舉個例子：</p>
+        <pre><code class="language-js"> 
+// 有一組集合：[a,b,c,d,e,f,g]
+// 子集合 size 指定為 3
+// 結果如下
+// [a,b,c]
+//   [b,c,d]
+//     [c,d,e]
+//       [d,e,f]
+//         [e,f,g]
+
+        </code></pre>
+        <p>下列例子除了列舉子集合之外，額外將個別子集合都加總計，並計算最大、最小值。</p>
+        <pre><code class="language-js">
+function maxSum(arr, size) {
+  if (size > arr.length) {
+    return null;
+  }
+
+  let maxValue = 0;
+  for (let i = 0; i &lt; size; i++) {
+    maxValue += arr[i];
+  }
+
+  let temValue = maxValue;
+  for (let j = size; j &lt; arr.length; j++) {
+    temValue = temValue + arr[j] - arr[j - size];
+    if (temValue > maxValue) {
+      maxValue = temValue;
+    }
+  }
+
+  console.log(maxValue);
+  return maxValue;
+}
+
+function minSum(arr, size) {
+  let min_value = Infinity;
+
+  if (size > arr.length) {
+    return null;
+  }
+
+  for (let i = 0; i &lt;= arr.length - size; i++) {
+    let attempt = 0;
+    for (let j = i; j &lt; i + size; j++) {
+      attempt += arr[j];
+    }
+    if (attempt &lt; min_value) {
+      min_value = attempt;
+    }
+  }
+
+  console.log(min_value);
+  return min_value;
+}
+
+
+maxSum([2, 7, 3, 0, 6, 1, -5, -12, -11], 2); // 12
+minSum([2, 7, 3, 0, 6, 1, -5, -12, -11], 3); // -28
+        </code></pre>
         <pre><code class="language-js"> </code></pre>
       </article>
     </main>
