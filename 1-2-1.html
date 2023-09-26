@@ -142,6 +142,90 @@ foo.fn()
           <code>this</code>
           指向的是最後呼叫它的物件。
         </p>
+        <h3>上下文物件呼叫中的 this</h3>
+        <p>根據上面的例子，不難理解下列案例結果。</p>
+        <pre><code class="language-js">
+const student = {
+  name: 'Lucas'
+  fn: function(){
+    return this
+  }
+}
+  console.log( student.fn() === student) // true
+        </code></pre>
+        <p>
+          當存在更複雜的呼叫關係時，如以下程式中的巢狀結構關係，this
+          會指向最後呼叫它的物件，因此輸出將是 Mike。
+        </p>
+        <pre><code class="language-js">
+const person = {
+  name: 'Lucas'
+  brother:{
+    name: 'Mike!'',
+    fn: function (){
+      return this.name
+    }
+  }
+}
+
+console.log( person.brother.fn() ) // Mike!' 
+        </code></pre>
+        <p>以上都可以理解後來看更為複雜的案例：</p>
+        <pre><code class="language-js">
+const o1 = {
+  text:'o1',
+  fn: function(){
+    return this.text
+  }
+}
+const o2 = {
+  text: 'o2',
+  fn: function(){
+    return o1.fn()
+  }
+}
+const o3 = {
+  text: 'o3',
+  fn: function(){
+    var fn = o1.fn
+    return fn()
+  }
+}
+
+console.log(o1.fn()) // 'o1'
+console.log(o2.fn()) // 'o1'
+console.log(o3.fn()) // undefined 
+// 原因是  var fn = o1.fn 設定裸奔呼叫，fn 位置所存的只有 
+// function(){
+//  return this.text
+// } 
+// o3.fn() 可以看做 fn() 也就是直接執行上述 function
+// 故 this 會指向 window
+        </code></pre>
+        <p>如果我們需要讓 console.log(o2.fn()) 敘述輸出 'o2'， 該怎麼做 ？</p>
+
+        <pre><code class="language-js">
+const o1 = {
+  text: 'o1',
+  fn: function(){
+    return this.text
+  }
+}
+const o2 = {
+  text: 'o2',
+  fn: o1.fn
+}
+console.log(o2.fn())
+        </code></pre>
+        <p>
+          以上方法同樣應用了那個重要的結論：
+          <code>this</code>
+          指向最後呼叫它的物件。在上面的 程式中，我們提前進行了設定值操作，將函數 fn 掛載到 o2
+          物件上， fn 最後作 為 o2 物件的方法被呼叫。
+        </p>
+        <pre><code class="language-js"></code></pre>
+        <pre><code class="language-js"></code></pre>
+        <pre><code class="language-js"></code></pre>
         <pre><code class="language-js"></code></pre>
       </article>
     </main>
