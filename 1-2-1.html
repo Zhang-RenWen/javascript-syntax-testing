@@ -161,14 +161,14 @@ const student = {
 const person = {
   name: 'Lucas'
   brother:{
-    name: 'Mike!'',
+    name: 'Mike!',
     fn: function (){
       return this.name
     }
   }
 }
 
-console.log( person.brother.fn() ) // Mike!' 
+console.log( person.brother.fn() ) // 'Mike!' 
         </code></pre>
         <p>以上都可以理解後來看更為複雜的案例：</p>
         <pre><code class="language-js">
@@ -223,8 +223,53 @@ console.log(o2.fn())
           指向最後呼叫它的物件。在上面的 程式中，我們提前進行了設定值操作，將函數 fn 掛載到 o2
           物件上， fn 最後作 為 o2 物件的方法被呼叫。
         </p>
-        <pre><code class="language-js"></code></pre>
-        <pre><code class="language-js"></code></pre>
+        <h3>透過 bind、call、apply 改變 this 指向</h3>
+        <p>
+          call 和 apply 會直接進行相關函數呼叫； bind
+          不會執行相關函數，而是傳回一個新的函數，這個新的函數已經自動綁 定了新的
+          <code>this</code>
+          指向，開發者可以手動呼叫它。如果再說實際一點，就是
+          <code>call</code>
+          和
+          <code>apply</code>
+          之間的區別主要表現在參數設定上。
+        </p>
+        <p>以下 3 段程式是相等的</p>
+        <pre><code class="language-js">
+// 1
+const target = {}
+fn.call(target,'arg1')
+
+// 2
+const target = {}
+fn.apply(target, ['arg1', 'arg2'])
+
+// 3
+const target = {}
+fn.bind(target,'arg1','arg2')()
+        </code></pre>
+
+        <pre><code class="language-js">
+const foo = {
+  name: 'lucas',
+  logName: function () {
+    console.log (this.name)
+  }
+}
+const bar = {
+  name: 'mike'
+}
+console. log (foo.logName.call(bar) )
+        </code></pre>
+        <p>
+          以上程式的執行結果為 'mike'，這不難了解。但是對
+          <code>call</code>
+          、
+          <code>apply</code>
+          、
+          <code>bind</code>
+          的進階考驗常常需要面試者結合建構函數及組合來實現繼承。關於建構函數的使用案例，我們會結合接下來的例題組合進行展示。
+        </p>
         <pre><code class="language-js"></code></pre>
         <pre><code class="language-js"></code></pre>
       </article>
