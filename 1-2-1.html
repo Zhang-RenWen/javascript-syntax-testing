@@ -270,7 +270,68 @@ console. log (foo.logName.call(bar) )
           <code>bind</code>
           的進階考驗常常需要面試者結合建構函數及組合來實現繼承。關於建構函數的使用案例，我們會結合接下來的例題組合進行展示。
         </p>
-        <pre><code class="language-js"></code></pre>
+        <h3>建構函數和 this</h3>
+        <pre><code class="language-js">
+function Foo() {
+  this.bar = 'Lucas'
+}
+const instance = new Foo()
+console.log(instance.bar) 'Lucas'
+        </code></pre>
+        <p>關於建構子的作用以上函式可以很直接地說明。就是在創建物件同時設定預設參數。</p>
+        <p>以下函式可以表述上述過程。</p>
+        <pre><code class="language-js">
+function Foo() {
+  this.bar = 'Lucas'
+}
+var obj = {}
+obj.__proto__ = Foo.prototype
+Foo.call(obj)
+        </code></pre>
+        <p>
+          如果在建構函數中出現了顯性
+          <code>return</code>
+          的情況，那麼需要注意，其可以細分為兩種場景。場暴1：執行以下程式將輸出
+          <code>undefined</code>
+          ，此時
+          <code>instance</code>
+          傳回的是空白物件。
+        </p>
+        <pre><code class="language-js">
+//場景1
+function Foo(){
+  this.user = 'Lucas'
+  const o = {}
+  return o
+}
+const instance = new Foo()
+console.log (instance.user) // undefined
+        </code></pre>
+        <p>
+          場景2：執行以下程式將輸出 Lucas，也就是說，
+          <code>instance</code>
+          此時傳回的是目標物件實例
+          <code>this</code>
+          。
+        </p>
+        <pre><code class="language-js">
+//場景2
+function Foo(){
+  this.user = 'Lucas'
+  return 1
+}
+const instance = new Foo()
+console.log (instance.user) // 'Lucas'
+        </code></pre>
+        <p>
+          所以，如果建構函數中顯性傳回一個值，且傳回的是一個物件(傳回複雜類 型)，那麼
+          <code>this</code>
+          就指向這個傳回的物件；如果傳回的不是一個物件(傳回基本 類型)，那麼
+          <code>this</code>
+          仍然指向實例。
+        </p>
+        <h3>箭頭函數中的 this</h3>
+
         <pre><code class="language-js"></code></pre>
       </article>
     </main>
