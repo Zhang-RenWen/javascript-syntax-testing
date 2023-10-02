@@ -331,7 +331,70 @@ console.log (instance.user) // 'Lucas'
           仍然指向實例。
         </p>
         <h3>箭頭函數中的 this</h3>
-
+        <p>
+          箭頭函數中的
+          <code>this</code>
+          指向是由其所屬函數或全域作用域決定的。
+        </p>
+        <p>
+          來看一段範例程式。在這段程式中，
+          <code>this</code>
+          出現在
+          <code>setTimeout()</code>
+          的匿名函數 中，因此
+          <code>this</code>
+          指向
+          <code>window</code>
+          物件
+        </p>
+        <pre><code class="language-js">
+const foo = {
+  fn: function(){
+    setTimeout(function(){
+      console.log(this)
+    },1)
+  }
+}
+console.log(foo.fn())
+        </code></pre>
+        <p>
+          如果需要讓
+          <code>this</code>
+          指向 foo 物件，則可以用箭頭函數來解決，程式如下
+        </p>
+        <pre><code class="language-js">
+const foo = {
+    fn: function(){
+    setTimeout(()=> {
+      console.log(this)
+    },1)
+  }
+}
+console.log(foo.fn())
+// {fn: f}
+        </code></pre>
+        <p>
+          單純的箭頭函數中的
+          <code>this</code>
+          指向問題非常簡單，但是如果綜合所有情況，並結合
+          <code>this</code>
+          的優先順序進行考驗，那麼這時
+          <code>this</code>
+          的指向並不容易確定。下面就來學習
+          <code>this</code>
+          優先順序的相關知識。
+        </p>
+        <h3>this 優先順序</h3>
+        <p>
+          透過
+          <code>call、apply、bind、new</code>
+          對
+          <code>this</code>
+          進行綁定的情況稱為顯性綁定，而把根據呼叫關係確定
+          <code>this</code>
+          指向的情況稱為隱式綁定。
+        </p>
+        <pre><code class="language-js"></code></pre>
         <pre><code class="language-js"></code></pre>
       </article>
     </main>
