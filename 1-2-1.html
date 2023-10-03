@@ -39,7 +39,9 @@
           <li>
             在函數本體中，非顯性或隱式地簡單呼叫函數時，在嚴格模式下，函數內 的
             <code>this</code>
-            會被綁定到 undefined 上，在非嚴格模式下則會被綁定到全域物件 window/global 上。
+            會被綁定到 undefined 上，在非嚴格模式下則會被綁定到全域物件
+            <code>window/global</code>
+            上。
           </li>
           <li>
             一般使用 new 方法呼叫建構函數時，建構函數內的
@@ -154,7 +156,8 @@ const student = {
   console.log( student.fn() === student) // true
         </code></pre>
         <p>
-          當存在更複雜的呼叫關係時，如以下程式中的巢狀結構關係，this
+          當存在更複雜的呼叫關係時，如以下程式中的巢狀結構關係，
+          <code>this</code>
           會指向最後呼叫它的物件，因此輸出將是 Mike。
         </p>
         <pre><code class="language-js">
@@ -200,7 +203,7 @@ console.log(o3.fn()) // undefined
 //  return this.text
 // } 
 // o3.fn() 可以看做 fn() 也就是直接執行上述 function
-// 故 this 會指向 window
+// 故<code>this</code>會指向 window
         </code></pre>
         <p>如果我們需要讓 console.log(o2.fn()) 敘述輸出 'o2'， 該怎麼做 ？</p>
 
@@ -223,9 +226,19 @@ console.log(o2.fn())
           指向最後呼叫它的物件。在上面的 程式中，我們提前進行了設定值操作，將函數 fn 掛載到 o2
           物件上， fn 最後作 為 o2 物件的方法被呼叫。
         </p>
-        <h3>透過 bind、call、apply 改變 this 指向</h3>
+        <h3>
+          透過
+          <code>bind、call、apply</code>
+          改變
+          <code>this</code>
+          指向
+        </h3>
         <p>
-          call 和 apply 會直接進行相關函數呼叫； bind
+          <code>call</code>
+          和
+          <code>apply</code>
+          會直接進行相關函數呼叫；
+          <code>bind</code>
           不會執行相關函數，而是傳回一個新的函數，這個新的函數已經自動綁 定了新的
           <code>this</code>
           指向，開發者可以手動呼叫它。如果再說實際一點，就是
@@ -253,7 +266,7 @@ fn.bind(target,'arg1','arg2')()
 const foo = {
   name: 'lucas',
   logName: function () {
-    console.log (this.name)
+    console.log(this.name)
   }
 }
 const bar = {
@@ -291,7 +304,7 @@ Foo.call(obj)
         <p>
           如果在建構函數中出現了顯性
           <code>return</code>
-          的情況，那麼需要注意，其可以細分為兩種場景。場暴1：執行以下程式將輸出
+          的情況，那麼需要注意，其可以細分為兩種場景。場景1：執行以下程式將輸出
           <code>undefined</code>
           ，此時
           <code>instance</code>
@@ -305,7 +318,7 @@ function Foo(){
   return o
 }
 const instance = new Foo()
-console.log (instance.user) // undefined
+console.log(instance.user) // undefined
         </code></pre>
         <p>
           場景2：執行以下程式將輸出 Lucas，也就是說，
@@ -321,7 +334,7 @@ function Foo(){
   return 1
 }
 const instance = new Foo()
-console.log (instance.user) // 'Lucas'
+console.log(instance.user) // 'Lucas'
         </code></pre>
         <p>
           所以，如果建構函數中顯性傳回一個值，且傳回的是一個物件(傳回複雜類 型)，那麼
@@ -394,8 +407,199 @@ console.log(foo.fn())
           <code>this</code>
           指向的情況稱為隱式綁定。
         </p>
-        <pre><code class="language-js"></code></pre>
-        <pre><code class="language-js"></code></pre>
+
+        <pre><code class="language-js">
+function foo (a) {
+  console.log(this.a)
+}
+const obj1 = { 
+  a: 1,
+  foo: foo
+}
+
+const obj2 = {
+  a: 2,
+  foo: foo
+}
+
+
+obi1.foo.call(obi2) // 2
+obj2.foo.call(obi1) // 1
+        </code></pre>
+        <p>
+          觀察上述案例，
+          <code>call、apply</code>
+          的顯性綁定一般來說優先順序更高。下面再來看另一段範例程式。
+        </p>
+        <pre><code class="language-js">
+function foo (a) {
+  this.a = a
+}
+
+const obj1 = {}
+
+var bar = foo.bind(obj1)
+bar(2)
+console.log(obj1.a)
+        </code></pre>
+        <p>
+          上述程式透過
+          <code>bind</code>
+          將 bar 函數中的
+          <code>this</code>
+          <code>
+            綁定為 obj1 物件。執行 bar(2)後 obj1.a 值為 2 ，即執行 bar(2) 後， obj1 物件為 {a:2} 。
+          </code>
+        </p>
+        <p>當再使用 bar 作為建構函數時，例如執行以下程式，則會輸出 3</p>
+        <pre><code class="language-js">
+var bar = new bar(3)
+console.log(bar.a)
+        </code></pre>
+        <p>
+          bar 函數本身是透過
+          <code>bind</code>
+          方法建置的函數，其內部已經將
+          <code>this</code>
+          綁定為
+          <code>obj1</code>
+          ，當 它再次作為建構函數透過
+          <code>new</code>
+          被呼叫時，傳回的實例就已經與
+          <code>obj1</code>
+          解綁了。
+        </p>
+        <p>
+          也就是說，
+          <code>new</code>
+          綁定修改了
+          <code>bind</code>
+          綁定中的
+          <code>this</code>
+          指向，因此
+          <code>new</code>
+          綁定的優先順 序比顯性
+          <code>bind</code>
+          綁定的更高。
+        </p>
+        <pre><code class="language-js">
+function foo{
+  return a => console.log(this.a)
+}
+const obj1 = {
+  a: 2
+}
+const obj2 = {
+  a: 3
+}
+const bar = foo.call(obj1)
+console.log(bar.call(obj2))
+        </code></pre>
+        <p>
+          以上程式的輸出結果為 2。由於 foo 中的
+          <code>this</code>
+          綁定到了
+          <code>obj1</code>
+          上，所以 bar (參考箭頭函數) 中的
+          <code>this</code>
+          也會綁定到
+          <code>obj1</code>
+          上，箭頭函數的綁定無法被修改
+        </p>
+        <p>如果將 foo 完全寫成如下所示的箭頭函數的形式，則會輸出 123。</p>
+        <pre><code class="language-js">
+var a = 123
+const foo = () => a => {
+  console.log(this.a)
+}
+
+const obj1 ={
+  a: 2
+}
+
+const obj2 = {
+  a: 3
+}
+var bar = foo.call(obj1)
+console.log(bar.call(obj2))
+        </code></pre>
+        <p>這裡再做個小變化，僅將上述程式中第一處變數 a 的宣告修改一下，即變成 如下所示的樣子</p>
+        <pre><code class="language-js">
+const a = 123
+const foo = () => a =>{
+  console.log(this.a)
+}
+
+const obj1 = {
+  a: 2
+}
+const obj2 = {
+  a: 3
+}
+
+var bar = foo.call(obi1)
+console.log(bar.call(obj2))
+
+        </code></pre>
+        <p>
+          答案為
+          <code>undefined</code>
+          ，原因是使用
+          <code>const</code>
+          宣告的變數不會掛載到
+          <code>window</code>
+          全域物件上。因此，
+          <code>this</code>
+          指向
+          <code>window</code>
+          時，自然也找不到 a 變數了。
+        </p>
+        <h3>開放例題分析</h3>
+        <p>
+          其中，最典型的一道題目為：實現一個
+          <code>bind</code>
+          函數。
+        </p>
+        <pre><code class="language-js">
+Function.prototype.bind = Function.prototype.bind || function(context){
+    var me = this;
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    return function bound(){
+      var innerArgs = Array.prototype.slice.call(arguments) ;
+      var finalArgs = args.concat(innerArgs) ;
+      return me.apply(context,finalArgs);
+    }
+}
+        </code></pre>
+        <p>
+          這樣的實現已經非常不錯了。但是，就如之前在
+          <code>this</code>
+          優先順序分析那裡所展示的規則：
+          <code>bind</code>
+          傳回的函數如果作為建構函數搭配
+          <code>new</code>
+          關鍵字出現的話，綁定的
+          <code>this</code>
+          就會「被忽略」。
+        </p>
+        <p>
+          為了實現這樣的規則，開發者需要考慮如何區分這兩種呼叫方式。實際來講 就是，要在 bound
+          函數中進行
+          <code>this</code>
+          <code>instanceof</code>
+          判斷。
+        </p>
+        <p>
+          另外一個細節是，函數具有
+          <code>length</code>
+          屬性，用來表示形式參數的個數。在上
+          述實現方式中，形式參數的個數顯然會失真。所以，改進的實現方式需要對
+          <code>length</code>
+          屬性進行還原。可是困難在於，函數的
+          <code>length</code>
+          屬性值是不可重新定義的。
+        </p>
       </article>
     </main>
   </body>
