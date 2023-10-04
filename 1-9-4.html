@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-9-4">1-9-4 Sorting Algorithms 排序演算法 進階</h2>
+        <h3>Merge Sort</h3>
+        <p>原則1 當在合併一個已經排序好的陣列時，演算法的時間複雜度為 O(n)</p>
+        <p>原則2 分而治之(divide and conquer)</p>
+        <p>分割大問題為小塊個別處理。</p>
+        <p>
+          實作思路：假設有一個無序集合，將集合拆成一半，切出的子集合全部個別再拆成一半，以此類推直到切到每一個子集合的
+          length 剩 1
+          (無法再分割)。這個時候每一個子集合單元都因為只有一個元素，所以可以視為一個已排序的集合。再將每一個已排序集合兩兩分成一組合併，分完組每組再做排序，排完序再兩兩分成一組合併，以此類推將集合排序重新組裝成新的已排序集合。
+        </p>
+        <p>
+          排序的實作方法可以使用 Pointer
+          的概念，將需要合併的陣列列舉出來。因為都是排序好的集合所以可以從 2
+          個集合的最前頭開始比較，把最小值取出來放到新的合併集合中，直到 2
+          個待合併的集合的元素全部取完即完成合併。
+        </p>
+        <pre><code class="language-js">
+function merge(a1, a2) {
+  let result = [];
+  let i = 0;
+  let j = 0;
+
+  while (i &lt; a1.length && j &lt; a2.length) {
+    if (a1[i] > a2[j]) {
+      result.push(a2[j]);
+      j++;
+    } else {
+      result.push(a1[i]);
+      i++;
+    }
+  }
+
+  // a1 or a2 might have some elements left
+  // use loop to put them all into result
+
+  while (i &lt; a1.length) {
+    result.push(a1[i]);
+    i++;
+  }
+  while (j &lt; a2.length) {
+    result.push(a2[j]);
+    j++;
+  }
+
+  return result;
+}
+
+function mergeSort(arr) {
+  if (arr.length === 1) {
+    return arr;
+  } else {
+    let middle = Math.floor(arr.length / 2);
+    let left = arr.slice(0, middle);
+    let right = arr.slice(middle, arr.length);
+    return merge(mergeSort(right), mergeSort(left));
+  }
+}
+
+console.log(mergeSort([15, 3, 17, 18, 35, 11, 0, 36, -336, 1054]));
+        </code></pre>
+        <p>
+          空間複雜度比較高，因為從上面範例可以看到這過算法會不斷開起新的記憶體空間，暫時存放已分割的排序子集合，故使用到的記憶體比較多。
+        </p>
+        <p>
+          合併時需要將每一個元素都做比較和抓取，故假設有一個 length 為 n 的集合，要做合併的 step
+          次數計算為 (第1次 n/2)..(第2次 n/4)..(第3次 n/8)最後得到一個算式 n/2ᵐ = 1。轉化公式為求 m
+          值 變成 n = 2ᵐ 在轉化一次 m = log₂n ， 得到 m ，意思是合併 m 步驟會合併完畢。
+          每一個步驟都要再合併 n 次。故最終得到 merge sort 的時間複雜度公式為 n log₂n。換成 BigO
+          值為 O(n log n)。
+        </p>
+        <p>上述函式的 BigO 時間複雜度:</p>
+        <ul>
+          <li>最糟情況： O(n log n)</li>
+          <li>最好情況： O(n log n)</li>
+          <li>平均情況： O(n log n)</li>
+        </ul>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
