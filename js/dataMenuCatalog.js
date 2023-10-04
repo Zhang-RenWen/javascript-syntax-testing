@@ -125,8 +125,13 @@ export const menu = [
           },
           {
             id: '1-9-3',
-            title: '1-9-3 Sorting Algorithms 排序演算法',
+            title: '1-9-3 Sorting Algorithms 排序演算法 初階',
             href: '1-9-3.html'
+          },
+          {
+            id: '1-9-4',
+            title: '1-9-4 Sorting Algorithms 排序演算法 進階',
+            href: '1-9-4.html'
           }
         ]
       },
