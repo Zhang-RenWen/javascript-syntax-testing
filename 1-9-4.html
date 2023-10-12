@@ -109,6 +109,25 @@ console.log(mergeSort([15, 3, 17, 18, 35, 11, 0, 36, -336, 1054]));
           <li>最好情況： O(n log n)</li>
           <li>平均情況： O(n log n)</li>
         </ul>
+        <h3>資料結構-Tree</h3>
+        <p>
+          Tree 是一種常見的抽象資料結構。畫成圖片的話我們會先看到一個原始起點。每一個點叫做 Node ，
+          初始點為 Root ， Node 跟 Node 之間的連接指向為 edge。每一個樹狀結構一定有、只會有一個
+          Root。 Node 之間有分母子層級。兩個相接的 Node 一定會分母子，較為接近 Root 的為母節點
+          Parent Node ，相對較遠的為子節點 Children Node。如果將某串 Node 獨立劃分來就叫做整個 Tree
+          的 Subtree。最後還有一個定義： Node 組不能形成一個閉環。
+        </p>
+
+        <p>
+          這邊會先談到其中一種 Tree ，因為接下來要介紹的
+          排序法會使用這種樹狀結構來搭配。之後的章節會再次提到更加完整的內容，以及列舉介紹其他樹狀結構。
+        </p>
+
+        <h3>Tree - Max Heap</h3>
+        <p>定義1.：每一個作為母節點的 Node 必須有兩個子節點。</p>
+        <p>
+          定義2.：每一個 Subtree 的 Root 節點所裝載的數字必為該 Subtree 所有節點比較後的最大值。
+        </p>
       </article>
     </main>
   </body>
