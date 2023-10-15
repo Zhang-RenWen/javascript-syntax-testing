@@ -34,10 +34,76 @@
       </aside>
       <article>
         <h2>1-2-2 閉包</h2>
+        <p>
+          開包是 JavaScript
+          中最基本也是最重要的概念之一，涉及作用域、作用域鏈、執行上下文、記憶體管理等多重基礎知識。
+        </p>
+        <h3>作用域</h3>
+        <p>
+          函數作用域和全域作用域 ，舉例來說，執行以下 foo 函數時，變數 bar 在 函數 foo
+          的作用域內，因此可以在函數本體內正常存取該變數，並輸出 bar。
+        </p>
         <pre><code class="language-js">
-
+function foo(){
+  var bar = 3
+  console.log(bar)
+}
+foo()
         </code></pre>
-        <div class="border-block"></div>
+        <p>
+          執行以上程式會輸出
+          <code>undefined</code>
+          ，原因是變數 bar 在函數內進行了提升。以上程式與以下程式結果是相等的。
+        </p>
+        <pre><code class="language-js">
+function foo(){
+  var bar
+  console.log(bar)
+  bar = 3
+}
+foo ()
+        </code></pre>
+        <p>
+          但是，在使用
+          <code>let</code>
+          對 bar 進行宣告時（如下所示）則會顯示出錯
+          <code>Uncaught ReferenceError: bar is not defined。</code>
+        </p>
+        <pre><code class="language-js">
+function foo(){
+  console.log(bar)
+  let bar = 3   // Uncaught ReferenceError: bar is not defined。
+}
+
+foo()
+        </code></pre>
+        <p>
+          我們知道，使用
+          <code>let</code>
+          或
+          <code>const</code>
+          宣告變數時會針對這個變數形成一個封閉的區塊級作用域，在這個區塊級作用域中，如果在宣告變數前存取該變數，就會出
+          現
+          <code>referenceError</code>
+          錯誤；如果在宣告變數俊存取該變數，則可以正常取得變數值，範例如下。
+        </p>
+
+        <pre><code class="language-js">
+function foo(){
+  let bar = 3
+  console.log(bar) // 3
+}
+foo()
+        </code></pre>
+        <p>
+          在對應大括號形成的作用域中存在一個「死區」，起始於函數開頭，終止於相關變數宣告敘述的所在行。在這個範圍
+          內無法存取使用
+          <code>let</code>
+          或
+          <code>const</code>
+          宣告的變數。這個「死區」，的專業名稱為 TDE (Temporal Dead Zone)，相關語言標準的介紹可參考
+          ECMA Script@ 2015 Language Specification。
+        </p>
       </article>
     </main>
   </body>
