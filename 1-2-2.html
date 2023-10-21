@@ -104,6 +104,56 @@ foo()
           宣告的變數。這個「死區」，的專業名稱為 TDE (Temporal Dead Zone)，相關語言標準的介紹可參考
           ECMA Script@ 2015 Language Specification。
         </p>
+        <pre><code class="language-js">
+function foo(){
+  // TDZ
+  let bar = 3
+  console.log(bar) // 3
+}
+foo()
+           </code></pre>
+        <p>以下舉一個特別的例子:</p>
+        <pre><code class="language-js">
+function foo(arg1 = arg2 , arg2){
+  console.log(`${arg1} ${arg2}`) 
+}
+foo('arg1','arg2') // 'arg1 arg2'
+        </code></pre>
+        <p>
+          在上面的 foo 函數中，如果没有傳入第一個參數，則會使用第二個參數作為第
+          一個實際參數。呼叫以上程式，傳回內容正常；但是當第一個參數為預設值 undefined 時，執行 arg1
+          = arg2 會被當作暫時性死區處理，範例如下:
+        </p>
+        <pre><code class="language-js">
+function foo(arg1 = arg2, arg2){
+  console.log(`${arg1} ${arg2}`)
+}
+foo(undefined,'arg2')
+// Uncaught ReferenceError : arg2 is not defined
+        </code></pre>
+        <p>
+          以上程式的輸出結果存在問題是因為除了區塊級作用域，函數參數預設值也會受到暫時性死區的影響。
+        </p>
+        <pre><code class="language-js">
+function foo(arg1 = arg2, arg2){
+  console.log(`${arg1} ${arg2}`)
+}
+foo(null,'arg2') // 'null arg2'
+
+        </code></pre>
+        <p>
+          這就有關 undefined 和 null 的區別了。在執行 foo(null, 'arg2')
+          時，不會認為「函數第一個參數為預設值」，而會直接接收 null 作為第一個參數的值。
+        </p>
+        <pre><code class="language-js">
+function foo(arg1){
+  let arg1 
+}
+foo('arg1') // Uncaught SyntaxError: Identifier 'arg1' has already been defined 
+        </code></pre>
+        <h3>執行上下文和呼叫堆疊</h3>
+        <pre><code class="language-js">
+        </code></pre>
       </article>
     </main>
   </body>
