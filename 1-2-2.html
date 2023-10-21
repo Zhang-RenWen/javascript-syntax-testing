@@ -152,6 +152,59 @@ function foo(arg1){
 foo('arg1') // Uncaught SyntaxError: Identifier 'arg1' has already been defined 
         </code></pre>
         <h3>執行上下文和呼叫堆疊</h3>
+        <h4>程式執行的兩個階段</h4>
+        <ul>
+          <li>程式預先編譯階段</li>
+          <li>程式執行階段</li>
+        </ul>
+        <p>
+          預先編譯階段是前置階段，這一階段會由編譯器將 JavaScript
+          程式編譯成可執行的程式。注意，這裡的預先編譯和傳統的編譯不同，傳統的編譯非常複雜，涉及分詞、解析、程式產生
+          等過程。這裡的預先編譯是 JavaScript 中的獨特概念，雖然 JavaScript
+          是直譯型語言，編譯一行，執行一行。但是在程式執行前，JavaScript
+          引擎確實會做一些「預先準備工作」。
+        </p>
+        <p>執行時的主要任務是執行程式邏輯，執行上下文在這個階段會全部建立完成。</p>
+        <p>
+          在透過語法分析，確認語法無誤之後，便會在預先編譯階段對 JavaScript
+          程式中變數的記憶體空閒進行分配，我們熟悉的變數提升過程便是在此階段完成的。
+        </p>
+        <p>對於預先編譯過程中的一些細節，我們應該注意以下 3 點。</p>
+        <ul>
+          <li>在預先編譯階段進行變數宣告。</li>
+          <li>在預先編譯階段對變數宣告進行提升，但是值為 undefined。</li>
+          <li>在預先編譯階段對所有非運算式的函數宣告進行提升。</li>
+        </ul>
+        <pre><code class="language-js">
+function bar(){
+  console.log('bar1')
+}
+var bar = function(){
+  console.log ('bar2')
+}
+bar() // 'bar2'
+        </code></pre>
+        <p>會輸出 bar2 ，接著我們調換程式順序，執行以下程式。</p>
+        <pre><code class="language-js">
+var bar = function(){
+  console.log ('bar2')
+} 
+function bar(){
+  console.log ('bar1')
+}
+bar() // 'bar2'
+        </code></pre>
+        <p>
+          以上輸出結果原因為在預先編譯階段雖然對變數 bar 進行了宣告，但是不會設定值；函數 bar
+          則被建立並提升。在程式執行時，變數 bar才會（透過運算式）被設定值，設定值的內容是函數本體為
+          console.log(bar2)的函數，輸出結果為 bar2。
+        </p>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
         <pre><code class="language-js">
         </code></pre>
       </article>
