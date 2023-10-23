@@ -200,10 +200,73 @@ bar() // 'bar2'
           console.log(bar2)的函數，輸出結果為 bar2。
         </p>
         <pre><code class="language-js">
+foo(10)
+function foo(num){
+  console.log(foo)
+  foo = num;
+  console.log(foo)
+  var foo
+}
+console.log(foo)
+foo = 1
+console.log(foo)
         </code></pre>
+        <p>執行以上程式，輸出結果如下。</p>
         <pre><code class="language-js">
+// undefined
+// 10
+// foo (num){
+//   console.log(foo)
+//   foo = num
+//   console.log(foo)
+//   var foo
+// }
+// 1
         </code></pre>
+        <p>
+          在foo(10)即時執行，會在函數本體內進行變數提升，此時執行函數本體內的第一行會輸出 undefined
+          ，執行函數本體內的第三行會輸出 foo。接著執行 程式，執行到函數本體外的 console.log(foo)
+          敘述時，會輸出 foo 函數的內容 (因為foo函數內的 foo =num ， num 被設定值給函數作用域內的
+          foo 變數)
+        </p>
+        <p>
+          上題的結論是，作用域在預先編譯階段確定，但是作用域鏈是在執行上下文
+          的建立階段完全產生的，因為函數在呼叫時才會開始建立對應的執行上下
+          文。執行上下文包含變數物件、作用域鏈及 this 的指向。
+        </p>
+        <p>
+          程式執行的整個過程說起來就像一條生產管線。第一道工序是在預先編譯階段建立變數物件 (
+          Variable Object ， VO)，此時只是建立，而未進行設定值。
+          到了下一道工序程式執行時，變數物件會轉為啟動物件 (Active Object,AO)， 即完成 VO 向 AO
+          的轉換。此時，作用域鏈也將被確定，它由目前執行環境的
+          變數物件和所有外層已經完成的啟動物件組成。這道工序確保了變數和函數
+          的有序存取，即如果未在目前作用域中找到變數，則會繼續向上尋找直到全域作用域。
+        </p>
+        <p>這樣的工序在管線上串成一個整體，便是 JavaScript 引擎執行機制最基本的原理。</p>
+        <h3>呼叫堆疊</h3>
+        <p>
+          了解了上面的內容，函數呼叫堆疊便很好了解了。在執行一個函數時，如果
+          這個函數又呼叫了另外一個函數，而這「另外一個函數」又呼叫了另外一個
+          函數，這樣便形成了一系列的呼叫堆疊，程式如下。
+        </p>
         <pre><code class="language-js">
+function foo1(){
+  foo2()
+}
+
+function foo2() {
+  foo3 ()
+}
+
+function foo3()
+  foo4(){
+}
+
+function foo4(){
+  console.log('foo4')
+}
+
+foo1()
         </code></pre>
         <pre><code class="language-js">
         </code></pre>
