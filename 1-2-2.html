@@ -310,6 +310,58 @@ getNum ()
           「模組化」;再舉例來說，翻看Redux
           原始程式的中介軟體實現機制，會發現其中也大量運用了開包（函數式理念）。
         </p>
+        <h3>記憶體管理</h3>
+        <p>
+          記憶體管理是電腦科學中的概念。不論使用哪種程式語言進行開發，記憶體管理都是指對記憶體生命週期的管理，而記憶體的生命週期無外乎分配記憶體丶讀寫記憶體、釋放記憶體，範例如下。
+        </p>
+        <pre><code class="language-js">
+var foo = 'bar!' // 分配記憶體
+alert(foo) // 讀寫記憶體
+foo = null // 釋放記憶體
+        </code></pre>
+        <h4>記憶體管理基本概念</h4>
+        <p>我們知道記憶體空間可以分為堆疊空間和堆積空間，實際如下。</p>
+        <ul>
+          <li>
+            堆疊空間：由作業系統自動分配釋放，儲存函數的參數值、區域變數的值等，其操作方式類似資料結構中的堆疊。
+          </li>
+          <li>堆積空間：一般由開發者分配釋放，關於這部分空間要考慮垃圾回收的問題。</li>
+        </ul>
+        <p>
+          在 JavaScript 中，資料類型（未包含 ES Next
+          新資料類型）包含基底資料型態和參考類型，實際如下。
+        </p>
+        <ul>
+          <li>基底資料型態：如 undefined、null、number、boolean 、string 等。</li>
+          <li>參考類型：如 object 、array、function 等。</li>
+        </ul>
+        <p>
+          一般情況下，基底資料型態按照值大小儲存在堆疊空間中，佔有固定大小的記憶體空閒；參考類型儲存在堆積空間中，記憶體空間大小並不固定，需按參考情況來進行存取。範例如下。
+        </p>
+
+        <pre><code class="language-js">
+var a = 11
+var b = 10
+var c = [1, 2, 3]
+var d = { e: 20 }
+        </code></pre>
+
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
         <pre><code class="language-js">
         </code></pre>
       </article>
