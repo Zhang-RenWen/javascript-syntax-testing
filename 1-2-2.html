@@ -33,7 +33,7 @@
         <nav></nav>
       </aside>
       <article>
-        <h2>1-2-2 閉包</h2>
+        <h2 id="1-2-2">1-2-2 閉包</h2>
         <p>
           開包是 JavaScript
           中最基本也是最重要的概念之一，涉及作用域、作用域鏈、執行上下文、記憶體管理等多重基礎知識。
@@ -296,10 +296,10 @@ getNum ()
           疊移出堆疊後，變數num不會消失，仍然有機會被外界存取。
         </p>
         <p>執行以上程式，我們能清晰地看到 JavaScript 引擎對執行過程的分析，如圖 下圖所示。</p>
-        <span>圖1</span>
-        <img src="/assets/image/1-2-2/1.jpeg" alt="" />
-        <span>圖2</span>
-        <img src="/assets/image/1-2-2/2.jpeg" alt="" />
+        <div>圖1</div>
+        <img src="./assets/image/1-2-2/1.jpeg" alt="" />
+        <div>圖2</div>
+        <img src="./assets/image/1-2-2/2.jpeg" alt="" />
         <p>num 值被標記為 Closure，即閉包變數。</p>
         <p>
           比較前述內容，我們知道在正常情況下外界是無法存取函數內部變數的，函數執行之後，上下文即被銷毀。但是在函數（外層）中，如果我們傳回了另一個函數，且這個傳回的函數使用了函數（外層）內的變數，那麼外界便能夠透過這個傳回的函數取得原函數（外層）內部的變數值。這就是閉包的基本原理。
@@ -345,17 +345,140 @@ var b = 10
 var c = [1, 2, 3]
 var d = { e: 20 }
         </code></pre>
+        <p>以上範例對應的記憶體分配示意如下表。</p>
+        <h4>堆疊空間</h4>
+        <table>
+          <tr>
+            <th>變數</th>
+            <th>值</th>
+          </tr>
+          <tr>
+            <td>a</td>
+            <td>11</td>
+          </tr>
+          <tr>
+            <td>b</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>c</td>
+            <td>0x0012ff76(堆積空間的記憶體空間地址)</td>
+          </tr>
+          <tr>
+            <td>d</td>
+            <td>0x0012ff7c(堆積空間的記憶體空間地址)</td>
+          </tr>
+        </table>
+        <h4>堆積空間</h4>
+        <table>
+          <tr>
+            <td>[1,2,3]</td>
+          </tr>
+          <tr>
+            <td>{e:20}</td>
+          </tr>
+        </table>
+        <p>
+          對分配記憶體和讀寫記憶體的行為，所有語言都較為一致，但釋放記憶體的行為在不同語言之間有差異。舉例來說，JavaScript
+          依賴宿主瀏覽器的垃圾回收機制，一般情況下不用程式設計師操心。但這並不表示在釋放記憶體方面就
+          OK 了，某些情況下依然會出現記憶體洩漏現象。
+        </p>
+        <p>
+          記憶體洩漏是指記憶體空閒明明已經不再被使用，但由於某種原因並沒有被
+          釋放的現象。這是一個非常「玄學」的概念，因為記憶體空間是否還在使用
+          在某種程度上是不可判斷的，或判斷成本很高。記憶體洩漏的危害非常直觀：
+          它會直接導致程式執行缓慢，甚至當機。
+        </p>
+        <h3>記憶體洩漏場景</h3>
+        <p>案例1</p>
+        <pre><code class="language-js">
+var element = document.getElementById("element")
+element.mark = "marked"
+// 移除 element 節點
+function remove(){
+  element.parentNode.removeChild(element)
+}
+        </code></pre>
+        <div>圖3</div>
+        <img src="./assets/image/1-2-2/3.jpeg" alt="" />
+        <div>圖4</div>
+        <img src="./assets/image/1-2-2/4.jpeg" alt="" />
+        <p>
+          在上面的程式中，我們只是把 id 為 element 的節點移除了，但是變數
+          element依然存在，該節點佔有的記憶體無法被釋放，如圖所示。為了解決這一問題，我們需要在
+          remove方法中增加 element =null，這樣更為穩妥。
+        </p>
+        <p>案例2</p>
+        <pre><code class="language-js">
+var element = document.getElementById('element' )
+element.innerHTML = '&lt;button id="button"&gt;點擊&lt;/button&gt;'
+var button = document.getElementById('button')
+button.addEventListener('click', function(){
+  // ...
+})
+element.innerHTML=''
+        </code></pre>
+        <p>
+          執行以上程式，因為存在 element innerHTML = '' 這行敘述， button 元素已經 從 DOM
+          中移除了，但是由於其事件處理控制碼還在，所以該節點變數依然無法被回收。因此，我們還需要增加
+          removeEventListener 函數，以防止記憶體 洩漏。
+        </p>
+        <p>案例3</p>
+        <pre><code class="language-js">
+function foo(){
+  var name = 'lucas'
+  window.setInterval(function(){
+    console.log(name)
+  }, 1000)
+}
+foo ()
+        </code></pre>
+        <p>
+          在這段程式中，由於存在 window.setInterval ，所以 name
+          記憶體空閒始終無法被釋放，如果不是業務要求的話，一定要記得在合適的時機使用
+          clearInterval清理。
+        </p>
+        <h3>瀏覽器垃圾回收</h3>
+        <p>
+          對於瀏覽器垃圾回收，除了開發者主動確保回收外，大部分場景下瀏覽器都會依靠標記清除、參考計數兩種演算法進行回收。
+        </p>
+        <h3>記憶體洩漏和垃圾回收注意事項</h3>
+        <p>
+          畢竟如今瀏覽器千變萬化且一直在演進中。從以上範例中可以看出，借助閉包來綁定資料變數，可以保護這些資料變數的區塊在閉包存活時，始終不被垃圾回收機制回收。正因為閉包使用不當極有可能引發記憶體洩漏，因此需
+          要格外注意。
+        </p>
+        <pre><code class="language-js">
+function foo(){
+  let value = 123
+  function bar(){ 
+    alert(value) 
+  }
+  return bar
+}
+let bar = foo()
+        </code></pre>
+        <p>
+          在以上範例中，變數 value 將被儲存在記憶體中，如果加上 bar = null ，則隨著 bar 不再被參考，
+          value 也會被清除。
+        </p>
+        <p>結合瀏覽器引擎的最佳化情況，對上述程式進行改動，修改後的程式如下。</p>
+        <pre><code class="language-js">
+function foo(){
+  let value = Math.random()
 
-        <pre><code class="language-js">
+  function bar(){
+    debugger
+  }
+  return bar
+}
+
+let bar = foo()
+bar()
         </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
+        <p>
+          在 Chrome 瀏覽器 V8 最新引擎中執行上述程式，並在函數 bar 中設定中斷 點，會發現 value
+          沒有被參考，如圖所示。
+        </p>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
