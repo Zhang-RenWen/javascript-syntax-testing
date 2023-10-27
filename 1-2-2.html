@@ -479,8 +479,24 @@ bar()
           在 Chrome 瀏覽器 V8 最新引擎中執行上述程式，並在函數 bar 中設定中斷 點，會發現 value
           沒有被參考，如圖所示。
         </p>
+        <div>圖5</div>
+        <img src="./assets/image/1-2-2/5.jpeg" alt="" />
+        <p>下面在 bar 函數中加入對 value 的參考，程式如下。</p>
+
         <pre><code class="language-js">
+function foo(){
+  let value = Math.random()
+  function bar(){
+    console.log(value)
+    debugger
+  }
+  return bar
+}
+let bar = foo()
+bar()
         </code></pre>
+        <div>圖6</div>
+        <img src="./assets/image/1-2-2/6.jpeg" alt="" />
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
@@ -491,4 +507,5 @@ bar()
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
+  <script></script>
 </html>

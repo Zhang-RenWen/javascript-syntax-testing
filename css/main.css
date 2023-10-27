@@ -113,6 +113,10 @@ article {
   width: calc(100% - var(--aside-width));
 }
 
+article img {
+  width: 100%;
+}
+
 table {
   border-collapse: collapse;
 }
