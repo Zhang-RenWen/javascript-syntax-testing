@@ -495,8 +495,61 @@ function foo(){
 let bar = foo()
 bar()
         </code></pre>
+        <p>此時 value 就出現了如下圖:</p>
         <div>圖6</div>
         <img src="./assets/image/1-2-2/6.jpeg" alt="" />
+        <p>現在看一個書中代碼案例，接著透過 Chrome devtool 來檢測排除洩漏問題。</p>
+        <pre><code class="language-js">
+var array = []
+function createNodes(){
+  let div
+  let i = 100
+  let frag = document.createDocumentFragment()
+  for (; i> 0; i--){
+    div = document.createElement("div")
+    div.appendChild(document.createTextNode(i))
+    frag.appendChild (div)
+  }
+  document.body.appendChild(frag)
+}
+
+function badCode(){
+  array.push([...Array(100000).keys()])
+  createNodes()
+  setTimeout(badCode, 1000)
+}
+
+badCode()
+        </code></pre>
+        <p>
+          以上程式遞迴呼叫了 badCode，這個函數每次向 array 陣列中寫入新的由 100000 項 0~1
+          數字組成的新陣列，badCode 函數使用全域變數 array 後並沒有
+          手動釋放記憶體，垃圾回收機制不會處理 array，因此會導致記憶體洩漏；同 時，badCode
+          函數呼叫了 createNodes 函數，每秒會建立 100 個 div 節點。
+        </p>
+        <p>記憶體狀況如下圖所示</p>
+        <div>圖7</div>
+        <img src="./assets/image/1-2-2/7.jpeg" alt="" />
+        <p>
+          執行20秒快照後可以發現，JS Heap 和 Nodes 線隨著時間線一直在上升，並沒有被
+          垃圾回收機制回收。因此，可以判斷這段程式存在較大的記憶體洩漏風險。
+          如果不知道問題程式的位置，要想找出風險點，那就需要在 Chrome Memory 標籤中，對JS Heap
+          中的每一項，尤其是 Size 較大的前幾項展開調查
+        </p>
+        <div>圖8</div>
+        <img src="./assets/image/1-2-2/8.jpeg" alt="" />
+        <p>就拿本網站為例同樣執行20秒快照，沒有記憶體洩漏疑慮的報表會如下所示:</p>
+        <div>圖9</div>
+        <img src="./assets/image/1-2-2/9.jpeg" alt="" />
+        <div>圖10</div>
+        <img src="./assets/image/1-2-2/10.jpeg" alt="" />
+        <h3>例題分析</h3>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
