@@ -534,7 +534,7 @@ badCode()
           執行20秒快照後可以發現，JS Heap 和 Nodes 線隨著時間線一直在上升，並沒有被
           垃圾回收機制回收。因此，可以判斷這段程式存在較大的記憶體洩漏風險。
           如果不知道問題程式的位置，要想找出風險點，那就需要在 Chrome Memory 標籤中，對JS Heap
-          中的每一項，尤其是 Size 較大的前幾項展開調查
+          中的每一項，尤其是 Size 較大的前幾項展開調查。
         </p>
         <div>圖8</div>
         <img src="./assets/image/1-2-2/8.jpeg" alt="" />
@@ -544,21 +544,113 @@ badCode()
         <div>圖10</div>
         <img src="./assets/image/1-2-2/10.jpeg" alt="" />
         <h3>例題分析</h3>
+        <h4>例題1</h4>
         <pre><code class="language-js">
+const foo = (function() {
+  var v = 0
+  return()=&gt;{
+    return v++
+  }
+}())
+ 
+for(let i = 0; 1 &lt; 10;i++){
+  foo()
+}   
+
+console.log(foo()) // 10
         </code></pre>
+        <p>foo 是一個立即執行函數，當我們嘗試列印 foo 時，要執行以下程式。</p>
         <pre><code class="language-js">
+const foo = (function() {
+  var v = 0
+  return ()=&gt;{
+    return v++
+  }
+}())
+
+console.log(foo)
+
+//  輸出結果如下。
+()=&gt;{
+  return v++
+}
         </code></pre>
+        <p>
+          在循環執行 foo 時，參考自由變數 10 次，v 自動增加10次，最後執行 foo 時，獲得
+          10。這裡的自由變數是指沒有在相關函數作用域中宣告，但卻被使用了的變數。
+        </p>
+        <h4>例題2</h4>
         <pre><code class="language-js">
+const foo = ()=&gt; {
+  var arr = []
+  var i
+
+  for (i = 0; i &lt; 10; i++) {
+    arr[i] = function() {
+      console.log(i)
+    }
+  }
+  return arr[0]
+}
+
+foo(){}
         </code></pre>
+        <p>
+          答案是10。在本例中，自由變數為 i ，類似實戰例題1 ，執行 foo 傳回的是 arr[0]， arr[0]
+          此時是函數，其中變數 i 的值為 10。
+        </p>
+        <h4>例題3</h4>
         <pre><code class="language-js">
+var fn = null
+const foo=()=&gt;{
+  var a=2
+  function innerFoo() {
+    console.log(a) // 2
+  }
+  fn = innerFoo
+}
+
+const bar =()=&gt;{
+  fn()
+}
+foo()
+bar()
         </code></pre>
+        <p>
+          正常來講：根據呼叫堆疊的知識，foo
+          函數執行完畢後，其執行環境生命員期會結束，所佔用的記憶體會被垃圾收集器釋放，上下文消失。但是透過將
+          innerFoo 函數設定值給全域變數 fn， foo 的變數物件 a 也會被保留下來。所以，函數 fn 在函數
+          bar 內部即時執行，依然可以存取這個被保留下來的變數 物件，輸出結果為 2。
+        </p>
+        <h4>例題4</h4>
         <pre><code class="language-js">
+var fn = null
+const foo = () =&gt; {
+  var a = 2
+  function innerFoo(){
+    console.log(c)
+    console.log(a)
+  }
+  fn = innerFoo
+}
+
+const bar = ()=&gt; {
+  var c = 100
+  fn()
+}
+
+foo ()
+bar ()          
         </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
+        <p>上面例子會報錯。</p>
+        <p>
+          其實在 bar 中執行 fn 時， fn 已經被複製為 innerFoo，變數 c 並不在其作用域鏈上， c 只是 bar
+          函數的內部變數，因此會顯示出錯 ReferenceError: c is not defined。
+        </p>
+        <div>圖11</div>
+        <img src="./assets/image/1-2-2/11.jpeg" alt="" />
       </article>
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
-  <script></script>
 </html>
