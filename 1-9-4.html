@@ -129,6 +129,11 @@ console.log(mergeSort([15, 3, 17, 18, 35, 11, 0, 36, -336, 1054]));
           定義2.：每一個 Subtree 的 Root 節點所裝載的數字必為該 Subtree 所有節點比較後的最大值。
         </p>
         <h3>Heap Sort Algorithm</h3>
+        <p>buildMaxHeap: 幾個 node 就會執行幾次。由 heapSize / 2 開始。</p>
+        <p>
+          maxHeapify:
+          先以3節點為一組的樹做相互交換位置，最後將最大值往樹的母層交換，較小的值往子層交換的一個方法。
+        </p>
         <pre><code class="language-js">
 let heapSize;
 let arr = [15, 3, 17, 18, 20, 2, 1, 666];
@@ -181,6 +186,12 @@ function heapSort() {
 
 
         </code></pre>
+        <p>上述函式的 BigO 時間複雜度:</p>
+        <ul>
+          <li>最糟情況： O(n log n)</li>
+          <li>最好情況： O(n log n)</li>
+          <li>平均情況： O(n log n)</li>
+        </ul>
       </article>
     </main>
   </body>
