@@ -29,6 +29,11 @@ export const menu = [
             id: '1-2-2',
             title: '1-2-2 閉包',
             href: '1-2-2.html'
+          },
+          {
+            id: '1-2-3',
+            title: '1-2-3 實作 API',
+            href: '1-2-3.html'
           }
         ]
       },
