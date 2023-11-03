@@ -33,12 +33,103 @@
         <nav></nav>
       </aside>
       <article>
-        <h2>1-2-3 實作 API</h2>
-        <h3 id="1-2-3"></h3>
+        <h2 id="1-2-3">1-2-3 實作 API</h2>
+        <h3>如何取得文件中任意一個元素與文件頂部的距離？</h3>
+        <p>解決這個問題主要有以下兩種想法。</p>
+        <ul>
+          <li>透過遞迴實現。</li>
+          <li>透過 getBoundingClientRect 方法實現。</li>
+        </ul>
+        <h3>透過遞迴實現。</h3>
+        <pre><code class="language-js">
+const offset = ele =&gt; {
+    let result = {
+        top: 0,
+        left: 0
+    }
+    const getOffset = (node, init) =&gt; {
+        if(node.nodeType!== 1){
+            return
+        }
+        position = window.getComputedStyle(node)['position']
+
+        if(typeof(init) ==='undefined' && position ==='static'){
+            getOffset(node.parentNode)
+            return
+        }
+
+        result.top = node.offsetTop + result.top - node.scrollTop
+        result.left = node.offSetLeft + result.left - node.scrollLeft
+
+        if (position === 'fixed') {
+            return
+        }
+
+        getOffset(node.parentNode)
+    }
+
+    // 目前 Dom 節點滿足 display === 'none' 時，直接傳回 {top: 0, left:0}
+    if (window.getComputedStyle(ele)['display'] === 'none') {
+        return result
+    }
+    
+    let position
+
+    getOffset(ele, true)
+    
+    return result
+}
+        </code></pre>
+        <h3>透過 getBoundingClientRect 方法實現。(推薦)</h3>
+        <p>
+          getBoundingClientRect 方法用來描述一個 DOM 元素的實際位置，該位置下面的 4
+          個屬性都是相對於視埠左上角的位置而言的。對某一節點執行 geiBoundingClientRect
+          方法，傳回值是一個 DOMRect 類型的物件。這個物件表示一個矩形盒子，其中含有 let、top、right
+          和 bottom 等唯讀屬性。
+        </p>
+        <pre><code class="language-js">
+const offset = ele =&gt; {
+    let result ={
+        top: 0,
+        left: 0
+    }
+
+    // 如果目前瀏覽器為 IE11 以下的版本，則直接傳回 {top:0,left:0}
+    if(!ele.getClientRects().length){
+        return result
+    }
+
+    // 如果目前 DOM 節點滿足 display === 'none'，則直接傳回 {top:0,left:0}
+    if(window.getComputedStyle(ele)['display'] === 'none'){
+        return resultde1
+    }
+    result = ele.getBoundingClientRect()
+    var docElement = ele.ownerDocument.documentElement
+    return {
+        top: result.top + window.pageYOffset - docElement.clientTop,
+        left: result.left + window.pageXOffset - docElement.clientLeft
+    }
+}
+        </code></pre>
+        <p>
+          對於 ele.ownerDocument.documentElement 的用法，可能比較陌生！ ownerDocument 是 DOM
+          節點的屬性，它傳回目前節點頂層的 document
+          物件。ownerDocument是文件：documentElement是根節點。事實上，ownerDocument
+          下含有兩個節點：&lt;!DocType&gt;、documentElement。
+        </p>
+        <p>
+          docElement.clientTop 中的 clientTop 表示一個元素頂部邊框的寬度，不包含頂部外面距或內邊距。
+        </p>
+        <p>getBoundingClientRect 方法是用來進行簡單的幾何運算、邊界 case 處理和相容性處理。</p>
         <pre><code class="language-js">
 
         </code></pre>
-        <div class="border-block"></div>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
       </article>
     </main>
   </body>
