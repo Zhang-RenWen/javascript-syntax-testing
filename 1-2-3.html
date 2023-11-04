@@ -121,9 +121,29 @@ const offset = ele =&gt; {
           docElement.clientTop 中的 clientTop 表示一個元素頂部邊框的寬度，不包含頂部外面距或內邊距。
         </p>
         <p>getBoundingClientRect 方法是用來進行簡單的幾何運算、邊界 case 處理和相容性處理。</p>
+        <h3>陣列 reduce 方法的實現</h3>
+        <p>reduce 的使用語法如下。</p>
         <pre><code class="language-js">
-
+arr.reduce( callback [,initialValue])
         </code></pre>
+        <p>
+          reduce 方法的第一個參數(callback方法)
+          是重點，它對陣列的每一項做再加工，其最後一次的傳回值將作為 reduce 方法的最後傳回值。
+          callback 方法包含以下4個參數。
+        </p>
+        <ul>
+          <li>previousValue 表示 callback 函數「上一次」的傳回值。</li>
+          <li>currentValue 表示陣列檢查中正在處理的元素。</li>
+          <li>
+            currentIndex 是可選參數，表示 currentValue 在陣列中對應的素引。如果提供了
+            initialValue，則起始索引號為0，否則為1。
+          </li>
+          <li>
+            array 是可選參數，表示呼叫 reduce 方法的陣列。 initialValue 是可選參數，是第一次呼叫
+            callback 時的第一個參數。如果沒有提供 initialValue，那麼陣列中的第一個元素將作為
+            callback 的第一個參數。
+          </li>
+        </ul>
         <pre><code class="language-js">
 
         </code></pre>
