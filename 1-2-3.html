@@ -144,8 +144,12 @@ arr.reduce( callback [,initialValue])
             callback 的第一個參數。
           </li>
         </ul>
+        <h3>用 reduce 實作 runPromiseInSequence</h3>
         <pre><code class="language-js">
-
+const runPromiseInSequence = (array,value) => array.reduce(
+  (promiseChain, currentFunction) => promiseChain.then(currentFunction),
+  Promise.resolve (value)
+)
         </code></pre>
         <pre><code class="language-js">
 
