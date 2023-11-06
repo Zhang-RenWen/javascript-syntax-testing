@@ -145,11 +145,59 @@ arr.reduce( callback [,initialValue])
           </li>
         </ul>
         <h3>用 reduce 實作 runPromiseInSequence</h3>
+        <p>示範代碼如下。</p>
         <pre><code class="language-js">
 const runPromiseInSequence = (array,value) => array.reduce(
   (promiseChain, currentFunction) => promiseChain.then(currentFunction),
   Promise.resolve (value)
 )
+        </code></pre>
+        <p>更詳細的示範。</p>
+        <pre><code class="language-js">
+const f1 = () => new Promise((resolve, reject) => {
+  setTimeout(() => {
+    console.log('p1 running')
+    resolve(1)
+  }, 1000)
+})
+
+const f2 = ()=> new Promise((resolve, reject) => {
+  setTimeout(() =>{
+    console.log('p2 running')
+    resolve(2)
+  }, 1000)
+})
+
+const array = [f1, f2]
+
+const runPromiseInSequence = (array, value) => array.reduce(
+  (promiseChain, currentFunction) => promiseChain.then(currentFunction),
+  Promise.resolve(value)
+)
+
+runPromiseInSequence(array,'init')
+// 'p1 running'
+// 'p2 running'
+        </code></pre>
+        <p>
+          當然實務上更加簡潔的方法還是 ES6 更加方便。以上只是展示 reduce
+          可以做到的事，感受一下它的能力。
+        </p>
+        <p>
+          參考章節：
+          <a href="4-1.html#4-1-6" target="blank">4-1-6 善用 Promise.all 和 Promise.race</a>
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
         </code></pre>
         <pre><code class="language-js">
 
@@ -158,4 +206,5 @@ const runPromiseInSequence = (array,value) => array.reduce(
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
+  <script></script>
 </html>
