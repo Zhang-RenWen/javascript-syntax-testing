@@ -187,15 +187,66 @@ runPromiseInSequence(array,'init')
           參考章節：
           <a href="4-1.html#4-1-6" target="blank">4-1-6 善用 Promise.all 和 Promise.race</a>
         </p>
+        <h3>透過 reduce 實現 pipe</h3>
         <pre><code class="language-js">
-
+const pipe = (...functions) => input => functions.reduce(
+  (acc, fn) => fn(acc),
+  input
+)
         </code></pre>
+        <h3>實現一個 reduce</h3>
+        <p>可以參考 MDN 的 polyfill。</p>
+
         <pre><code class="language-js">
-
+if ((!Array.prototype, reduce)) {
+  Object.defineproperty(Array.prototype, 'reduce', {
+    value: function (callback /*, initialValue*/) {
+      if (this === null) {
+        throw new TypeError('Array.prototype.reduce ' + 'called on null or undefined')
+      }
+      if (typeof callback !== 'function') {
+        throw new TypeError(callback + ' is not a function')
+      }
+      var o = Object(this)
+      var len = o.length >>> 0
+      var k = 0
+      var value
+      
+      if (arguments.length >= 2) {
+        value = arguments[1]
+      } else {
+        while (k < len && !(k in o)) {
+          k++
+        }
+        if (k >= len) {
+          throw new TypeError('Reduce of empty array ' + 'with no initial value')
+        }
+        value = o[k++]
+      }
+      while (k < len) {
+        if (k in o) {
+          value = callback(value, o[k], k, o)
+        }
+        k++
+      }
+      return value
+    }
+  })
+}
         </code></pre>
+        <p>跟上面 polyfill。版本相比，以下提供的範例更加簡潔：</p>
         <pre><code class="language-js">
-
+Array.prototype.reduce = Array.prototype.reduce || function (func, initialValue) {
+  var arr = this
+  var base = typeof initialValue === 'undefined' ? arr[i] : initialValue
+  var startPoint = typeof initialValue == 'undefined' ? 1 : 0
+  arr.slice(startPoint).forEach(function (val, index) {
+    base = func(base, val, index + startPoint, arr)
+  })
+  return base
+}
         </code></pre>
+        <h3>透過 Koa only 模組原始程式認識 reduce</h3>
         <pre><code class="language-js">
 
         </code></pre>

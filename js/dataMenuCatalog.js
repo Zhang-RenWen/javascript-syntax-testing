@@ -5,19 +5,19 @@ export const menu = [
     submenu: [
       {
         id: '1-1',
-        title: '1-1 HTML5 & CSS3',
+        title: '1-1 HTML5 & CSS3 🚧',
         href: `./1-1.html`,
         anchorMenu: [
           {
             id: '1-1-1',
-            title: '1-1-1 ',
+            title: '1-1-1 🚧',
             href: '1-1.html#1-1-1'
           }
         ]
       },
       {
         id: '1-2',
-        title: '1-2 JavaScript 核心',
+        title: '1-2 JavaScript 核心 🚧',
         href: `./1-2.html`,
         anchorMenu: [
           {
@@ -39,70 +39,70 @@ export const menu = [
       },
       {
         id: '1-3',
-        title: '1-3 瀏覽器運作',
+        title: '1-3 瀏覽器運作 🚧',
         href: `./1-3.html`,
         anchorMenu: [
           {
             id: '1-3-1',
-            title: '1-3-1 ',
+            title: '1-3-1 🚧',
             href: '1-3.html#1-3-1'
           },
           {
             id: '1-3-111',
-            title: '1-3-111 window 物件',
+            title: '1-3-111 window 物件 🚧',
             href: '1-3-111.html'
           }
         ]
       },
       {
         id: '1-4',
-        title: '1-4 效能調校',
+        title: '1-4 效能調校 🚧',
         href: `./1-4.html`,
         anchorMenu: [
           {
             id: '1-4-1',
-            title: '1-4-1 ',
+            title: '1-4-1 🚧',
             href: '1-4.html#1-4-1'
           }
         ]
       },
       {
         id: '1-5',
-        title: '1-5 資安議題',
+        title: '1-5 資安議題 🚧',
         href: `./1-5.html`,
         anchorMenu: [
           {
             id: '1-5-1',
-            title: '1-5-1 ',
+            title: '1-5-1 🚧',
             href: '1-5.html#1-5-1'
           }
         ]
       },
       {
         id: '1-6',
-        title: '1-6 程式架構規劃與設計',
+        title: '1-6 程式架構規劃與設計 🚧',
         href: `./1-6.html`,
         anchorMenu: [
           {
             id: '1-6-1',
-            title: '1-6-1 權限',
+            title: '1-6-1 權限 🚧',
             href: '1-6.html#1-6-1'
           },
           {
             id: '1-6-2',
-            title: '1-6-2 JWT 登入',
+            title: '1-6-2 JWT 登入 🚧',
             href: '1-6.html#1-6-2'
           }
         ]
       },
       {
         id: '1-7',
-        title: '1-7 程式部署',
+        title: '1-7 程式部署 🚧',
         href: `./1-7.html`,
         anchorMenu: [
           {
             id: '1-7-1',
-            title: '1-7-1 ',
+            title: '1-7-1 🚧',
             href: '1-7.html#1-7-1'
           }
         ]
@@ -142,55 +142,55 @@ export const menu = [
       },
       {
         id: '1-10',
-        title: '1-10 離散數學',
+        title: '1-10 離散數學 🚧',
         href: `./1-10.html`,
         anchorMenu: []
       },
       {
         id: '1-11',
-        title: '1-11 線性代數',
+        title: '1-11 線性代數 🚧',
         href: `./1-11.html`,
         anchorMenu: []
       },
       {
         id: '1-12',
-        title: '1-12 微積分',
+        title: '1-12 微積分 🚧',
         href: `./1-12.html`,
         anchorMenu: []
       },
       {
         id: '1-13',
-        title: '1-13 三角函數',
+        title: '1-13 三角函數 🚧',
         href: `./1-13.html`,
         anchorMenu: []
       },
       {
         id: '1-14',
-        title: '1-14 密碼學',
+        title: '1-14 密碼學 🚧',
         href: '1-14.html',
         anchorMenu: []
       },
       {
         id: '1-15',
-        title: '1-15 ',
+        title: '1-15 🚧',
         href: `./1-15.html`,
         anchorMenu: []
       },
       {
         id: '1-16',
-        title: '1-16 電腦及作業系統',
+        title: '1-16 電腦及作業系統 🚧',
         href: '1-16.html',
         anchorMenu: []
       },
       {
         id: '1-17',
-        title: '1-17 終端指令集',
+        title: '1-17 終端指令集 🚧',
         href: '1-17.html',
         anchorMenu: []
       },
       {
         id: '1-18',
-        title: '1-18 網路架構',
+        title: '1-18 網路架構 🚧',
         href: '1-18.html',
         anchorMenu: []
       }
