@@ -295,10 +295,99 @@ fn1(fn2(fn3(fn4(args))))
         </ul>
         <p>我們發現，實際上， compose 方法和 pipe 方法的差別只在於呼叫順序的不同。</p>
         <pre><code class="language-js">
+// compose
+fn1(fn2(fn3(fn4(args))))
 
+// pipe
+fn4(fn3(fn2(fl(args))))
+        </code></pre>
+        <p>實現 compose 方法的最簡單的方案是針對過程的，範例如下。</p>
+        <pre><code class="language-js">
+const compose = function (...args) {
+  let length
+  args.length
+  let count = length - 1
+  let result
+  return function f1(...arg1) {
+    result = args[count].apply(this, arg1)
+    if (count <= 0) {
+      count = length - 1
+      return result
+    }
+    Count--
+    return fl.call(null, result)
+  }
+}
+        </code></pre>
+        <p>
+          這裡的關鍵是用到了閉包。使用閉變數儲存結果 result
+          和函數陣列長度，以及檢查索引，並利用遞迴思想進行結果的結果加以計算。整體實現符合正常的針對過程思維，不難了解。
+        </p>
+        <p>利用上文所講的 reduce 方法，應該更能利用「函數式」思想解決問題。</p>
+        <pre><code class="language-js">
+const reduceFunc = (f, g) => (...arg) = g.call(this, f.apply(this, arg))
+const compose = (..args) => args, reverse().reduce(reduceFunc, args.shift())
+        </code></pre>
+        <p>透過前面的學習，結合 call、apply 方法，這樣的實現並不難了解。</p>
+        <p>既然費現該方法有關串聯和流程控制，那麼應該還可以使用 Promise 來實現，範例如下。</p>
+        <pre><code class="language-js">
+const compose = (...args) => {
+  let init = args.pop()
+  return (...arg) =>
+    args
+      .reverse()
+      .reduce(
+        (sequence, func) => sequence.then((result) => func.call(null, result)),
+        Promise.resolve(init.apply(null, arg))
+      )
+}
+        </code></pre>
+        <p>
+          這種實現利用了 Promise 的特性：首先透過 Promise.resolve(init.apply(null,arg))啟動 reduce
+          邏輯，利於陣列的reduce 方法來依次執行函數。因為 Promise.then()仍然傳回一個 Promise
+          類型的值，所以 reduce 方法完全可以基於 Promise 實例執行下去。
+        </p>
+        <p>
+          既然能夠使用 Promise 實現 compose 方法，那麼應該也能夠使用 Generator 來實現。
+          最後，著名的使用lodash 和 Redux來實現 compose方法的方案。
+        </p>
+        <p>透過 lodash 實現的程式如下。這種實現方式比較簡單，了解起來也更容易。</p>
+        <pre><code class="language-js">
+// lodash版本
+var compose = function (funcs) {
+  var length = funcs.length
+  var index = length
+  while (index--) {
+    if (typeof funcs[index] !== 'function') {
+      throw new TypeError('Expected a function')
+    }
+  }
+
+  return function (...args) {
+    var index = 0
+    while (++index < length) {
+      var result = length ? funcs.reverse()[index].apply(this, args) : args[0]
+      result = funcs[index].call(this, result)
+    }
+    return result
+  }
+}
         </code></pre>
         <pre><code class="language-js">
-
+// Redux版本
+function compose(...funcs) {
+  if (funcs.length === 0) {
+    return (arg) => arg
+  }
+  if (funcs.length === 1) {
+    return funcs[0]
+  }
+  return funcs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(...args))
+  )
+}
         </code></pre>
       </article>
     </main>
