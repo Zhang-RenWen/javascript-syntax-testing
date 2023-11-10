@@ -389,6 +389,43 @@ function compose(...funcs) {
   )
 }
         </code></pre>
+        <h3>apply、bind 進階實作</h3>
+        <h3>實作 簡易 bind</h3>
+        <pre><code class="language-js">
+Function.prototype.bind = Function.prototype.bind || function (context) {
+  var me = this
+  var argsArray = Array.prototype.slice.call(arguments)
+  return function () {
+    return me.apply(context, argsArray).slice(1)
+  }
+}
+        </code></pre>
+        <p>這是一般的合格開發者提供的答案，如果面試者能寫到這裡，可以給他60分。</p>
+        <p>
+          以上程式的基本原理是使用 apply 模擬 bind。函數本體內的 this 就是需要綁定 this
+          的函數，或說是原函數。最後使用 apply 來進行參數(context)綁定，並傳回。
+        </p>
+        <p>
+          與此同時，將第一個參數（context）以外的其他參數作為提供給原函數的預設參數，這也是柯里化的基礎。
+        </p>
+        <p>
+          在上述實現方式中，我們傳回的參數列表中包含 argsArray
+          slice(1)，它的問題在於存在預設參數功能遺失的現象。
+        </p>
+        <p>
+          想像一下，如果想在傳回的綁定函數中實現預設參數傳遞（就像 bind
+          所實現的那樣），就會面臨尷尬的局面。真正實現柯里化的完美方式應該像下面這樣。
+        </p>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
       </article>
     </main>
   </body>
