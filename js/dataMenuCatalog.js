@@ -34,6 +34,11 @@ export const menu = [
             id: '1-2-3',
             title: '1-2-3 實作 API',
             href: '1-2-3.html'
+          },
+          {
+            id: '1-2-4',
+            title: '1-2-4 高頻考點及基礎題庫',
+            href: '1-2-4.html'
           }
         ]
       },
