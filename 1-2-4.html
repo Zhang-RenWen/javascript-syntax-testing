@@ -34,10 +34,46 @@
       </aside>
       <article>
         <h2 id="1-2-4">1-2-4 高頻考點及基礎題庫</h2>
-        <h3></h3>
+        <h3>JavaScript 資料類型及其判斷</h3>
+        <p>
+          對於類型判斷，常用的方法有 typeof、instanceof、Object.prototype.toString、 constructor。
+        </p>
+        <h3>使用 typeof 判斷資料類型</h3>
+        <pre><code class="language-js">
+typeof 5 // "number"
+typeof 'lucas' // "string"
+typeof undefined // "undefined"
+typeof true // "boolean"
+        </code></pre>
+        <p>但是也存在一些特例，如用 typeof 判斷 null，程式如下。</p>
+        <pre><code class="language-js">
+typeof null // "object"
+        </code></pre>
+        <p>判斷複雜資料類型的範例。</p>
+        <pre><code class="language-js">
+const foo = () => 1
+typeof foo // "function"
+
+const too = {}
+typeof foo // "object"
+
+const Foo = []
+typeof foo // "object"
+
+const foo = new Date ()
+typeof too // "object"
+
+const foo = Symbol("foo")
+typeof Foo // "symbol"
+        </code></pre>
+        <p>
+          透過以上範例，我們可以知道，使用 typeof 可以準確判斯出除 null 以外的基底資料型態，以及
+          function 類型、symbol 類型；null 會被 typeof 判斷為 object 。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
+
         <div class="border-block"></div>
       </article>
     </main>
