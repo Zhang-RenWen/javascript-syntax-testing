@@ -70,13 +70,66 @@ typeof Foo // "symbol"
           透過以上範例，我們可以知道，使用 typeof 可以準確判斯出除 null 以外的基底資料型態，以及
           function 類型、symbol 類型；null 會被 typeof 判斷為 object 。
         </p>
+        <h3>使用 instanceof 判斷資料類型</h3>
+        <p>
+          a instanceof B 判斷的是，a 是否為 B 的實例，即a 的原型鏈上是否存在 B
+          的建構函數，範例程式如下。
+        </p>
+        <pre><code class="language-js">
+function Person (name) {
+  this.name = name
+}
+const p = new Person('lucas')
+p instanceof Person
+// true
+        </code></pre>
+        <p>
+          p 是 Person 創建出來的實體。同時順著 p 的原型鏈也能找到 Object 的建構函數，範例程式如下。
+        </p>
+        <pre><code class="language-js">
+p.__proto__.__proto__=== Object.prototype
+        </code></pre>
+        <p>再來看一個範例。如果我們判斷的是以下關係，則傳回 false。</p>
+        <pre><code class="language-js">
+5 instanceof Number // false
+        </code></pre>
+        <p>
+          因為 5 是基本類型，它並不是 Number
+          建構函數建置出來的實例物件。而如果稍加修改，使其變為判斷以下關係，則傳回 true
+        </p>
+        <pre><code class="language-js">
+new Number(5) instanceof Number // true
+        </code></pre>
+        <p>關於 instanceof 的原理，可以用以下程式來模擬。</p>
+        <pre><code class="language-js">
+//工表示左運算式，R表示右運算式
+
+        </code></pre>
+        <pre><code class="language-js">
+const instanceofMock = (L, R) => {
+  if (typeof L !== 'object') {
+    return false
+  }
+  while (true) {
+    if (L === null) {
+      //已經檢查到了頂端
+      return false
+    }
+    if (R.prototype === L.__proto__) {
+      return true
+    }
+    L = L.__proto__
+  }
+}
+        </code></pre>
+        <p>根據 L 表示左運算式， R 表示右運算式， instanceofMock 的用法如下。</p>
         <pre><code class="language-js">
 
         </code></pre>
-
         <div class="border-block"></div>
       </article>
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
+  <script></script>
 </html>
