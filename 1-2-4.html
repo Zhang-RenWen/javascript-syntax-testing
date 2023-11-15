@@ -124,6 +124,84 @@ const instanceofMock = (L, R) => {
         </code></pre>
         <p>根據 L 表示左運算式， R 表示右運算式， instanceofMock 的用法如下。</p>
         <pre><code class="language-js">
+instanceofMock('', String)
+// false
+
+function Person(name){
+  this.name = name
+}
+const p = new Person('lucas')
+instanceofMock(p, Person)
+// true
+        </code></pre>
+        <h3>使用 constructor 和 Object.prototype.toString 判斷資料類型</h3>
+        <p>透過 toString 判斷資料類型好用的方法如下所示。</p>
+        <pre><code class="language-js">
+console.log(Object.prototype.toString.call(1))
+// [object Number]
+console.log(Object.prototype.toString.call('lucas'))
+// [object String]
+console.log(Object.prototype.toString.call(undefined))
+/ [object Undefined]
+console.log(Object.prototype.toString. call(true))
+// [object Boolean]
+console.log(Object.prototype.toString.call({}))
+// [object Object]
+console.log(Object.prototype.toString.call([]))
+// [object Array]
+console.log(Object.prototype.toString.call(function(){}))
+// [object Function]
+console.log(Object.prototype.toString.call(null))
+// [object Null]
+console.log(Object.prototype.toString.call(Symbol('lucas')))
+// [object Symbol]
+        </code></pre>
+        <p>
+          使用 constructor
+          可以檢視目標的建構函數，也可以進行資料類型判斷，但其中也存在問題，實際請看以下範例。
+        </p>
+
+        <pre><code class="language-js">
+var foo = 5
+foo.constructor
+// f Number(){ [native code] }
+var foo = 'Lucas'
+foo.constructor
+// f String(){ [native code] }
+var foo = true
+foo.constructor
+// f Boolean(){ [native code] }
+var foo = []
+foo.constructor
+// f Array () { [native code] }
+var foo = {}
+foo.constructor
+// f Object(){ [native code] } 
+var foo = () => {}
+foo.constructor
+// f Function () { [native code] }
+var foo = new Date()
+foo. constructor
+// f Date(){ [native code] }
+var foo = Symbol("foo")
+foo.constructor
+// f Symbol(){ [native code] }
+var foo = undefined
+foo.constructor
+// VM257:1 Uncaught TypeError: Cannot read property 'constructor' of undefined at &lt;anonymous&gt;: 1:5
+var foo = null
+foo.constructor
+// VM334:1 Uncaught TypeError: Cannot read property 'constructor' of null at &lt;anonymous&gt;： 1:5
+
+        </code></pre>
+        <p>
+          我們發現對於 undefined 和 null，如果嘗試讀取其 constructor 屬性，則會顯示出錯，並且
+          constructor 傳回的是建構函數本身，一般使用它來判斷資料類型 的情況並不多見。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
 
         </code></pre>
         <div class="border-block"></div>
