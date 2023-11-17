@@ -102,10 +102,8 @@ new Number(5) instanceof Number // true
         </code></pre>
         <p>關於 instanceof 的原理，可以用以下程式來模擬。</p>
         <pre><code class="language-js">
-//工表示左運算式，R表示右運算式
+// L表示左運算式， R表示右運算式
 
-        </code></pre>
-        <pre><code class="language-js">
 const instanceofMock = (L, R) => {
   if (typeof L !== 'object') {
     return false
@@ -597,25 +595,61 @@ $("run").onclick = function(){
         </p>
         <p>如果覺得上面的例子太過燒腦，下面有列舉一些基本案例。</p>
         <pre><code class="language-js">
-console.log(1 + '1')
+console.log( 1 + '1' )
 // 11
-console.log(1 + true)
+console.log( 1 + true )
 // 2
-console.log(1 + false)
+console.log( 1 + false )
 // 1
-console.log(1 + undefined)
+console.log( 1 + undefined )
 // NaN
-console.log('lucas' + true)
+console.log( 'lucas' + true )
 // lucastrue
-console.log(1+ true)
+console.log( 1+ true )
 // 2
-console.log(1 + false)
+console.log( 1 + false )
 // 1
-console.log( {} + true)
+console.log( {} + true )
 // [object Object]true
-        </code></pre>
-        <pre><code class="language-js">
+console.log( [] + {} )
+// [object Object]
+console.log( [] + [] )
+// ''
+console.log( [] + 1 )
+// '1'
+console.log( [] + 0 )
+// '0'
 
+        </code></pre>
+        <p>在＋運算子兩側，如果存在複雜資料類型，例如物件，會遵循的一套轉換規則。</p>
+        <p>
+          當使用＋運算子計算時，如果存在複雜資料類型，那麼它將被轉為基底資料型態再進行運算。這就有關「物件類型轉基本類型」這個過程。這個過程的實際規則是，在轉換時，會呼叫該物件上的
+          valueOf或 toString 方法，這兩個方法的傳回值是轉換後的結果。
+        </p>
+        <p>
+          那實際呼叫 valueOf 還是 toString 呢？這是 ES 標準所決定的，實際上，這取決於內建的
+          toPrimitive
+          的呼叫結果。從主觀上說，這個物件偏好轉換成什麼，就會優先呼叫哪個方法。如果偏好轉為 number
+          類型，就優先呼叫valueOf；如果偏好轉為 string 類型，就只呼叫
+          toString。這裡建議大家了解一些常用的轉換結果，對於其他特例情況，會尋找標準即可。
+        </p>
+        <p>
+          很多經典教科書中介紹將物件轉為基底資料型態時，會先呼叫 valueOf，再呼叫
+          toString，這裡引用的「這個物件偏好轉換成什麼，就會優先呼叫哪個方法」其實取自標準中的
+          PreferredType 概念，這個概念在這些書中並沒有被提到。事實上，瀏覽器對 PreferredType的
+          了解比較一致，「物件類型轉為基本類型時，先呼叫 valueOf，再呼叫
+          toString」也沒有問題。對此有興趣或更加嚴謹可以翻閱相關標準。
+        </p>
+        <p>valueOf 及 toString 是可以被開發者重新定義的，範例如下。</p>
+        <pre><code class="language-js">
+const foo = {
+  toString(){
+    return 'lucas'
+  },
+  valueOf(){
+    return 1
+  }
+}
         </code></pre>
         <pre><code class="language-js">
 
