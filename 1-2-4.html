@@ -651,6 +651,11 @@ const foo = {
   }
 }
         </code></pre>
+        <p>
+          我們對 foo 物件的 valueOf及 toSting 進行了重新定義，這時候呼叫 alert(foo)將輸出
+          lucas。這裡就有關自動轉型，在呼叫 alert 列印輸出時，偏好使用 foo 物件的toString 方法，將
+          foo 轉為基底資料型態，以列印出結果。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
