@@ -656,6 +656,27 @@ const foo = {
           lucas。這裡就有關自動轉型，在呼叫 alert 列印輸出時，偏好使用 foo 物件的toString 方法，將
           foo 轉為基底資料型態，以列印出結果。
         </p>
+        <p>
+          然而，執行 console.log(1 + foo)將輸出 2 ，這時候的自動轉型則偏好使用 foo 物件的 valueOf
+          方法，將 foo 轉為基底資料型態，以執行相加操作。
+        </p>
+        <p>我們再全面歸納一下，對於加法操作，如果＋運算子兩邊都是 number 類型，則其規則如下。</p>
+        <ul>
+          <li>如果 + 運算子兩邊存在 NaN ，則結果為 NaN ( 對 NaN 進行 typeof 求值，傳回 number)</li>
+          <li>如果是 Infinity + Infinity，則結果是 Infinity 。</li>
+          <li>如果是 -Infinity + (-Infinity)，則結果是 -Infinity。</li>
+          <li>如果是 Infinity + (-Infinity)，則結果是 NaN 。</li>
+        </ul>
+        <p>如果 + 運算子兩邊有至少一個是字串，則其規則如下。</p>
+        <ul>
+          <li>如果 + 運算子兩邊都是字串，則執行字串連接操作。</li>
+          <li>如果 + 運算子兩邊只有一個是字串，則將另外的值轉為字串，再執行字串連接操作。</li>
+          <li>
+            如果 + 運算子兩邊有一個是物件，則呼叫 valueOf 或 toString
+            方法取得值，將其轉為基底資料型態再進行字串連接。
+          </li>
+        </ul>
+        <h3>JavaScript 函數參數傳遞</h3>
         <pre><code class="language-js">
 
         </code></pre>
