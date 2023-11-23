@@ -726,12 +726,103 @@ console.log(foo) // { bar: 1}
           </li>
         </ul>
         <h3>cannot read property of undefined 問題解決方案</h3>
+        <p>意外獲得一個空白物件或空值這樣惱人的問題是在所難免的，面對這樣的問題該怎麼辦。</p>
         <pre><code class="language-js">
-
+const obj = {
+  user: {
+    posts: [
+      { title: 'Foo', comments: [ 'Good one!', 'Interesting…..' ] },
+      { title: 'Bar' , comments: [ 'Ok' ] }, 
+      { title: 'Baz' , comments: []}
+    ],
+    comments: []
+  }
+}
         </code></pre>
+        <p>
+          為了能夠在物件中安全地設定值，需要驗證物件中每一個鍵的存在性。常見的處理方案有以下幾種。
+        </p>
+        <h4>1. 透過 && 短路運算子進行可存取性偵測。</h4>
+        <p>以下為透過 &&短路運算子進行可存取性偵測的實現程式。</p>
         <pre><code class="language-js">
-
+obj.user &&
+obj.user.posts && 
+obj.user.posts[0] && 
+obj.user.posts[0].comments
         </code></pre>
+        <h4>2. 透過 || 單元設定預設保底值。</h4>
+        <p>以下為透過 || 單元設定預設保底值的實現程式。</p>
+        <pre><code class="language-js">
+(((obj.user || {}).posts ||{})[0]||{}).comments
+        </code></pre>
+        <h4>3. 使用 try...catch方法</h4>
+        <p>以下為使用 try…catch 方法的實現程式。</p>
+        <pre><code class="language-js">
+var result try {
+  result = obj.user.posts[0].comments
+}
+catch {
+  result = null
+}
+        </code></pre>
+        <h4>4.使用 lodash get API</h4>
+        <p>以下為使用 lodash get API 的實現程式。</p>
+        <pre><code class="language-js">
+function get(object, path, defaultValue) {
+  const result = object == null ? undefined : baseGet(object, path)
+  return result === undefined ? defaultValue : result
+}
+
+function baseGet(object, path) {
+  path = castPath(path, object)
+  let index = 0
+
+  const length = path.length
+  while (object != null && index < length) {
+    object = object[toKey(path[index++])]
+  }
+  return (index && index == length) ? object : undefined
+}
+        </code></pre>
+        <p>簡易的 get 方法</p>
+        <pre><code class="language-js">
+const get = (p, o)=> p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o)
+
+console.log(get(['user', 'posts', 0, 'comments'], obj)) 
+// ['Good one!','Interesting...' ]
+
+console.log(get(['user', 'post', 0, 'comments'], obj])) // null
+        </code></pre>
+        <p>
+          我們實現的方法可以接收兩個參數，第一個參數表示取得值的路徑(path)，第二個參數表示目標物件。
+        </p>
+        <p>同樣，為了在設計上顯得更加靈活和抽象，我們可以對方法進行柯里化，程式如下。</p>
+        <pre><code class="language-js">
+const get = p => o => 
+    p.reduce((xs, x) =>
+      (xs && xs[x]) ? xs[x] : null, o)
+
+const getUserComments = get(['user', 'posts', 0, 'comments'])
+
+console.log(getUserComments(obj))
+// [ 'Good one!','Interesting...' ]
+
+console.log(getUserComments({user:{posts:[]}}))
+// null
+        </code></pre>
+        <p>
+          TC39 中有一個新的提案，支援
+          console.log(obj?.user?.posts[0]?.comments)，由此可見，JavaScript 語言也在不斷演進。
+        </p>
+        <p>
+          目前已經實裝。可以參考章節：
+          <a href="14-4.html">14-4 Operators-Optional chaining (?.)</a>
+        </p>
+        <h3>type.js 原始程式解讀</h3>
+        <p>
+          type.js 是由顏海鏡撰寫的用於判斷資料類型的方法函數庫，其相容 IE6
+          瀏覽器，靈活運用了多種判斷資料類型方式。以下是其實現程式。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
