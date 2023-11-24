@@ -824,10 +824,85 @@ console.log(getUserComments({user:{posts:[]}}))
           瀏覽器，靈活運用了多種判斷資料類型方式。以下是其實現程式。
         </p>
         <pre><code class="language-js">
-
+const toString = Object.prototype.toString
+export function type(x, strict = false) {
+  strict = !!strict
+  // fix typeof null = object
+  if (x === null) {
+    return 'null'
+  }
+  const t = typeof x
+  // number string boolean undefined symbol
+  if (t !== 'object') {
+    return t
+  
+  let cls
+  let clsLow
+  try {
+    cls = toString.call(x).slice(8, -1)
+    clsLow = cls.toLowerCase()
+  } catch (e) {
+    // IE覽器下的 activex 物件
+    return 'object'
+  }
+  if (clsLow !== 'object') {
+    // 區分 String() 和 new String()
+    if (strict && (clsLow === 'number' || clsLow === 'boolean' || clsLow === 'string')) {
+      return cls
+    }
+    return clsLow
+  }
+  if (x.constructor == Object) {
+    return clsLow
+  }
+  // Object.create(null)
+  try {
+    // __proto__ 部分的早期Firefox瀏覽
+    if (Object.getPrototypeof(x) === null || x.__proto__ === null) {
+      return 'object'
+    }
+  } catch (e) {
+    // 瀏覽器下無Object.getPrototypeOf會顯示出錯
+  }
+  // function A() {}; new A
+  try {
+    const cname = x.constructor.name
+    if (typeof cname === 'string') {
+      return cname
+    }
+  } catch (e) {
+    //無constructor
+  }
+  // function A() {}; A.prototype. constructor = null; new A
+  return 'unknown'
+}
         </code></pre>
+        <p>以上程式中的關鍵點有以下幾個。</p>
+        <ul>
+          <li>透過 x === null 來判斷 null 類型。</li>
+          <li>
+            對於 typeof x 不為 object 的情況，直接傳回 typeof x的結果，這時可以判斷其是否為
+            number、string、boolean、undefined、symbol 類型。
+          </li>
+          <li>
+            對於其他情況，瀏覽器為 IE6 以上版本時，使用 Object.prototype.toString
+            方法進行資料類型判斷。
+          </li>
+          <li>
+            相容性處理，舉例來說，對於不支援 Object.prototype.toString 方法的情況，會傳回
+            object。對於其他相容性處理，此處不再一一多作說明。
+          </li>
+        </ul>
+        <p>
+          這裡特別注意一下 Object,prototype.toString
+          方法，該方法確實可以稱得上是「終極方案」，它最後會傳回一個格式形如 [object
+          XXXX]的結果，這個結果中的 XXXX
+          部分就是我們需要的變數資料類型，因此對傳回結果使用，slice(8, -1)方法，切分出結果中的XXXX
+          部分，就可以更加方便地獲得結果，程式如下。
+        </p>
         <pre><code class="language-js">
-
+Object.prototype.toString.call(true).slice(8,-1)
+// "Boolean"
         </code></pre>
         <pre><code class="language-js">
 
