@@ -726,17 +726,183 @@ console.log(foo) // { bar: 1}
           </li>
         </ul>
         <h3>cannot read property of undefined 問題解決方案</h3>
+        <p>意外獲得一個空白物件或空值這樣惱人的問題是在所難免的，面對這樣的問題該怎麼辦。</p>
         <pre><code class="language-js">
-
+const obj = {
+  user: {
+    posts: [
+      { title: 'Foo', comments: [ 'Good one!', 'Interesting…..' ] },
+      { title: 'Bar' , comments: [ 'Ok' ] }, 
+      { title: 'Baz' , comments: []}
+    ],
+    comments: []
+  }
+}
         </code></pre>
+        <p>
+          為了能夠在物件中安全地設定值，需要驗證物件中每一個鍵的存在性。常見的處理方案有以下幾種。
+        </p>
+        <h4>1. 透過 && 短路運算子進行可存取性偵測。</h4>
+        <p>以下為透過 &&短路運算子進行可存取性偵測的實現程式。</p>
         <pre><code class="language-js">
-
+obj.user &&
+obj.user.posts && 
+obj.user.posts[0] && 
+obj.user.posts[0].comments
         </code></pre>
+        <h4>2. 透過 || 單元設定預設保底值。</h4>
+        <p>以下為透過 || 單元設定預設保底值的實現程式。</p>
         <pre><code class="language-js">
-
+(((obj.user || {}).posts ||{})[0]||{}).comments
         </code></pre>
+        <h4>3. 使用 try...catch方法</h4>
+        <p>以下為使用 try…catch 方法的實現程式。</p>
         <pre><code class="language-js">
+var result try {
+  result = obj.user.posts[0].comments
+}
+catch {
+  result = null
+}
+        </code></pre>
+        <h4>4.使用 lodash get API</h4>
+        <p>以下為使用 lodash get API 的實現程式。</p>
+        <pre><code class="language-js">
+function get(object, path, defaultValue) {
+  const result = object == null ? undefined : baseGet(object, path)
+  return result === undefined ? defaultValue : result
+}
 
+function baseGet(object, path) {
+  path = castPath(path, object)
+  let index = 0
+
+  const length = path.length
+  while (object != null && index < length) {
+    object = object[toKey(path[index++])]
+  }
+  return (index && index == length) ? object : undefined
+}
+        </code></pre>
+        <p>簡易的 get 方法</p>
+        <pre><code class="language-js">
+const get = (p, o)=> p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o)
+
+console.log(get(['user', 'posts', 0, 'comments'], obj)) 
+// ['Good one!','Interesting...' ]
+
+console.log(get(['user', 'post', 0, 'comments'], obj])) // null
+        </code></pre>
+        <p>
+          我們實現的方法可以接收兩個參數，第一個參數表示取得值的路徑(path)，第二個參數表示目標物件。
+        </p>
+        <p>同樣，為了在設計上顯得更加靈活和抽象，我們可以對方法進行柯里化，程式如下。</p>
+        <pre><code class="language-js">
+const get = p => o => 
+    p.reduce((xs, x) =>
+      (xs && xs[x]) ? xs[x] : null, o)
+
+const getUserComments = get(['user', 'posts', 0, 'comments'])
+
+console.log(getUserComments(obj))
+// [ 'Good one!','Interesting...' ]
+
+console.log(getUserComments({user:{posts:[]}}))
+// null
+        </code></pre>
+        <p>
+          TC39 中有一個新的提案，支援
+          console.log(obj?.user?.posts[0]?.comments)，由此可見，JavaScript 語言也在不斷演進。
+        </p>
+        <p>
+          目前已經實裝。可以參考章節：
+          <a href="14-4.html">14-4 Operators-Optional chaining (?.)</a>
+        </p>
+        <h3>type.js 原始程式解讀</h3>
+        <p>
+          type.js 是由顏海鏡撰寫的用於判斷資料類型的方法函數庫，其相容 IE6
+          瀏覽器，靈活運用了多種判斷資料類型方式。以下是其實現程式。
+        </p>
+        <pre><code class="language-js">
+const toString = Object.prototype.toString
+export function type(x, strict = false) {
+  strict = !!strict
+  // fix typeof null = object
+  if (x === null) {
+    return 'null'
+  }
+  const t = typeof x
+  // number string boolean undefined symbol
+  if (t !== 'object') {
+    return t
+  
+  let cls
+  let clsLow
+  try {
+    cls = toString.call(x).slice(8, -1)
+    clsLow = cls.toLowerCase()
+  } catch (e) {
+    // IE覽器下的 activex 物件
+    return 'object'
+  }
+  if (clsLow !== 'object') {
+    // 區分 String() 和 new String()
+    if (strict && (clsLow === 'number' || clsLow === 'boolean' || clsLow === 'string')) {
+      return cls
+    }
+    return clsLow
+  }
+  if (x.constructor == Object) {
+    return clsLow
+  }
+  // Object.create(null)
+  try {
+    // __proto__ 部分的早期Firefox瀏覽
+    if (Object.getPrototypeof(x) === null || x.__proto__ === null) {
+      return 'object'
+    }
+  } catch (e) {
+    // 瀏覽器下無Object.getPrototypeOf會顯示出錯
+  }
+  // function A() {}; new A
+  try {
+    const cname = x.constructor.name
+    if (typeof cname === 'string') {
+      return cname
+    }
+  } catch (e) {
+    //無constructor
+  }
+  // function A() {}; A.prototype. constructor = null; new A
+  return 'unknown'
+}
+        </code></pre>
+        <p>以上程式中的關鍵點有以下幾個。</p>
+        <ul>
+          <li>透過 x === null 來判斷 null 類型。</li>
+          <li>
+            對於 typeof x 不為 object 的情況，直接傳回 typeof x的結果，這時可以判斷其是否為
+            number、string、boolean、undefined、symbol 類型。
+          </li>
+          <li>
+            對於其他情況，瀏覽器為 IE6 以上版本時，使用 Object.prototype.toString
+            方法進行資料類型判斷。
+          </li>
+          <li>
+            相容性處理，舉例來說，對於不支援 Object.prototype.toString 方法的情況，會傳回
+            object。對於其他相容性處理，此處不再一一多作說明。
+          </li>
+        </ul>
+        <p>
+          這裡特別注意一下 Object,prototype.toString
+          方法，該方法確實可以稱得上是「終極方案」，它最後會傳回一個格式形如 [object
+          XXXX]的結果，這個結果中的 XXXX
+          部分就是我們需要的變數資料類型，因此對傳回結果使用，slice(8, -1)方法，切分出結果中的XXXX
+          部分，就可以更加方便地獲得結果，程式如下。
+        </p>
+        <pre><code class="language-js">
+Object.prototype.toString.call(true).slice(8,-1)
+// "Boolean"
         </code></pre>
         <pre><code class="language-js">
 
