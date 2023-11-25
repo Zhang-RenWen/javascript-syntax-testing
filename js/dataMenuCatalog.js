@@ -39,6 +39,11 @@ export const menu = [
             id: '1-2-4',
             title: '1-2-4 高頻考點及基礎題庫',
             href: '1-2-4.html'
+          },
+          {
+            id: '1-2-5',
+            title: '1-2-5 實作非同步流程',
+            href: '1-2-5.html'
           }
         ]
       },
