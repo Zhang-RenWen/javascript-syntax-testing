@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-2-5">1-2-5 實作非同步流程</h2>
+        <h3>需求.1</h3>
+        <p>
+          行動頁面上的元素 target(document.querySelectorAll(#man)[0])，先從原點出發，向左移動
+          20px，再向上移動50px，最後再向左移動 30px，請把運動路徑動畫實現出來。
+        </p>
+        <h4>思路</h4>
+        <p>將移動的過程封裝成一個 walk 函數，該函數要接受以下 3 個參數。</p>
+        <ul>
+          <li>direction：字串，表示移動方向，這裡簡化為 "left"、"top" 兩種列舉。</li>
+          <li>distance：整數，可正可負。</li>
+          <li>callback：執行動作後回呼。</li>
+        </ul>
+        <p>direction 表示移動方向， distance 表示移動距離。</p>
+        <p>透過 distance 的正負值，可以實現4個方向的移動。</p>
+        <p>
+          每一個任務都是相互聯繫的：目前任務結束後，將馬上進入下一個流程，如何將這些流串聯起來呢？這裡採用最簡單的
+          callback 來明確指示下一個任務。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <h4>方案.1</h4>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
