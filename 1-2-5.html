@@ -89,6 +89,30 @@ top: 0px
       })
     })
         </code></pre>
+        <p>
+          關於以上程式，有兩點需要注意。第一點，為了簡化問題，將目標元素的定位進行了如下所示的初始化設定，且不再考慮邊界情況（如移出螢幕外等）。
+        </p>
+        <pre><code class="language-js">
+position: absolute;
+left: 0px;
+top: 0px;
+        </code></pre>
+        <p>
+          第二點，為了能夠展現出動畫，我們將 walk 函數的執行邏輯包裹在 20ms
+          的計時器中，每次執行一像素的運動都會有一個停留定格。
+        </p>
+        <p>
+          這樣的實現是完全針對過程的，只是程式比較「醜」，讀者只需體會使用回呼來解決非同步任務的處理方案即可。另外，如下所示的回呼巢狀結構很不優雅，有幾次位移任務就會巢狀結構幾層，是名副其實的回呼地獄。
+        </p>
+        <pre><code class="language-js">
+walk('left',20,()=>{
+  walk('top',50,()=>{
+    walk('left', 30, Function.prototype)
+  })
+})
+        </code></pre>
+        <h3>Promise 方案</h3>
+        <p>來看一下如何用 Promise 解決問題，程式如下。</p>
         <pre><code class="language-js">
 
         </code></pre>
