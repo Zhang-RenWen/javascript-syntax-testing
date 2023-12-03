@@ -34,7 +34,7 @@
       </aside>
       <article>
         <h2 id="1-2-5">1-2-5 實作非同步流程</h2>
-        <h3>需求.1</h3>
+        <h3>需求.1 製作一個非同步的方法</h3>
         <p>
           行動頁面上的元素 target(document.querySelectorAll(#man)[0])，先從原點出發，向左移動
           20px，再向上移動50px，最後再向左移動 30px，請把運動路徑動畫實現出來。
@@ -262,9 +262,61 @@ const task = async function () {
           透過比較 Generator 和 async/await 這兩種方案，讀者應該準確意識到，async/await 就是
           Generator 的語法糖，能夠自動執行產生器函數，且可以更加方便地實現非同步流程。
         </p>
+        <h3>需求.2 紅綠燈任務控制</h3>
+        <p>紅燈3s亮一次，綠燈1s亮一次，黃燈2s亮一次，如何讓3個燈不斷交替重複地亮呢？</p>
+        <p>這道題目如果用 Promise 方案實現的話，程式如下。</p>
+        <pre><code class="language-js">
+const task = (timer, light) =>
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (light === 'red') {
+        red()
+      } else if (light === 'green') {
+        green()
+      } else if (light === 'yellow') {
+        yellow()
+      }
+      resolve()
+    }, timer)
+  })
+
+
+const step = ()=>{
+  task(3000, 'red')
+  .then(()=> task(1000,'green'))
+  .then(() => task(2000,'yellow'))
+  .then(step)
+}
+step ()
+        </code></pre>
+        <pre><code class="language-js">
+const taskRunner = async ()=> {
+  await task(3000, 'red')
+  await task(1000,'green')
+  await task(2000,'yellow')
+  taskRunner()
+}
+taskRunner()
+        </code></pre>
+        <p>該用什麼方案一目了然。</p>
+        <p>
+          可見，熟悉 Promise 是基礎，是了解 async/await 的前提，學習 async/await
+          就是在學習「最先進的生產力」。當然要再次重申： async/await 是語法糖，學習 Promise
+          是消化這顆「糖」的前提。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+
         <pre><code class="language-js">
 
         </code></pre>
