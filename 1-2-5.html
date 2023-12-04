@@ -304,8 +304,108 @@ taskRunner()
           就是在學習「最先進的生產力」。當然要再次重申： async/await 是語法糖，學習 Promise
           是消化這顆「糖」的前提。
         </p>
+        <h3>需求.3 請求圖片進行預先載入</h3>
+        <p>
+          假設 urlIds
+          陣列預先就存在，陣列中的每一項都可以按照規則連接成一個完整的圖片位址，那麼請根據這個陣列，依次請求圖片進行預先載入。
+        </p>
+        <p>這個問題解決起來比較簡單，我們先實現一個請求圖片的方法，程式如下。</p>
         <pre><code class="language-js">
+const loadImg = (urlId) => {
+  const url = `https://www.image.com/${urlId}`
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onerror = function () {
+      reject(urlId)
+    }
+    img.onload = function () {
+      resolve(urlId)
+    }
+    img.src = url
+  })
+}
+        </code></pre>
+        <p>
+          該方法進行過 Promise 化（promisify）的處理，在圖片成功載入時執行 resolve，載入失敗時執行
+          reject。
+        </p>
+        <p>根據圖片 urlId，依次請求圖片，程式如下。</p>
+        <pre><code class="language-js">
+const urlIds = [1, 2, 3, 4, 5]
+urlIds.reduce((prevPromise, UrLId) => {
+  return prevPromise.then(() => loadImg(urlId))
+}, Promise.resolve())
+        </code></pre>
+        <p>上面使用了陣列的 reduce 方法，當然還可以使用針對過程的方法來實現，程式如下。</p>
+        <pre><code class="language-js">
+const loadImgOneByOne = (index) => {
+  const length = urlIds.length
 
+  loadImg(urlIds[index]).then(() => {
+    if (index === length - 1) {
+      return
+    } else {
+      loadImgOneByOne(++index)
+    }
+  })
+}
+loadImgOneByOne(0)
+        </code></pre>
+        <p>另外，還可以採用 async/await 來實現，程式如下。</p>
+        <pre><code class="language-js">
+const loadImgOneByOne = async () => {
+  for (i of urlIds) {
+    await loadImg(urlIds[i])
+  }
+}
+loadImgOneByOne()
+        </code></pre>
+        <p>上述程式的請求都是依次執行的，只有成功載入完第一張圖片，才能繼續載入下一張圖片。</p>
+        <p>如果想要提高效率，將所有圖片的請求一次性發出，該如何做呢？請看以下程式。</p>
+        <pre><code class="language-js">
+const urlIds = [1, 2, 3, 4, 5]
+const promiseArray = urlIds.map((urlId) => loadImg(urlId))
+Promise.all(promiseArray)
+  .then(() => {
+    console.log('finish load all')
+  })
+  .catch(() => {
+    console.log('promise all catch')
+  })
+        </code></pre>
+        <p>
+          繼續提出需求：我們希望控制最大平行處理數為3，最多一起發出3個請求，剩下2個一起發出，又該怎麼做呢？這就需要實現一個loadByLimit
+          方法，實現時可以考慮使用 Promise.race方法，程式如下
+        </p>
+        <pre><code class="language-js">
+const loadByLimit = (urlIds, loadImg, limit) => {
+  const urlIdsCopy = [...urlIds]
+  if (urlIdsCopy.length <= limit) {
+    // 如果陣列長度小於最大平行處理數，則直接發出全部請求
+    const promiseArray = urlIds.map((urlId = loadImg(urlId)))
+    return Promise.all(promiseArray)
+  }
+  // 注意，splice方法會改變 urlIdsCopy 陣列
+  const promiseArray = urlIdsCopy.splice(0, limit).map((urlId) => loadImg(urlId))
+  urlIdsCopy
+    .reduce(
+      (prevPromise, urlId) =>
+        prevPromise
+          .then(() => Promise.race(promiseArray))
+          .catch((error) => {
+            console.log(error)
+          })
+          .then((resolvedId) => {
+            //將resolvedId從 promiseArray陣列中刪除
+            // 這裡用於刪除操作的只是虛擬程式碼，實際刪除情況要看後端 API 傳回的結果
+            let resolvedIdPosition = promiseArray.findIndex((id) => resolvedId === id)
+            promiseArray.splice(resolvedIdPosition, 1)
+            promiseArray.push(loadImg(urlId))
+          }),
+      Promise.resolve()
+    )
+    .then(() => Promise.all(promiseArray))
+}
         </code></pre>
         <pre><code class="language-js">
 
@@ -316,7 +416,6 @@ taskRunner()
         <pre><code class="language-js">
 
         </code></pre>
-
         <pre><code class="language-js">
 
         </code></pre>
