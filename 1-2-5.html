@@ -102,7 +102,7 @@ top: 0px;
           的計時器中，每次執行一像素的運動都會有一個停留定格。
         </p>
         <p>
-          這樣的實現是完全針對過程的，只是程式比較「醜」，讀者只需體會使用回呼來解決非同步任務的處理方案即可。另外，如下所示的回呼巢狀結構很不優雅，有幾次位移任務就會巢狀結構幾層，是名副其實的回呼地獄。
+          這樣的實現是完全針對過程的，只是程式比較「醜」，只需體會使用回呼來解決非同步任務的處理方案即可。另外，如下所示的回呼巢狀結構很不優雅，有幾次位移任務就會巢狀結構幾層，是名副其實的回呼地獄。
         </p>
         <pre><code class="language-js">
 walk('left',20,()=>{
@@ -259,8 +259,8 @@ const task = async function () {
         </code></pre>
         <p>經過改造，使用 async/await方案只需直接執行 task 函數即可使物體做出預期中的運動軌跡。</p>
         <p>
-          透過比較 Generator 和 async/await 這兩種方案，讀者應該準確意識到，async/await 就是
-          Generator 的語法糖，能夠自動執行產生器函數，且可以更加方便地實現非同步流程。
+          透過比較 Generator 和 async/await 這兩種方案，應該意識到，async/await 就是 Generator
+          的語法糖，能夠自動執行產生器函數，且可以更加方便地實現非同步流程。
         </p>
         <h3>需求.2 紅綠燈任務控制</h3>
         <p>紅燈3s亮一次，綠燈1s亮一次，黃燈2s亮一次，如何讓3個燈不斷交替重複地亮呢？</p>
@@ -407,15 +407,143 @@ const loadByLimit = (urlIds, loadImg, limit) => {
     .then(() => Promise.all(promiseArray))
 }
         </code></pre>
+        <h3>setTimeout 解析</h3>
+        <p>觀察以下程式。</p>
         <pre><code class="language-js">
-
+setTimeout(() => {
+  console.log('setTimeout block')
+}, 100)
+while (true) {}
+console.log('end here')
         </code></pre>
+        <p>
+          行以上程式符不會輸出任何結果，因為 while 巡迴回不斷執行，佔用主執行緒。
+          但是，執行以下程式會列印出 end here。
+        </p>
         <pre><code class="language-js">
-
+setTimeout(() => {
+  while (true) {}
+},0)
+console.log('end here')
         </code></pre>
+        <p>這段程式執行後，再執行任何敘述都不會獲得回應。</p>
+        <p>JavaScript 中的任務分為同步任務和非同步任務。</p>
+        <ul>
+          <li>
+            同步任務：目前主執行緒將要消化執行的任務，這些任務一起形成執行基疊 （execution context
+            stack）。
+          </li>
+          <li>
+            非同步任務：不進入主執行緒，而是進入任務佇列（task queue），即不會馬上進行的任務。
+          </li>
+        </ul>
+        <p>
+          當同步任務全都被消化，主執行緒空閒時，即上面提到的執行堆疊為空時！
+          系統將執行任務佇列中的任務，即非同步任務。
+        </p>
+        <p>
+          JS為單行執行的程式語言，操作中將需要耗時的任務丟進任務佇列中，這樣就不會阻礙主執行緒的執行。
+        </p>
+        <p>如果將相關程式修改為如下所示的樣子</p>
         <pre><code class="language-js">
+const t1 = new Date()
+setTimeout(() => {
+  const t3 = new Date()
+  console.log('setTimeout block')
+  console.log('t3-t1=' t3 - t1)
+}, 100)
+let t2 = new Date()
+while (t2 - t1 < 200) {
+  t2 = new Date()
+}
+console.log('end here')
 
+
+// 則輸出結果如下。
+// end here setTimeout block
+// t3 - t1 = 200
         </code></pre>
+        <p>
+          雖然setTimeout 計時器的定時為100ms，但是由於同步任務中的while 循環將執行
+          200ms，因此計時完成後仍然會先執行主執行緒中的同步任務，只有當同步任務全部執行完畢，輸出
+          end here
+          時，才會開始執行任務佇列中的任務。此時，t3和t1的時間差為200ms，而非計時器設定的100ms。
+        </p>
+        <p>關於 setTimeout 最容易被忽視的其實是一個非常小的細節。請看以下程式。</p>
+        <pre><code class="language-js">
+setTimeout(() => {
+  console.log('here 100')
+}, 100)
+setTimeout(() => {
+  console.log('here 2')
+}, 0)
+        </code></pre>
+        <p>但是，如果將程式修改成下面的樣子，情況又會如何呢？</p>
+        <pre><code class="language-js">
+setTimeout(() => {
+  console.log('here 1')
+}, 1)
+setTimeout(() => {
+  console.log('here 2')
+}, 0)
+        </code></pre>
+        <p>
+          按道理來說，執行這段程式時也應該是第二個 setTimeout 將更快被觸發，先 輸出 here
+          2，再輸出here 1・但是，在 Chrome 瀏覽器中執行的結果相反，事 實上，這兩個 setTimeout
+          誰先進入任務佇列，誰就會先執行，並不會嚴格按 照 1ms 和 0ms 進行區分。
+        </p>
+        <p>
+          表面上看，1ms 和0ms 的延遲是完全相等的，有點類似「最小延時間」這個概念。直觀上看，最小延
+          時間是1ms，在1ms以內的定時都以最小延遲時間處理。此時，誰在程式順序上靠前，誰就會在主執行緒空閒時被優先執行。
+        </p>
+        <p>
+          可以參考一下 MDN上列出的最小延遲時間——4ms，另外，setTimeout 也有「最大延
+          時間」的概念。這都依賴於標準的制定和瀏覽器引擎的實現
+        </p>
+        <h3>巨任務和微任務</h3>
+        <p>在此之前先看一段程式</p>
+        <pre><code class="language-js">
+console.log('start here')
+new Promise((resolve, reject) => {
+  console.log('first promise constructor')
+  resolve()
+})
+  .then(() => {
+    console.log('first promise then')
+    return new Promise((resolve, reject) => {
+      console.log('second promise')
+      resolve()
+    }).then(() => {
+      console.log('second promise then')
+    })
+  })
+  .then(() => {
+    console.log('another first promise then')
+  })
+console.log('end here')
+        </code></pre>
+        <ul>
+          <li>首先會輸出 start here，這一點是沒有問題的。</li>
+          <li>
+            接著是一個Promise建構函數，執行同步程式，輸出 first promise constructor，同時將第一處
+            Promise 的 then 方法完成處理邏輯放入任務佇列。
+          </li>
+          <li>繼續執行同步程式，輸出 end here。</li>
+          <li>
+            同步程式全部執行完畢，然後執行任務佇列中的邏輯，輸出 first promise then 及 second
+            promise
+          </li>
+          <li>
+            當在 then 方法中傳回一個 Promise 時（第9行），第一個 Promise 的第二個 then
+            方法對應的完成處理函數（第17行）便會置於傳回的這個新 Promise的then方法（第13行）之後。
+          </li>
+          <li>
+            此時將傳回的這個新 Promise 的
+            then方法放到任務佇列中，由於主執行緒中沒有其他任務，因此會轉而執行第二個 then 任務，輸出
+            second promise then
+          </li>
+          <li>最後輸出 another first promise then</li>
+        </ul>
         <pre><code class="language-js">
 
         </code></pre>
