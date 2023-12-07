@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-2-6">1-2-6 Promise 深入解析</h2>
+        <h3>Promise 化一個 API</h3>
+        <p>微信小程式環境中發送一個網路請求時會使用 路請求時會使用 wx.request()。</p>
+        <pre><code class="language-js">
+wx.request({
+  url: 'test', // 範例
+  data: {
+    x: '',
+    y: ''
+  },
+  header: {
+    'content-type': 'application/json' // 預設值
+  },
+  success(res) {
+    console.log(res)
+  }
+})
+        </code></pre>
+        <p>
+          這樣的設計有一個小問題，就是容易出現「回呼地獄」問題。如果我們想先透過，userInfo
+          介面來取得登入使用者資訊資料，再從登入使用者資訊資料中透過請求 ./${id}/friendList
+          介面來取得登入使用者的所有好友清單，那麼就需要執行以下程式。
+        </p>
+        <pre><code class="language-js">
+wx.request({
+  url: './userInfo',
+  success(res) {
+    const id = res.data.id
+    wx.request({
+      url: `./${id}/friendList`,
+      success(res) {
+        console.log(res)
+      }
+    })
+  }
+})
+        </code></pre>
+        <p>
+          解決「回呼地獄」問題的極佳工具就是 Promise，所以將微信小程式wx.request() 方法進行Promise
+          化，程式將變為如下所示的樣子。
+        </p>
+        <pre><code class="language-js">
+const wxRequest = (url, data = {}, method = 'GEI') =>
+  new Promise((resolve, reject) => {
+    wx.request({
+      uri,
+      data,
+      method,
+      header: {
+        // 通用化header設定
+      },
+    success: function (res) {
+      const code = res.statusCode
+
+      if (code !== 200) {
+        reject({ error: 'request fail', code })
+        return
+      }
+      resolve(res.data)
+    },
+    fail: function (res) {
+      reject({ error: 'request fail' })
+    }
+  })
+})
+        </code></pre>
+        <p>Promise 化更多類似（透過 success 和 fail代表狀態）的介面，程式如下。</p>
+        <pre><code class="language-js">
+const promisify = (fn) => (args) =>
+  new Promise((resolve, reject) => {
+    args.success = function (res) {
+      return resolve(res)
+    }
+    args.fail = function (res) {
+      return reject(res)
+    }
+  })
+
+        </code></pre>
+        <p>在將 Promise 化的程式封裝為 promisify 之後，我們便可以像以下程式所示的 那樣使用。</p>
+        <pre><code class="language-js">
+const wxRequest = promisify(wx.request)
+        </code></pre>
+        <p>
+          透過以上實例，我們知道． Promise 其實就是一個建構函數，我們可以使用這個建構函數建立一個
+          Promise 寶例。該建構函數很簡單，它只有一個參數，按照 Promise/A+ 標準的命名。我們把 Promise
+          建構函數的參數叫作 executor：區是函數類型的參數。這個函數又「自動」具有 resolve 、reject
+          兩個方法作為參數。
+        </p>
+        <p>我們可以根據此結論開始實現 Promise 的第一步，先簡單地實現一個建構函數，程式如下:</p>
+        <pre><code class="language-js">
+function Promise (executor) {
+
+}
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+  <script></script>
+</html>

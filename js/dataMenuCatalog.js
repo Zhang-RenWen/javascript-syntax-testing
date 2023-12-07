@@ -44,6 +44,11 @@ export const menu = [
             id: '1-2-5',
             title: '1-2-5 實作非同步流程',
             href: '1-2-5.html'
+          },
+          {
+            id: '1-2-6',
+            title: '1-2-6 Promise 深入解析',
+            href: '1-2-6.html'
           }
         ]
       },
