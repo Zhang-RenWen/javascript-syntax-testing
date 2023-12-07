@@ -597,7 +597,7 @@ console.log('end here')
           的完成處理函數（第18行）進入任務佇列（微任務），第一個（匿名）promise
           的完成處理函數（第23行）進入任務佇列（微任務）。 雖然 setTimeout
           回呼率先進入任務佇列，但是引擎會優先執行微任務，按照微任務的順序先輸出 promise1
-          的結果，再輸出 promiseO 的結果（即第一個匿名 promise 的結果）。
+          的結果，再輸出 promise0 的結果（即第一個匿名 promise 的結果）。
         </p>
         <p>
           此時，所有微任務都處理完畢，開始執行巨任務，輸出 setTimeout 回呼內容 setTimeout here。
