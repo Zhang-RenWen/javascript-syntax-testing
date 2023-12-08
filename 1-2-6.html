@@ -128,21 +128,141 @@ function Promise (executor) {
 
 }
         </code></pre>
+        <p>
+          在上面的 wx.request() 介紹中，我們將其進行了 Promise
+          化，因此在巢狀結構回呼場景中可以使用以下方法。
+        </p>
         <pre><code class="language-js">
-
+wxRequest('./userInfo')
+.then(
+  (data) => wxRequest(`./${data.id}/friendList`),
+  (error) => console.log(error)
+)
+.then(
+  (data) => {
+    console.log(data)
+  },
+  (error) => {
+    console.log(error)
+  }
+)
         </code></pre>
+        <p>
+          Promise 建構函數傳回一個 Promise 物件實例，這個傳回的 Promise 物件具有一個then
+          方法。在then 方法中，呼叫者可以定義兩個參數，分別是 onfulfilled 和
+          onrejected，它們都是函數類型的參數。其中，onfulfilled 透過參數可以取得 Promise 物件經過
+          resolve 處理後的值，onrejected 可以取得 Promise 物件經過 reject
+          處理後的值。透過這個值，我們來處理非同步作業完成後的邏輯。
+        </p>
+        <p>
+          這些都是 Promise/A+ 標準的基本內容，接下來我們繼續實現 Promise。在已有 Promise
+          建構函數的基礎上加上 then 原型方法的骨架，程式如下。
+        </p>
         <pre><code class="language-js">
+function Promise (executor) {
 
+}
+
+Promise.prototype.then = function (onfulfilled, onrejected) {
+
+}
         </code></pre>
+        <p>下面先來看一個範例，從範例中了解 Promise 的重點內容。</p>
         <pre><code class="language-js">
-
+let promise1 = new Promise((resolve, reject) => {
+  resolve('data')
+})
+promise1.then((data) => {
+  console.log(data)
+})
+let promise2 = new Promise((resolve, reject) => {
+  reject('error')
+})
+promise2.then(
+  (data) => console.log(data),
+  (error) => {
+    console.log(error)
+  }
+)
         </code></pre>
+        <p>
+          在使用 new 關鍵字呼叫 Promise 建構函數時，在合適的時機（常常是非同步作業結束時）呼叫
+          executor 的參數 resolve，並將經過 resolve 處理後的值作為 resolve
+          的函數參數執行，這個值便可以在後續 then
+          方法的第一個函數參數（onfulfilled）中拿到；同理，在出現錯誤時，呼叫 executor 的參數
+          reject，並將錯誤訊息作為 reject 的函數參數執行，這個錯誤訊息可以在後續then
+          方法的第二個函數參數（onrejected）中獲得。
+        </p>
+        <p>
+          因此，我們在實現Promise 時，應該有兩個變數，分別儲存經過 resolve 處理後的值，以及經過
+          reject 處理後的值（當然，因為 Promise狀態的唯一性，不可能同時出現經過 resolve
+          處理後的值和經過 reject
+          處理後的值，因此也可以用一個變數來儲存）；同時還需要存在一個狀態，這個狀態就是 Promise
+          實例的狀態（pending、fulfilled、rejected）；最後要提供 resolve 方法及 reject方
+          法，兩個方法需要作為 executor 的參數提供給開發者使用，程式如下。
+        </p>
         <pre><code class="language-js">
+function Promise(executor) {
+  const self = this
+  this.status = 'pending'
+  this.value = null
+  this.reason = null
+  function resolve(value) {
+    self.value = value
+  }
+  function reject(reason) {
+    self.reason = reason
+  }
+  executor(resolve, reject)
+}
 
+Promise.prototype.then = function (
+  onfulfilled = Function.prototype,
+  onrejected = Function.prototype
+) {
+  onfulfilled(this.value)
+  onrejected(this.reason)
+}
         </code></pre>
+        <p>
+          為了確保 onfulfilled、onrejected
+          能夠穩固地執行，我們為其設定了預設值，其預設值為一個函數元（Function.prototype）。
+        </p>
+        <p>
+          注意，因為 resolve
+          的最後呼叫是由開發者在不確定環境下（常常是在全域中）直接呼叫的，因此為了在 resolve
+          函數中能夠拿到 Promise實例的值，我們需要對 this 進行儲存，上述程式中使用了 self變數來記錄
+          this，也可以使用箭頭函數來確保 this 執行的準確性。
+        </p>
         <pre><code class="language-js">
+function Promise(executor) {
+  this.status = 'pending'
+  this.value = null
+  this.reason = null
 
+  const resolve = (value) => {
+    this.value = value
+  }
+  const reject = (reason) => {
+    this.reason = reason
+  }
+
+  executor(resolve, reject)
+}
+
+Promise.prototype.then = function (
+  onfulfilled = Function.prototype,
+  onrejected = Function.prototype
+) {
+  onfulfilled(this.value)
+  onrejected(this.reason)
+}
         </code></pre>
+        <p>
+          每個 Promise 實例的then
+          方法邏輯都是一致的，實例在呼叫該方法時，可以透過原型（Promise.prototype）來呼叫，而不需要每次產生實體都新建立一個
+          then 方法，以便節省記憶體，顯然更合適。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
