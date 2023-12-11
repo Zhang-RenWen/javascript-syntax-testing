@@ -259,16 +259,84 @@ Promise.prototype.then = function (
 }
         </code></pre>
         <p>
-          每個 Promise 實例的then
+          每個 Promise 實例的 then
           方法邏輯都是一致的，實例在呼叫該方法時，可以透過原型（Promise.prototype）來呼叫，而不需要每次產生實體都新建立一個
           then 方法，以便節省記憶體，顯然更合適。
         </p>
+        <h3>Promise 實現狀態增強</h3>
         <pre><code class="language-js">
-
+let promise = new Promise((resolve, reject) => {
+  resolve('data')
+  reject('error')
+})
+promise.then(
+  (data) => {
+    console.log(data)
+  },
+  (error) => {
+    console.log(error)
+  }
+)
         </code></pre>
+        <p>
+          以上程式只會輸出 data。我們知道，Promise 實例的狀態只能從 pending 變為 fulfilled，或從
+          pending 變為 rejected。狀態一旦愛更完畢，就不可再次變化或逆轉。也就是說，如果一旦變為
+          fulfilled，就不能再變為 rejected；一旦轉為 rejected ，就不能再變為 fulfilled。
+        </p>
+        <p>
+          而上段程式實現顯然無法滿足這一特性。要執行上一段程式輸出 data 及
+          error，需要對狀態進行判斷和增強，如下。
+        </p>
         <pre><code class="language-js">
+function Promise(executor) {
+  this.status = 'pending'
+  this.value = null
+  this.reason = null
 
+  const resolve = (value) => {
+    if (this.status === 'pending') {
+      this.value = value
+      this.status = 'fulfilled'
+    }
+  }
+  const reject = (reason) => {
+    if (this.status === 'pending') {
+      this.reason = reason
+      this.status = 'rejected'
+    }
+  }
+  executor(resolve, reject)
+}
+
+Promise.prototype.then = function (onfulfilled, onrejected) {
+  onfulfilled = typeof onfulfilled === 'function' ? onfulfilled : (data) => data
+  onrejected =
+    typeof onrejected === 'function'
+      ? onrejected
+      : (error) => {
+          throw error
+        }
+  if (this.status === 'fulfilled') {
+    onfulfilled(this.value)
+  }
+  if (this.status === 'rejected') {
+    onrejected(this.reason)
+  }
+}
         </code></pre>
+        <p>
+          可以看到：resolve和 reject 方法中加入了判斷，只允許 Promise 實例狀態從 pending 變為
+          fulfilled，或從 pending 變為 rejected。
+        </p>
+        <p>
+          同時注意、這裡對 Promise.prototype.then 的參數 onfulfilled 和 onrejected
+          進行了判斷，當實際參數不是函數類型時，就需要指定預設函數值。這時的預設值不再是函數元
+          Function.prototype 了。
+        </p>
+        <p>
+          不過 Promise
+          是用來解決非同步問題的，而我們的程式全部都是同步執行的，似乎還差了更重要的邏輯。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
