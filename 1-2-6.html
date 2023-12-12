@@ -337,6 +337,203 @@ Promise.prototype.then = function (onfulfilled, onrejected) {
           不過 Promise
           是用來解決非同步問題的，而我們的程式全部都是同步執行的，似乎還差了更重要的邏輯。
         </p>
+        <h3>非同步實現增強</h3>
+        <pre><code class="language-js">
+let promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('data')
+  }, 2000)
+})
+promise.then((data) => {
+  console.log(data)
+})
+        </code></pre>
+        <p>
+          正常來講，上述程式會在 2s 後輸出 data，但是現在，程式並沒有輸出任何資訊。這是為什麼呢？
+        </p>
+        <p>
+          原因很簡單，因為我們的實現邏輯全是同步的。上述程式在產生實體一個 Promise
+          的建構函數時，會在 setTimeout 邏輯中呼叫 resolve，也就是說，2s後才會呼叫 resolve
+          方法，更改 Promise 實例狀態。而結合我們的實現，then 方法中的 onfulfilled
+          是同步執行的，它在即時執行 this.status 仍然為 pending，並沒有做到「2s後再執行
+          onfulfilled」。
+        </p>
+        <p>
+          那該怎麼辦呢？我們似乎應該在合適的時間去呼叫
+          onfulfilled方法，這個合適的時間應該是開發者呼叫
+          resolve的時刻，那麼我們先在狀態（status）為 pending 時把開發者傳進來的 onfulfilled
+          方法存起來，再在 resolve 方法中執行即可。程式如下所示。
+        </p>
+        <pre><code class="language-js">
+function Promise(executor) {
+  this.status = 'pending'
+  this.value = null
+  this.reason = null
+  this.onFulfilledFunc = Function.prototype
+  this.onRejectedFunc = Function.prototype
+  const resolve = (value) => {
+    if (this.status === 'pending') {
+      this.value = value
+      this.status = 'fulfilled'
+      this.onFulfilledFunc(this.value)
+    }
+  }
+  const reject = (reason) => {
+    if (this.status === 'pending') {
+      this.reason = reason
+      this.status = 'rejected'
+      this.onRejectedFunc(this.reason)
+    }
+  }
+  executor(resolve, reject)
+}
+
+Promise.prototype.then = function (onfulfilled, onrejected) {
+  onfulfilled = typeof onfulfilled === 'function' ? onfulfilled : (data) => data
+  onrejected =
+    typeof onrejected === 'function'
+      ? onrejected
+      : (error) => {
+          throw error
+        }
+  if (this.status === 'fulfilled') {
+    onfulfilled(this.value)
+  }
+  if ((this, status === 'rejected')) {
+    onrejected(this.reason)
+  }
+  if (this.status === 'pending') {
+    this.onFulfilledFunc = onfulfilled
+    this.onRejectedFunc = onrejected
+  }
+}
+        </code></pre>
+        <p>
+          透過測試發現，我們實現的程式也可以支援非同步執行了！同時，我們知道promise
+          是非同步執行的！再來看一個實例，請判斷以下程式的輸出結果。
+        </p>
+        <pre><code class="language-js">
+let promise = new Promise((resolve, reject) => {
+  resolve('data')
+})
+promise.then((data) => {
+  console.log(data)
+})
+console.log(1)
+        </code></pre>
+        <p>正常的話，這裡會按照順序先輸出1，再輸出 data。</p>
+        <p>
+          而我們實現的程式卻沒有考慮這種情況，實際先輸出了data，再輸出 1。 因此，需要將 resolve 和
+          reject 的執行放到任務佇列中。這裡姑且先放到 setTimeout
+          中，確保非同步執行（這樣的做法並不嚴謹，為了確保 Promise 屬於 microTasks，很多Promise
+          的實現函數庫用了 MutationObserver 來模仿 nextTick()。
+        </p>
+        <pre><code class="language-js">
+const resolve = (value) => {
+  if (value instanceof Promise) {
+    return value.then(resolve, reject)
+  }
+  setTimeout(() => {
+    if (this.status === 'pending') {
+      this.value = value
+      this.status = 'fulfilled'
+      this.onFulfilledFunc(this.value)
+    }
+  })
+}
+const reject = (reason) => {
+  setTimeout(() => {
+    if (this.status === 'pending') {
+      this.reason = reason
+      this.status = 'rejected'
+      this.onRejectedFunc(this.reason)
+    }
+  })
+}
+executor(resolve, reject)
+        </code></pre>
+        <p>
+          這樣一來，在執行到 executor(resolve, reject)時，也能確保在 nextTick 中才去執行 Promise
+          被決議後的任務，不會阻塞同步任務。
+        </p>
+        <p>
+          同時，我們在 resolve 方法中加入了對 value 值是否為一個 Promise
+          實例的判斷敘述。到目前為止，整個實現程式如下所示。
+        </p>
+        <pre><code class="language-js">
+function Promise(executor) {
+  this.status = 'pending'
+  this.value = null
+  this.reason = null
+  this.onFulfilledFunc = Function.prototype
+  this.onRejectedFunc = Function.prototype
+  const resolve = (value) => {
+    if (value instanceof Promise) {
+      return value.then(resolve, reject)
+    }
+    setTimeout(() => {
+      if (this.status === 'pending') {
+        this.value = value
+        this.status = 'fulfilled'
+        this.onFulfilledFun(this.value)
+      }
+    })
+  }
+  const reject = (reason) => {
+    setTimeout(() => {
+      if (this.status === 'pending') {
+        this.reason = reason
+        this.status = 'rejected'
+        this.onRejectedFunc(this.reason)
+      }
+    })
+  }
+  executor(resolve, reject)
+}
+Promise.prototype.then = function (onfulfilled, onrejected) {
+  onfulfilled = typeof onfulfilled === 'function' ? onfulfilled : (data) => data
+  onrejected =
+    typeof onrejected === 'function'
+      ? onrejected
+      : (error) => {
+          throw error
+        }
+  if (this.status === 'fulfilled') {
+    onfulfilled(this.value)
+  }
+  if (this.status === 'rejected') {
+    onrejected(this.reason)
+  }
+  if (this.status == 'pending') {
+    this.onFulfilledFunc = onfulfilled
+    this.onRejectedFunc = onrejected
+  }
+}
+        </code></pre>
+        <p>下面的實現也會按照順序，先輸出1，再輸出data。</p>
+        <pre><code class="language-js">
+let promise = new Promise((resolve, reject) => {
+  resolve('data')
+})
+promise.then((data) => {
+  console.log(data)
+})
+console.log(1)
+        </code></pre>
+        <h3>Promise 細節增強</h3>
+        <p>
+          到此為止，我們的Promise 實現似乎越來越可靠了，但是還有些細節需要增強。 舉例來說，在
+          Promise 實例狀態變更之前增加多個then 方法。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
