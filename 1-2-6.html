@@ -526,17 +526,124 @@ console.log(1)
           Promise 實例狀態變更之前增加多個then 方法。
         </p>
         <pre><code class="language-js">
+let promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('data')
+  }, 2000)
+  promise.then((data) => {
+    console.log(`1: ${data}`)
+  })
+  promise.then((data) => {
+    console.log(`2: $(data)`)
+  })
+})
 
+// 預期會有以下輸出
+// 1:data 
+// 2:data 
         </code></pre>
+        <p>
+          而我們的實現只會輸出 2:data，這是因為第二個 then 方法中的 onFulfilledFunc 會覆蓋第一個
+          then 方法中的 onFulfilledFunc。
+        </p>
+        <p>
+          這個問題也好解決，只需要將所有 then 方法中的 onFulfilledFunc 儲存到一個陣列
+          onFulfilledArray 中，在目前 Promise 被決議時依次執行
+          onFulfilledArray陣列內的方法即可。對於 onRejectedFunc 同理，改動後的實現程式如下。
+        </p>
         <pre><code class="language-js">
-
+function Promise(executor) {
+  this.status = 'pending'
+  this.value = null
+  this.reason = null
+  this.onFulfilledArray = []
+  this.onRejectedArray = []
+  const resolve = (value) => {
+    if (value instanceof Promise) {
+      return value.then(resolve, reject)
+    }
+    setTimeout(() => {
+      if (this.status === 'pending') {
+        this.value = value
+        this.status = 'fulfilled'
+        this.onFulfilledArray.forEach((func) => {
+          func(value)
+        })
+      }
+    })
+  }
+  const reject = (reason) => {
+    setTimeout(() => {
+      if (this.status === 'pending') {
+        this.reason = reason
+        this.status = 'rejected'
+        this.onRejectedArray.forEach((func) => {
+          func(reason)
+        })
+      }
+    })
+  }
+  executor(resolve, reject)
+}
+Promise.prototype.then = function (onfulfilled, onrejected) {
+  onfulfilled = typeof onfulfilled === 'function' ? onfulfilled : (data) => data
+  onrejected =
+    typeof onrejected === 'function'
+      ? onrejected
+      : (error) => {
+          throw error
+        }
+  if (this.status === 'fulfilled') {
+    onfulfilled(this.value)
+  }
+  if (this.status === 'rejected') {
+    onrejected(this.reason)
+  }
+  if (this.status === 'pending') {
+    this.onFulfilledArray.push(onfulfilled)
+    this.onRejectedArray.push(onrejected)
+  }
+}
         </code></pre>
+        <p>
+          另外一個需要完整的細節是，在建構函數中如果出錯，將自動觸發 Promise 實例狀態變為
+          rejected，因此我們用 try..catch 區塊對 executor 進行包裹，如下。
+        </p>
         <pre><code class="language-js">
-
+try {
+  executor(resolve, reject)
+} catch (e) {
+  reject(e)
+}
         </code></pre>
+        <p>當我們故意將程式錯寫為以下形式時：</p>
         <pre><code class="language-js">
+let promise = new Promise((resolve, reject) => {
+  setTout(() => {
+    resolve('data')
+  }, 2000)
+})
+promise.then(
+  (data) => {
+    console.log(data)
+  },
+  (error) => {
+    console.log('got error from promise', error)
+  }
+)
 
+// 就可以對錯誤進行處理，並捕捉到以下異常。
+//  got error from promise ReferenceError: setTimeouteout is not defined
+// at <anonymous>: 2:3
+// at <anonymous>: 33:7
         </code></pre>
+        <p>到目前為止，我們已經初步實現了基本的 Promise。獲得一個好的實現結果固然重要，但是在實現過程中，我們也加深了對 Promise 的了解，得出下面一些重要的結論。</p>
+        <ul>
+          <li>Promise 的狀態具有凝固性。</li>
+          <li>Promise 可以在 then 方法第二個參數中進行錯誤處理。</li>
+          <li>Promise 實例可以增加多個 then 處理場景。</li>
+        </ul>
+       <h3>Promise then 的鏈式呼叫</h3>
         <pre><code class="language-js">
 
         </code></pre>
