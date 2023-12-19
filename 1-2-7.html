@@ -70,13 +70,13 @@ function newFunc(...args) {
           建構函數如果有顯性回傳值：且傳回值為物件類型：那麼建構函數傳回結果就不再是目標實例，程式如下。
         </p>
         <pre><code class="language-js">
-    function Person(name) {
-      this.name = name
-      return { 1: 1 }
-    }
-    const person = new Person(Person, 'lucas')
-    console.log(person)
-    // {1:1}
+function Person(name) {
+  this.name = name
+  return { 1: 1 }
+}
+const person = new Person(Person, 'lucas')
+console.log(person)
+// {1:1}
         </code></pre>
         <pre><code class="language-js">
 
