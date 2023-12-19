@@ -49,6 +49,11 @@ export const menu = [
             id: '1-2-6',
             title: '1-2-6 Promise 深入解析',
             href: '1-2-6.html'
+          },
+          {
+            id: '1-2-7',
+            title: '1-2-7 物件導向和原型鏈',
+            href: '1-2-7.html'
           }
         ]
       },
