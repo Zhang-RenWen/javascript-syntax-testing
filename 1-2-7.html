@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-2-7">1-2-7 物件導向和原型鏈</h2>
+        <h3>new</h3>
+        <ul>
+          <li>首先建立一個空白物件，這個物件將作為執行建構函數之後傳回的物件實例。</li>
+          <li>使上面建立的空白物件的原型 (__Proto__)指向建構函數的 prototype 屬性。</li>
+          <li>將這個空白物件設定值給建構函數內部的 this ，並執行建構函數邏輯。</li>
+          <li>根據建構函數執行邏輯，傳回第一步建立的物件或建構函數的顯性傳回值。</li>
+        </ul>
+        <p>
+          因為 new 是Javascript 的關鍵字，因此我們不能直接將其覆蓋，但可以透過質現一個 newFunc
+          來進行模擬・我們對 newFunc 預期的使用方式如下。
+        </p>
+        <p>根據預期的使用方式，我們可以實現 newFunc ，程式如下。</p>
+        <pre><code class="language-js">
+function newFunc(...args) {
+  //取出args陣列的第一個參數，即目標建構函數
+  const constructor = args.shift() 
+    // 建立一個空白物件，且使這個空自物件繼承建構函數的 prototype 屬性
+    // 即實現 obj.__proto__ == constructor.prototype
+  const obj = Object.create(constructor.prototype)
+  //執行建構函數，獲得建構函數傳回結果
+  // 注意，這裡使用 apply 使建構函數內的 this 指向 obj
+  const result = constructor.apply(obj, args)
+  // 如果建構函數執行後，傳回結果是物件類型，則直接將該結果傳回，否則傳回。obj物件
+  return typeof result === 'object' && result != null ? result : obj
+}
+        </code></pre>
+        <p>上述程式並不複雜，涉及的幾個關鍵點如下。</p>
+        <ul>
+          <li>使用 Object.create 使 obj 的 __proto__ 指向建構函數的原型。</li>
+          <li>使用 apply 方法使建構函數內的 this 指向 obj。</li>
+          <li>在 newFunc 傳回時，使用三元運算子決定傳回結果。</li>
+        </ul>
+        <p>
+          建構函數如果有顯性回傳值：且傳回值為物件類型：那麼建構函數傳回結果就不再是目標實例，程式如下。
+        </p>
+        <pre><code class="language-js">
+    function Person(name) {
+      this.name = name
+      return { 1: 1 }
+    }
+    const person = new Person(Person, 'lucas')
+    console.log(person)
+    // {1:1}
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+  <script></script>
+</html>
