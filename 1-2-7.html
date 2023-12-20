@@ -449,7 +449,7 @@ window.$ === undefined && (window.$ = jQuery)
         </code></pre>
         <p>
           我們順著原始程式進行分析，當呼叫$('p')時，最後傳回的是 dom ，而 dom.__proto__ 指向了$fn ，
-          $.fn 是包含了多種方法的物件集合，因此傳回的結果 (dom) 可以在其原型鏈上找到 aedClass
+          $.fn 是包含了多種方法的物件集合，因此傳回的結果 (dom) 可以在其原型鏈上找到 addClass
           這樣的方法。同理 $('span') 也不例外，任何實例都不例外，因此可以歸納出以下一行程式。
           <code>$('span').__proto__ === $.fn</code>
           同時，ajax 方法是直接掛載在建構函數 $ 上的，是一個靜態屬性方法。
@@ -472,16 +472,58 @@ class $ {
   }
 }
         </code></pre>
-        <h3>類別繼承和原型繼承的區別</h3>
+        <h3>物件導向在實戰場景中的應用</h3>
+        <p>
+          在產品中，一個頁面可能存在多處元件。以 ES6 class
+          實現為例，我們不借助任何架構來實現這樣的物件關係：所有UI元件（包含訂閱元件）都會繼承
+          UIBase class。
+        </p>
         <pre><code class="language-js">
+class Widget extends UIBase {
+  constructor() {
+    super()
+    //...
+  }
+}
+        </code></pre>
+        <p>
+          而 UIBase
+          本身會產生一個全域唯一的id，這樣透過繼承便可以使所有元件都有一個唯一的id標識。同時，UIBase
+          又會繼承 EventEmitter 這個 pub/sub模式元件。
+        </p>
+        <pre><code class="language-js">
+class UIBase extends EventEmitter {
+  constructor() {
+    super()
+    this.guid = guid()
+  }
+}
+        </code></pre>
+        <p>
+          因此，所有的元件都擁有了 pub/sub
+          模式，即事件發佈/訂閱功能。這這就相對簡單完美地解決了元件之間的通訊問題，達到了「高內聚、低耦合」的效果。
+          實際來說，任何元件在觸發某些行為動作時（當然包含訂閱按鈕在發起訂閱行為時），都可以透過以下程式將該行為動作發出。
+        </p>
+        <pre><code class="language-js">
+widget.emit('favorAction')
+        </code></pre>
+        <p>同時，其他元件可以透過以下程式捕捉對應的動作行為。</p>
+        <img src="./assets/image/1-2-7/1.jpg" alt="" />
+        <pre><code class="language-js">
+widget.on('favorAction', function () {
+  // toggle status
+})
 
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>
+          這樣的元件行為在一些先進的 MVVM、MVC等架構中可以良好地實現，舉例來說，在 React
+          架構中，可以借助 Redux 實現元件之間的通訊。Redux 的實質就是一個事件發佈/訂閱系統，而
+          connect就是使元件的行為具備「發佈和訂閱」的能力。在上述簡單的架構中，我們透過物件導向繼承使系統自動具備了這樣的能力。
+        </p>
+        <p>
+          同樣的設計思想也可以在 Nodejs 原始程式中找到線索，想一想 Nodejs 中的 EventEmitter
+          類別即可。
+        </p>
       </article>
     </main>
   </body>
