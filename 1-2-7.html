@@ -78,6 +78,88 @@ const person = new Person(Person, 'lucas')
 console.log(person)
 // {1:1}
         </code></pre>
+        <h3>實現繼承</h3>
+        <p>
+          實現繼承是物件導向的重點概念。我們前面提到過 JavaScript
+          的物件導向系統是以原型為基礎的，它的繼承不同於其他大多數語言。 社區上對JavaScript
+          繼承說明的資料並不少，所以這裡不再贅述每一種繼承方式的實現過程，但需要開發者事先進行了解。
+        </p>
+        <h3>ES5 中相對可用的繼承方案</h3>
+        <p>如果想使 Child 繼承 Parent，那麼透過原型鏈實現繼承最關鍵的要點如下。</p>
+        <pre><code class="language-js">
+Child.prototype = new Parent()
+        </code></pre>
+        <p>
+          在這樣的實現中，不同的 Child 實例的 __proto__ 會參考同一 Parent
+          的實例。建構函數實現繼承的要點如下。
+        </p>
+        <pre><code class="language-js">
+function Child(args) {
+  // ...
+  Parent.call(this, args)
+}
+        </code></pre>
+        <p>
+          這樣實現的問題也比較大，其只是實現了實例屬性繼承， Parent 原型的方法 Child
+          實例中並不可用。 只有實現組合繼承， Parent 原型的方法在 Child
+          實例中才能基本可用，其要點如下。
+        </p>
+        <pre><code class="language-js">
+function Child(args1, args2) {
+  // ...
+  this.args2 = args2
+  Parent.call(this, args1)
+}
+Child.prototype = new Parent()
+Child.prototype.constructor = Child
+        </code></pre>
+        <p>
+          以上程式的問題在於 Child 實例中會存在 Parent 的實例屬性，這是因為我們在 Child
+          建構函數中執行了 Parent 建構函數。同時， Child.__proto__ 中也會存在同樣的 Parent
+          的實例屬性，且所有 Child 實例的 __proto__
+          都指向同一記憶體位址。同時上述實現都沒有對靜態屬性的繼承，還有一些其他不完美的繼承方式，這裡不再過多介紹。綜上，一個比較完整的實現如下。
+        </p>
+        <pre><code class="language-js">
+function inherit(Child, Parent) {
+  // 繼承原型上的屬性
+  Child.prototype = Object.create(Parent.prototype)
+  //修復constructor
+  Child.prototype.constructor = Child
+  //儲存超類別
+  Child.super = Parent
+  //靜態屬性繼承
+  if (Object.setPrototypeOf) {
+    // setPrototypeOf es6
+    Object.setPrototypeOf(Child, Parent)
+  } else if (Child.__proto__) {
+    // proto 在 ES6 中被引用，但是部分瀏覽器早已支援
+    Child.__proto__ = Parent
+  } else {
+    // 相容IE10等舊版本瀏覽器
+    // 將Parent上的靜態𦣇性和方法拷貝一份到 Child 上，但不會覆蓋 Child 上原有的方法
+    for (var k in Parent) {
+      if (Parent.hasOwnProperty(k) && !(k in Child)) {
+        Child[k] = Parent[k]
+      }
+    }
+  }
+}
+        </code></pre>
+        <p>
+          上面的靜態屬性繼承存在一個問題：在舊版本瀏覽器中，我們是透過靜態拷貝實現屬性和方法的繼承，繼承之後，若在父類別中進行了改動，則對應的改動不會自動同步到子類別。這是不同於正常物件導向思想的，但是這種組合式繼承已經相對完美、優雅了。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
