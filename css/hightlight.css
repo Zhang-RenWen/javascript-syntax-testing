@@ -2,8 +2,9 @@
 pre code.hljs {
   display: block;
   overflow-x: auto;
-  padding: 1.35rem 0.8rem 0.5rem 2.5rem;
+  padding: 25px 0.8rem 0.3rem 2.5rem;
   border-radius: 0.25rem;
+  font-size: 0.8rem;
 }
 
 .hljs {

@@ -23,7 +23,7 @@ export function initCodeLine() {
 
   const codeBlocks = document.querySelectorAll('pre .hljs')
   codeBlocks.forEach((e) => {
-    const linesCount = Math.floor((e.offsetHeight - 40) / (Number(getRootFontSize) * 1.15))
+    const linesCount = Math.floor((e.offsetHeight - 40) / (Number(getRootFontSize * 0.8) * 1.15))
     const codeLineContainer = document.createElement('div')
     codeLineContainer.classList.add('code-line-container')
     for (let i = 0; i < linesCount; i++) {
