@@ -10,8 +10,48 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-1-1',
-            title: '1-1-1 🚧',
+            title: '1-1-1 HTML 語義化 🚧',
             href: '1-1.html#1-1-1'
+          },
+          {
+            id: '1-1-2',
+            title: '1-1-2 BFC 版面配置 🚧',
+            href: '1-1.html#1-1-2'
+          },
+          {
+            id: '1-1-3',
+            title: '1-1-3 實現置中 🚧',
+            href: '1-1.html#1-1-3'
+          },
+          {
+            id: '1-1-4',
+            title: '1-1-4 HTML5 特色 🚧',
+            href: '1-1.html#1-1-4'
+          },
+          {
+            id: '1-1-5',
+            title: '1-1-5 HTML5 特色 🚧',
+            href: '1-1.html#1-1-5'
+          },
+          {
+            id: '1-1-6',
+            title: '1-1-6 CSS 變數做主題配置 🚧',
+            href: '1-1.html#1-1-6'
+          },
+          {
+            id: '1-1-7',
+            title: '1-1-7 CSS Module 🚧',
+            href: '1-1.html#1-1-7'
+          },
+          {
+            id: '1-1-8',
+            title: '1-1-8 Responsive Web Design 🚧',
+            href: '1-1.html#1-1-8'
+          },
+          {
+            id: '1-1-9',
+            title: '1-1-9 Web Component 🚧',
+            href: '1-1.html#1-1-9'
           }
         ]
       },
@@ -54,6 +94,11 @@ export const menu = [
             id: '1-2-7',
             title: '1-2-7 物件導向和原型鏈',
             href: '1-2-7.html'
+          },
+          {
+            id: '1-2-8',
+            title: '1-2-8 常見資料操作範例 🚧',
+            href: '1-2-8.html'
           }
         ]
       },
@@ -88,7 +133,7 @@ export const menu = [
       },
       {
         id: '1-5',
-        title: '1-5 資安議題 🚧',
+        title: '1-5 快取政策 🚧',
         href: `./1-5.html`,
         anchorMenu: [
           {
@@ -122,7 +167,7 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-7-1',
-            title: '1-7-1 🚧',
+            title: '1-7-1 站台配置 🚧',
             href: '1-7.html#1-7-1'
           }
         ]
@@ -212,6 +257,12 @@ export const menu = [
         id: '1-18',
         title: '1-18 網路架構 🚧',
         href: '1-18.html',
+        anchorMenu: []
+      },
+      {
+        id: '1-19',
+        title: '1-19 資安政策 🚧',
+        href: '1-19.html',
         anchorMenu: []
       }
     ]
