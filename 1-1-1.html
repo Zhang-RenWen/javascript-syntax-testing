@@ -206,21 +206,6 @@ if(導航){
           HTML 的語義表達能力。比如維基百科的 將自定義 vcard class 標記在特定元素上， 使用者在
           google 搜尋資料時會看到搜尋結果右側有時會出現維基百科的相關資料卡片，就是如此實作的。
         </p>
-        <h3>BFC 背後的版面配置問題</h3>
-        <p>
-          BFC 是前端面試中的超級熱點，面試官經常喜歡問的問題是：請解釋一下BFC是什麼？
-          回答這個問題並不困難，但是我們可以繼續追問：BFC 會引起哪些版面配置現象？ BFC是 Block
-          Formatting Context
-          的簡寫，我們可以直接將其翻譯成「區塊級格式化上下文」。它會建立一個特殊的區域，在這個區域中，只有block
-          box
-          參與版面配置；而BFC的一系列特點和規則規定了在這個特殊的區域中如何進行版面配置，如何進行定位，區域內元素的相互關係和相互作用是怎樣的。這個特殊的區域不受外界影響。
-          上面提到了 block box 的概念，block box 是指 display 屬性為 block、list-item、table
-          的元素。 對應地，inline box 也是一種 box 類型，是指 display 屬性為
-          inline、inline-block、inline-table 的元素。
-        </p>
-        <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">
-          MDN Block_formatting_context
-        </a>
       </article>
     </main>
   </body>
