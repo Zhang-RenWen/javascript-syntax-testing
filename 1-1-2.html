@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-1-2">1-1-2 版面配置</h2>
+        <h3>BFC 背後的版面配置問題</h3>
+        <p>
+          BFC 是前端面試中的超級熱點，面試官經常喜歡問的問題是：請解釋一下BFC是什麼？
+          回答這個問題並不困難，但是我們可以繼續追問：BFC 會引起哪些版面配置現象？ BFC是 Block
+          Formatting Context
+          的簡寫，我們可以直接將其翻譯成「區塊級格式化上下文」。它會建立一個特殊的區域，在這個區域中，只有block
+          box
+          參與版面配置；而BFC的一系列特點和規則規定了在這個特殊的區域中如何進行版面配置，如何進行定位，區域內元素的相互關係和相互作用是怎樣的。這個特殊的區域不受外界影響。
+          上面提到了 block box 的概念，block box 是指 display 屬性為 block、list-item、table
+          的元素。 對應地，inline box 也是一種 box 類型，是指 display 屬性為
+          inline、inline-block、inline-table 的元素。
+        </p>
+        <h3>如何形成 BFC</h3>
+        <ul>
+          <li>根項目或其他包含根項目的元素</li>
+          <li>浮動元素（元素的float 不是 none）</li>
+          <li>絕對定位元素(元素的 position 為 absolute或 fixed)</li>
+          <li>
+            內聯區塊（元素具有 display: inline-block 屬性）表格儲存格（元素具有 display:
+            table-cell，HTML 表格儲存格預設屬性）表格標題（元素具有 display: table-caption，HTML.
+            表格標題預設屬性）
+          </li>
+          <li>具有 overflow 且值不是 visible 的區塊元素</li>
+          <li>含有樣式屬性 display: flow-root 的元素</li>
+          <li>含有樣式屬性 column-span: all 的元素</li>
+        </ul>
+        <h3>BFC 決定了什麼</h3>
+        <p>這套規則的實際描述如下所示。</p>
+        <ul>
+          <li>內部的box 將獨佔寬度，且在垂直方向上一個接一個排列。</li>
+          <li>
+            box 在垂直方向上的間距由 margin 屬性決定，但是同一個BFC的兩個相鄰 box 的 margin
+            會出現邊距折疊現象。
+          </li>
+          <li>每個 box 在水平方向上的左邊緣與 BFC 的左邊緣相對齊，即使存在浮動也是如此。</li>
+          <li>BFC 區域不會與浮動元素重疊，而是會依次排列。</li>
+          <li>BFC 區域是一個碼立的繪製容器•容器內的元素和 BFC區域外的元素員患不會有任何干擾。</li>
+          <li>浮動元素的高度也參與 BFC 的高度計算。</li>
+        </ul>
+        <p>從這些規則中，我們至少能歸納出以下一些關鍵要點。</p>
+        <ul>
+          <li>邊距折疊</li>
+          <li>清除浮動</li>
+          <li>自我調整多欄版面配置</li>
+        </ul>
+        <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">
+          MDN Block_formatting_context
+        </a>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>

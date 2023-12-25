@@ -10,13 +10,13 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-1-1',
-            title: '1-1-1 HTML 語義化 🚧',
-            href: '1-1.html#1-1-1'
+            title: '1-1-1 HTML 語義化',
+            href: './1-1-1.html'
           },
           {
             id: '1-1-2',
             title: '1-1-2 BFC 版面配置 🚧',
-            href: '1-1.html#1-1-2'
+            href: './1-1-2.html'
           },
           {
             id: '1-1-3',
