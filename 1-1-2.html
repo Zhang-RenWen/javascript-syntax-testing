@@ -36,34 +36,42 @@
         <h2 id="1-1-2">1-1-2 版面配置</h2>
         <h3>BFC 背後的版面配置問題</h3>
         <p>
-          BFC 是前端面試中的超級熱點，面試官經常喜歡問的問題是：請解釋一下BFC是什麼？
-          回答這個問題並不困難，但是我們可以繼續追問：BFC 會引起哪些版面配置現象？ BFC是 Block
-          Formatting Context
-          的簡寫，我們可以直接將其翻譯成「區塊級格式化上下文」。它會建立一個特殊的區域，在這個區域中，只有block
-          box
-          參與版面配置；而BFC的一系列特點和規則規定了在這個特殊的區域中如何進行版面配置，如何進行定位，區域內元素的相互關係和相互作用是怎樣的。這個特殊的區域不受外界影響。
-          上面提到了 block box 的概念，block box 是指 display 屬性為 block、list-item、table
-          的元素。 對應地，inline box 也是一種 box 類型，是指 display 屬性為
-          inline、inline-block、inline-table 的元素。
+          BFC 是前端面試中的超級熱點，面試官經常喜歡問的問題是：請解釋一下 BFC 是什麼？ BFC 是 Block
+          Formatting Context 的簡寫，我們可以直接將其翻譯成「區塊級格式化上下文」。話鋒一轉：
+          元素會建立一個特殊的區域，該區域可以發動該元素的隱藏效果。
         </p>
         <h3>如何形成 BFC</h3>
+        <p>
+          BFC 可以說是元素的特殊功能，除了 html
+          元素外其他元素在預設狀態下是關閉的。當元素達成某個條件後這個功能就會被開啟。也就是該元素形成了
+          BFC 。
+        </p>
         <ul>
-          <li>根項目或其他包含根項目的元素</li>
+          <li>根項目或其他包含根項目的元素 (html)</li>
           <li>浮動元素（元素的float 不是 none）</li>
           <li>絕對定位元素(元素的 position 為 absolute或 fixed)</li>
+          <li>行內區塊元素（元素具有 display: inline-block 屬性）</li>
           <li>
-            內聯區塊（元素具有 display: inline-block 屬性）表格儲存格（元素具有 display:
-            table-cell，HTML 表格儲存格預設屬性）表格標題（元素具有 display: table-caption，HTML.
-            表格標題預設屬性）
+            表格儲存格（元素具有 display:table-cell，HTML 表格儲存格預設屬性） 表格標題（元素具有
+            display: table-caption，HTML 表格標題預設屬性）table thead tbody tfoot tr th td caption
+            等
           </li>
+          <li>父元素具有 display: flex 系列的屬性</li>
           <li>具有 overflow 且值不是 visible 的區塊元素</li>
-          <li>含有樣式屬性 display: flow-root 的元素</li>
           <li>含有樣式屬性 column-span: all 的元素</li>
+          <li>含有樣式屬性 display: flow-root 的元素 (副作用最小，但 IE 沒用要注意。)</li>
+        </ul>
+        <h3>形成 BFC 解決什麼問題</h3>
+        <p></p>
+        <ul>
+          <li>子元素不會產生 margin 塌陷的問題。</li>
+          <li>該元素不會被其他 float 元素所覆蓋。</li>
+          <li>就算子元素 float 狀態，自身也不會產生塌陷。</li>
         </ul>
         <h3>BFC 決定了什麼</h3>
         <p>這套規則的實際描述如下所示。</p>
         <ul>
-          <li>內部的box 將獨佔寬度，且在垂直方向上一個接一個排列。</li>
+          <li>內部的 box 將獨佔寬度，且在垂直方向上一個接一個排列。</li>
           <li>
             box 在垂直方向上的間距由 margin 屬性決定，但是同一個BFC的兩個相鄰 box 的 margin
             會出現邊距折疊現象。
@@ -76,7 +84,10 @@
         <p>從這些規則中，我們至少能歸納出以下一些關鍵要點。</p>
         <ul>
           <li>邊距折疊</li>
-          <li>清除浮動</li>
+          <li>
+            清除浮動(不一定要開啟 BFC 來清除，可以給該元素偽元素 ::after 設定 clear 為 both
+            來處理即可。)
+          </li>
           <li>自我調整多欄版面配置</li>
         </ul>
         <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">
