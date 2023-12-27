@@ -90,6 +90,46 @@
           </li>
           <li>自我調整多欄版面配置</li>
         </ul>
+        <h3>BFC 實際案例</h3>
+        <h4>範例1</h4>
+        <p>列出以下程式。</p>
+        <pre><code class="language-css">
+.body {
+  width: 600px;
+  position: relative;
+}
+.left {
+  width: 80px;
+  height: 150px;
+  float: left;
+  background: blue;
+}
+.right {
+  height: 200px;
+  background: red;
+}
+        </code></pre>
+        <p>執行以上程式，我們可以獲得的版面配置如下</p>
+        <div class="body">
+          <div class="left"></div>
+          <div class="right"></div>
+        </div>
+        <p>
+          請在不修改已有內容的情況下加入樣式，實現自我調整（left寬度固定，right估滿剩下的寬度）兩欄版面配置。
+        </p>
+        <p>
+          我們想一下，根據BFC其中一筆版面配置規則，「每個在 box
+          水平方向上的左邊緣與BFC的左邊緣相對齊，即使存在浮動也是如此」接觸。出現這樣的版面配置並不意外。
+        </p>
+        <p>
+          再想一下另一筆BFC版面配置規則，「BFC
+          區域不會與浮動元素重疊，而是會依次排列」，因此我們可以使 right：形成
+          BFC，來實現自我調整兩欄版面配置。
+        </p>
+        <div class="body">
+          <div class="left"></div>
+          <div class="right overflow-hidden"></div>
+        </div>
         <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">
           MDN Block_formatting_context
         </a>
@@ -97,4 +137,25 @@
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
+  <style>
+    .body {
+      width: 600px;
+      position: relative;
+    }
+
+    .left {
+      width: 80px;
+      height: 150px;
+      float: left;
+      background: blue;
+    }
+
+    .right {
+      height: 200px;
+      background: red;
+    }
+    .overflow-hidden {
+      overflow: hidden;
+    }
+  </style>
 </html>
