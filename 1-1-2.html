@@ -122,10 +122,14 @@
           水平方向上的左邊緣與BFC的左邊緣相對齊，即使存在浮動也是如此」接觸。出現這樣的版面配置並不意外。
         </p>
         <p>
-          再想一下另一筆BFC版面配置規則，「BFC
-          區域不會與浮動元素重疊，而是會依次排列」，因此我們可以使 right：形成
-          BFC，來實現自我調整兩欄版面配置。
+          再想一下另一筆BFC版面配置規則，「BFC區域不會與浮動元素重疊，而是會依次排列」，因此我們可以使
+          right：形成 BFC，來實現自我調整兩欄版面配置。
         </p>
+        <pre><code class="language-css">
+.overflow-hidden {
+  overflow: hidden;
+}
+                  </code></pre>
         <div class="body">
           <div class="left"></div>
           <div class="right overflow-hidden"></div>
