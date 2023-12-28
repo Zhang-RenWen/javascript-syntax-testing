@@ -122,14 +122,45 @@
           水平方向上的左邊緣與BFC的左邊緣相對齊，即使存在浮動也是如此」接觸。出現這樣的版面配置並不意外。
         </p>
         <p>
-          再想一下另一筆BFC版面配置規則，「BFC
-          區域不會與浮動元素重疊，而是會依次排列」，因此我們可以使 right：形成
-          BFC，來實現自我調整兩欄版面配置。
+          再想一下另一筆BFC版面配置規則，「BFC區域不會與浮動元素重疊，而是會依次排列」，因此我們可以使
+          right：形成 BFC，來實現自我調整兩欄版面配置。
         </p>
+        <pre><code class="language-css">
+.overflow-hidden {
+  overflow: hidden;
+}
+                  </code></pre>
         <div class="body">
           <div class="left"></div>
           <div class="right overflow-hidden"></div>
         </div>
+
+        ‹style>
+        •root {
+        border: 5px solid blue;
+        width: 300px;
+        • child (
+        border: 5px solid red;
+        width: 100px; height: 100px; float: left;
+        </ style>
+        ‹body>
+        
+        <div class="root">
+        <div class="child child1">/div>
+        <div class="child child2"></div>
+        </div>
+        </body>
+        
+        root 因為chid 為浮動元素，因此會造成「高度塌陷」現象，root的高度
+        為0
+        
+        那麼，如何解決「高度塌陷」問題呢？
+        根據 BFC規則，「浮動元素的高度也參與BFC的高度計算」，因此使，root 形成
+        BFC 就能解決問題，程式如下。透過圖9-7可知，此時.root 的高度不再為。。
+        •KOOt【
+        overflow: hidden;
+
+
         <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">
           MDN Block_formatting_context
         </a>
