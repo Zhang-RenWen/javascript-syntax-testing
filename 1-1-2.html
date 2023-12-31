@@ -190,9 +190,62 @@
         root overflow-hidden
         <div class="root overflow-hidden">
           <div class="child child1">child child1</div>
-          <div class="child child2">child child1</div>
+          <div class="child child2">child child2</div>
         </div>
         <p>此時 .root 高度已經被撐開。</p>
+
+        <h4>範例3</h4>
+        <pre><code class="language-css">
+.pWrap{
+ border: 1px solid #blue
+}
+
+.p{
+  color: blue;
+  background: red;
+  width: 400px;
+  line-height: 100px;
+  text-align: center;
+  margin: 40px;
+}
+        </code></pre>
+        <pre><code class="language-html">
+&lt;div class="pWrap"&gt;
+  &lt;p class="p"&gt;paragraph 1&lt;/p&gt;
+  &lt;p class="p"&gt;paragraph 2&lt;/p&gt;
+&lt;/div&gt;
+        </code></pre>
+        <div class="pWrap">
+          <p class="p">paragraph 1</p>
+          <p class="p">paragraph 2</p>
+        </div>
+        <p>
+          首先回答問題：兩段之間的垂直距離為多少？根據 BFC版面配置規則：「box 在垂直方向上的間距由
+          margin 屬性決定，但是同一個BFC的兩個相鄰 box 的 margin
+          會出現邊距折疊現象」。事實上，因為存在邊距折疊現象，所以該問題的答案為 40px。
+          那麼，如何解決這個問題呢？ 最簡單地，我們可以在p標籤中再包裹一個元素，並觸發該元素形成一個
+          BFC，那麼這兩個 p 標籤就不再屬於同一個 BFC 了，這樣便可以解決問題，程式如下。
+        </p>
+
+        <pre><code class="language-css">
+.overflow-hidden {
+  overflow: hidden
+}
+        </code></pre>
+        <pre><code class="language-html">
+&lt;div class="pWrap"&gt;
+  &lt;p class="p"&gt;paragraph 1&lt;/p&gt;
+  &lt;div class="overflow-hidden"&gt;
+    &lt;p class="p"&gt;paragraph 2&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+        <div class="pWrap">
+          <p class="p">paragraph 1</p>
+          <div class="overflow-hidden">
+            <p class="p">paragraph 2</p>
+          </div>
+        </div>
         <a href="https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Block_formatting_context">
           MDN Block_formatting_context
         </a>
@@ -230,6 +283,19 @@
       width: 50%;
       height: 100px;
       float: left;
+    }
+
+    .pWrap {
+      border: 1px solid rgb(255, 55, 0);
+    }
+
+    .p {
+      color: rgb(255, 55, 0);
+      background: rgb(255, 174, 0);
+      width: 400px;
+      line-height: 100px;
+      text-align: center;
+      margin: 40px;
     }
   </style>
 </html>
