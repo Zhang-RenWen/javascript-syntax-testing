@@ -358,7 +358,15 @@ export const menu = [
             id: '3-3-3',
             title: '3-3-3 Object.setPrototypeOf',
             href: '3-3.html#3-3-3'
-          },
+          }
+        ]
+      },
+      {
+        id: '3-4',
+        title: '3-4 修飾器',
+        href: '3-4.html',
+        anchorMenu: [
+          ,
           {
             id: '3-4-1',
             title: '3-4-1 初談 JavaScript 修飾器',
