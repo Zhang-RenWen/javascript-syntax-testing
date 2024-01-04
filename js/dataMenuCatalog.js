@@ -25,13 +25,13 @@ export const menu = [
           },
           {
             id: '1-1-4',
-            title: '1-1-4 HTML5 特色 🚧',
-            href: '1-1.html#1-1-4'
+            title: '1-1-4 現代 HTML5 特色 🚧',
+            href: '1-1-4.html'
           },
           {
             id: '1-1-5',
-            title: '1-1-5 HTML5 特色 🚧',
-            href: '1-1.html#1-1-5'
+            title: '1-1-5 現代 CSS 特色 🚧',
+            href: '1-1-5.html'
           },
           {
             id: '1-1-6',

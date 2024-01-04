@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-1-4">1-1-4 現代 HTML5 特色</h2>
+        <p>
+          什麼是HTML5？ HTML5就是HTML的第五次修訂的版本，由W3C在2014年10月完成標準訂定。
+          廣義上來說，HTML5 是指包含了 HTML、CSS 和 JavaScript的一套技術組合
+        </p>
+        <p>
+          HTML 標準是 W3C與 WHATWG 共同合作產出的，HTML5也是。 HTML5
+          給開發者提供了更多便利，簡單列舉如下。
+        </p>
+
+        <ul>
+          <li>用於繪畫的 canvas 元素。</li>
+          <li>用於媒介播放的 video 和 audio 元素。</li>
+          <li>對本機離線儲存有更好的支援（localStorage、sessionStorage）。</li>
+          <li>新的語義化標籤（article、footer、header、nav、section 等）。</li>
+          <li>新的表單控制項（calendar、date、time、email、url、search 等）。</li>
+        </ul>
+        <p>除了以上正常功能，HTML5 還可實現以下功能，透過一些範例來說明。</p>
+        <h4>1.給中文字加拼音</h4>
+        <p>HTML5 可以用於給中文字加拼音，範例程式如下，執行效果如下所示。</p>
+        <pre><code class="language-html">
+&lt;ruby&gt;
+  前端開發核心知識進階
+  &lt;rt&gt;
+  gianduankaifahexinzhishijinjie
+  &lt;/rt&gt;
+&lt;/ruby&gt;
+        </code></pre>
+        <div class="border-block">
+          <ruby>
+            前端開發核心知識進階
+            <rt>gianduankaifahexinzhishijinjie</rt>
+          </ruby>
+        </div>
+        <h4>2.展開和收起元件</h4>
+        <h5>代碼</h5>
+        <pre><code class="language-html">
+&lt;details&gt;
+  &lt;summary&gt;前端開發核心知識進階&lt;/summary&gt;
+  前端領域，入門相對簡單，可是想要「更上一層樓」卻雞上加雞，市場上進階/資深醇墓工程師鳳毛麟角。這當然未必完全是壞事，一且类破瓶頸，在技能上脫額而出．便是更廣隊的空間。那麼，如何從夯實基礎到突破瓶頸？
+&lt;/details&gt;
+        </code></pre>
+        <br />
+        <h5>效果</h5>
+        <div class="border-block">
+          <details>
+            <summary>前端開發核心知識進階</summary>
+            前端領域，入門相對簡單，可是想要「更上一層樓」卻雞上加雞，市場上進階/資深醇墓工程師鳳毛麟角。這當然未必完全是壞事，一且类破瓶頸，在技能上脫額而出．便是更廣隊的空間。那麼，如何從夯實基礎到突破瓶頸？
+          </details>
+        </div>
+        <br />
+        <p>標籤的打開時，開啟主控台可以看到 details 多了 open 標記</p>
+        <p>
+          <img src="./assets/image/1-1-4/1.jpeg" alt="" />
+        </p>
+        <p>
+          以往要實現這樣的效果，我們必須依靠 JavaScript。現在來看，HTML 也愛得更加具有可互動性。
+        </p>
+        <h4>3.原生進度指示器和度量</h4>
+        <p>我們可以使用原生 progress 標籤顯示進度指示器</p>
+        <h5>代碼</h5>
+        <pre><code class="language-html">
+&lt;progress&gt;&lt;/progress&gt;
+
+&lt;progress value="22" max="100"&gt;&lt;/progress&gt;
+        </code></pre>
+        <br />
+        <h5>效果</h5>
+        <div class="border-block">
+          <progress></progress>
+          <br />
+          <br />
+          <progress value="22" max="100"></progress>
+        </div>
+        <h3>未來趨勢：Web components</h3>
+        <p>
+          事實上，Web
+          components的概念在幾年前就已經被提出了，但似乎一直沒有發展得「如火如茶」，那麼這裡為什麼要單獨拿出來講呢？
+          作為「更高階」的前端工程師，要時刻保持技術視野的廣度。在架構帶來的「元件化」、「生命週期化」這些統治等級的概念下，Web
+          components 取長補短並帶有「原生」優勢。下面歸納一下 Web components的優點。
+        </p>
+        <h4>原生標準，無須使用架構</h4>
+        <p>
+          這個優點的後半句話是「但是繼承且具備了架構的優點」。新的 Web components
+          標準中新增了元件生命週期、slot、範本等概念（可以與JSX或 Vue template
+          類比），這些概念與本來就已經存在的元件化、shadow dom、擴充原生元素的能力相結合，使 Web
+          components 具備了較好的發展前景。
+        </p>
+        <h4>原生使用，無須進行編譯</h4>
+        <p>
+          想想現有的一系列架糖：無論是 Vue 還是 React ，都需要進行編譯、而此 Web components
+          是原生工具，會獲得瀏覽器的天然支援，可以免去編譯建置過程：
+        </p>
+        <h4></h4>
+        真正的CSS scope Web
+        <p>
+          components 實現了真正的 CSS scope ，做到了樣式隔離。真正的CSS scope
+          對於專案的可維護性非常重要。
+        </p>
+        <h3>行動版 HTML5 注意事項</h3>
+        <pre><code class="language-js">
+
+        </code></pre>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
