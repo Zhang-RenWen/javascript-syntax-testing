@@ -136,35 +136,35 @@
         <p>這裡列舉一些典型情況</p>
         <h4>1.打電話 /發簡訊/寫郵件的小技巧</h4>
         <p>這些技巧都和 a 標籤相關，我們可以透過以下程式實現點選連結後撥打指定電話的功能。</p>
-        <pre><code class="language-js">
+        <pre><code class="language-html">
 &lt;a href="tel:110"&gt;打電話給警察局&lt;/a&gt;
         </code></pre>
         <div class="border-block">
           <a href="tel:110">打電話給警察局</a>
         </div>
         <p>實現發簡訊功能的程式如下。</p>
-        <pre><code class="language-js">
+        <pre><code class="language-html">
 &lt;a href="sms:110"&gt;發簡訊給警察局&lt;/a&gt;
         </code></pre>
         <div class="border-block">
           <a href="sms:110">發簡訊給警察局</a>
         </div>
         <p>透過以下程式可以實現寫郵件功能，實現此功能需要依賴"mailto"。</p>
-        <pre><code class="language-js">
+        <pre><code class="language-html">
 &lt;a href="mailto: 110@govn.com"&gt;發郵件給警察局&lt;/a&gt;
         </code></pre>
         <div class="border-block">
           <a href="mailto: 110@govn.com">發郵件給警察局</a>
         </div>
         <p>透過以下設定可以在發送郵件時增加副本。</p>
-        <pre><code class="language-js">
+        <pre><code class="language-html">
 &lt;a href="mailto: 110@govn.com"&gt;發郵件給警察局，並副本給我爸爸&lt;/a&gt;
         </code></pre>
         <div class="border-block">
           <a href="mailto: 110@govn.com">發郵件給警察局，並副本給我爸爸</a>
         </div>
         <p>除了副本，也可以進行私密發送，程式如下。</p>
-        <pre><code class="language-js">
+        <pre><code class="language-html">
 &lt;a href="mailto: 110@govn.com?cc=baba@family.com&bcc=mama@family.com"&gt;發郵件給警察局，副本給我爸爸，並密送給我媽媽&lt;/a&gt;
         </code></pre>
         <div class="border-block">
@@ -172,24 +172,123 @@
             發郵件給警察局，副本給我爸爸，並密送給我媽媽
           </a>
         </div>
-        <pre><code class="language-js">
-
+        <p>同理，也可以透過以下程式實現群發。</p>
+        <pre><code class="language-html">
+&lt;a href="mailto: 110@govn.com;120@govn.com"&gt;發郵件給警察局，以及120急救中心&lt;/a&gt;
         </code></pre>
-        <pre><code class="language-js">
-
+        <div class="border-block">
+          <a href="mailto: 110@govn.com;120@govn.com">發郵件給警察局，以及120急救中心</a>
+        </div>
+        <p>既然能支援群發，那麼定義主題和內容也可以，程式如下。</p>
+        <pre><code class="language-html">
+&lt;a href="mailto:110@gorn.com?sudbject=S0S"&gt;發郵件給警察局，並增加救命主題&lt;/a&gt;
         </code></pre>
-        <pre><code class="language-js">
-
+        <div class="border-block">
+          <a href="mailto:110@gorn.com?sudbject=S0S">發郵件給警察局，並增加救命主題</a>
+        </div>
+        <p>除了自訂主題，還可以用 body 這個 query 來實現自訂郵件內容。</p>
+        <p>內容也支援插入圖片和連結。</p>
+        <pre><code class="language-html">
+&lt;a href="mailto: 110@gorn.com?:subject=SOS&body=快來救我"&gt;發郵件給警察局，並增加救命主題和內容&lt;/a&gt;
         </code></pre>
-
-        <pre><code class="language-js">
-
+        <div class="border-block">
+          <a href="mailto: 110@gorn.com?:subject=SOS&body=快來救我">
+            發郵件給警察局，並增加救命主題和內容
+          </a>
+        </div>
+        <h4>2. 行動端產生300ms 點擊延遲及點擊穿透現象</h4>
+        <p>
+          這是由於歷史原因造成的，一般解決方法為禁止混用 touch 和
+          click，或增加一層「透明」蒙層，也可以透過延遲上層元素消失來實現。
+        </p>
+        <h4>3. 點擊元素時禁止產生背景或邊框</h4>
+        <p>
+          在行動端的某些裝置上，點擊按鈕後會出現醜陋的邊框，對於這種情況，我們一般可以使用以下程式，對預設樣式進行禁用。
+        </p>
+        <pre><code class="language-css">
+-webkit-tap-highlight-color:rgba (0,0,0,0);
         </code></pre>
-        <pre><code class="language-js">
-
+        <h4>4. 長按連結與圖片時禁止出現選單</h4>
+        <p>
+          在行動端的某些裝置上，長按連結或圖片會預設出現選單，我們一般可以定
+          用以下程式來禁止這一預設行為。
+        </p>
+        <pre><code class="language-css">
+-webkit-touch-callout: none;
         </code></pre>
+        <h4>5. 禁止使用者選取文字</h4>
+        <pre><code class="language-css">
+-webkit-user-select:none;
+user-select: none;
+        </code></pre>
+        <h4>6.取消輸入英文時預設字首大寫</h4>
+        <p>
+          在某些版本的系統中，使用者輪入英文時，會預設字首大寫，我們可以透過以下程式來關閉這種設定(在iOS
+          下生效)。
+        </p>
+        <pre><code class="language-html">
+&lt;input autocapitalize="off" autocorrect="off" /&gt;
+        </code></pre>
+        <div class="border-block">
+          <input autocapitalize="off" autocorrect="off" />
+        </div>
+        <h4>7.語音和視訊自動播放</h4>
+        <p>
+          自動播放是一個很麻煩的話題。不同瀏覽器的核心支援自動播放的情況不一樣，甚至WebKit
+          核心對於自動播放的策略也一直在調整中。自動播放有時候也帶著條件，如設定靜音等。
+          一般，我們設定自動播放的回復策略是使用者觸控式螢幕時進行播放，相關程式如下。
+        </p>
         <pre><code class="language-js">
-
+// Javascript 綁定自動播放（操作window時，播放音樂）
+$(window).on('touchstart', () => {
+    video.play()
+  }
+)
+//微信環境
+document.addEventListener("WeixinJSBridgeReady",()=>{
+  video.play()
+}, false)
+        </code></pre>
+        <h4>8.視訊全螢幕播放</h4>
+        <p>為了使視訊全螢幕播放，我們一般進行以下設定。</p>
+        <pre><code class="language-html">
+&lt;video
+  style="width: 100%"
+  x-webkit-airplay="true"
+  webkit-playsinline="true"
+  preload="auto"
+  autoplay
+  controls
+  src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"&gt;
+&lt;/video&gt;
+        </code></pre>
+        <div class="border-block">
+          <video
+            style="width: 100%"
+            x-webkit-airplay="true"
+            webkit-playsinline="true"
+            preload="auto"
+            autoplay
+            controls
+            src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
+          ></video>
+        </div>
+        <p>但是，最後情況會受到瀏覽器引擎實現所影響。</p>
+        <h4>9.開啟硬體加速</h4>
+        <p>在做動畫時，為了達到更好的效能效果，我們常常會開啟硬體加速，一般會進行以下設定。</p>
+        <pre><code class="language-css">
+transform: translate3d (0,0,0);
+        </code></pre>
+        <h4>10.fixed 定位問題</h4>
+        <p>
+          fixed 定位問題主要表現在：iOS端，舉例來說，在軟鍵盤出現的某些情況下，fixed
+          元素定位會受到影響；在配合使用 transform translate 的某些情況下，fixed
+          元素定位也會受到影響。這個問題的一般解決方案是模擬 fixed 定位一或使用 iScroll 函數庫。
+        </p>
+        <h4>11.讓 Chrome 支援小於12px 的文字</h4>
+        <p>一般會透過以下程式使 Chrome 支援小於 12px 的文字。</p>
+        <pre><code class="language-css">
+-webkit-text-size-adjust:none;
         </code></pre>
         <pre><code class="language-js">
 
