@@ -208,11 +208,87 @@
         <pre><code class="language-css">
 -webkit-tap-highlight-color:rgba (0,0,0,0);
         </code></pre>
-        <pre><code class="language-js">
-
+        <h4>4. 長按連結與圖片時禁止出現選單</h4>
+        <p>
+          在行動端的某些裝置上，長按連結或圖片會預設出現選單，我們一般可以定
+          用以下程式來禁止這一預設行為。
+        </p>
+        <pre><code class="language-css">
+-webkit-touch-callout: none;
         </code></pre>
+        <h4>5. 禁止使用者選取文字</h4>
+        <pre><code class="language-css">
+-webkit-user-select:none;
+user-select: none;
+        </code></pre>
+        <h4>6.取消輸入英文時預設字首大寫</h4>
+        <p>
+          在某些版本的系統中，使用者輪入英文時，會預設字首大寫，我們可以透過以下程式來關閉這種設定(在iOS
+          下生效)。
+        </p>
+        <pre><code class="language-html">
+&lt;input autocapitalize="off" autocorrect="off" /&gt;
+        </code></pre>
+        <div class="border-block">
+          <input autocapitalize="off" autocorrect="off" />
+        </div>
+        <h4>7.語音和視訊自動播放</h4>
+        <p>
+          自動播放是一個很麻煩的話題。不同瀏覽器的核心支援自動播放的情況不一樣，甚至WebKit
+          核心對於自動播放的策略也一直在調整中。自動播放有時候也帶著條件，如設定靜音等。
+          一般，我們設定自動播放的回復策略是使用者觸控式螢幕時進行播放，相關程式如下。
+        </p>
         <pre><code class="language-js">
-
+// Javascript 綁定自動播放（操作window時，播放音樂）
+$(window).on('touchstart', () => {
+    video.play()
+  }
+)
+//微信環境
+document.addEventListener("WeixinJSBridgeReady",()=>{
+  video.play()
+}, false)
+        </code></pre>
+        <h4>8.視訊全螢幕播放</h4>
+        <p>為了使視訊全螢幕播放，我們一般進行以下設定。</p>
+        <pre><code class="language-html">
+&lt;video
+  style="width: 100%"
+  x-webkit-airplay="true"
+  webkit-playsinline="true"
+  preload="auto"
+  autoplay
+  controls
+  src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"&gt;
+&lt;/video&gt;
+        </code></pre>
+        <div class="border-block">
+          <video
+            style="width: 100%"
+            x-webkit-airplay="true"
+            webkit-playsinline="true"
+            preload="auto"
+            autoplay
+            controls
+            src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm"
+          ></video>
+        </div>
+        <p>但是，最後情況會受到瀏覽器引擎實現所影響。</p>
+        <h4>9.開啟硬體加速</h4>
+        <p>在做動畫時，為了達到更好的效能效果，我們常常會開啟硬體加速，一般會進行以下設定。</p>
+        <pre><code class="language-css">
+transform: translate3d (0,0,0);
+        </code></pre>
+        <h4>10.fixed 定位問題</h4>
+        <p>
+          fixed 定位問題主要表現在：iOS端，舉例來說，在軟鍵盤出現的某些情況下，fixed
+          元素定位會受到影響；在配合使用 transform translate 的某些情況下，fixed
+          元素定位也會受到影響。這個問題的一般解決方案是模擬 fixed 定位一或使用 iScroll 函數庫。
+        </p>
+        <h4>11.讓 Chrome 支援小於12px 的文字</h4>
+        <p>一般會透過以下程式使 Chrome 支援小於 12px 的文字。</p>
+        <pre><code class="language-css">
+-webkit-text-size-adjust:none;
         </code></pre>
         <pre><code class="language-js">
 
