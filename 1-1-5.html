@@ -34,12 +34,159 @@
       </aside>
       <article>
         <h2 id="1-1-5">1-1-5 現代 CSS 特色</h2>
-        <h3></h3>
+        <h3>CSS 變數和主題切換優雅實現</h3>
+        <p>
+          CSS 變數時代確實已經到來。注意，這裡所說的不是CSS 前置處理器（類似
+          Less、Sass）中的變數，而是實實在在地原生支援特性。
+        </p>
+        <pre><code class="language-css">
+main {
+  background: white;
+  color: #555;
+}
+a,
+a:link {
+  color: #639a67;
+}
+a:hover {
+  color: #205d67;
+}
+        </code></pre>
+        <p>借助 CSS 變數，我們可以對顏色色值進行設定。</p>
+        <pre><code class="language-css">
+:root {
+  --bg: White;
+  --text-color: #555;
+  --link-color: #639a67;
+  --link-hover: #205d67;
+}
+        </code></pre>
+        <p>這樣一來，我們可以直接使用色值來實現程式簡化。</p>
+        <pre><code class="language-css">
+main {
+  background: var (--bg);
+  color: var (--text-color);
+}
+a,
+a:link {
+  color: var (--link-color);
+}
+a:hover {
+  color: var (--link-hover);
+}
+        </code></pre>
+        <p>
+          這一點很好了解，在任何語言中，變數都是個好東西：它可以降低維護成本，甚至實現更好的效能。
+        </p>
+        <p>
+          CSS 變數語法也很簡單：我們使用「--變數名稱」的方式定義變數，使用
+          var(--變數名稱)的方式消費變數。
+        </p>
+        <p>
+          CSS變數的相容性「出乎意料」得好，大部分行動端都已經可以使用 CSS 變數，PC
+          端的新版本瀏覽器基本也都已經支援該變數。
+        </p>
+        <p>:root 使用方式是在 html 根節點下定義，並如上面的範例進行變數宣告。</p>
+        <p>除了簡單地應用變數，下面介紹一些進階用法。</p>
+        <h4>使用CSS變數實現主題切換</h4>
+        <p>
+          對於一鍵切換主題這一功能，以往的寶現方式較為複雜。如今，借助 CSS
+          變數，一切都變得容易起來。參考以下程式。
+        </p>
+        <pre><code class="language-css">
+:root {
+  --bg: white;
+  --text-color: #555;
+}
+        </code></pre>
+        <p>定義一個，pink-theme 來對應粉色主題，程式如下。</p>
+        <pre><code class="language-css">
+.pink-theme {
+  --bg: hotpink;
+  --text-color: white;
+}
+        </code></pre>
+        <p>指定套用的元素。</p>
+        <pre><code class="language-css">
+main {
+  background: var(--bg);
+  color: var(--text-color);
+}
+        </code></pre>
+        <p>這樣一來，切換主題就變得非常簡單了，程式如下。</p>
+        <pre><code class="language-js">
+const toggleBtn = document.querySelector('.toggle-theme')
+const main = document.querySelector('main')
+toggleBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  if (main.classList.contains('pink-theme')) {
+    // 目前主題為粉色主題，需要移除 pink-theme class
+    main.classList.remove('pink-theme')
+    toggleBtn.innerText = '切換為粉色少女主題'
+  } else {
+    main.classList.add('pink-theme')
+    toggleBtn.innerText = '切換正常主題色'
+  }
+})
+        </code></pre>
+        <div class="border-block"><button class="toggle-theme">切換為粉色少女主題</button></div>
+        <h4>CSS Modules 理論和實戰</h4>
+        <p>
+          如何維護大型專案的 z-index，如何維護 CSS 選擇器和樣式之間的衝突。是接下來這個單元的重點。
+        </p>
+        <h4>CSS Modules</h4>
+        <p>
+          CSS Modules是指，專案中的所有 class 名稱預設都是局部有作用的。 其實，CSS Modules
+          並不是一個官方標準，更不是瀏覽器的機制，因為它依賴我們的專案建置過程，因此以它為基礎的實現常常需要借助
+          webpack 或其他建置工具可以將 class 名稱唯一化，進一步使其只在局部有作用。
+        </p>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <div class="border-block"></div>
       </article>
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
+  <script>
+    const toggleBtn = document.querySelector('.toggle-theme')
+    const main = document.querySelector('main')
+    toggleBtn.addEventListener('click', (e) => {
+      e.preventDefault()
+      if (main.classList.contains('pink-theme')) {
+        // 目前主題為粉色主題，需要移除 pink-theme class
+        main.classList.remove('pink-theme')
+        toggleBtn.innerText = '切換為粉色少女主題'
+      } else {
+        main.classList.add('pink-theme')
+        toggleBtn.innerText = '切換正常主題色'
+      }
+    })
+  </script>
 </html>
+<style>
+  :root {
+    --bg: white;
+    --text-color: #000;
+  }
+  .pink-theme {
+    --bg: hotpink;
+    --text-color: white;
+  }
+  main {
+    background: var(--bg);
+    color: var(--text-color);
+  }
+</style>

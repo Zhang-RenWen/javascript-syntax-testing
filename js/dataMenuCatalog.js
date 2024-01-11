@@ -35,12 +35,12 @@ export const menu = [
           },
           {
             id: '1-1-6',
-            title: '1-1-6 CSS 變數做主題配置 🚧',
+            title: '1-1-6  🚧',
             href: '1-1.html#1-1-6'
           },
           {
             id: '1-1-7',
-            title: '1-1-7 CSS Module 🚧',
+            title: '1-1-7  🚧',
             href: '1-1.html#1-1-7'
           },
           {
