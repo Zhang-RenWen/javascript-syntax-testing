@@ -140,16 +140,66 @@ toggleBtn.addEventListener('click', (e) => {
           並不是一個官方標準，更不是瀏覽器的機制，因為它依賴我們的專案建置過程，因此以它為基礎的實現常常需要借助
           webpack 或其他建置工具可以將 class 名稱唯一化，進一步使其只在局部有作用。
         </p>
-        <pre><code class="language-css">
-
+        <pre><code class="language-html">
+&lt;div class="test"&gt;This is a test&lt;/div&gt;
         </code></pre>
+        <p>對應的樣式表如下。</p>
         <pre><code class="language-css">
-
+.test{
+  color: red
+}
         </code></pre>
+        <p>經過編譯建置後，對應的 HTML 程式內容如下所示。</p>
+        <pre><code class="language-html">
+&lt;div class="_style_test_309571057"&gt;
+  This is a test
+&lt;/div&gt;
+        </code></pre>
+        <p>同時，經過編譯建置後，對應的 CSS 程式內容如下所示。</p>
         <pre><code class="language-css">
-
+._style_test_309571057{
+  color: red;
+}
         </code></pre>
-        <pre><code class="language-js">
+        <p>
+          其中，class
+          名是動態產生的，在整個專案中這個名字是唯一的。透過命名標準的唯一性，便達到了避免樣式衝突的目的。
+        </p>
+        <p>
+          仔細想來，這樣的解決方案似乎有一個問題：如何實現樣式重複使用？因為產 生了全域唯一的 class
+          名，所以我們如何像傳統方式那樣實現樣式重複使用呢？ 從原理上想，全域唯一的 class
+          名是在建置過程中產生的，所以如果能夠在建置過程中進行標識，表示該 class
+          將被重複使用，就可以解決問題了。
+        </p>
+        <p>
+          這樣的方式需要依靠 composes 關鍵字實現。我們來看一個實際範例。 在專案樣式表 style.css
+          檔案中，有以下相關程式。
+        </p>
+        <pre><code class="language-css">
+.common { 
+  color: red;
+}
+.test {
+  composes: common; 
+  font-size: 18px;
+}
+        </code></pre>
+        <p>注意，這裡使用 composes 關鍵字在 .test 中連結了 .common 樣式。</p>
+        <p>專案的HTML 檔案中引用了 style.css檔案，並使用了 CSS Modules特性，程式如下。</p>
+        <pre><code class="language-html">
+import style from "./style.css"; 
+&lt;div class="${style.test}"&gt;
+  This is a test
+&lt;/div&gt;
+        </code></pre>
+        <p>以上程式經過編譯建置後，獲得的程式如下。</p>
+        <pre><code class="language-html">
+&lt;div class="_style__test_0980340_style_common 404840"&gt;
+  This is a test 
+&lt;/div&gt;
+        </code></pre>
+        <p>我們看到， div 的 class 中加入了 _style_common_404840 ，這樣就實現了重複使用樣式‧</p>
+        <pre><code class="language-css">
 
         </code></pre>
         <pre><code class="language-css">
