@@ -200,12 +200,88 @@ import style from "./style.css";
         </code></pre>
         <p>我們看到， div 的 class 中加入了 _style_common_404840 ，這樣就實現了重複使用樣式‧</p>
         <h4>CSS Modules 實戰</h4>
+        <p>本節將使用 webpack 來建置一個專案，一步一步進行分析說明。</p>
+        <h5>1.建立專案</h5>
+        <p>透過指令 npm init-y 進行專案初始化建立。 此時產生的 package.json 檔案中的內容如下。</p>
+        <pre><code class="language-json">
+{
+  "name": "css-modules",
+  "version": "1.0.0",
+  "description": "README. md",
+  "main": "index. js",
+  "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1"},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+}
+        </code></pre>
+        <h5>2.建立必要檔案</h5>
+        <p>
+          輸入指令 mkdir sre 來建立 src 檔案，同時在該目錄下建立 index.html 檔案，指令是 touch
+          index.html。接著，在./src 資料夾中建立 index.js、style.css 和 app.css 檔案。
+        </p>
+        <p>其中 index.js 檔案中的程式如下。</p>
+        <pre><code class="language-js">
+import blueStyle from './style.css'
+import greenStyle from './app.css'
+let html = `
+&lt;h2 class="${bluestyle.my_css_selector}"&gt;I should be displayed in blue.&lt;/h2&gt;
+&lt;br/&gt;
+&lt;h2 class="${greenstyle.my_css_selector}"&gt;I should be displayed in green.&lt;/h2&gt;`
+document.write(html)
+        </code></pre>
+        <p>style.css 檔案中的程式如下。</p>
+        <pre><code class="language-css">
+.my_css_selector{
+  color: blue;
+}
+        </code></pre>
+        <p>app.css 檔案中的程式如下。</p>
+        <pre><code class="language-css">
+.my_css_selector {
+  color: green;
+}
+        </code></pre>
+        <p>在 style.css 和 app.css 這兩個樣式檔案中，使用了相同的 class 名。</p>
+        <h5>3.安裝依賴</h5>
+        <p>
+          接下來安裝 webpack、webpack-cli、Babel 全家桶(babel-core、babel-loader、 abel-preset-env
+          )、對應的 loaders ( css-loader 、 style-loader) 及 extract-text-webpack-plugin 外掛程式。
+        </p>
+        <p>
+          強烈建議安裝版本遵循以下程式設定，否則會出現類似 webpack 版本和
+          extract-text-webpack-plugin 不相容等版本依賴問題。
+        </p>
+        <pre><code class="language-css">
+
+        </code></pre>
+
         <pre><code class="language-css">
 
         </code></pre>
         <pre><code class="language-css">
 
         </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+        <pre><code class="language-css">
+
+        </code></pre>
+
         <div class="border-block"></div>
       </article>
     </main>
