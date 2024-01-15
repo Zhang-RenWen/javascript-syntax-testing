@@ -194,7 +194,7 @@ import style from "./style.css";
         </code></pre>
         <p>以上程式經過編譯建置後，獲得的程式如下。</p>
         <pre><code class="language-html">
-&lt;div class="_style__test_0980340_style_common 404840"&gt;
+&lt;div class="_style__test_0980340_style_common_404840"&gt;
   This is a test 
 &lt;/div&gt;
         </code></pre>
@@ -202,15 +202,16 @@ import style from "./style.css";
         <h4>CSS Modules 實戰</h4>
         <p>本節將使用 webpack 來建置一個專案，一步一步進行分析說明。</p>
         <h5>1.建立專案</h5>
-        <p>透過指令 npm init-y 進行專案初始化建立。 此時產生的 package.json 檔案中的內容如下。</p>
+        <p>透過指令 npm init -y 進行專案初始化建立。 此時產生的 package.json 檔案中的內容如下。</p>
         <pre><code class="language-json">
 {
   "name": "css-modules",
   "version": "1.0.0",
   "description": "README. md",
-  "main": "index. js",
+  "main": "index.js",
   "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1"},
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -218,8 +219,8 @@ import style from "./style.css";
         </code></pre>
         <h5>2.建立必要檔案</h5>
         <p>
-          輸入指令 mkdir sre 來建立 src 檔案，同時在該目錄下建立 index.html 檔案，指令是 touch
-          index.html。接著，在./src 資料夾中建立 index.js、style.css 和 app.css 檔案。
+          輸入指令 mkdir src 來建立 src 檔案，同時在該目錄下建立 index.html 檔案，指令是 touch
+          index.html。接著，在 ./src 資料夾中建立 index.js、style.css 和 app.css 檔案。
         </p>
         <p>其中 index.js 檔案中的程式如下。</p>
         <pre><code class="language-js">
@@ -253,25 +254,117 @@ document.write(html)
           強烈建議安裝版本遵循以下程式設定，否則會出現類似 webpack 版本和
           extract-text-webpack-plugin 不相容等版本依賴問題。
         </p>
-        <pre><code class="language-css">
-
+        <pre><code class="language-json">
+{
+  "babel-core": "^6.26.3",
+  "babel-loader": "^7.1.4",
+  "babel-preset-env": "^1.6.1",
+  "css-loader": "^0.28.11",
+  "extract-text-webpack-plugin": "^4.0.0-beta.0",
+  "style-loader": "^0.21.0",
+  "webpack": "^4.1.0",
+  "webpack-cli": "^3.1.1"
+}
         </code></pre>
-
-        <pre><code class="language-css">
-
+        <p>按照正常流程走下來，package.json 檔案中的程式如下所示。</p>
+        <pre><code class="language-json">
+{
+  "name": "css-modules",
+  "version": "1.0.0",
+  "description": "[README.md](http://readme.md/)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env" : "^1.6.1",
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "style-loader": "^0.21.0",
+    "webpack" : "^4.1.0",
+    "webpack-cli": "^3.1.1"
+  }
+}
         </code></pre>
-        <pre><code class="language-css">
-
+        <h5>4.撰寫 webpack 設定</h5>
+        <p>建立 webpack 設定檔，如下。</p>
+        <pre><code class="language-bash">
+touch webpack.config.js
         </code></pre>
-        <pre><code class="language-css">
-
+        <p>撰寫 webpack 設定內容，如下。</p>
+        <pre><code class="language-js">
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+module.exports = {
+  entry: './src',
+  output: {
+    path: __dirname + '/build',
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js/,
+        loader: 'babel-loader',
+        include: __dirname + '/src'
+      },
+      {
+        test: /\.css/,
+        loader: ExtractTextPlugin.extract(
+          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]__[hash: base64:5]'
+        )
+      }
+    ]
+  },
+  plugins: [new ExtractTextPlugin('styles.Css')]
+}
         </code></pre>
-        <pre><code class="language-css">
-
+        <p>
+          這裡使用了 extract-text-webpack-plugin 外掛程式，並定義外掛程式分析入口為./sre
+          目錄，外掛程式進行處理後，輸出結果到 __dirname + '/build' 目錄中。 對副檔名為 .css
+          的檔案使用 css-loader 進行解析，輸出樣式內容到 styles.css 檔案中，並在 index.html
+          檔案中引用 styles.css 檔案。 注意，這裡為 css-loader 設定了 modules 參數，並進行了 CSS
+          Modules 處理。
+        </p>
+        <h5>5.撰寫 npm script 並執行</h5>
+        <p>最後，將 package.json 中的 script 指令改為以下形式。</p>
+        <pre><code class="language-json">
+"scripts": {
+  "start": "webpack --mode development"
+}
         </code></pre>
-        <pre><code class="language-css">
-
+        <p>使用 npm run stat 指令來執行 webpack，此時 package.json 檔案中的程式如下。</p>
+        <pre><code class="language-json">
+{
+  "name": "css-modules",
+  "version": "1.0.0",
+  "description": "README.md",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --mode development"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env" : "^1.6.1",
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "style-loader": "^0.21.0",
+    "webpack" : "^4.1.0",
+    "webpack-cli": "^3.1.1"
+  }
+}
         </code></pre>
+        <p>
+          執行 npm start，獲得輸出，開啟頁面會發現，在編譯過程中完成了對樣式的 CSS Modules 處理。
+        </p>
         <pre><code class="language-css">
 
         </code></pre>

@@ -25,7 +25,7 @@ export const menu = [
           },
           {
             id: '1-1-4',
-            title: '1-1-4 現代 HTML5 特色 🚧',
+            title: '1-1-4 現代 HTML5 特色',
             href: '1-1-4.html'
           },
           {
