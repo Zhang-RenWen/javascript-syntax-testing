@@ -397,16 +397,78 @@ em 相對目前元素或目前元素繼承來的字型的寬度，但是每個�
 <li>rem 相對於根節點（html）的字型大小。</li>
 <li>vw 相對於視埠寬度，100vw 就相當於一個視埠寬度。</li>
 <li>vh 與 vw 同理，1vh表示一個視埠高度的1/100。</li>
-<li>vmin 相對於視埠範圍中較小的那一個數值，也就是 vw vh 中取最小值。相對的 vmax 就是在 vh vw 中取最大值。</li>
+<li>vmin Math.min(vw,vh)相對於視埠範圍中較小的那一個數值，也就是 vw vh 中取最小值。相對的 vmax Math.max(vw,vh) 就是在 vh vw 中取最大值。</li>
 <li>% 顯示相對於父層多少比例範圍。</li>
 <li>calc 是一個響應式版面配置計算單位，它使得CSS有了運算的能力。舉例來說，以下程式實現了根據螢幕寬度進行計算的功能。
+</li>
+</ul>
 <pre><code class="language-css">
 width: calc(100vw - 80px) 
 </code></pre>
-</li>
+<h3>真實線上轉換案例分析</>
+<p>羅列一下其他關於響應式版面配置的概念，</p>
+<ul>
+<li>螢幕解析度</li>
+<li>像素(px)</li>
+<li>PPI(Pixel Per Inch)：每英吋包含的像素數</li>
+<li>DPI(Dot Per Inch)：每英吋包含的點數</li>
+<li>裝置獨立像素</li>
+<li>裝置像素比(dpr)</li>
+<li>Meta Viewport</li>
 </ul>
-        
-        <pre><code class="language-css">
+<p>首先，淘寶透過設定以下程式來禁用使用者縮放功能，使真面寬度和裝置寬度對齊（如圖11-1 所示），這種操作一般也是行動端響應式轉換的標準配備。</p>
+補圖片        
+        <pre><code class="language-html">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+        </code></pre>
+        <p>在頁面根節點 html 元素上顯性設定了 fout-size、如圖11-2補圖片</p>
+        補2張圖片
+        <p>在此基礎上，嘗試改變瀏覽器大小時，html 的 font-size 就會動態發生變化。這其實不難了解，採用 rem 作為相對單位的長寬數值都會隨著 resize 事件進行變化，因為html的 font-size 是動態變化的。在其頁面中，也不難找到如圖11-3所示的程式。</p>
+        <p>這段程式的格式進行美化，可以獲得以下樣式的程式。</p>
+        <pre><code class="language-js">
+!function(e, t){
+var n= t.documentElement,
+d = e.devicePixelRatio || 1;
+function i() {
+var e = n.clientWidth / 3.75;
+n.style. fontSize = e + "px"
+}
+if(function e(){
+t.body? t.body.style.fontSize = "16px" : t.addEventListener("DOMContent Loaded", e)}),
+i(), e.addEventListener ("resize", i), e.addEventListener("pageshow",
+function (e){
+e. persisted && i()}),2<=d){
+var o = t.createElement ("body"),
+a = t.createElement("div");
+a. style.border = ".5px solid transparent", o.appendChild(a),
+n.appendChild(o), 1 === a.offsetHeight & n.classList.add("hairlines"),
+n.removeChild(o)
+}
+}(window, document)
+        </code></pre>
+        <p>以上程式是一個IIFE，在 DOMContentLoaded、resize、pageshow 事件觸發時，會對 html 的 font-size 值進行設定，計算方式如下。
+        <pre><code class="language-js">
+font-size = document. documentElement.clientWidth / 3.15
+        </code></pre>
+        <p>為什麼這麼計算呢？淘寶的工程師是按照 375px 的視覺稿進行開發的。在375px的視覺稿下，html 的 font-size 為 100，那如果寬度是 75px 的元素，就可以設定為 0.75rem（100 * 0.75 - 75px）；當裝置寬度為
+414px(iPhone8 plus）時，我們想讓上述元素的寬度等比例自我調整到 82.8px(75 * 414/375)，那麼在 CSS 樣式為 0.75rem 不變的前提下，想計算獲得
+82.0px，只需便 html 中的 font-size 變為 110.4px 即可 (110.4 * 0.75 = 82.8）。
+那麼反過來，這個 110.4 的計算公式就如下所示。
+        </p>
+        <pre><code class="language-js">
+document.documentElement.clientWidth / 3.75
+        </code></pre>
+        <p>再來看一看網易的做法。</p>
+        <p>可以看出這裡同樣採用了 rem 版面配置，但與淘寶的差別是網易並沒有透過 JavasSerpt 計算 html 中的 font-size ，而是透過媒體查詢和 calc()，「列舉」了不同裝置下不同的 html 的 font-size 值。</p>
+        <p>在頁面中，教為複雜的頭部 slider 元件的寬度明顯是 JS（取得裝置寬度後動態設定值的（圖11-6中為 414px），而高度則採用了
+rem 版面配置來取得，圖11-6 中的 高度3.7rem=55.3px(calc(13.3333330)*3.7)
+            </p>
+        補圖片
+        補圖片
+                <pre><code class="language-css">
+
+        </code></pre>
+                <pre><code class="language-css">
 
         </code></pre>
         <pre><code class="language-css">
