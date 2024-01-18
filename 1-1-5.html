@@ -545,16 +545,48 @@ console.log('横向螢幕')
         <h3>面試題 % 相對於誰</h3>
    <p>以下列舉在 CSS 中，這個常見的 ％ 單位規則。</p>
   <ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
+<li>
+  position: absolute 中的%
+  <p>
+    對於設定絕對定位的元素，我們可以使用 left 、top 表示其偏移量，我們把這個元素的父項目中第一個存在定位屬性的元素當作參照物，其中的％是相對於參照物的，left 相對於參照物的 width ，top 相對於這個參照物的 height。
+  </p>
+</li>
+<li>
+  position: relative 中的 %
+  <p>對於設定相對定位的元素，% 的數值是相對於本身的，left 相對於本身的 width，top 相對於本身的 height。</p>
+</li>
+<li>
+  position:fixed 中的 %
+  <p>對於設定固定定位的元素，% 的數值是相對於視埠的，left 相對於視埠的 width,top 相對於視埠的 height。</p>
+</li>
+<li>
+  margin 和 padding 中的 %
+  <p>margin 和 padding 中的 % 非常特殊，它是相對於父元素的寬度的。沒錯，margin-top: 30% 相當於父元素寬度的 30%。
+</li>
+<li>
+  border-radius 中的%
+  <p>我們經常對一個正方形元素設定 border-radius: 50% 來得到一個圓形，因此不難發現這裡的 % 是相對於本身長寬的。</p>
+</li>
+<li>
+  background-size 中的 %
+  <p>background-size 中的 % 和 border-radius 中的一樣，也是相對於本身長寬的。</p>
+</li>
+<li>
+  transform:translate 中的 %
+  <p>transform:translate 中的 % 是相對於本身長寬的，這也是能夠實現置中的原因</p>
+</li>
+<li>
+  text-indent 中的 %
+  <p>text-indent 這個屬性可以用來設定首行縮排，其中的 ％ 是相對於父元素 width 。
+</li>
+<li>
+  font-size 中的 % 
+  <p>目前元素的字型大小用 % 設定時，會相對於父元素的字型大小進行換算。</p>
+</li>
+<li>
+  line-height 中的 %
+  <p>使用 line-height 設定行高時，如果單位為 %，則是相對於該元素的 font-size 數值的。</p>
+</li>
 </ul>
 <h3>深入：flex 版面配置和傳統版面配置的效能比較</h3>
 <p>首先，效能問題一定是一個相對概念，flex版面配置與正常的block layout
