@@ -150,6 +150,11 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-6-1',
+            title: '1-6-1 常見架構設計🚧',
+            href: '1-6-1.html'
+          },
+          {
+            id: '1-6-3',
             title: '1-6-1 權限 🚧',
             href: '1-6.html#1-6-1'
           },
