@@ -43,11 +43,37 @@
           <li>資料變化時，自動「通知」需要更新的視圖部分，並進行更新。</li>
         </ul>
         <p>接下來針對上述需求思路實作出 資料綁定、代理監聽、和發布等功能。</p>
+        <h4>資料綁架/資料代理</h4>
+        <p>感知資料變化的方法很直接，就是進行資料綁架或資料代理。我們常常會透過 Object.defineProperty 這個方法來實現這兩種操作。這個方法可以定義資料的 getter 和 setter。</p>
         <pre><code class="language-js">
-
+let data = { stage: 'GitChat',
+course:{
+title：'前端開發進階',
+author: 'Lucas',
+publishTime：'2018年5月！',
+Object.keys(data).forEach(key =>{
+let currentValue = data[key]
+Object.defineProperty(data, key,{
+enumerable: true, 
+configurable: false, 
+get(){
+console.log(getting${key)}value now, getting value is: , currentValue)
+return currentValue
+},
+set(newvalue){
+currentValue = newValue
+console.log(setting ${key}value now, setting value is , currentValue)
+}
+})
+})
         </code></pre>
+        <p>這段程式對 data 資料的 getter 和 setter 方法進行了定義攔截，當我們讀取或改變 data 的值時，便可以監聽到這種回應，如下所示。</p>
         <pre><code class="language-js">
-
+data.course
+// getting course value now, getting value is: {title: "HM",
+// author："Luces",publishTime："2018年5月"}
+data.course ='前端開發進階2'
+// setting course value now, setting value is前端開發進階2
         </code></pre>
         <pre><code class="language-js">
 
