@@ -75,18 +75,62 @@ data.course
 data.course ='前端開發進階2'
 // setting course value now, setting value is前端開發進階2
         </code></pre>
+        <p>但是這種實現有一個問題，例如執行以下程式後，只會獲得 getting course value now, getting value is: {title: "HM",author："Luces",publishTime："2018年5月"} 的輸出，修改後的 data.course.title 的資訊並沒有被列印出來。</p>
         <pre><code class="language-js">
-
+data.course.title ='前端開發進階2'
+// getting course value now, getting value is： ｛title："前端開發進階"，author："Lucas"，publishTime："2018年5月"｝
         </code></pre>
+        <p>出現這個問題的原因是，我們的程式只實現了一層 Object.defneProperty，或說只對 data 的第一層屬性執行了 Object.defineProperty，對於巢狀結構的參考類型資料結構 data.course，我們同樣應該進行攔截。</p>
+        <p>為了達到深層攔截的目的，可以將 Object.defineProperty 的邏輯抽象為 observe
+函數，並改用遞迴實現，程式如下。</p>
         <pre><code class="language-js">
+let data = {
+stage: 'GitChat'
+course: {
+title：'前端開發進階'，
+author: 'Lucas',
+publishrime：'2018年5月，
+}
+}
+const observe = data => {
+if(!data || typeof data !== 'object') {
+return
+}
+Object.keys(data).forEach(key => {
+let currentValue = data[key]
+observe(currentValue)
+Object.defineProperty(data, key, {
+enumerable: true, configurable: false,
+get () {
+console.log(`getting ${key} value now, getting value is:`,
+currentValue)
+return currentValue
+},
 
+set (newValue) {
+currentValue = newValue
+console.log || `setting $(key) value now, setting value is`, currentValue)
+}
+})
+})
+}
+observe(data)
         </code></pre>
+        <p>這樣一來，就實現了深層資料攔截。攔截效果如下所示:</p>
         <pre><code class="language-js">
-
+data.course.title ='前端開發進階2'
+// getting course value now, getting value is：｛// ...}
+// setting title value now,setting value is前端開發進階2
         </code></pre>
+        <p>請注意，我們在代理 set 行為時，並沒有對 new Value 為複雜類型的情況再次遞迴呼叫 observe(new Value) 方法。也就是說，如果給 data.course.title 設定值一個如下所示的參考類型，則無法實現對 data.course.title 資料的觀察。</p>
         <pre><code class="language-js">
-
+data.course. title = {
+  title：'前端開發進階2'
+}
         </code></pre>
+        <p>這裡為了降低學習成本而做了一些變化，預設修改的數值待合語義，都是基本類型。</p>
+        <p>在嘗試對 data.course.title 進行設定值時，首先會讓取 data.course ，輸出 getting course value now, settng value is:{//...} ;設定值後,當觸發 date.couise.title 的 setter，然後輸出 setting title value now, setting value is 前端開發進階2。</p>
+        <p>因此，對資料進行攔截並不複雜，這也是很多架構實現的第一步。</p>
         <pre><code class="language-js">
 
         </code></pre>
