@@ -308,6 +308,29 @@ observe(data)
 data.course.author.push('messi')
 // setting author value now, setting value is ["Lucas"]
         </code></pre>
+        <p>觀察輸出內容，發現程式已經監聽到了深層資料的變動，這已經符合我們的需求了。注意，這裡在使用 Proxy 進行代理時，並沒有對 getter 進行代理，因此上述程式的輸出結果並不像之前使用 Object.defineProperty 那樣也會輸出 getting value 。</p>
+        <p>了解了 Proxy 實現之後，我們對使用 Proxy 實現資料代理和使用 Objeot.defineProperty 實現資料攔截進行比較，可以得出以下結論。</p>
+        <ul>
+          <li>
+            Objeat.defneProperty 不能監聽陣列的變化，需要對陣列方法進行重新定義。
+          </li>
+          <li>
+            Object.defineProperty 必須檢查物件的每個屬性，且需要對巢狀結構結構進行深層檢查。
+          </li>
+          <li>
+            Proxy 的代理是針對整個物件的，而非針對物件的某個屬性的，因此不像 Objeat.defneProperty 必須檢查物件的每個屬性，Proxy 只需要做一層代理就可以監聽同級結構下的所有屬性變化。當然對於深層結構，遞迴還是循要進行的。
+          </li>
+          <li>
+            Proxy 支援代理陣列的變化。
+          </li>
+          <li>
+            Proxy 的第二個參數除了可以使用 set 和 get，還可以使用13種攔截方法，比 Object.defineProperty 更加強大，實際方法這裡不再一一列舉。
+          </li>
+          <li>
+            使用 Proxy 時，效能將被底層持續最佳化；而使用 Object.defineProperty 時，效能已經不再是最佳化重點。
+          </li>
+        </ul>
+        <h3>範本編譯原理介紹</h3>
         <pre><code class="language-js">
 
         </code></pre>
