@@ -131,27 +131,206 @@ data.course. title = {
         <p>這裡為了降低學習成本而做了一些變化，預設修改的數值待合語義，都是基本類型。</p>
         <p>在嘗試對 data.course.title 進行設定值時，首先會讓取 data.course ，輸出 getting course value now, settng value is:{//...} ;設定值後,當觸發 date.couise.title 的 setter，然後輸出 setting title value now, setting value is 前端開發進階2。</p>
         <p>因此，對資料進行攔截並不複雜，這也是很多架構實現的第一步。</p>
+        <h4>監聽陣列變化</h4>
+        <p>將上述資料中的某一項變為陣列，如下所示。</p>
         <pre><code class="language-js">
+let data = {
+stage: 'GitChat',
+course: {
+title：‘前端開發進階'，
+author：［'Lucas'， 'Ronaldo'］,publishrime：'2018年5月'
+}
+}
+const observe = data => {
+if (!data || typeof data !== 'object') {
+return
+}
+Object.keys(data).forEach(key => {
+let currentValue = data[key]
+observe(currentValue)
+Object.defineProperty (data, key, {
+enumerable: true, configurable: false,
+get () {
+console.log(`getting ${key} value now, getting value is:`, currentValue) return currentValue
+},
+set (newValue) {
+currentValue = newValue
+console.log(`setting ${key} value now, setting value is`, currentValue)
+}
+})
+})
+}
+observe(data)
+
+data.course.author.push('Messi')
+// getting course value now, getting value is: {//...}
+// getting author value now, getting value is: (2) [(...), (...)]
+        </code></pre>
+        <p>此時，我們只監聽到了對 data.course 及 data.course.author 的讀取，而陣列 push 所產生的行為並沒有被攔截。這是因為 Array.prototype 上掛載的方法並不能觸發 data.course.author 屬性值的 setter，這並不屬於做設定值操作，而是呼叫陣列的 push 方法。然而對以架構為基礎的實現來說，這顯然是不滿足要求的，當陣列變化時我們也應該有所感知。</p>
+        <p>Vue 同樣存在這樣的問題，它的解決方法是：將陣列的常用方法進行重新定義，進而覆蓋掉原生的陣列方法，重新定義之後的陣列方法需要能夠被攔截。實現邏輯如下。</p>
+        <pre><code class="language-js">
+const arrExtend = Object.create(Array.prototype)
+const arrMethods = [
+'push',
+'pop'
+'shift'
+'unshift',
+'splice',
+'sort',
+'reverse'
+]
+arrMethods.forEach(method => {
+const oldMethod = Array.prototype[method]
+const newMethod = function (...args) {
+oldMethod.apply(this, args)
+console.log(`${method｝方法被執行了`)
+)
+})
+arrExtend[method] = newMethod
+})
+        </code></pre>
+        <p>對陣列的7個原生方法（push、pop、shift、 unshift、 splice、 sort、 Reverse） 進行重新定義，核心換作還是呼叫原生方法 OldMethod.apply(this, args)。除此之外，還可以在呼叫 oldMethod.apply(this, arg) 的前後加入我們需要的任何邏輯。在上面程式的基礎上，我們使用陣列的 push 方法時會獲得以下結果。</p>
+        <pre><code class="language-js">
+Array.prototype = Object.assign(Array.prototype,arrExtend)
+let array = [1, 2, 3]
+array.push(4)
+// push 方法被執行了
+        </code></pre>
+        <p>按照以上想法執行下面的程式，並觀察輸出結果。</p>
+        <pre><code class="language-js">
+const arrExtend = Object. create (Array. prototype)
+const arrMethods = [
+'push'
+'pop'
+'shift'，
+'unshift',
+'splice',
+'sort',
+' reverse'
+]
+arrMethods.forEach (method => {
+const oldMethod = Array.prototype[method]
+const newMethod = function (...args) {
+oldMethod.apply(this, args)
+console.log（`${method}方法被執行了`）
+}
+arrExtend [method] = newMethod
+})
+Array.prototype = Object.assign(Array.prototype, arrExtend)
+let data = {
+stage: 'GitChat',
+course: {
+title：'前端開發進階',
+author: ['Lucas', 'Ronaldo'],
+PublishTime：'2018年5月'
+}
+}
+const observe = data => {
+if (!data || typeof data !== 'object') {
+return
+}
+Object.keys(data).forEach (key =>{
+let currentValue = data[key]
+observe(currentValue）
+
+Object.defineProperty(data, key, {
+enumerable: true, configurable: false,
+get (){
+console.log(`getting ${key} value now, getting value is:`, currentvalue)
+return currentValue
+}
+set (newValue) {
+currentValue = newValue
+console.log(`setting ${key} value now, setting value is`, currentValue)
+}
+})
+})
+}
+observe(data)
+data.course.author.push('Messi')
+        </code></pre>
+        <p>執行以上程式，輸出如下。</p>
+        <pre><code class="language-js">
+getting course value now, getting value is: {//...} 
+getting author value now, getting value is: (2) [(...), (...)]
+// push方法被執行了
+        </code></pre>
+        <p>這種 monkey patch（猴子更新）的做法本質上就是重新定義原生方法，這樣你不是很安全，也很不優雅。因此推薦使用 ES Next 的新特性—Proxy。之前也對該特性進行過介紹，它可以完成對資料的代理。</p>
+        <h4>Object.defineProperty 和 Proxy 區別</h4>
+        <p>首先嘗試使用 Proxy 來完成程式重構，如下。</p>
+        <pre><code class="language-js">
+let data = {
+stage: 'GitChat',
+course: {
+title：'前端開發進階',
+author: ['Lucas'],
+publishTime：'2018年5月'
+}
+}
+const observe = data => ｛
+if (!data || Object.prototype.toString.call(data) !== '[object Object]') {
+return
+}
+Object.keys(data).forEach(key => {
+let currentValue = data[key]
+//事實上，Proxy也可以對函數類型進行代理。這裡只對承載資料類型的object進行處理
+if（typeof currentValue === 'object'）｛
+observe (currentValue)
+data (key] = new Proxy(currentValue, {
+set (target, property, value, receiver) {
+// 因為使用陣列的 push方法時會引起 length 屬性的變化，所以呼叫 push 之後
+// 會觸發兩次 set 操作，我們只需要保留一次即可
+if (property !== 'length'){
+console.log('`setting ${key} value now, setting value is`,
+currentValue)
+return Reflect.set(target, property, value, receiver)
+}
+})
+}else {
+Object.defineProperty(data, key, {enumerable: true, configurable: false,
+get () {
+console.log(`getting ${key} value now, getting value is:`, currentValue) return currentValue
+},
+set (newValue) {
+currentValue = newValue
+console.log(setting ${key} value now, setting value is`, currentValue)
+}
+})
+}
+})
+}
+
+observe(data)
 
         </code></pre>
+        <p>此時，對陣列進行以下操作。</p>        
         <pre><code class="language-js">
-
+data.course.author.push('messi')
+// setting author value now, setting value is ["Lucas"]
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>觀察輸出內容，發現程式已經監聽到了深層資料的變動，這已經符合我們的需求了。注意，這裡在使用 Proxy 進行代理時，並沒有對 getter 進行代理，因此上述程式的輸出結果並不像之前使用 Object.defineProperty 那樣也會輸出 getting value 。</p>
+        <p>了解了 Proxy 實現之後，我們對使用 Proxy 實現資料代理和使用 Objeot.defineProperty 實現資料攔截進行比較，可以得出以下結論。</p>
+        <ul>
+          <li>
+            Objeat.defneProperty 不能監聽陣列的變化，需要對陣列方法進行重新定義。
+          </li>
+          <li>
+            Object.defineProperty 必須檢查物件的每個屬性，且需要對巢狀結構結構進行深層檢查。
+          </li>
+          <li>
+            Proxy 的代理是針對整個物件的，而非針對物件的某個屬性的，因此不像 Objeat.defneProperty 必須檢查物件的每個屬性，Proxy 只需要做一層代理就可以監聽同級結構下的所有屬性變化。當然對於深層結構，遞迴還是循要進行的。
+          </li>
+          <li>
+            Proxy 支援代理陣列的變化。
+          </li>
+          <li>
+            Proxy 的第二個參數除了可以使用 set 和 get，還可以使用13種攔截方法，比 Object.defineProperty 更加強大，實際方法這裡不再一一列舉。
+          </li>
+          <li>
+            使用 Proxy 時，效能將被底層持續最佳化；而使用 Object.defineProperty 時，效能已經不再是最佳化重點。
+          </li>
+        </ul>
+        <h3>範本編譯原理介紹</h3>
         <pre><code class="language-js">
 
         </code></pre>
