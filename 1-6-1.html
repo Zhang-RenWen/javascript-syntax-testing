@@ -331,6 +331,138 @@ data.course.author.push('messi')
           </li>
         </ul>
         <h3>範本編譯原理介紹</h3>
+        <p>已經了解了如何監聽資料的變化，那麼下一步以 Vue 架構為例，先來看一個典型的用法，如下。
+        <pre><code class="language-html">
+<body>
+<div id="app">
+<h1>{{stage}}平台課程：{{course.title}}</h1>
+<p>{{course.title}｝是 {{course.author}}發佈的課程</p>
+<p>發佈時間為{{course.publishTime}}</p>
+</div>
+<script>
+let vue = new Vue {
+ele: '#app',
+data: {
+stage: 'GitChat',
+course: 1,
+title：'前端開發進階',
+author: 'Lucas',
+Publishrime：'2018年5月,
+},
+}
+})
+</script>
+</body>
+        </code></pre>
+        <p>其中，範本變數是透過{{}}的表達方式進行輸出的。最後輸出的 HTML 內容應該被合適的資料進行填充取代，因此還需要進行編譯，在編譯過程中任何架構或類別庫都是相通的，舉例來說，React 中的 JSX 會被編譯為 React.CreateElement，並在產生虛擬 DOM 時進行資料填充。</p>
+        <p>這裡簡化一下，將以下範本內容輸出為真實的 HTML 即可。</p>
+        <pre><code class="language-html">
+<div id="app">
+<h1>{{stage}}平台課程：{{course.title}}/</hl>
+<p>{{course.title}}是{{course.author}}發佈的課程</p>
+<p>發佈時間為{{course.publishTime}}</p>
+</div>
+        </code></pre>
+        <h4>範本編譯實現</h4>
+        <p>提到這樣的「範本編譯」過程，很多開發者都會想到詞法分析，進而會感到頭大。其實範本編譯的原理很簡單，就是使用「正規＋檢查」的方式，有時需要使用一些演算法知識，但是在這裡的場景中，只需要對 #app 節點下的內容進行取代，透過正規表示法識別出範本變數，取得對應的資料即可，程式如下。</p>
+        <pre><code class="language-js">
+compile(document.querySelector('#app'), data)
+function compile(el, data) {
+let fragment = document.createDocumentFragment()
+while(child = el.firstChild) {
+fragment.appendChild(child)
+// 對el中的内容進行取代
+function replace(fragment) {
+Array.from(fragment.childNodes).forEach(node =>{
+let textContent = node.textContent
+let reg = /\{\{(.*?)\}\}/g
+if (node.nodeType === 3 && reg.test(textContent)) {
+const nodeTextContent = node.textContent
+const replaceText = () => {
+node.textContent = nodeTextContent.replace (reg, (matched,
+placeholder) => {
+return placeholder.split('.').reduce ((prev, key) =>{
+return prev[key]
+}, data)
+})
+}
+replaceText()
+}
+// 如果還有子節點，則繼續遞迴 replace
+if (node.childNodes && node. childNodes.length) {
+replace(node)
+}
+})
+}
+replace(fragment)
+el.appendChild(fragment)
+return el
+}
+        </code></pre>
+        <p>下面對以上程式進行分析。我們使用 fragment 變數儲存產生的真實 HTML 節點中的內容。透過 replace 方法對{{變數}}進行資料取代，同時{{變數}}的表達只會出現在 nodeType
+=3 的文字類型節點中，因此對於符合 node.
+nodeType === 3 && reg.test(textContent) 條件的情況，可以進行資料取得和填充。接下來，借助 replace 方法的第二個參數對字串進行一次性取代，此時對於形如 {{data.course.title}} 深層資料，可以透過 reduce 方法獲得正確的值。</p>
+<p>因為 DOM 結構可能是多層的，所以對存在子節點的節點依然使用遞迴對 replace 進行取代。</p>
+<h4>雙向綁定實現</h4>
+<p>上述實現是單向的，透過資料變化引起了視圖變化，那麼真面中存在一個輸入框時該如何觸發資料變化呢？以下為 Vue 的特色 v-model </p>
+        <pre><code class="language-js">
+<input v-model="inputData" type = "text" >
+        </code></pre>
+        <p>舉例來說，對於以上敘述，我們需要在範本編譯中對存在 v-model 屬性的 node 進行事件監聽，在輸入框中有內容輸入時，改變 v-model 屬性值對應的資料即可（這裡對應的資料為 inputData）。為了滿足輸入內容的同時修改資料來源的需求，我們只需要增加 compile
+中的 replace 方法邏輯。對於 node.nodeType === 1 的 DOM 類型，實現的虛擬程式碼如下。</p>
+        <pre><code class="language-js">
+function replace(el, data) {
+// ...
+if (node.nodeType === 1) {
+let attributesArray = node.attributes
+Array.from（attributesArray.forEach(attr =>{
+let attributeName = attr.name
+let attributeValue = attr.value
+if (name.includes('v-')) {
+node.value = data[attributeValue]
+}
+node.addEventListener('input', e => {
+let newVal = e.target.value
+data [attributeValue] = newVal
+
+// ...
+// 更改資料來源，觸發setter ...
+// ...
+})
+})
+}
+
+if (node.childNodes && node.childNodes.length) {
+replace (node)
+}
+}
+        </code></pre>
+        <h3>發佈/訂閱模式簡單應用</h3>
+        <p>作為前端開發人員，我們對所謂的「事件驅動」理念，即「事件發佈/訂閱模式（（ pub/sub 模式）」一定再熟悉不過了。這種模式是 JavaScript 與生俱來的基因：我們可以認為 Javascript 本身就是事件驅動型語言：舉例來說，應用中對第一個 button 進行了事件綁定，使用者點擊之後就會觸發按鈕對應的 click 事件。這是因為此時有特定程式正在監聽這個事件，隨之觸發了相關的處理函式</p>
+        <p>這個模式的好處在於能夠對程式進行解耦，實現「高內聚、低耦合」的理念。這種模式對於架構的設計同樣也不可或缺。請思考一下：透過學習前面的內容，我們是如何監聽資料變化的呢？如果最後想實現響應式 MVVM，或所謂的雙向綁定，那麼還需要根據這個資料變化做出對應的視圖更新。這個邏輯和在頁面中對 button 綁定事件處理函數是多麼相近。</p>
+        
+        <pre><code class="language-js">
+class Notify {
+constructor () {
+this.subscribers = []
+}
+add (handler) {
+this.subscribers.push(handLer)
+}
+emit(){
+this.subscribers.forEach(subscriber =>subscriber())
+}
+}
+        </code></pre>
+        <p>使用 Notify 類別產生出實體 notify 程式如下</p>
+        <pre><code class="language-js">
+notify.add()=> {
+console.log('emit here')
+})
+notify.emit()
+// emit here
+        </code></pre>
+        <p>這就是一個簡單的事件發佈/訂閱模式實現，以上程式只用來啟發想法，實現得比較粗糙，沒有進行事件名設定，也沒有涉及很多 API，但完全能夠說明問題。其實，透過閱讀 Vue 原始程式碼也能看出 Vue 中的發佈/訂閱模式很簡單。</p>
         <pre><code class="language-js">
 
         </code></pre>
