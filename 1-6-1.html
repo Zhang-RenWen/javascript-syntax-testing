@@ -475,15 +475,189 @@ notify.emit()
 <p>應用虛擬 DOM 的好處很直觀：操作資料結構遠比透過和瀏覽器互動去操作
 DOM 快。準確了解這句話的意思就是，操作資料結構是指改變物件（虛擬DOM），這個過程比修改真實 DOM 快很多。但虛擬 DOM 最後也是要掛載到瀏覽器上成為真實 DOM 節點的，因此使用虛擬 DOM 並不能使操作DOM的次數減少，但能夠精確地取得最小的、最必要的操作 DOM 的集合。</p>
 <p>這樣一來，我們抽象表示 DOM，每次透過 DOM diff 計算出視圖前後更新的最小差異，再把最小差異應用到真實 DOM 上的做法，無疑更為可靠，效能更有保障。</p>
+<p>如果用 JavaScript 來表示 DOM 結構，則採用物件結構形式的實際表示如下。</p>
+        <pre><code class="language-js">
+const chapterListVirtualDom = {
+tagName: 'ul', attributes: {
+id: 'chapterlist'
+},
+children: [
+{
+tagName: 'li', 
+attributes: { class: 'chapter' }, 
+children: ['chapter1']
+}, 
+{ 
+tagName: 'li', 
+attributes: {class: 'chapter' }, 
+children: ['chapter2'] 
+}, 
+{ 
+tagName: 'li', 
+attributes: {class: 'chapter' }, 
+children: ['chapter3']
+}
+]
+        </code></pre>
+        <p>tagName 表示虛擬 DOM 對應的真實 DOM 標籤類型；attributes 是一個物件，表示真實 DOM 節點上的所有屬性；children 對應真實 DOM 的 childNodes，其中 childNodes 的每一項又是類似的結構。</p>
+        <p>下面來實現一個虛擬 DOM 產生類別，用於生產虛擬 DOM，程式如下。</p>
+        <pre><code class="language-js">
+class Element {
+constructor(tagName,attributes = {},children = []){
+this.tagName = tagName
+this.attributes = attributes
+this.children = children
+}
+}
+function element(tagName, attributes, children){
+ return new Element(tagName, attributes, children)
+}
+        </code></pre>
+        <p>上述虛擬 DOM 可以採用以下方法產生。</p>
+        <pre><code class="language-js">
+const chapterlistVirtualDom = element ('ul', {id: 'list' }, 
+[
+element('li', {class: 'chapter' }, ['chapter1']), 
+element('li', {class: 'chapter' }, ['chapter2']), 
+element('li', {class: 'chapter' }, ['chapter3'])
+])
+        </code></pre>
+        <p>執行以上程式，列印出的內容如下圖所示。</p>
+        補圖
+        <p>下面繼續將虛擬 DOM 產生真實 DOM 節點。首先實現一個
+setAttribute 方法，後續的程式都將使用 setAttribute 方法來對 DOM 節點進行
+屬性設定，程式如下所示。</p>
+        <pre><code class="language-js">
+const setAttribute = (node,key, value) =>{
+switch (key){
+case 'style':
+node.style.cssText = value
+break
+case 'value':
+let tagName = node.tagName || ''
+tagName = tagName.toLowerCase()
+if (
+tagName === 'input' || tagName ===
+'textarea'
+){
+node.value = value
+}
+else{
+// 如果節點不是 input 或 textarea，則使用 setAttribute 設定屬性
+node.setAttribute(key, value)
+}
+break default:
+node.setAttribute(key, value)
+break
+}
+}
+        </code></pre>
+        <p>下面在 Element 類別中加入 render 原型方法，該方法的目的是根據虛擬 DOM 產生真實 DOM 片段，程式如下。</p>
+        <pre><code class="language-js">
+class Element {
+constructor (tagName, attributes = {}, children = []){
+this.tagName = tagName
+this.attributes = attributes
+this.children = children
+}
+render (){
+let element = document.createElement(this.tagName)
+let attributes = this.attributes
+for (let key in attributes){
+setAttribute(element, key, attributes[key])
+let children = this.children
+children.forEach(child => {
+let childElement = child instanceof Element？ child.render() : document.createTextNode(child)
+// 若 child 也是虛擬節點，則遞迴進行
+// 若是字串，則直接建立文字節點
+element.appendChild(childElement)
+})
+return element
+}
+}
+
+function element(tagame, attributes, children) {
+return new Element(tagName, attributes, children)
+}
+        </code></pre>
+        <p>有了真實的 DOM 節點片段，接下來就可以將真實的DOM 節點繪製到瀏覽器上了。可以透過 renderDom 方法實現，該方法的實現程式如下。</p>
+        
+        <pre><code class="language-js">
+const renderDom = (element,target）=>｛
+target.appendChild(element)
+}
+        </code></pre>
+        <p>至此，我們便實現了產生DOM 元素的必備方法集合。完整程式如下。</p>
+        <pre><code class="language-js">
+const setAttribute = (node, key, value) =>{
+switch (key) {
+case 'style':
+node.style.cssText = value
+break
+case 'value':
+let tagName = node.tagName || ''
+tagName = tagName.toLowerCase()
+if (tagName === 'input' || tagName === 'textarea'){
+node.value = value
+}else {
+// 如果節點不是input 或textarea，則使用setAttribute去設定屬性
+node.setAttribute(key, value)
+}
+break 
+default:
+node.setAttribute (key, value)
+break
+}
+}
+class Element(
+constructor(tagName, attributes = ((, children = []) {
+this.tagName = tagName
+this.attributes = attributes
+this.children = children
+}
+render (){
+let element = document.createElement(this.tagName)
+let attributes = this.attributes
+for (let key in attributes) {
+setAttribute (element, key, attributes[key])
+｝
+let children = this.children
+children.forEach(child =>{
+let childElement = child instanceof Element？ child.render():document.createTextNode(child)
+// 若 child 也是虛擬節點，則遞迴進行
+// 若是字串，則直接建立文字節點
+element.appendChild (childElement)
+})
+return element
+}
+}
+function element(tagName, attributes, children) {
+return new Element(tagName, attributes, children)
+}
+
+const renderDom = (element, target) => {
+target.appendChild(element)
+const chapterlistVirtualDom = element('ul', {id: 'list' }, [
+element('li',{class: 'chapter'}, ['chapter1']), 
+element('li',{class: 'chapter'}, ['chapter2']),
+element('li',{class: 'chapter'}, ['chapter3'])
+])
+const dom = chapterListVirtualDom.render()
+renderDom(dom, document.body)
+        </code></pre>
+        <p>執行上面函式後，便可以獲得真實的 DOM 元素了，結果如下圖所示。</p>
+        補圖
         <pre><code class="language-js">
 
         </code></pre>
+      
+        
         <pre><code class="language-js">
 
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        
+        
+        
       </article>
     </main>
   </body>
