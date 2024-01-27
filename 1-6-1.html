@@ -711,78 +711,82 @@ const walkIoDiff = (oldVirtualDom, newVirtualDom, index, patches) => {
         </code></pre>
         <p>下面對 diff 函數進行測試，程式如下</p>  
         <pre><code class="language-js">
-const chapterListVirtualDom = element ('ul', ( id: 'list' ), [
-element('li', { class: 'chapter' ), ['chapter1']),
-element('li', { class: 'chapter' }, l'chapter2']), 
-element('li', { class: 'chapter' }, ['chapter3'])
+const chapterListVirtualDom = element('ul', { id: 'list' }, [
+  element('li', { class: 'chapter' }, ['chapter1']),
+  element('li', { class: 'chapter' }, ['chapter2']),
+  element('li', { class: 'chapter' }, ['chapter3'])
 ])
-const chapterListVirtualDom1 = element('ul', (id: 'list2' ), [
-element('li', { class: 'chapter2' ), ['chapter4']),
-element('li', { class: 'chapter2' ), ['chapter5']),
-element('li', { class: 'chapter2' }, ['chapter6'])
-diff(chapterlistVirtualDom, chapterlistVirtualDom1)
+const chapterListVirtualDom1 = element('ul', { id: 'list2' }, [
+  element('li', { class: 'chapter2' }, ['chapter4']),
+  element('li', { class: 'chapter2' }, ['chapter5']),
+  element('li', { class: 'chapter2' }, ['chapter6'])
+])
+diff(chapterListVirtualDom, chapterListVirtualDom1)
         </code></pre>
         補圖
       <h4>最小化差異應用</h4>
       <p>總結一下截至為止共做了哪些事：透過 Element class 產生了虛擬 DOM．透過 diff 方法對任意兩個虛擬 DOM 進行比對．獲得差異。那麼，如何將這個差異更新到現有的DOM 節點中呢？看上去需要使用 patch 方法來完成，程式如下。</p>
       <pre><code class="language-js">
-const patch = (node, patches)=>{
-let walker = {index: 0 }
-walk(node, walker, patches)
+const patch = (node, patches) => {
+  let walker = { index: 0 }
+  walk(node, walker, patches)
 }
       </code></pre>
       <p>patch 方法會接收一個真實的DOM 節點（它是現有的瀏覽器中需要進行更新的DOM節點），同時會接收一個最小化差異集合，該集合對接 diff 方法傳回的結果。patch方法內部呼叫了 walk 函數，程式如下。</p>
       <pre><code class="language-js">
-const walk = (node, walker, patches)=> {
-let currentPatch = patches [walker.index]
-let childNodes = node.childNodes
-childNodes.forEach(child =>{
-walker.index++
-walk (child, walker, patches)
-})
-if (currentPatch) {
-doPatch (node, currentPatch)
-}
+const walk = (node, walker, patches) => {
+  let currentPatch = patches[walker.index]
+  let childNodes = node.childNodes
+  childNodes.forEach((child) => {
+    walker.index++
+    walk(child, walker, patches)
+  })
+  if (currentPatch) {
+    doPatch(node, currentPatch)
+  }
 }
       </code></pre>
       <p>walk 函數會進行本身遞迴，對目前節點的差異呼叫 doPatch 方法進行更新。</p>
         
       <pre><code class="language-js">
-const doPatch =（node,patches）=>｛
-patches.forEach(patch => {
-switch (patch. type){
-case 'MODIFY ATTRIBUTES:
-const attributes = patch.diffAttributeResult.attributes
-for (let key in attributes) {
-if (node.nodeType !== 1) return
-const value = attributes[key]
-if (value) {
-setAttribute (node, key, value)
-} else {
-node.removeAttribute(key)
-}
-}
-break
-case 'MODIFY_TEXT':
-node.textContent = patch.data
-break
-case 'REPLACE':
-let newlode = (patch.newNode instanceof Element) ? render (patch.newNode) : document.createTextNode(patch.newNode)
-node.parentNode.replaceChild(newNode, node)
-break
-case 'REMOVE':
-node.parentNode.removeChild(node)
-break 
-default:
-break
-}
-})
+const doPatch = (node, patches) => {
+  patches.forEach((patch) => {
+    switch (patch.type) {
+      case 'MODIFY ATTRIBUTES':
+        const attributes = patch.diffAttributeResult.attributes
+        for (let key in attributes) {
+          if (node.nodeType !== 1) return
+          const value = attributes[key]
+          if (value) {
+            setAttribute(node, key, value)
+          } else {
+            node.removeAttribute(key)
+          }
+        }
+        break
+      case 'MODIFY_TEXT':
+        node.textContent = patch.data
+        break
+      case 'REPLACE':
+        let newNode =
+          patch.newNode instanceof Element
+            ? render(patch.newNode)
+            : document.createTextNode(patch.newNode)
+        node.parentNode.replaceChild(newNode, node)
+        break
+      case 'REMOVE':
+        node.parentNode.removeChild(node)
+        break
+      default:
+        break
+    }
+  })
 }
       </code></pre>
       <p>doPatch 方法會對4種類型的 diff 進行處理，最後進行測試，程式如下。</p>
       <pre><code class="language-js">
 var element = chapterListVirtualDom.render()
-renderDom(element,document.body)
+renderDom(element, document.body)
 const patches = diff(chapterListVirtualDom, chapterListVirtualDom1)
 patch(element, patches)
       </code></pre>
