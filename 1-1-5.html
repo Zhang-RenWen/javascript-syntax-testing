@@ -365,175 +365,228 @@ module.exports = {
         <p>
           執行 npm start，獲得輸出，開啟頁面會發現，在編譯過程中完成了對樣式的 CSS Modules 處理。
         </p>
-        
+
         <h3>響應式版面配置</h3>
-        <p>
-          首先來整理一下響應式版面配置的幾種典型方案，實際如下。
-        </p>
+        <p>首先來整理一下響應式版面配置的幾種典型方案，實際如下。</p>
         <ul>
           <li>傳統版面配置</li>
           <li>相對單位版面配置</li>
           <li>透過媒體查詢實現的響應式版面配置</li>
-          <li>以相對單位 rem 為基礎的 fexible 版面配置</li>
+          <li>以相對單位 rem 為基礎的 flexible 版面配置</li>
           <li>flex 版面配置</li>
           <li>grid 版面配置</li>
           <li>借助 JavaScript 進行版面配置</li>
         </ul>
-        <p>前面內容配置為傳統式排版，實現較為複雜，同時對整體版面配置入侵影響較大，除了傳統版面配置，我們還會經常用到相對單位版面配置，這種實現方式比較容易了解，下面就來整理一下 CSS中的相對單位。</p>
+        <p>
+          前面內容配置為傳統式排版，實現較為複雜，同時對整體版面配置入侵影響較大，除了傳統版面配置，我們還會經常用到相對單位版面配置，這種實現方式比較容易了解，下面就來整理一下
+          CSS中的相對單位。
+        </p>
         <ul>
-<li>em</li>
-<li>rem</li>
-<li>vh vw vmin vmax</li>
-<li>%</li>
-<li>calc()</li>
-</ul>
+          <li>em</li>
+          <li>rem</li>
+          <li>vh vw vmin vmax</li>
+          <li>%</li>
+          <li>calc()</li>
+        </ul>
 
-<p>這裡的重點是了解這些相對單位的使用標準，也就是「到底是相對於誰」（注意，這也是一個很重要的面試考點）。</p>
+        <p>
+          這裡的重點是了解這些相對單位的使用標準，也就是「到底是相對於誰」（注意，這也是一個很重要的面試考點）。
+        </p>
 
-<ul>
-<li>
-em 相對目前元素或目前元素繼承來的字型的寬度，但是每個字母或中文字的寬度有可能是不一樣的，一般來說是一個大寫字母M的寛度（事實上，標準中有一個 x-height 概念，建議取X的高度，但並沒有推薦絕對的計算執行標準，還需要看瀏覽器的實現，也有的地方採用O的高度）；一個非常容易出錯的點在於，很多同學會認為em 相對父元素的字型大小，但是實際上「相對於誰」取決於應用在什麼 CSS 屬性上。對於 font-size 來說，em 是相對於父元素的字型大小；在 line-height 中，em 卻是相對於本身的字型大小。
-</li>
-<li>rem 相對於根節點（html）的字型大小。</li>
-<li>vw 相對於視埠寬度，100vw 就相當於一個視埠寬度。</li>
-<li>vh 與 vw 同理，1vh表示一個視埠高度的1/100。</li>
-<li>vmin Math.min(vw,vh)相對於視埠範圍中較小的那一個數值，也就是 vw vh 中取最小值。相對的 vmax Math.max(vw,vh) 就是在 vh vw 中取最大值。</li>
-<li>% 顯示相對於父層多少比例範圍。</li>
-<li>calc 是一個響應式版面配置計算單位，它使得CSS有了運算的能力。舉例來說，以下程式實現了根據螢幕寬度進行計算的功能。
-</li>
-</ul>
-<pre><code class="language-css">
+        <ul>
+          <li>
+            em
+            相對目前元素或目前元素繼承來的字型的寬度，但是每個字母或中文字的寬度有可能是不一樣的，一般來說是一個大寫字母M的寛度（事實上，標準中有一個
+            x-height
+            概念，建議取X的高度，但並沒有推薦絕對的計算執行標準，還需要看瀏覽器的實現，也有的地方採用O的高度）；一個非常容易出錯的點在於，很多同學會認為em
+            相對父元素的字型大小，但是實際上「相對於誰」取決於應用在什麼 CSS 屬性上。對於 font-size
+            來說，em 是相對於父元素的字型大小；在 line-height 中，em 卻是相對於本身的字型大小。
+          </li>
+          <li>rem 相對於根節點（html）的字型大小。</li>
+          <li>vw 相對於視埠寬度，100vw 就相當於一個視埠寬度。</li>
+          <li>vh 與 vw 同理，1vh表示一個視埠高度的1/100。</li>
+          <li>
+            vmin Math.min(vw,vh)相對於視埠範圍中較小的那一個數值，也就是 vw vh 中取最小值。相對的
+            vmax Math.max(vw,vh) 就是在 vh vw 中取最大值。
+          </li>
+          <li>% 顯示相對於父層多少比例範圍。</li>
+          <li>
+            calc
+            是一個響應式版面配置計算單位，它使得CSS有了運算的能力。舉例來說，以下程式實現了根據螢幕寬度進行計算的功能。
+          </li>
+        </ul>
+        <pre><code class="language-css">
 width: calc(100vw - 80px) 
 </code></pre>
-<h3>真實線上轉換案例分析</>
-<p>羅列一下其他關於響應式版面配置的概念，</p>
-<ul>
-<li>螢幕解析度</li>
-<li>像素(px)</li>
-<li>PPI(Pixel Per Inch)：每英吋包含的像素數</li>
-<li>DPI(Dot Per Inch)：每英吋包含的點數</li>
-<li>裝置獨立像素</li>
-<li>裝置像素比(dpr)</li>
-<li>Meta Viewport</li>
-</ul>
-<p>首先，淘寶透過設定以下程式來禁用使用者縮放功能，使真面寬度和裝置寬度對齊（如圖11-1 所示），這種操作一般也是行動端響應式轉換的標準配備。</p>
-補圖片        
+        <h3>真實線上轉換案例分析</h3>
+        <p>羅列一下其他關於響應式版面配置的概念，</p>
+        <ul>
+          <li>螢幕解析度</li>
+          <li>像素(px)</li>
+          <li>PPI(Pixel Per Inch)：每英吋包含的像素數</li>
+          <li>DPI(Dot Per Inch)：每英吋包含的點數</li>
+          <li>裝置獨立像素</li>
+          <li>裝置像素比(dpr)</li>
+          <li>Meta Viewport</li>
+        </ul>
+        <p>
+          首先，淘寶透過設定以下程式來禁用使用者縮放功能，使真面寬度和裝置寬度對齊(如下程式設定)，這種操作一般也是行動端響應式轉換的標準配備。
+        </p>
         <pre><code class="language-html">
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+&lt;meta name="viewport" 
+content="width=device-width, 
+initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, 
+viewport-fit=cover"
+&gt;
         </code></pre>
-        <p>在頁面根節點 html 元素上顯性設定了 fout-size、如圖11-2補圖片</p>
-        補2張圖片
-        <p>在此基礎上，嘗試改變瀏覽器大小時，html 的 font-size 就會動態發生變化。這其實不難了解，採用 rem 作為相對單位的長寬數值都會隨著 resize 事件進行變化，因為html的 font-size 是動態變化的。在其頁面中，也不難找到如圖11-3所示的程式。</p>
-        <p>這段程式的格式進行美化，可以獲得以下樣式的程式。</p>
+        <p>在頁面根節點 html 元素上顯性設定了 font-size</p>
+        <p>
+          在此基礎上，嘗試改變瀏覽器大小時，html 的 font-size 就會動態發生變化。這其實不難了解，採用
+          rem 作為相對單位的長寬數值都會隨著 resize 事件進行變化，因為html的 font-size
+          是動態變化的。動態設定程式如下
+        </p>
         <pre><code class="language-js">
-!function(e, t){
-var n= t.documentElement,
-d = e.devicePixelRatio || 1;
-function i() {
-var e = n.clientWidth / 3.75;
-n.style. fontSize = e + "px"
-}
-if(function e(){
-t.body? t.body.style.fontSize = "16px" : t.addEventListener("DOMContent Loaded", e)}),
-i(), e.addEventListener ("resize", i), e.addEventListener("pageshow",
-function (e){
-e. persisted && i()}),2<=d){
-var o = t.createElement ("body"),
-a = t.createElement("div");
-a. style.border = ".5px solid transparent", o.appendChild(a),
-n.appendChild(o), 1 === a.offsetHeight & n.classList.add("hairlines"),
-n.removeChild(o)
-}
-}(window, document)
+!(function (e, t) {
+  var n = t.documentElement,
+    d = e.devicePixelRatio || 1
+  function i() {
+    var e = n.clientWidth / 3.75
+    n.style.fontSize = e + 'px'
+  }
+  if (
+    ((function e() {
+      t.body ? (t.body.style.fontSize = '16px') : t.addEventListener('DOMContent Loaded', e)
+    })(),
+    i(),
+    e.addEventListener('resize', i),
+    e.addEventListener('pageshow', function (e) {
+      e.persisted && i()
+    }),
+    2 &lt;= d)
+  ) {
+    var o = t.createElement('body'),
+      a = t.createElement('div')
+    ;(a.style.border = '.5px solid transparent'),
+      o.appendChild(a),
+      n.appendChild(o),
+      (1 === a.offsetHeight) & n.classList.add('hairlines'),
+      n.removeChild(o)
+  }
+})(window, document)
         </code></pre>
-        <p>以上程式是一個IIFE，在 DOMContentLoaded、resize、pageshow 事件觸發時，會對 html 的 font-size 值進行設定，計算方式如下。
+        <p>
+          以上程式是一個 IIFE ，在 DOMContentLoaded、resize、pageshow 事件觸發時，會對 html 的
+          font-size 值進行設定，計算方式如下。
+        </p>
         <pre><code class="language-js">
 font-size = document. documentElement.clientWidth / 3.15
         </code></pre>
-        <p>為什麼這麼計算呢？淘寶的工程師是按照 375px 的視覺稿進行開發的。在375px的視覺稿下，html 的 font-size 為 100，那如果寬度是 75px 的元素，就可以設定為 0.75rem（100 * 0.75 - 75px）；當裝置寬度為
-414px(iPhone8 plus）時，我們想讓上述元素的寬度等比例自我調整到 82.8px(75 * 414/375)，那麼在 CSS 樣式為 0.75rem 不變的前提下，想計算獲得
-82.0px，只需便 html 中的 font-size 變為 110.4px 即可 (110.4 * 0.75 = 82.8）。
-那麼反過來，這個 110.4 的計算公式就如下所示。
+        <p>
+          為什麼這麼計算呢？淘寶的工程師是按照 375px 的視覺稿進行開發的。在375px的視覺稿下，html 的
+          font-size 為 100，那如果寬度是 75px 的元素，就可以設定為 0.75rem（100 * 0.75 -
+          75px）；當裝置寬度為 414px(iPhone8 plus)時，我們想讓上述元素的寬度等比例自我調整到
+          82.8px(75 * 414/375)，那麼在 CSS 樣式為 0.75rem 不變的前提下，想計算獲得 82.0px，只需便
+          html 中的 font-size 變為 110.4px 即可 (110.4 * 0.75 = 82.8)。 那麼反過來，這個 110.4
+          的計算公式就如下所示。
         </p>
         <pre><code class="language-js">
 document.documentElement.clientWidth / 3.75
         </code></pre>
         <p>再來看一看網易的做法。</p>
-        <p>可以看出這裡同樣採用了 rem 版面配置，但與淘寶的差別是網易並沒有透過 JavasSerpt 計算 html 中的 font-size ，而是透過媒體查詢和 calc()，「列舉」了不同裝置下不同的 html 的 font-size 值。</p>
-        <p>在頁面中，教為複雜的頭部 slider 元件的寬度明顯是 JS（取得裝置寬度後動態設定值的（圖11-6中為 414px），而高度則採用了
-rem 版面配置來取得，圖11-6 中的 高度3.7rem=55.3px(calc(13.3333330)*3.7)
-            </p>
-        補圖片
-        補圖片
-        <h3>Bootstrap 光柵實現概念>
-        <p>直接用程式碼說明光柵的概念。</p>          
+        <p>
+          可以看出這裡同樣採用了 rem 版面配置，但與淘寶的差別是網易並沒有透過 JavasScript 計算 html
+          中的 font-size ，而是透過媒體查詢和 calc()，「列舉」了不同裝置下不同的 html 的 font-size
+          值。
+        </p>
+        <p>
+          試想在一個頁面中，較為複雜的頭部 slider 元件的寬度明顯是
+          JS（取得裝置寬度後動態設定值的（假設為 414px），而高度則採用了 rem
+          版面配置來取得，假設範例中的 高度3.7rem=55.3px(calc(13.3333330)*3.7)
+        </p>
+        <h3>Bootstrap 光柵實現概念</h3>
+        <p>直接用程式碼說明光柵的概念。</p>
         <pre><code class="language-html">
-<div class="co1-6 col-sm-3">
+&lt;div class="co1-6 col-sm-3"&gt;
   ...
-</div>
-<div class="co1-6 col-sm-3">
+&lt;/div&gt;
+&lt;div class="co1-6 col-sm-3"&gt;
   ...
-< div>
-<div class="co1-6 col-sm-3">
+&lt;div&gt;
+&lt;div class="co1-6 col-sm-3"&gt;
   ...
-</div>
-<div class="co1-6 col-sm-3">
+&lt;/div&gt;
+&lt;div class="co1-6 col-sm-3"&gt;
   ...
-</div>
+&lt;/div&gt;
         </code></pre>
         <p>.col-6 class 的原始程式可以簡單（不完全）歸納如下。</p>
         <pre><code class="language-css">
 .col-6 {
--webkit-box-flex: 0;
--webkit-flex: 0 0 50%;
--ms-flex: 0 0 50%; 
-flex: 0 0 50%; 
-max-width: 50%;
+ -webkit-box-flex: 0;
+ -webkit-flex: 0 0 50%;
+ -ms-flex: 0 0 50%; 
+ flex: 0 0 50%; 
+ max-width: 50%;
 }
         </code></pre>
         <p>.col-sm-3 的原始程式可以歸納如下。</p>
         <pre><code class="language-css">
 .col-sm-3{
--webkit-box-flex: 0;
--webkit-flex: 0 0 25%;
--ms-flex: 0 0 25%; 
-flex: 0 0 25%;
-max-width: 25%;
+ -webkit-box-flex: 0;
+ -webkit-flex: 0 0 25%;
+ -ms-flex: 0 0 25%; 
+ flex: 0 0 25%;
+ max-width: 25%;
 }
         </code></pre>
-        <p>我們看到，本節第一段程式中對同一個節點同時設定了兩個class（col-6 和col-sm-3）來進行樣式宣告。</p>
-        <p>從上面的樣式程式中可以看到 flex: 0 0 25% 這樣的宣告，為了了解該宣告，我們先來看一下 flex 屬性。flex 屬性是 flex-grow、flex-shrink 和 flex-basis 的簡寫（就像 backgroud 是很多背景屬性的簡寫一樣），它的預設值為0 1 auto，後兩個屬性是可選項。flex 屬性的語法格式如下。
+        <p>
+          我們看到，本節第一段程式中對同一個節點同時設定了兩個class（col-6
+          和col-sm-3）來進行樣式宣告。
+        </p>
+        <p>
+          從上面的樣式程式中可以看到 flex: 0 0 25% 這樣的宣告，為了了解該宣告，我們先來看一下 flex
+          屬性。flex 屬性是 flex-grow、flex-shrink 和 flex-basis 的簡寫（就像 backgroud
+          是很多背景屬性的簡寫一樣），它的預設值為0 1 auto，後兩個屬性是可選項。flex
+          屬性的語法格式如下。
+        </p>
         <pre><code class="language-css">
-.item｛
-flex:none | ［ <'flex-grow'><'flex-shrink'>？||<'flex-basis'>］
-｝
+.item{
+  flex:none | [ &lt;'flex-grow'&gt;&lt;'flex-shrink'&gt;?||&lt;'flex-basis'&gt;]
+}
         </code></pre>
-<ul>
-<li>flex-grow：該屬性定義項目的放大比例，預設值為0。我們看到，Bootstrap
-程式中的這個值一直為 0，即如果存在剩餘空間，也不放大。</li>
-<li>
-  flex-shrink：該屬性定義了項目的縮小比例，預設值為1，即如果空間不足，該專案將縮小。
-</li>
-<li>
-  flex-basis：該屬性定義了在分配多餘空間之前，項目佔據的主軸空間 (main size) °
-</li>
-</ul>
-<p>瀏覽器會根據這個屬性計算主軸是否有多餘空間，該屬性可以設為與 width或height 屬性一樣的值（如350px），此時專案將佔據固定空間。</p>
-<h3>橫向螢幕轉換及其他細節問題</h3>
-<p>在很多 HTML5 頁面中，我們要區分橫向螢幕和垂直，在不同螢幕下要展示不同的版面配置，所以需要先檢測場景，在不同的場景下指定不同的樣式。
-一般來說會使用 JavaScript 檢查橫向螢幕和垂直情況。
+        <ul>
+          <li>
+            flex-grow：該屬性定義項目的放大比例，預設值為0。我們看到，Bootstrap 程式中的這個值一直為
+            0，即如果存在剩餘空間，也不放大。
+          </li>
+          <li>
+            flex-shrink：該屬性定義了項目的縮小比例，預設值為1，即如果空間不足，該專案將縮小。
+          </li>
+          <li>flex-basis：該屬性定義了在分配多餘空間之前，項目佔據的主軸空間 (main size) °</li>
+        </ul>
+        <p>
+          瀏覽器會根據這個屬性計算主軸是否有多餘空間，該屬性可以設為與 width或height
+          屬性一樣的值（如350px），此時專案將佔據固定空間。
+        </p>
+        <h3>橫向螢幕轉換及其他細節問題</h3>
+        <p>
+          在很多 HTML5
+          頁面中，我們要區分橫向螢幕和垂直，在不同螢幕下要展示不同的版面配置，所以需要先檢測場景，在不同的場景下指定不同的樣式。
+          一般來說會使用 JavaScript 檢查橫向螢幕和垂直情況。
+        </p>
+
         <pre><code class="language-js">
-window.addEventListener（"resize",()=>{
-if(window.orientation === 180 || window.orientation === 0{
-console.log('垂直')
-if(window.orientation === 90 || window.orientation === -90){
-console.log('横向螢幕')
-}
-}
+window.addEventListener('resize', () => {
+  if (window.orientation === 180 || window.orientation === 0) {
+    console.log('垂直')
+    if (window.orientation === 90 || window.orientation === -90) {
+      console.log('横向螢幕')
+    }
+  }
 })
         </code></pre>
         <p>同樣，可以使用純CSS 來實現不同場景下的版面配置。</p>
-        
+
         <pre><code class="language-css">
 @media screen and (orientation: portrait) {
 /*垂直様式程式*/
@@ -543,109 +596,112 @@ console.log('横向螢幕')
 }
         </code></pre>
         <h3>面試題 % 相對於誰</h3>
-   <p>以下列舉在 CSS 中，這個常見的 ％ 單位規則。</p>
-  <ul>
-<li>
-  position: absolute 中的%
-  <p>
-    對於設定絕對定位的元素，我們可以使用 left 、top 表示其偏移量，我們把這個元素的父項目中第一個存在定位屬性的元素當作參照物，其中的％是相對於參照物的，left 相對於參照物的 width ，top 相對於這個參照物的 height。
-  </p>
-</li>
-<li>
-  position: relative 中的 %
-  <p>對於設定相對定位的元素，% 的數值是相對於本身的，left 相對於本身的 width，top 相對於本身的 height。</p>
-</li>
-<li>
-  position:fixed 中的 %
-  <p>對於設定固定定位的元素，% 的數值是相對於視埠的，left 相對於視埠的 width,top 相對於視埠的 height。</p>
-</li>
-<li>
-  margin 和 padding 中的 %
-  <p>margin 和 padding 中的 % 非常特殊，它是相對於父元素的寬度的。沒錯，margin-top: 30% 相當於父元素寬度的 30%。
-</li>
-<li>
-  border-radius 中的%
-  <p>我們經常對一個正方形元素設定 border-radius: 50% 來得到一個圓形，因此不難發現這裡的 % 是相對於本身長寬的。</p>
-</li>
-<li>
-  background-size 中的 %
-  <p>background-size 中的 % 和 border-radius 中的一樣，也是相對於本身長寬的。</p>
-</li>
-<li>
-  transform:translate 中的 %
-  <p>transform:translate 中的 % 是相對於本身長寬的，這也是能夠實現置中的原因</p>
-</li>
-<li>
-  text-indent 中的 %
-  <p>text-indent 這個屬性可以用來設定首行縮排，其中的 ％ 是相對於父元素 width 。
-</li>
-<li>
-  font-size 中的 % 
-  <p>目前元素的字型大小用 % 設定時，會相對於父元素的字型大小進行換算。</p>
-</li>
-<li>
-  line-height 中的 %
-  <p>使用 line-height 設定行高時，如果單位為 %，則是相對於該元素的 font-size 數值的。</p>
-</li>
-</ul>
-<h3>深入：flex 版面配置和傳統版面配置的效能比較</h3>
-<p>首先，效能問題一定是一個相對概念，flex版面配置與正常的block layout
-（non-float）相比，效能負擔一定更大。事實上，block layout 永遠都是透過單通道廣算法（single-pass）進行版面配置的，而flex 版面配置卻總會觸發多通道演算法 （multi-pass code path）進行版面配置。舉例來說，常用的 flex-align
-stretch 通常都是雙通道版面配置（2-pass），這是無可爭議且難以避免的缺陷，是由它的基因決定的。（單通道和多通道屬於圖形學演算法問題，這裡不再說明，這邊只需要了解使用單通道的成本更低即可。</p>
-<p>以下進行一個實驗:重複1000次如下所示的 DOM</p>   
+        <p>以下列舉在 CSS 中，這個常見的 % 單位規則。</p>
+        <ul>
+          <li>
+            position: absolute 中的%
+            <p>
+              對於設定絕對定位的元素，我們可以使用 left 、top
+              表示其偏移量，我們把這個元素的父項目中第一個存在定位屬性的元素當作參照物，其中的％是相對於參照物的，left
+              相對於參照物的 width ，top 相對於這個參照物的 height。
+            </p>
+          </li>
+          <li>
+            position: relative 中的 %
+            <p>
+              對於設定相對定位的元素，% 的數值是相對於本身的，left 相對於本身的 width，top
+              相對於本身的 height。
+            </p>
+          </li>
+          <li>
+            position:fixed 中的 %
+            <p>
+              對於設定固定定位的元素，% 的數值是相對於視埠的，left 相對於視埠的 width,top
+              相對於視埠的 height。
+            </p>
+          </li>
+          <li>
+            margin 和 padding 中的 %
+            <p>
+              margin 和 padding 中的 % 非常特殊，它是相對於父元素的寬度的。沒錯，margin-top: 30%
+              相當於父元素寬度的 30%。
+            </p>
+          </li>
+
+          <li>
+            border-radius 中的%
+            <p>
+              我們經常對一個正方形元素設定 border-radius: 50% 來得到一個圓形，因此不難發現這裡的 %
+              是相對於本身長寬的。
+            </p>
+          </li>
+          <li>
+            background-size 中的 %
+            <p>background-size 中的 % 和 border-radius 中的一樣，也是相對於本身長寬的。</p>
+          </li>
+          <li>
+            transform:translate 中的 %
+            <p>transform:translate 中的 % 是相對於本身長寬的，這也是能夠實現置中的原因</p>
+          </li>
+          <li>
+            text-indent 中的 %
+            <p>text-indent 這個屬性可以用來設定首行縮排，其中的 ％ 是相對於父元素 width 。</p>
+          </li>
+
+          <li>
+            font-size 中的 %
+            <p>目前元素的字型大小用 % 設定時，會相對於父元素的字型大小進行換算。</p>
+          </li>
+          <li>
+            line-height 中的 %
+            <p>使用 line-height 設定行高時，如果單位為 %，則是相對於該元素的 font-size 數值的。</p>
+          </li>
+        </ul>
+        <h3>深入：flex 版面配置和傳統版面配置的效能比較</h3>
+        <p>
+          首先，效能問題一定是一個相對概念，flex版面配置與正常的block layout
+          （non-float）相比，效能負擔一定更大。事實上，block layout
+          永遠都是透過單通道廣算法（single-pass）進行版面配置的，而flex
+          版面配置卻總會觸發多通道演算法 （multi-pass code path）進行版面配置。舉例來說，常用的
+          flex-align stretch
+          通常都是雙通道版面配置（2-pass），這是無可爭議且難以避免的缺陷，是由它的基因決定的。（單通道和多通道屬於圖形學演算法問題，這裡不再說明，這邊只需要了解使用單通道的成本更低即可。
+        </p>
+        <p>以下進行一個實驗:重複1000次如下所示的 DOM</p>
         <pre><code class="language-html">
-‹div class="wrap">
-‹div class="cell description">Item Description‹/div>
-<div class="cell add">Add</div>
-<div class="cell remove">Remove</div>
-</div>
+&lt;div class="wrap"&gt;
+  &lt;div class="cell description"&gt;Item Description&lt;/div&gt;
+  &lt;div class="cell add"&gt;Add&lt;/div&gt;
+  &lt;div class="cell remove"&gt;Remove&lt;/div&gt;
+&lt;/div&gt;
         </code></pre>
-        <p>接著分別使用 flex 版面配置和 table 版面配置，並採用 Navigation Timing API
-進行版面配置速度測量，測量程式如下。
+        <p>
+          接著分別使用 flex 版面配置和 table 版面配置，並採用 Navigation Timing API
+          進行版面配置速度測量，測量程式如下。
+        </p>
+
         <pre><code class="language-js">
-<script type="text/javascript">
-;(function TimeThisMother () {
-window.onload = function () {
-set Timeout (function () {
-var t = performance.timing;
-alert("Speed of selection is: " + (t.loadEventEnd -
-t.responseEnd) + "milliseconds");
-}, 0) ;
-}
-})()；
-</script>
+&lt;script type="text/javascript"&gt;
+  ;(function TimeThisMother() {
+    window.onload = function () {
+      setTimeout(function () {
+        var t = performance.timing
+        alert('Speed of selection is: ' + (t.loadEventEnd - t.responseEnd) + 'milliseconds')
+      }, 0)
+    }
+  })()
+&lt;/script&gt;
         </code></pre>
         <p>執行結果 flex 版面配置似乎要比 table 版面配置更快</p>
         <p>最後，版面配置效能的負擔一般與以下因素相關。</p>
         <ul>
-<li>
-  需要版面配置的元素數量
-</li>
-<li>
-  版面配置的複雜性
-</li>
-</ul>
-<p>
-  相對地，在加強版面配置效能方面主要需要注意以下兩點。
-</p>
-  <ul>
-<li>
-  應盡可能避免觸發版面配置（layout / reflow）。
-</li>
-<li>
-  避免強制同步版面配置和版面配置抖動。
-</li>
-</ul>
-
-
-        <pre><code class="language-css">
-
-        </code></pre>
-        <pre><code class="language-css">
-
-        </code></pre>
-        
-        <div class="border-block"></div>
+          <li>需要版面配置的元素數量</li>
+          <li>版面配置的複雜性</li>
+        </ul>
+        <p>相對地，在加強版面配置效能方面主要需要注意以下兩點。</p>
+        <ul>
+          <li>應盡可能避免觸發版面配置（layout / reflow）。</li>
+          <li>避免強制同步版面配置和版面配置抖動。</li>
+        </ul>
       </article>
     </main>
   </body>

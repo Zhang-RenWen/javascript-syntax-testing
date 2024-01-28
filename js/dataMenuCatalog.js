@@ -30,7 +30,7 @@ export const menu = [
           },
           {
             id: '1-1-5',
-            title: '1-1-5 現代 CSS 特色 🚧',
+            title: '1-1-5 現代 CSS 特色',
             href: '1-1-5.html'
           },
           {
@@ -150,7 +150,7 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-6-1',
-            title: '1-6-1 常見架構設計🚧',
+            title: '1-6-1 常見架構設計',
             href: '1-6-1.html'
           },
           {
