@@ -154,6 +154,11 @@ export const menu = [
             href: '1-6-1.html'
           },
           {
+            id: '1-6-2',
+            title: '1-6-2 單向數據流架構 React 解析 🚧',
+            href: '1-6-2.html'
+          },
+          {
             id: '1-6-3',
             title: '1-6-1 權限 🚧',
             href: '1-6.html#1-6-1'
