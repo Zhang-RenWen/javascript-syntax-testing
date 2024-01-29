@@ -34,8 +34,175 @@
       </aside>
       <article>
         <h2 id="1-6-2">1-6-2 單向數據流架構 React 解析</h2>
-        <h3></h3>
+        <p>React 開發者可能對各種生命週期瞭若指掌，也熟悉「React 虛擬 DOM diff 演算法」、「單向資料流程」。但這並不夠深入。以下來介紹一些更加深入核心的原理。</p>
+        <h3>React 專屬語法 JSX</h3>
+        <p>從直觀上看 JSX 是將 HTML 直接嵌入了 JS （JavaScript）中。</p>
+        <p>如果我們需要用條件判斷是否顯示元件有多種寫法。</p>
+        <p>假設收到這樣一個很常見的需求：繪製一個清單，但是需要滿足清單為空陣列時，顯示空文案"Sorry，the list is empty"。清單中的資料可能需要透過網路取得，存在列表中沒有初值為 null 的情況。</p>
+        <p>透過 JSX 實現這種條件繪製的最簡潔的方法就是使用三元運算子</p>
         <pre><code class="language-js">
+const list = ({list}) => {
+const isNull = !list
+const isEmpty = !isNull && !list.length
+return (<div> {
+isNull ? null:(
+isEmpty:<p>Sorry,the list is empty </p>
+:<div>{
+  list.map(item => <ListItem item={item｝/>)
+}
+</div>
+)
+}
+</div>
+}
+}
+        </code></pre>
+        <p>由於之後還要加上了出現錯誤時和正在載入時的邏輯，所以三元運算子萬惡的巢狀結構地獄可能就要出現了。解決思路通常用的方法是抽離出 render function ，如下：</p>
+                <pre><code class="language-js">
+const getListContent = (isLoading, list, error) => {
+console.log(list)
+console.log(isLoading)
+console.log(error)
+//...
+return //...
+}
+const list = ({isLoading, list, error}) => {
+return (<div>{
+getListContent (isLoading, list, error)
+}
+</div>)
+}
+        </code></pre>
+        <p>甚至可以使用 IIFE，範例如下</p>
+                <pre><code class="language-js">
+const list = ({isloading, 11st, error})=> {
+return (<div>
+{
+(()=>{
+console.log(list)
+console.log(isLoading)
+console.log(error)
+if(error) {
+return <span>Something is wrong!</span>
+}
+if (!error && isLoading) {
+return <span>Loading...</span>
+}
+if (lerror && lisLoading && !list. length) {
+return <p>Sorry, the list is empty </p>
+}
+if (!error && !isLoading && list.length > 0){
+return <div>{
+list.map(item => <ListItem item={item} />)
+}
+</div>
+}
+})()
+}
+</div>
+)
+}
+        </code></pre>
+        <p>這樣一來就可以使用 console.log 進行簡單偵錯了，也可以使用 if.else 實現條件繪製。</p>
+        <p>再回到根本問題：為什麼不能直接在 JSX 中使用 if.eise 實現條件繪製，而只能借用函數運輯實現呢？實際上，我們都知道 JSX 會被編譯為 React.
+createElenent。直白地說，React createElenent 的底層邏輯是無法執行 JavaScript 程式的，只能繪製一個結果。因此，JSX 中除了 JavaScript 運算式，不能直接寫 JavaScript 語法。準確來講，JSX 只是函數呼叫和運算式的語法糖。</p>
+<p>雖然 JSX 只是函數呼叫和運算式的語法糖，但是JSX 仍然具有強大的功能且能夠使用靈活。React 元件重複使用最流行的方式都是以 JSX 能力為基礎的，
+舉例來説，HOC（Higher Order Component，高階元件）和 render prop 模式，
+render prop 模式的實現程式如下</p>
+                <pre><code class="language-js">
+class WindowWidth extends React.Component {
+constructor () {
+super()
+this.state ={
+width: 0
+}
+componentDidMount () {
+this.setState (
+{width: window.innerWidth},
+window.addEventListener('resize', ({target}) =>{
+this.setState({
+width: target.innerWidth
+})
+})
+)
+｝
+render (){
+return this props.children (this.state.width)
+}
+}
+‹WindowWidth>
+{
+width => (width > 800 ? <div>show</div> : null)
+}
+<WindowWidth>
+        </code></pre>
+        <p>甚至還可以讓 JSX 具有 Vue template 的能力，範例程式如下。</p>
+                <pre><code class="language-js">
+render (){
+const visible = true
+return ( <div>
+<div v-if={visible}>
+content
+</div>
+</div>
+)
+}
+render () {
+const list = [1, 2, 3, 4]
+return (
+<div>
+<div v-for={item in list}>
+{item}
+</div>
+</div>
+)
+}
+        </code></pre>
+        <p>JSX 需要在編譯後執行，在編譯過 中借助 AST（抽象語法樹）對 v-if、v-for進行處理即可。</p>
+        <p>這裡註記一下：操作AST 是另外一門高階技術。需要額外開一章說明。
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
+
+        </code></pre>
+                <pre><code class="language-js">
 
         </code></pre>
         <div class="border-block"></div>
