@@ -159,13 +159,60 @@ return (
 }
         </code></pre>
         <p>JSX 需要在編譯後執行，在編譯過 中借助 AST（抽象語法樹）對 v-if、v-for進行處理即可。</p>
-        <p>這裡註記一下：操作AST 是另外一門高階技術。需要額外開一章說明。
-                <pre><code class="language-js">
-
+        <p>這裡註記一下：操作AST 是另外一門高階技術。需要額外開一章說明。</p>
+        <h3>非同步的 this.setState</h3>
+        <p>絕大多數 React 開發者都知道 this.setState 是非同步執行的，但這個結論是錯誤的！那麼，this.setState 到底是非同步執行還是同步執行的？</p>
+        <p>this.setSate 這個 API 的官方描述為：
+setState() does not always immediately update the component. It may batch or defer the update until later. This makes reading this state right after calling setState() a potential pitfall.</p>
+<p>意思是說，setState() 方法並不總是能夠立刻更新元件，它可能會延遲更新，這樣在透過 this.state 讀取內容時，就有可能取得不到最新的狀態值。</p>
+<p>既然用詞是 may，那麼說明 this.setState 一定不總是非同步執行的，也不總是同步執行的。所謂的延遲更新並不是針對所有情況的。</p>
+<p>實際上，在React 控制之內的事件處理過程中，setState 不會同步更新 this.
+state ；而對於 React 控制之外的情況，setState 會同步更新 this.state。</p>
+<p>什麼是 React 控制內外呢？舉個實例，先來看以下程式。</p>
+        <pre><code class="language-js">
+onClick(){
+this.setState({
+count: this.state.count + 1
+})
+}
+componentDidMount(){
+document.querySelectorAll('#btn-raw')
+addEventlistener('click', this.onclick)
+}
+render(){
+return(
+<React.Fragment> 
+  <button id="btn-raw"> 
+    click out React
+  </button>
+  <button onClick=｛this.onClick｝>
+   click in React
+  </button>
+</React.Fragment>
+)
+}
         </code></pre>
-                <pre><code class="language-js">
-
+        <p>在 為 btn-raw 的 butbon 上綁定的事件，是在 componentDidMount方法中添過 addEventListener 完成更新的，這是脱離於 React 事件之外的事件，因此它是同步更新的。相反，在程式中第二個 buton 上綁定的事件處理函數對應的 setState 是非同步更新的。這樣的設計並不難了解，透過延遲更新，可以獲得更好的效能。</p>
+        <h4>this.setState Promise 化</h4>
+        <p>官方提供了 this.setState 這種處理非同步更新的方法。其中的方法就是使 setState 接收第二個參數，並作為狀態更新後的回呼，但這無疑又帶來了我們熟悉的 callback hell（回呼地獄）問題。</p>
+        <p>例如有這樣一個場景，我們在開發一個 table，這個 table 類似Excel 的形式，使用者敲下確認鍵時，需要將游標移動到下一行，這是一個 setState 操作，然後馬上進行聚焦，這又是一個 setState 操作。如果目前行就是最後一行，那麼使用者敲下確認鍵時，需要先建立一個新行，這是第一個setState 操作，同時將游標移動到新的最後一行，這是第二個 setState 操作；然後在這個新行中進行聚焦，這是第三個 setState 操作。這些 setState 操作依賴於前一個 setState 操作的完成。</p>
+        <p>面對這種場景，如果我們不想讓回呼地獄問題出現，那麼常見的處理方式就是利用生命週期方法，在 componentDidUpdate 中進行相關操作，第一個 setState
+操作完成後，在其觸發的 componentDidUpdate 中進行第二個 setState 操作，依此類推</p>
+<p>但是這樣存在的問題也很明顯：邏輯過於分散。生命週期方法中有很多很難維護的「莫名其妙的操作」會出現「針對生命週期程式設計」的情況</p>
+<p>回到剛才的問題，解決回呼地獄問題其實是前端工程師的拿手好戲，最直接的方案就是將 setState Promise 化，程式如下。</p>
+        <pre><code class="language-js">
+const setstatepromise(me, state)=>{
+new Promise (resolve => {
+me.setState(state,()=>{
+resolve()
+})
+})
+}
         </code></pre>
+        <p>這只是系統更新的做法，如果使用修改 React 原始程式的做法，也不困難，如下圖所示。</p>
+        補圖
+        <h3>原生事件和 React 合成事件</h3>
+        
                 <pre><code class="language-js">
 
         </code></pre>
