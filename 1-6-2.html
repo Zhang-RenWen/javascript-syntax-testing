@@ -212,19 +212,79 @@ resolve()
         <p>這只是系統更新的做法，如果使用修改 React 原始程式的做法，也不困難，如下圖所示。</p>
         補圖
         <h3>原生事件和 React 合成事件</h3>
+<p>React 中的事件機制並不是原生的那一套，事件沒有綁定在原生DOM上，大多數事件都綁定在 document 上（除了少數不會上浮到 document 的事件，如 video等）。</p>
+<p>同時，React 觸發的事件也是對原生事件的包裝，並不是原生event物件。</p>
+<p>合成事件物件將被重用，因此在呼叫事件回呼函數後，合成事件物件上的所有屬性都將被廢棄。這樣做可以大幅節省記憶體，而不會頻繁地建立和銷毀事件物件。</p>
+<p>這樣的事件系統設計，會使效能有所提升，但同時也會引發幾個潛在現象。</p>
+<h4>現象1：非同步存取事件物件</h4>
+<p>我們不能以非同步的方式存取合成事件物件。以下程式所展示的是一個典型的錯誤範例。</p>
+  
+                <pre><code class="language-js">
+function handleClick (e){
+console.log(e)
+setTimeout(()=>{
+console.log(e)
+},0)
+}
+        </code></pre>
+        <p>在以上程式中，第二個 console.log 總會輸出 undefined。為此，React 也為我們準備了持久化合成事件的方法，如下。 </p>
         
                 <pre><code class="language-js">
-
+function handleClick(e){
+console.log(e)
+e.persist() // 持久化
+setrimeout(()=>{
+console.log(e)
+},0)
+}
         </code></pre>
+        <h4>現象2：阻止原生事件上浮</h4>
+        <p>在 React 中直接使用 e.stopPropagation 不能阻止原生事件上浮，因為事件早已經上浮到了 document 上，React 在事件上浮到 document 上時才能夠處理事件。以下程式證明了 React 中是無法使用 e.stopPropagation 來阻止事件上浮的。</p>
+        <pre><code class="language-js">
+componentDidMount(){
+document.addEventListener('click',()=>{
+console.log('document click')
+})
+}
+handleclick=e=>{
+console.log('div click')
+e.stopPropagation()
+}
+
+render(){
+return(
+<div onclick={this.handleClick}>
+click
+</div>
+)
+}
+        </code></pre>
+        <p>以上程式執行後首先會列印出 div click，然後列印出 document click。e.stopPropagation 是沒有用的。</p>
+        <p>但是，React 的合成事件為使用原生事件留了一個口，透過合成事件上的 nativeEvent 屬性可以存取原生事件。原生事件上的stopImmediatePropagation
+方法除了能做到像 stopPropagation 一樣阻止事件向父級上浮，還能阻止目前元素剩餘的、同類型事件的執行（第一個click 事件觸發時，呼叫e.stoplmmediatePropagation 能夠阻止目前元素的第二個 click 事件觸發）。因此，執行以下程式只會列印出 div click。
+        </p>
+
                 <pre><code class="language-js">
-
+componentDidMount (){
+document.addEventListener('click',()=>｛
+console.log('document click')
+})
+}
+handleClick = e => {
+console.log('div click')
+e.nativeEvent.stopImmediatePropagation ()
+}
+render(){
+return(
+<div onclick={this.handleClick}>
+click
+</div>
+)
+}
         </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
+        <h3>element diff 演算法的細節</h3>
+        
+        
                 <pre><code class="language-js">
 
         </code></pre>
