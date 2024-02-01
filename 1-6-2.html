@@ -283,25 +283,138 @@ click
 }
         </code></pre>
         <h3>element diff 演算法的細節</h3>
+        <p>React的三個假設在比較 element 時存在缺陷，所以需要開發者為每一個
+element提供 key，以便 React可以準確地發現新舊集合節點中的相同節點，對
+於相同節點無須進行節點刪除和建立，只需要將舊集合中節點的位置進行移動，更新為新集合中節點的位置，如圖13-2所示。</p>
+<p>元件的排列順序由1234變為2143，此時 React 列出的 diff 結果為2，對4不做任何操作，對1和3執行移動操作即可。</p>
+<p>也就是說，如果元素在舊集合中的位置與在新集合中的位置相比更靠後的話，就不需要移動。當然，這種 diff 聽上去並非完美無缺。</p>
+補圖1
+補圖2
+
+<p>對於圖13-3所示的情況，實際上，只需要對4執行移動操作，然而由於4在舊集合中的位置是最靠後的，因此其他節點都要移動到4後面。</p>
+<p>這種做法無疑是很愚蠢的，效能也會比較差。針對這種情況，官方建議，在開發過程中，儘量減少類似將最後一個節點移動到列表表頭的操作。</p>
+<p>實際上，很多類別 React 類別庫（Inferno.js、Preact.js）都有了更優的 element diff 移動策略。</p>
+        <h3>不是每次加上 Key 都能效能最佳化</h3>
+        <p>剛才提到，React 在進行 element 差異比較時，由於key 的存在，React 可以準確地判斷出該節點在新集合中是否存在，這相當大地加強了 element 差異比較的效率。</p>
+        <p>但是接下來的案例卻不一定。現在有個場景，將集合［1,2,3.4］繪製成4組數字（僅是數字這麼簡單）</p>
         
+                <pre><code class="language-html">
+<div id="1">1</div> 
+<div id="2">2</div>
+<div id="3">3</div>
+<div id="4">4</div>
+        </code></pre>
+        <p>如果要將它變為 ［2,1.4,5］，也就是刪除3，增加5，那麼按照之前的演算法，需要把1放到2後面，刪除3，再新增5。整個操作移動了一次 DOM 節點，刪除和新增節點加起來一共2處。</p>
+        <p>由於DOM 節點的移動操作負擔是比較昂貴的，因此對於這種簡單的 node text
+更改，不需要進行類似的 element diff過程，只需要更改 dom.textContent 即可。dom.textContent 中的內容如下所示。</p>
+                <pre><code class="language-js">
+const startTime = performance.now()
+$('#1').textContent = 2
+$('#2').textContent = 1
+$('#3').textContent = 4
+$('#4').textContent = 5
+console.log('time consumed:' performance.now() - startTime)
+        </code></pre>
+        <p>這麼看，也許不加key的效能要比加上key 的效能更高。</p>
+        <h2>React :元件設計</h2>
+        <p>首先來看第一個概念:單一職責。</p>
+        <h3>單一職責</h3>
+        <p>將全部元件都拆散，使它們只具備單一職責並沒有必要，反而增加了撰寫的繁瑣程度。如果一個功能集合有可能發生變化，那麼就需要大幅地確保單一職責。</p>
+        <p>單一職責帶來的最大好處就是在修改元件時能夠做到對全域進行掌控，不必擔心對其他元件造成影響。舉個實例，我們的元件需要透過網路請求取得資料並展示資料內容，這樣一來潛在的功能集合改變就有以下幾種。</p>
+        <ul>
+          <li>請求API 位址發生變化。</li>
+          <li>請求傳回資料格式發生變化。</li>
+          <li>開發者想更換網路請求協力廠商函數庫，例如：將jQuery.ajax 改成 axios。</li>
+          <li>更改請求資料邏輯。</li>
+        </ul>
+        <p>再看一個實例，如果需要一個 Table 元件，並繪製一個 List，那潛在更改可能如下。</p>
+        <ul>
+          <li>限制一次性繪製的 item 個數（只繪製前 10個，對剩下的進行 lazy-load）。</li>
+          <li>當資料清單為空時顯示 This list is empty。</li>
+          <li>任何繪製邏輯的更改。</li>
+        </ul>
+        <p>下面來看一個實際場景，使用 Weather 元件讀取天氣預報資料，並進行天氣資訊展示，程式如下。</p>
         
-                <pre><code class="language-js">
+        <pre><code class="language-js">
+import axios from 'axios'
+class Weather extends Component {
+constructor (props){
+  super (props)
+  this.state = { 
+  temperature: 'N/A', 
+  windSpeed: 'N/A' 
+  }
+}
+componentDidMount () {
+axios.get('http://weather.com/api').then(response =>{
+const ( current } = response.data
+this.setState ({
+temperature: current.temperature, 
+windSpeed: current.windspeed
+})
+})
+}
 
+render (){
+const { temperature, windSpeed } = this.state
+return (
+<div className="weather">
+<div>Temperature: {temperature} °C</div> 
+<div>Wind: {windSpeed} km/h</div>
+</div>
+)
+}
+}
         </code></pre>
+        <p>這個元件很容易了解，並且看上去沒什麼大問題，只是並不符合單一職責。
+舉例來說，這個 Weather 元件將資料取得與繪製邏輯耦合在了一起，如果資料請求有變化，就需要在 componentDidMount 生命週期中進行改動；如果展示天氣的邏輯有變化，就需要對 render 方法進行更改。</p>
+<p>如果我們將這個元件拆分成 WeatherFeteh 和 WeatherInfo 兩個元件，這兩個元件各自只需要做一件事，保持單一職責，則重構後 程式如下。<p>
                 <pre><code class="language-js">
+import axios from 'axios'
+import WeatherInfo from '/weatherInfo'
+class WeatherFetch extends Component {
+constructor (props) {
+super(props)
+this.state = { temperature: 'N/A', windSpeed: 'N/A' }
+}
+componentDidMount () {
+axios.get('http://weather.com/api').then(response =>{
+const { current } = response.data
+this.setState({
+temperature: current.temperature, windSpeed: current.windSpeed})
+})
+}
 
+render (){
+const {temperature, windSpeed} = this.state
+return (
+<WeatherInfo temperature={temperature} windSpeed={windSpeed} />
+)
+}
+}
         </code></pre>
+        <p>在另一個檔案中實現 WeatherInfo 元件的程式如下。</p>
                 <pre><code class="language-js">
-
+const WeatherInfo = ({temperature, windSpeed })=>(
+<div className="weather">
+<div>Temperature: {temperature} °C</div> 
+<div>Wind: {windSpeed} km/h</div>
+</div>
+)
         </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
-                <pre><code class="language-js">
-
+        <p>如果我們想對程式進行重構，使用 async/await 代替 Promise，那麼只需要直接更改 WeatherFetch 元件即可，不會對 Weatherlnfo 元件有任何影響，程式如下。<p>
+        <pre><code class="language-js">
+class WeatherFetch extends Component｛
+async componentDidMount () {
+const response = await axios.get('http://weather.com/api')
+const { current } = response.data
+this.setState({
+temperature: current.temperature, windSpeed: current.windSpeed
+})
+}
+}
+// ...
+}
         </code></pre>
                 <pre><code class="language-js">
 
