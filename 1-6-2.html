@@ -562,20 +562,68 @@ return (
         </code></pre>
         <p>這樣一來，Controls 元件就不需要知道 App 元件的內部情況了，實現了更好的重複使用性和可測試性，App 元件因此也具有了更好的封裝性。</p>
         <h3>元件組裝性設計</h3>
-        
-         <pre><code class="language-js">
-
-        </code></pre>
+        <p>React 具有天生的組合基因，可以將一個頁面拆分成許多個元件，如圖：</p>
+        補圖
+        <p>上圖整個頁面對應的宣告式程式如下。</p>
         <pre><code class="language-js">
-
+const app = (
+<Application>
+<Header />
+<Sidebar>
+<Menu />
+</Sidebar>
+<Content>
+<Article />
+</Content>
+<Footer />
+</Application>
+)
         </code></pre>
+        <p>如果兩個元件 Composed1 和 Composed2 具有相同的邏輯，則可以使用組合性進行拆分重組，如下</p>
+        <pre><code class="language-js">
+const instance1 = (
+<Composed1>
+// Composed1邏輯
+//重複邏輯
+</Composedl>
+const instance2 = (
+‹Composed2>
+//重複邏輯
+// Composed2邏輯
+</Composed2>
+)
+        </code></pre>
+        <p>將重複邏輯分析為 Common元件，程式如下。</p>
        <pre><code class="language-js">
-
+const instancel = (
+<Composedl>
+<Logic1 />
+<Common />
+</Composed1>
+)
+const instance2 = (
+<Composed2>
+<Common />
+‹Logic2 />
+</Composed2>
+)
         </code></pre>
+        <p>另外一個組合性的典型應用就是 render prop 模式</p>
         <pre><code class="language-js">
-
+const ByDevice = ({children :{mobile, other }})=>{
+return Utils.isMobile() ? mobile : other
+}
+<ByDevice>
+{{
+mobile: <div>Mobile detected!</div>,
+other: <div>Not a mobile device</div>
+}}
+</ByDevice>
         </code></pre>
-        <div class="border-block"></div>
+        <h3>副作用和（準）純元件</h3>
+        <pre><code class="language-js">
+          
+        </code></pre>
       </article>
     </main>
   </body>
