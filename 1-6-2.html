@@ -283,33 +283,296 @@ click
 }
         </code></pre>
         <h3>element diff 演算法的細節</h3>
+        <p>React的三個假設在比較 element 時存在缺陷，所以需要開發者為每一個
+element提供 key，以便 React可以準確地發現新舊集合節點中的相同節點，對
+於相同節點無須進行節點刪除和建立，只需要將舊集合中節點的位置進行移動，更新為新集合中節點的位置，如圖13-2所示。</p>
+<p>元件的排列順序由1234變為2143，此時 React 列出的 diff 結果為2，對4不做任何操作，對1和3執行移動操作即可。</p>
+<p>也就是說，如果元素在舊集合中的位置與在新集合中的位置相比更靠後的話，就不需要移動。當然，這種 diff 聽上去並非完美無缺。</p>
+補圖1
+補圖2
+
+<p>對於圖13-3所示的情況，實際上，只需要對4執行移動操作，然而由於4在舊集合中的位置是最靠後的，因此其他節點都要移動到4後面。</p>
+<p>這種做法無疑是很愚蠢的，效能也會比較差。針對這種情況，官方建議，在開發過程中，儘量減少類似將最後一個節點移動到列表表頭的操作。</p>
+<p>實際上，很多類別 React 類別庫（Inferno.js、Preact.js）都有了更優的 element diff 移動策略。</p>
+        <h3>不是每次加上 Key 都能效能最佳化</h3>
+        <p>剛才提到，React 在進行 element 差異比較時，由於key 的存在，React 可以準確地判斷出該節點在新集合中是否存在，這相當大地加強了 element 差異比較的效率。</p>
+        <p>但是接下來的案例卻不一定。現在有個場景，將集合［1,2,3.4］繪製成4組數字（僅是數字這麼簡單）</p>
         
+                <pre><code class="language-html">
+<div id="1">1</div> 
+<div id="2">2</div>
+<div id="3">3</div>
+<div id="4">4</div>
+        </code></pre>
+        <p>如果要將它變為 ［2,1.4,5］，也就是刪除3，增加5，那麼按照之前的演算法，需要把1放到2後面，刪除3，再新增5。整個操作移動了一次 DOM 節點，刪除和新增節點加起來一共2處。</p>
+        <p>由於DOM 節點的移動操作負擔是比較昂貴的，因此對於這種簡單的 node text
+更改，不需要進行類似的 element diff過程，只需要更改 dom.textContent 即可。dom.textContent 中的內容如下所示。</p>
+                <pre><code class="language-js">
+const startTime = performance.now()
+$('#1').textContent = 2
+$('#2').textContent = 1
+$('#3').textContent = 4
+$('#4').textContent = 5
+console.log('time consumed:' performance.now() - startTime)
+        </code></pre>
+        <p>這麼看，也許不加key的效能要比加上key 的效能更高。</p>
+        <h2>React :元件設計</h2>
+        <p>首先來看第一個概念:單一職責。</p>
+        <h3>單一職責</h3>
+        <p>將全部元件都拆散，使它們只具備單一職責並沒有必要，反而增加了撰寫的繁瑣程度。如果一個功能集合有可能發生變化，那麼就需要大幅地確保單一職責。</p>
+        <p>單一職責帶來的最大好處就是在修改元件時能夠做到對全域進行掌控，不必擔心對其他元件造成影響。舉個實例，我們的元件需要透過網路請求取得資料並展示資料內容，這樣一來潛在的功能集合改變就有以下幾種。</p>
+        <ul>
+          <li>請求API 位址發生變化。</li>
+          <li>請求傳回資料格式發生變化。</li>
+          <li>開發者想更換網路請求協力廠商函數庫，例如：將jQuery.ajax 改成 axios。</li>
+          <li>更改請求資料邏輯。</li>
+        </ul>
+        <p>再看一個實例，如果需要一個 Table 元件，並繪製一個 List，那潛在更改可能如下。</p>
+        <ul>
+          <li>限制一次性繪製的 item 個數（只繪製前 10個，對剩下的進行 lazy-load）。</li>
+          <li>當資料清單為空時顯示 This list is empty。</li>
+          <li>任何繪製邏輯的更改。</li>
+        </ul>
+        <p>下面來看一個實際場景，使用 Weather 元件讀取天氣預報資料，並進行天氣資訊展示，程式如下。</p>
+        
+        <pre><code class="language-js">
+import axios from 'axios'
+class Weather extends Component {
+constructor (props){
+  super (props)
+  this.state = { 
+  temperature: 'N/A', 
+  windSpeed: 'N/A' 
+  }
+}
+componentDidMount () {
+axios.get('http://weather.com/api').then(response =>{
+const ( current } = response.data
+this.setState ({
+temperature: current.temperature, 
+windSpeed: current.windspeed
+})
+})
+}
+
+render (){
+const { temperature, windSpeed } = this.state
+return (
+<div className="weather">
+<div>Temperature: {temperature} °C</div> 
+<div>Wind: {windSpeed} km/h</div>
+</div>
+)
+}
+}
+        </code></pre>
+        <p>這個元件很容易了解，並且看上去沒什麼大問題，只是並不符合單一職責。
+舉例來說，這個 Weather 元件將資料取得與繪製邏輯耦合在了一起，如果資料請求有變化，就需要在 componentDidMount 生命週期中進行改動；如果展示天氣的邏輯有變化，就需要對 render 方法進行更改。</p>
+<p>如果我們將這個元件拆分成 WeatherFeteh 和 WeatherInfo 兩個元件，這兩個元件各自只需要做一件事，保持單一職責，則重構後 程式如下。<p>
+                <pre><code class="language-js">
+import axios from 'axios'
+import WeatherInfo from '/weatherInfo'
+class WeatherFetch extends Component {
+constructor (props) {
+super(props)
+this.state = { temperature: 'N/A', windSpeed: 'N/A' }
+}
+componentDidMount () {
+axios.get('http://weather.com/api').then(response =>{
+const { current } = response.data
+this.setState({
+temperature: current.temperature, windSpeed: current.windSpeed})
+})
+}
+
+render (){
+const {temperature, windSpeed} = this.state
+return (
+<WeatherInfo temperature={temperature} windSpeed={windSpeed} />
+)
+}
+}
+        </code></pre>
+        <p>在另一個檔案中實現 WeatherInfo 元件的程式如下。</p>
+                <pre><code class="language-js">
+const WeatherInfo = ({temperature, windSpeed })=>(
+<div className="weather">
+<div>Temperature: {temperature} °C</div> 
+<div>Wind: {windSpeed} km/h</div>
+</div>
+)
+        </code></pre>
+        <p>如果我們想對程式進行重構，使用 async/await 代替 Promise，那麼只需要直接更改 WeatherFetch 元件即可，不會對 Weatherlnfo 元件有任何影響，程式如下。<p>
+        <pre><code class="language-js">
+class WeatherFetch extends Component｛
+async componentDidMount () {
+const response = await axios.get('http://weather.com/api')
+const { current } = response.data
+this.setState({
+temperature: current.temperature, windSpeed: current.windSpeed
+})
+}
+}
+// ...
+}
+        </code></pre>
+        <p>相對地，如果將顯示風速的邏輯從 "Wind: 0 km/h" 改為文字描述「Wind：風平浪靜」，也只需要改動 Weatherinfo 元件，而不會對 WeatherFetch 元件有任何影響，程式如下。</p>
+        <p>這只是一個簡單的實例，在真實的專案中，保持元件的單一職責非常重要，甚至可以使用 HOC 強制元件保持單一職責。</p>
         
                 <pre><code class="language-js">
+class PersistentForm extends Component｛
+constructor (props) {
+super (props)
+this.state = { 
+inputValue: localStorage.getItem('inputValue') }
+this.handleChange = this.handleChange.bind(this)
+this.handleClick = this.handleClick. bind(this)
+}
+
+handleChange(event) {
+this.setState ({
+inputValue: event.target.value
+})
+}
+handleClick () {
+localStorage.setItem('inputValue', this.state.inputValue)
+}
+render () {
+const { inputValue } = this.state
+return (
+<div className="persistent-form">
+<input type="text" value={inputValue} onChange={this.handleChange} />
+<button onClick={this.handleClick)>
+Save to storage </button>
+</div>
+)
+}
+}
+        </code></pre>
+        <p>與初始實現相比，以上程式中的改動如下：初始 state 的值不再透過直接讀取 localStorage 提供，而是由 this.props.initialValue 提供；handleClick 對 this.
+props.saveValue 進行邏輯呼叫，而不再直接操作 localStorage。更進一步地，我們可以用 withPersistence 這個 HOC 來實現 this.props.saveValue 方法，程式如下。</p>
+        <pre><code class="language-js">
+function withPersistence (storageKey, storage) {
+return function (WrappedComponent) {
+return class PersistentComponent extends Component {
+constructor (props) {
+super(props)
+this.state = initialValue: storage.getItem(storageKey)
+}
+render () {
+return(
+‹WrappedComponent initialValue={this.state.initialValue} saveValue={this.saveValue}
+{...this.props}
+/>
+);
+}
+
+saveValue(value) {
+storage.setItem(storageKey, value)
+}
+}
+}
+}
+        </code></pre>
+        <p>withPenistence 元件的使用方式如下所示。</p>
+        <pre><code class="language-js">
+const LocalStoragePersistentForm = withPersistence('key',localStorage)(PersistentForm)
+        </code></pre>
+        <p>這種方式是元件單一職責和元件重複使用的結合的表現，其他元件當然也可以使用這個 HOC，程式如下。</p>
+        <pre><code class="language-js">
+const LocalStorageMyOtherForm = withPersistence('key', localStorage)(MyOtherForm)
+        </code></pre>
+        <p>上述關於 withPersistence 元件的設計和使用方法對儲存和繪製職責進行了解耦，這樣便可以隨時切換儲存方式，舉例來說，將 localstorage 打換為 sessionStorage，程式如下。</p>
+        <pre><code class="language-js">
+const SessionStoragePersistentForm = withPersistence('key', sessionStorage)(PersistentForm)
+        </code></pre>
+        <h3>元件通訊和封裝</h3>
+        <p>元件連結有緊耦合和鬆散耦合之分，緊耦合是指兩個或多個元件之間需要了解彼此的元件內設計，這樣的情況是我們不想看到的，因為它破壞了元件的獨立性，「牽一髮而動全身」。這麼看來，鬆散耦合帶來的好處是很直接的。</p>
+        <p>直接來看一個簡單的計數器元件的實現。</p>
+       <pre><code class="language-js">
+class App extends Component {
+constructor(props)｛
+super (props)
+this.state = { number: 0 }
+}
+render (){
+return(
+<div className="app">
+<span className= "number"> {this.state.number}</span>
+<Controls parent={this} />
+</div>)
+}
+}
+class Controls extends Component {
+updateNumber(toAdd){
+this.props.parent.setState(prevState =>({
+number: prevState.number + toAdd
+}))
+}
+
+render(){
+return(
+<div className="controls" >
+<button onClick=(()=> this.updateNumber(+1) }>
+Increase </button>
+<button onClick={()=> this.updateNumber(-1) }>
+Decrease </button>
+</div>
+)
+}
+}
+        </code></pre>
+        <p>這樣的元件實現的問題很明顯：App元件不具有封裝性，它將實例傳給
+Controls 元件，Controls 元件可以直接更改App state 中的內容。事實上，我們並不是不允許Controls 元件修改App元件中的內容，只是不建議使用 Controls
+元件直接呼叫 App 元件的 setState 方法，因為 Controls 元件如果要呼叫 App 的 setState，就需要知道 App 元件 state 的結構，需要了解 this.props.parent.state.number 等詳情。</p>
+<p>同時，上述程式也不利於測試，這一點將在後面說明。那麼應該如何重構呢？答案就是秉承封裝性，使元件的 state 結構只有自己知道，將 updateNumber 遷移至 App 元件內，程式如下。</p>
+        <pre><code class="language-js">
+class App extends Component {
+constructor (props){
+super(props)
+this.state = { number: 0}
+}
+updateNumber (toAdd) {
+this.setState(prevState => ({
+number: prevState.number + toAdd
+}))
+}
+
+render () {
+return (
+<div className="app" >
+<span className= "number"> {this.state.number}</ span>
+<Controls 
+onIncrease={() => this.updateNumber(+1)}
+onDecrease={() => this.updateNumber(-1)}
+/>
+</div>)
+}
+}
+
+const Controls = ({ onIncrease, onDecrease }) => {
+return (
+<div className="controls">
+<button onClick={onIncrease}>Increase</button> 
+<button onClick={onDecrease}>Decrease</button>
+</div>
+)
+}
 
         </code></pre>
-                <pre><code class="language-js">
+        <p>這樣一來，Controls 元件就不需要知道 App 元件的內部情況了，實現了更好的重複使用性和可測試性，App 元件因此也具有了更好的封裝性。</p>
+        <h3>元件組裝性設計</h3>
+        
+         <pre><code class="language-js">
 
         </code></pre>
-                <pre><code class="language-js">
+        <pre><code class="language-js">
 
         </code></pre>
-                <pre><code class="language-js">
+       <pre><code class="language-js">
 
         </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
-                <pre><code class="language-js">
-
-        </code></pre>
-                <pre><code class="language-js">
+        <pre><code class="language-js">
 
         </code></pre>
         <div class="border-block"></div>
