@@ -124,52 +124,53 @@ return (&lt;div&gt;
         </p>
         <pre><code class="language-js">
 class WindowWidth extends React.Component {
-constructor () {
-super()
-this.state ={
-width: 0
+ constructor () {
+  super()
+  this.state ={
+   width: 0
+  }
+  
+ componentDidMount () {
+  this.setState (
+   {width: window.innerWidth},
+   window.addEventListener('resize',
+   ({target}) =>{
+     this.setState({
+      width: target.innerWidth
+     })
+   })
+  )
+ }
+ render (){
+  return this.props.children(this.state.width)
+ }
 }
-componentDidMount () {
-this.setState (
-{width: window.innerWidth},
-window.addEventListener('resize', ({target}) =>{
-this.setState({
-width: target.innerWidth
-})
-})
-)
-}
-render (){
-return this props.children (this.state.width)
-}
-}
+
 &lt;WindowWidth&gt;
-{
-width =&gt; (width &gt; 800 ? &lt;div&gt;show&lt;/div&gt; : null)
-}
+{width =&gt; (width =&gt; 800 ? &lt;div&gt;show&lt;/div&gt; : null)}
 &lt;WindowWidth&gt;
         </code></pre>
         <p>甚至還可以讓 JSX 具有 Vue template 的能力，範例程式如下。</p>
         <pre><code class="language-js">
 render (){
-const visible = true
-return ( 
-&lt;div&gt;
-&lt;div v-if={visible}&gt;
-content
-&lt;/div&gt;
-&lt;/div&gt;
-)
+  const visible = true
+  return ( 
+   &lt;div&gt;
+     &lt;div v-if={visible}&gt;
+       content
+     &lt;/div&gt;
+   &lt;/div&gt;
+  )
 }
 render () {
-const list = [1, 2, 3, 4]
-return (
-&lt;div&gt;
-&lt;div v-for={item in list}&gt;
-{item}
-&lt;/div&gt;
-&lt;/div&gt;
-)
+  const list = [1, 2, 3, 4]
+  return (
+   &lt;div&gt;
+    &lt;div v-for={item in list}&gt;
+     {item}
+    &lt;/div&gt;
+   &lt;/div&gt;
+  )
 }
         </code></pre>
         <p>JSX 需要在編譯後執行，在編譯過 中借助 AST（抽象語法樹）對 v-if、v-for進行處理即可。</p>
