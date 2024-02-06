@@ -200,25 +200,25 @@ render () {
         <p>什麼是 React 控制內外呢？舉個實例，先來看以下程式。</p>
         <pre><code class="language-js">
 onClick(){
-this.setState({
-count: this.state.count + 1
-})
+  this.setState({
+    count: this.state.count + 1
+  })
 }
 componentDidMount(){
-document.querySelectorAll('#btn-raw')
-addEventListener('click', this.onclick)
+  document.querySelectorAll('#btn-raw')
+  addEventListener('click', this.onclick)
 }
 render(){
-return(
-&lt;React.Fragment&gt; 
-  &lt;button id="btn-raw"&gt; 
-    click out React
-  &lt;/button&gt;
-  &lt;button onClick={this.onClick}&gt;
-   click in React
-  &lt;/button&gt;
-&lt;/React.Fragment&gt;
-)
+  return(
+    &lt;React.Fragment&gt; 
+      &lt;button id="btn-raw"&gt; 
+        click out React
+      &lt;/button&gt;
+      &lt;button onClick={this.onClick}&gt;
+       click in React
+      &lt;/button&gt;
+    &lt;/React.Fragment&gt;
+  )
 }
         </code></pre>
         <p>
@@ -256,11 +256,11 @@ return(
         </p>
         <pre><code class="language-js">
 const setStatePromise(me, state)=>{
-new Promise (resolve => {
-me.setState(state,()=>{
-resolve()
-})
-})
+  new Promise (resolve => {
+    me.setState(state,()=>{
+      resolve()
+    })
+  })
 }
         </code></pre>
         <p>這只是系統更新的做法，如果使用修改 React 原始程式的做法，也不困難，如下圖所示。</p>
@@ -280,10 +280,10 @@ resolve()
 
         <pre><code class="language-js">
 function handleClick (e){
-console.log(e)
-setTimeout(()=>{
-console.log(e)
-},0)
+  console.log(e)
+  setTimeout(()=>{
+    console.log(e)
+  },0)
 }
         </code></pre>
         <p>
@@ -293,11 +293,11 @@ console.log(e)
 
         <pre><code class="language-js">
 function handleClick(e){
-console.log(e)
-e.persist() // 持久化
-setTimeout(()=>{
-console.log(e)
-},0)
+  console.log(e)
+  e.persist() // 持久化
+  setTimeout(()=>{
+    console.log(e)
+  },0)
 }
         </code></pre>
         <h4>現象2：阻止原生事件上浮</h4>
@@ -308,21 +308,21 @@ console.log(e)
         </p>
         <pre><code class="language-js">
 componentDidMount(){
-document.addEventListener('click',()=>{
-console.log('document click')
-})
+  document.addEventListener('click',()=>{
+    console.log('document click')
+  })
 }
 handleClick=e=>{
-console.log('div click')
-e.stopPropagation()
+  console.log('div click')
+  e.stopPropagation()
 }
 
 render(){
-return(
-&lt;div onclick={this.handleClick}&gt;
-click
-&lt;/div&gt;
-)
+  return(
+    &lt;div onclick={this.handleClick}&gt;
+      click
+    &lt;/div&gt;
+  )
 }
         </code></pre>
         <p>
@@ -340,20 +340,20 @@ click
 
         <pre><code class="language-js">
 componentDidMount (){
-document.addEventListener('click',()=>{
-console.log('document click')
-})
+  document.addEventListener('click',()=>{
+    console.log('document click')
+  })
 }
 handleClick = e => {
-console.log('div click')
-e.nativeEvent.stopImmediatePropagation ()
+  console.log('div click')
+  e.nativeEvent.stopImmediatePropagation ()
 }
 render(){
-return(
-&lt;div onclick={this.handleClick}&gt;
-click
-&lt;/div&gt;
-)
+  return(
+    &lt;div onclick={this.handleClick}&gt;
+      click
+    &lt;/div&gt;
+  )
 }
         </code></pre>
         <h3>element diff 演算法的細節</h3>
@@ -451,23 +451,23 @@ constructor (props){
   }
 }
 componentDidMount () {
-axios.get('http://weather.com/api').then(response =>{
-const { current } = response.data
-this.setState ({
-temperature: current.temperature, 
-windSpeed: current.windSpeed
-})
-})
+  axios.get('http://weather.com/api').then(response =>{
+    const { current } = response.data
+    this.setState ({
+      temperature: current.temperature, 
+      windSpeed: current.windSpeed
+    })
+  })
 }
 
 render (){
-const { temperature, windSpeed } = this.state
-return (
-&lt;div className="weather"&gt;
-&lt;div&gt;Temperature: {temperature} °C&lt;/div&gt; 
-&lt;div&gt;Wind: {windSpeed} km/h&lt;/div&gt;
-&lt;/div&gt;
-)
+  const { temperature, windSpeed } = this.state
+  return (
+    &lt;div className="weather"&gt;
+    &lt;div&gt;Temperature: {temperature} °C&lt;/div&gt; 
+    &lt;div&gt;Wind: {windSpeed} km/h&lt;/div&gt;
+    &lt;/div&gt;
+  )
 }
 }
         </code></pre>
@@ -485,33 +485,33 @@ return (
 import axios from 'axios'
 import WeatherInfo from '/weatherInfo'
 class WeatherFetch extends Component {
-constructor (props) {
-super(props)
-this.state = { temperature: 'N/A', windSpeed: 'N/A' }
-}
-componentDidMount () {
-axios.get('http://weather.com/api').then(response =>{
-const { current } = response.data
-this.setState({
-temperature: current.temperature, windSpeed: current.windSpeed})
-})
-}
+  constructor (props) {
+    super(props)
+    this.state = { temperature: 'N/A', windSpeed: 'N/A' }
+  }
+  componentDidMount () {
+    axios.get('http://weather.com/api').then(response =>{
+    const { current } = response.data
+    this.setState({
+      temperature: current.temperature, windSpeed: current.windSpeed})
+    })
+  }
 
-render (){
-const {temperature, windSpeed} = this.state
-return (
-&lt;WeatherInfo temperature={temperature} windSpeed={windSpeed} /&gt;
-)
-}
+  render (){
+    const {temperature, windSpeed} = this.state
+    return (
+      &lt;WeatherInfo temperature={temperature} windSpeed={windSpeed} /&gt;
+    )
+  }
 }
         </code></pre>
         <p>在另一個檔案中實現 WeatherInfo 元件的程式如下。</p>
         <pre><code class="language-js">
 const WeatherInfo = ({temperature, windSpeed })=>(
-&lt;div className="weather"&gt;
-&lt;div&gt;Temperature: {temperature} °C&lt;/div&gt; 
-&lt;div&gt;Wind: {windSpeed} km/h&lt;/div&gt;
-&lt;/div&gt;
+  &lt;div className="weather"&gt;
+    &lt;div&gt;Temperature: {temperature} °C&lt;/div&gt; 
+    &lt;div&gt;Wind: {windSpeed} km/h&lt;/div&gt;
+  &lt;/div&gt;
 )
         </code></pre>
         <p>
@@ -521,13 +521,13 @@ const WeatherInfo = ({temperature, windSpeed })=>(
         <p></p>
         <pre><code class="language-js">
 class WeatherFetch extends Component{
-async componentDidMount () {
-const response = await axios.get('http://weather.com/api')
-const { current } = response.data
-this.setState({
-temperature: current.temperature, windSpeed: current.windSpeed
-})
-}
+  async componentDidMount () {
+    const response = await axios.get('http://weather.com/api')
+    const { current } = response.data
+    this.setState({
+      temperature: current.temperature, windSpeed: current.windSpeed
+    })
+  }
 }
 // ...
 }
@@ -543,32 +543,32 @@ temperature: current.temperature, windSpeed: current.windSpeed
 
         <pre><code class="language-js">
 class PersistentForm extends Component{
-constructor (props) {
-super (props)
-this.state = { 
-inputValue: localStorage.getItem('inputValue') }
-this.handleChange = this.handleChange.bind(this)
-this.handleClick = this.handleClick. bind(this)
-}
+  constructor (props) {
+  super (props)
+    this.state = { 
+      inputValue: localStorage.getItem('inputValue') }
+      this.handleChange = this.handleChange.bind(this)
+      this.handleClick = this.handleClick. bind(this)
+    }
 
-handleChange(event) {
-this.setState ({
-inputValue: event.target.value
-})
-}
-handleClick () {
-localStorage.setItem('inputValue', this.state.inputValue)
-}
-render () {
-const { inputValue } = this.state
-return (
-&lt;div className="persistent-form"&gt;
-&lt;input type="text" value={inputValue} onChange={this.handleChange} /&gt;
-&lt;button onClick={this.handleClick}&gt;
-Save to storage &lt;/button&gt;
-&lt;/div&gt;
-)
-}
+  handleChange(event) {
+    this.setState ({
+      inputValue: event.target.value
+   })
+  }
+  handleClick () {
+    localStorage.setItem('inputValue', this.state.inputValue)
+  }
+  render () {
+    const { inputValue } = this.state
+    return (
+      &lt;div className="persistent-form"&gt;
+      &lt;input type="text" value={inputValue} onChange={this.handleChange} /&gt;
+      &lt;button onClick={this.handleClick}&gt;
+        Save to storage &lt;/button&gt;
+      &lt;/div&gt;
+    )
+  }
 }
         </code></pre>
         <p>
@@ -579,23 +579,23 @@ Save to storage &lt;/button&gt;
         </p>
         <pre><code class="language-js">
 function withPersistence (storageKey, storage) {
-return function (WrappedComponent) {
-return class PersistentComponent extends Component {
-constructor (props) {
-super(props)
-this.state = initialValue: storage.getItem(storageKey)
-}
-render () {
-return(
-&lt;WrappedComponent initialValue={this.state.initialValue} saveValue={this.saveValue}
-{...this.props}
-/&gt;
-);
-}
+  return function (WrappedComponent) {
+  return class PersistentComponent extends Component {
+  constructor (props) {
+  super(props)
+    this.state = initialValue: storage.getItem(storageKey)
+  }
+  render () {
+    return(
+      &lt;WrappedComponent initialValue={this.state.initialValue} saveValue={this.saveValue}
+        {...this.props}
+      /&gt;
+    );
+  }
 
-saveValue(value) {
-storage.setItem(storageKey, value)
-}
+  saveValue(value) {
+    storage.setItem(storageKey, value)
+  }
 }
 }
 }
