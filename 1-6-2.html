@@ -626,34 +626,35 @@ const SessionStoragePersistentForm = withPersistence('key', sessionStorage)(Pers
         <p>直接來看一個簡單的計數器元件的實現。</p>
         <pre><code class="language-js">
 class App extends Component {
-constructor(props){
-super (props)
-this.state = { number: 0 }
-}
-render (){
-return(
-&lt;div className="app"&gt;
-&lt;span className= "number"&gt; {this.state.number}&lt;/span&gt;
-&lt;Controls parent={this} /&gt;
-&lt;/div&gt;)
-}
+  constructor(props){
+    super (props)
+    this.state = { number: 0 }
+  }
+  render (){
+    return(
+      &lt;div className="app"&gt;
+        &lt;span className= "number"&gt; {this.state.number}&lt;/span&gt;
+        &lt;Controls parent={this} /&gt;
+      &lt;/div&gt;
+    )
+  }
 }
 class Controls extends Component {
-updateNumber(toAdd){
-this.props.parent.setState(prevState =>({
-number: prevState.number + toAdd
-}))
+  updateNumber(toAdd){
+    this.props.parent.setState(prevState =>({
+      number: prevState.number + toAdd
+  }))
 }
 
 render(){
-return (
-&lt;div className="controls" &gt;
-&lt;button onClick={ ()=&gt; this.updateNumber(+1) }&gt;
-Increase &lt;/button&gt;
-&lt;button onClick={ ()=&gt; this.updateNumber(-1) }&gt;
-Decrease &lt;/button&gt;
-&lt;/div&gt;
-)
+  return (
+    &lt;div className="controls" &gt;
+      &lt;button onClick={ ()=&gt; this.updateNumber(+1) }&gt;
+      Increase &lt;/button&gt;
+      &lt;button onClick={ ()=&gt; this.updateNumber(-1) }&gt;
+      Decrease &lt;/button&gt;
+    &lt;/div&gt;
+  )
 }
 }
         </code></pre>
@@ -670,36 +671,36 @@ Decrease &lt;/button&gt;
         </p>
         <pre><code class="language-js">
 class App extends Component {
-constructor (props){
-super(props)
-this.state = { number: 0}
+  constructor (props){
+  super(props)
+  this.state = { number: 0}
 }
 updateNumber (toAdd) {
-this.setState(prevState => ({
-number: prevState.number + toAdd
+  this.setState(prevState => ({
+  number: prevState.number + toAdd
 }))
 }
 
 render () {
-return (
-&lt;div className="app" &gt;
-&lt;span className= "number"&gt; {this.state.number}&lt;/span&gt;
-&lt;Controls 
-onIncrease={ ()=&gt; this.updateNumber(+1)}
-onDecrease={ ()=&gt; this.updateNumber(-1)}
-/&gt;
-&lt;/div&gt;
-)
+  return (
+    &lt;div className="app" &gt;
+    &lt;span className= "number"&gt; {this.state.number}&lt;/span&gt;
+    &lt;Controls 
+      onIncrease={ ()=&gt; this.updateNumber(+1)}
+      onDecrease={ ()=&gt; this.updateNumber(-1)}
+    /&gt;
+    &lt;/div&gt;
+  )
 }
 }
 
 const Controls = ({ onIncrease, onDecrease }) =&gt; {
-return (
-&lt;div className="controls"&gt;
-&lt;button onClick={onIncrease}&gt;Increase&lt;/button&gt; 
-&lt;button onClick={onDecrease}&gt;Decrease&lt;/button&gt;
-&lt;/div&gt;
-)
+  return (
+    &lt;div className="controls"&gt;
+      &lt;button onClick={onIncrease}&gt;Increase&lt;/button&gt; 
+      &lt;button onClick={onDecrease}&gt;Decrease&lt;/button&gt;
+    &lt;/div&gt;
+  )
 }
 
         </code></pre>
@@ -713,16 +714,16 @@ return (
         <p>上圖整個頁面對應的宣告式程式如下。</p>
         <pre><code class="language-js">
 const app = (
-&lt;Application&gt;
-&lt;Header /&gt;
-&lt;Sidebar&gt;
-&lt;Menu /&gt;
-&lt;/Sidebar&gt;
-&lt;Content&gt;
-&lt;Article /&gt;
-&lt;/Content&gt;
-&lt;Footer /&gt;
-&lt;/Application&gt;
+  &lt;Application&gt;
+    &lt;Header /&gt;
+    &lt;Sidebar&gt;
+      &lt;Menu /&gt;
+    &lt;/Sidebar&gt;
+    &lt;Content&gt;
+      &lt;Article /&gt;
+    &lt;/Content&gt;
+    &lt;Footer /&gt;
+  &lt;/Application&gt;
 )
         </code></pre>
         <p>
@@ -730,48 +731,49 @@ const app = (
         </p>
         <pre><code class="language-js">
 const instance1 = (
-&lt;Composed1&gt;
-// Composed1邏輯
-//重複邏輯
-&lt;/Composed1&gt;
+  &lt;Composed1&gt;
+  // Composed1邏輯
+  // 重複邏輯
+  &lt;/Composed1&gt;
 )
 const instance2 = (
-&lt;Composed2&gt;
-//重複邏輯
-// Composed2邏輯
-&lt;/Composed2&gt;
+  &lt;Composed2&gt;
+  //重複邏輯
+  // Composed2邏輯
+  &lt;/Composed2&gt;
 )
         </code></pre>
         <p>將重複邏輯分析為 Common元件，程式如下。</p>
         <pre><code class="language-js">
 const instance1 = (
-&lt;Composed1&gt;
-&lt;Logic1 /&gt;
-&lt;Common /&gt;
-&lt;/Composed1&gt;
+  &lt;Composed1&gt;
+  &lt;Logic1 /&gt;
+  &lt;Common /&gt;
+  &lt;/Composed1&gt;
 )
 const instance2 = (
-&lt;Composed2&gt;
-&lt;Common /&gt;
-&lt;Logic2 /&gt;
-&lt;/Composed2&gt;
+  &lt;Composed2&gt;
+  &lt;Common /&gt;
+  &lt;Logic2 /&gt;
+  &lt;/Composed2&gt;
 )
         </code></pre>
         <p>另外一個組合性的典型應用就是 render prop 模式</p>
         <pre><code class="language-js">
 const ByDevice = ({children :{mobile, other }})=>{
-return Utils.isMobile() ? mobile : other
+  return Utils.isMobile() ? mobile : other
 }
 &lt;ByDevice&gt;
-{{
-mobile: &lt;div&gt;Mobile detected!&lt;/div&gt;,
-other: &lt;div&gt;Not a mobile device&lt;/div&gt;
-}}
+  {{
+    mobile: &lt;div&gt;Mobile detected!&lt;/div&gt;,
+    other: &lt;div&gt;Not a mobile device&lt;/div&gt;
+  }}
 &lt;/ByDevice&gt;
-        &lt;/code&gt;&lt;/pre&gt;
-        &lt;h3&gt;副作用和（準）純元件&lt;/h3&gt;
-        &lt;pre&gt;&lt;code class="language-js"&gt;
-          
+        </code></pre>
+        <h3>副作用和（準）純元件</h3>
+        <p>簡單來說，透過函數參數能夠唯一確定函數傳回值的函數，我們稱之為純函數，反之就是有副作用的非純函數。將純/非純函數延伸到元件中，就是純/非純元件。</p>
+        <p>最好的情況是應用全部由純元件組成，這對元件的偵錯和穩固性非常重要。但這只是理想情況，在真實環境中，我們需要發送網路</p>
+        <pre><code class="language-js">
         </code></pre>
       </article>
     </main>
