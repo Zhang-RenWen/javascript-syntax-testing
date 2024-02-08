@@ -83,28 +83,28 @@ const list = ({isLoading, list, error}) => {
         <pre><code class="language-js">
 const list = ({isLoading, 11st, error})=> {
 return (&lt;div&gt;
-{
- (()=&gt;{
-   console.log(list)
-   console.log(isLoading)
-   console.log(error)
-   if(error) {
-     return &lt;span&gt;Something is wrong!&lt;/span&gt;
-   }
-   if (!error && isLoading) {
-     return &lt;span&gt;Loading...&lt;/span&gt;
-   }
-   if (!error && lisLoading && !list. length) {
-     return &lt;p&gt;Sorry, the list is empty &lt;/p&gt;
-   }
-   if (!error && !isLoading && list.length &gt; 0){
-     return &lt;div&gt;{
-       list.map(item =&gt; &lt;ListItem item={item} /&gt;)
-     }
-     &lt;/div&gt;
-   }
- })()
-}
+  {
+    (()=&gt;{
+      console.log(list)
+      console.log(isLoading)
+      console.log(error)
+      if(error) {
+        return &lt;span&gt;Something is wrong!&lt;/span&gt;
+      }
+      if (!error && isLoading) {
+        return &lt;span&gt;Loading...&lt;/span&gt;
+      }
+      if (!error && lisLoading && !list. length) {
+        return &lt;p&gt;Sorry, the list is empty &lt;/p&gt;
+      }
+      if (!error && !isLoading && list.length &gt; 0){
+        return &lt;div&gt;{
+          list.map(item =&gt; &lt;ListItem item={item} /&gt;)
+        }
+        &lt;/div&gt;
+      }
+    })()
+  }
 &lt;/div&gt;
 )
 }
@@ -124,31 +124,32 @@ return (&lt;div&gt;
         </p>
         <pre><code class="language-js">
 class WindowWidth extends React.Component {
- constructor () {
-  super()
-  this.state ={
-   width: 0
+  constructor () {
+    super()
+    this.state = {
+     width: 0
+    }
   }
   
- componentDidMount () {
-  this.setState (
-   {width: window.innerWidth},
-   window.addEventListener('resize',
-   ({target}) =>{
-     this.setState({
-      width: target.innerWidth
-     })
-   })
-  )
- }
- render (){
-  return this.props.children(this.state.width)
- }
+  componentDidMount () {
+    this.setState (
+      {width: window.innerWidth},
+      window.addEventListener('resize',({target}) =>{
+        this.setState({
+         width: target.innerWidth
+        })
+      })
+    )
+  }
+  render (){
+   return this.props.children(this.state.width)
+  }
 }
 
 &lt;WindowWidth&gt;
 {width =&gt; (width =&gt; 800 ? &lt;div&gt;show&lt;/div&gt; : null)}
 &lt;WindowWidth&gt;
+
         </code></pre>
         <p>甚至還可以讓 JSX 具有 Vue template 的能力，範例程式如下。</p>
         <pre><code class="language-js">
@@ -443,32 +444,32 @@ console.log('time consumed:' performance.now() - startTime)
         <pre><code class="language-js">
 import axios from 'axios'
 class Weather extends Component {
-constructor (props){
-  super (props)
-  this.state = { 
-  temperature: 'N/A', 
-  windSpeed: 'N/A' 
+  constructor (props){
+    super (props)
+    this.state = { 
+    temperature: 'N/A', 
+    windSpeed: 'N/A' 
+    }
   }
-}
-componentDidMount () {
-  axios.get('http://weather.com/api').then(response =>{
-    const { current } = response.data
-    this.setState ({
-      temperature: current.temperature, 
-      windSpeed: current.windSpeed
+  componentDidMount () {
+    axios.get('http://weather.com/api').then(response =>{
+      const { current } = response.data
+      this.setState ({
+        temperature: current.temperature, 
+        windSpeed: current.windSpeed
+      })
     })
-  })
-}
-
-render (){
-  const { temperature, windSpeed } = this.state
-  return (
-    &lt;div className="weather"&gt;
-    &lt;div&gt;Temperature: {temperature} °C&lt;/div&gt; 
-    &lt;div&gt;Wind: {windSpeed} km/h&lt;/div&gt;
-    &lt;/div&gt;
-  )
-}
+  }
+  
+  render (){
+    const { temperature, windSpeed } = this.state
+    return (
+      &lt;div className="weather"&gt;
+      &lt;div&gt;Temperature: {temperature} °C&lt;/div&gt; 
+      &lt;div&gt;Wind: {windSpeed} km/h&lt;/div&gt;
+      &lt;/div&gt;
+    )
+  }
 }
         </code></pre>
         <p>
@@ -525,10 +526,10 @@ class WeatherFetch extends Component{
     const response = await axios.get('http://weather.com/api')
     const { current } = response.data
     this.setState({
-      temperature: current.temperature, windSpeed: current.windSpeed
+      temperature: current.temperature,
+      windSpeed: current.windSpeed
     })
   }
-}
 // ...
 }
         </code></pre>
@@ -580,24 +581,23 @@ class PersistentForm extends Component{
         <pre><code class="language-js">
 function withPersistence (storageKey, storage) {
   return function (WrappedComponent) {
-  return class PersistentComponent extends Component {
-  constructor (props) {
-  super(props)
-    this.state = initialValue: storage.getItem(storageKey)
+    return class PersistentComponent extends Component {
+      constructor (props) {
+      super(props)
+        this.state = initialValue: storage.getItem(storageKey)
+      }
+      render () {
+        return(
+          &lt;WrappedComponent initialValue={this.state.initialValue} saveValue={this.saveValue}
+            {...this.props}
+          /&gt;
+        );
+      }
+      saveValue(value) {
+        storage.setItem(storageKey, value)
+      }
+    }
   }
-  render () {
-    return(
-      &lt;WrappedComponent initialValue={this.state.initialValue} saveValue={this.saveValue}
-        {...this.props}
-      /&gt;
-    );
-  }
-
-  saveValue(value) {
-    storage.setItem(storageKey, value)
-  }
-}
-}
 }
         </code></pre>
         <p>withPersistence 元件的使用方式如下所示。</p>
@@ -633,7 +633,7 @@ class App extends Component {
   render (){
     return(
       &lt;div className="app"&gt;
-        &lt;span className= "number"&gt; {this.state.number}&lt;/span&gt;
+        &lt;span className="number"&gt; {this.state.number}&lt;/span&gt;
         &lt;Controls parent={this} /&gt;
       &lt;/div&gt;
     )
@@ -643,19 +643,18 @@ class Controls extends Component {
   updateNumber(toAdd){
     this.props.parent.setState(prevState =>({
       number: prevState.number + toAdd
-  }))
-}
-
-render(){
-  return (
-    &lt;div className="controls" &gt;
-      &lt;button onClick={ ()=&gt; this.updateNumber(+1) }&gt;
-      Increase &lt;/button&gt;
-      &lt;button onClick={ ()=&gt; this.updateNumber(-1) }&gt;
-      Decrease &lt;/button&gt;
-    &lt;/div&gt;
-  )
-}
+    }))
+  }
+  render(){
+    return (
+      &lt;div className="controls" &gt;
+        &lt;button onClick={ ()=&gt; this.updateNumber(+1) }&gt;
+        Increase &lt;/button&gt;
+        &lt;button onClick={ ()=&gt; this.updateNumber(-1) }&gt;
+        Decrease &lt;/button&gt;
+      &lt;/div&gt;
+    )
+  }
 }
         </code></pre>
         <p>
@@ -672,26 +671,25 @@ render(){
         <pre><code class="language-js">
 class App extends Component {
   constructor (props){
-  super(props)
-  this.state = { number: 0}
-}
-updateNumber (toAdd) {
-  this.setState(prevState => ({
-  number: prevState.number + toAdd
-}))
-}
-
-render () {
-  return (
-    &lt;div className="app" &gt;
-    &lt;span className= "number"&gt; {this.state.number}&lt;/span&gt;
-    &lt;Controls 
-      onIncrease={ ()=&gt; this.updateNumber(+1)}
-      onDecrease={ ()=&gt; this.updateNumber(-1)}
-    /&gt;
-    &lt;/div&gt;
-  )
-}
+    super(props)
+    this.state = { number: 0}
+  }
+  updateNumber (toAdd) {
+    this.setState(prevState => ({
+      number: prevState.number + toAdd
+    }))
+  }
+  render () {
+    return (
+      &lt;div className="app" &gt;
+      &lt;span className="number"&gt; {this.state.number}&lt;/span&gt;
+      &lt;Controls 
+        onIncrease={ ()=&gt; this.updateNumber(+1)}
+        onDecrease={ ()=&gt; this.updateNumber(-1)}
+      /&gt;
+      &lt;/div&gt;
+    )
+  }
 }
 
 const Controls = ({ onIncrease, onDecrease }) =&gt; {
@@ -771,8 +769,12 @@ const ByDevice = ({children :{mobile, other }})=>{
 &lt;/ByDevice&gt;
         </code></pre>
         <h3>副作用和（準）純元件</h3>
-        <p>簡單來說，透過函數參數能夠唯一確定函數傳回值的函數，我們稱之為純函數，反之就是有副作用的非純函數。將純/非純函數延伸到元件中，就是純/非純元件。</p>
-        <p>最好的情況是應用全部由純元件組成，這對元件的偵錯和穩固性非常重要。但這只是理想情況，在真實環境中，我們需要發送網路</p>
+        <p>
+          簡單來說，透過函數參數能夠唯一確定函數傳回值的函數，我們稱之為純函數，反之就是有副作用的非純函數。將純/非純函數延伸到元件中，就是純/非純元件。
+        </p>
+        <p>
+          最好的情況是應用全部由純元件組成，這對元件的偵錯和穩固性非常重要。但這只是理想情況，在真實環境中，我們需要發送網路
+        </p>
         <pre><code class="language-js">
         </code></pre>
       </article>
