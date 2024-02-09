@@ -775,6 +775,58 @@ const ByDevice = ({children :{mobile, other }})=>{
         <p>
           最好的情況是應用全部由純元件組成，這對元件的偵錯和穩固性非常重要。但這只是理想情況，在真實環境中，我們需要發送網路
         </p>
+        <p>
+          請求以取得資料（因為資料不固定，需要從網路取得，這是一種副作用），定進行條件繪製等操作，如何大幅地位址應用由純元件或準純元件組成呢？先來下一個定義：
+        </p>
+        <p>準純元件是繪製資料全部來自 props，但是會產生副作用的元件。</p>
+        <p>從非純元件中分析純元件部分，是一個很常見且很有效的做法。下面來看一段非純元件的程式。</p>
+        <pre><code class="language-js">
+const globalConfig = {
+  siteName: 'Animals in Zoo'
+}
+const Header = ({ children }) => {
+  const heading = globalConfig.siteName ?&lt;h1&gt;{globalConfig.siteName}&lt;/h1&gt;:null
+  return ( 
+    &lt;div&gt;
+      {heading}
+      {children}
+    &lt;/div&gt;
+  );
+}
+
+        </code></pre>
+        <p>這個元件是典型的非純元件，因為它依賴全域變數 siteName。其可能繪製出以下兩種結果:</p>
+        <pre><code class="language-js">
+// globalConfig.siteName存在時
+&lt;div&gt;
+  &lt;h1&gt;Animals in 200&lt;/h1&gt;
+  Some content 
+&lt;/div&gt;
+// globalConfig.siteName 不存在 
+&lt;div&gt;
+  Some content 
+&lt;/div&gt;
+        </code></pre>
+        <p>在撰寫測試使用案例時，還需要考慮 globalConfig.siteName 的值，這會使邏輯更加複雜。</p>
+        <pre><code class="language-js">
+import assert from 'assert' 
+import { shallow } from 'enzyme'
+import globalConfig from './config' 
+import Header from './Header'
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
         <pre><code class="language-js">
         </code></pre>
       </article>
