@@ -813,18 +813,127 @@ import assert from 'assert'
 import { shallow } from 'enzyme'
 import globalConfig from './config' 
 import Header from './Header'
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
 
-        <pre><code class="language-js">
+describe('<Header />',function(){
+ it('should render the heading',function(){
+   const wrapper = shallow(
+     <Header>Some content</Header>
+   )
+   assert(wrapper.contains(<h1>Animals in zoo</h1>))
+ })
+ it('should not render the heading',function(){
+   // 改動全域變數
+   globalConfig.siteName = null
+   const wrapper = shallow(
+     <Header>Some content</Header>
+   )
+   assert(appWithHeading.find('h1').length === 0)
+ })
+})
+  
         </code></pre>
+        <p>在測試 Header 元件時，不僅需要多測試一種案例，還需要我們手動改寫全域變數的值。</p>
+        <p>一個常用的最佳化方式是使全域變數作為 Header 的 props 出現，而不再是一個外部的全域變數，這樣一來，函數式元件 Header 就完全依賴其參數來決定繪製內容了，程式如下所示。</p>
+        <pre><code class="language-js">
+const Header = ({children, siteName })=>{
+const heading = siteName ? <h1>{siteName}</h1> : null;
+  return (
+    <div className="header">
+    {heading} {children}
+    </div>
+  )
+}
+Header.defaultProps = {
+  siteName: globalConfig.siteName
+}
+        </code></pre>
+        <p>測試使用案例便可簡化如下所示:</p>
+        <pre><code class="language-js">
+import assert from 'assert' 
+import { shallow } from 'enzyme' 
+import { Header } from './Header';
+describe('<Header />', function () { 
+  it ('should render the heading', function () {
+    const wrapper = shallow(
+      <Header siteName="Animals in Zoo">Some content</Header>
+    )
+    assert(wrapper.contains(<h1>Animals in Zoo</h1>))
+  })
+  it('should not render the heading',function(){
+    const wrapper = shallow(
+      <Header siteName={null}>Some content</Header>
+    )
+    assert(appWithHeading.find('h1').length === 0)
+  })
+})
+        </code></pre>
+        <p>這時，我們不用手動改變變數的值，就可以完成測試邏輯了。</p>
+        <p>另一個重構非純元件的典型案例是針對有網路請求的副作用情況的，下面重新放一下在元件單一職責中的程式。</p>
+        <pre><code class="language-js">
+import axios from 'axios' 
+import WeatherInfo from './weatherInfo'
+class WeatherFetch extends Component {
+  constructor (props) {
+    super (props)
+    this. state = { temperature: 'N/A', windSpeed: 'N/A' }
+  }
+  componentDidMount (){
+    axios.get('http://weather.com/api').then(response=>{
+      const { current } = response.data
+      this.setState {
+        temperature: current.temperature, 
+        windSpeed: current.windSpeed
+      })
+    })
+  }
+
+  render () {
+    const { temperature, windSpeed } = this.state
+    return (
+      <WeatherInfo temperature={temperature} windSpeed={windspeed} />
+    )
+  ｝
+}
+        </code></pre>
+        <p>表面上看，WeatherFeteh 元件不得不作為非純元件，因為網路請求不可避免，但是我們可以將請求的主體邏輯分離出元件，使元件只負責呼叫請求，我將這樣的元件稱為準純元件，這種拆分非純元件的程式實現如下。</p>
+        <pre><code class="language-js">
+          import ( connect } from 'react-redux' import ( fetch } from './action'
+export class WeatherFetch extends Component ｛
+render () {
+const ( temperature, windSpeed } = this.props
+return
+‹WeatherInfo temperature=(temperature} windSpeed=(windSpeed} />
+componentDidMount () {
+this.props.fetch ()
+function mapStateToProps (state) {
+return｛
+temperature: state. temperate, windSpeed: state.windSpeed
+export default connect (mapStateToProps, { fetch ))
+        </code></pre>
+<p>我們使用Redux來完成整體頁面邏輯，這樣一來 WeatherFetch 元件至少可以连碳脂同的p20% 電錦製主程同的結果•那塵對 Wentierfetsh 元件的測試也就。
+雙得更加簡單清晰。測試程式如下。</p>
+        <pre><code class="language-js">
+          import
+assert from
+'assert'
+Import ( shallow, mount | from 'enzyme' import \ spy \ from
+'sinon'
+Laport Weatheretch) from /eatherFetch' ;
+import WeatherInfo from './WeatherInfo' describe ('‹WeatherFetch />', function () {
+it ('should render the weather info', function () {
+function noop () }
+const wrapper = shallow
+‹WeatherFetch temperature="30" windSpeed="10" fetch=(noop} />
+assert (wrapper. contains (
+<NeatherInfo temperature="30" windSpeed="10" />
+））
+it（'should fetch weather when mounted'，function（）｛
+const fetchSpy = spy ()
+const wrapper = mount (
+WeatherFetch temperature="30" windSpeed="10" fetch=(fetchSpy)/>
+assert (fetchSpy. calledOnce)
+        </code></pre>
+        <h3>元件可測試性</h3>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
