@@ -1074,36 +1074,45 @@ describe ('&lt;Controls /&gt;', function () {
   })
 })
         </code></pre>
+        <p>
+          有的開發者覺得測試不重要，因此也不用關心元件撰寫的可測試性。其實我認為，之所以會有程式設計師認為測試不重要，是因為他不具有看待專案的更高視野和角度，也沒有撰寫穩定可靠元件函數庫或其他函數庫的經驗。我們要端正態度，想要進階，就要從態度入手，從掌握一種測試使用案例的使用入手。
+        </p>
+        <h3>元件命名是意識和態度問題</h3>
+        <p>
+          為什麼要把元件命名放在最後呢？因為元件命名太簡單了，任何一個開發者只要有意識，能用心，就可極佳地命名元件；同時，元件命名又太重要了，良好的元件命名就是「行走著的註釋」。但意識是一個很虛的概念，有的程式設計師也許天生就不具備，有的程式設計師即使具備了，只需要觀察兩段程式即可，第一段程式如下所示，需要在其中加入大量的註釋才能使大家了解程式的意思。
+        </p>
         <pre><code class="language-js">
+// &lt;Games&gt;傳回一組 game 資訊
+// data 是一個陣列，包含了所有 game 資訊
+function Games ({data }) {
+  // 選出前 10 筆 games
+  const data1 = data.slice(0, 10)
+  // list 是包含了 10 筆 games 的 Game 元件集合
+  const list = data1.map(function(v){
+    return &lt;Game key={v.id} name={v.name} /&gt;
+  })
+  return &lt;ul&gt;{list}&lt;/ul&gt;
+}
+&lt;Games
+  data=[{ id: 1, name: 'Mario' }, { id: 2, name: 'Doom' }]
+/&gt;
         </code></pre>
+        <p>第二段程式如下所示，不需要一行註釋，非常易於了解。</p>
         <pre><code class="language-js">
+const GAMES LIMIT = 10
+const GamesList = ({items }) => {
+  const itemsSlice = items.slice(0, GAMES LIMIT)
+  const games = itemsSlice.map(gameItem =>
+    &lt;Game key={gameItem.id} name={gameItem.name} /&gt;
+  ) 
+  return &lt;ul&gt;{games}&lt;/ul&gt;
+}
+&lt;GamesList
+  data=[{ id: 1, name: 'Mario' }, { id: 2, name: 'Doom' }]
+/&gt;
+
         </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
+        <p>元件設計的功力其實從一個命名就能看出來；在做程式審查時，一個命名也能出賣你的深淺。</p>
       </article>
     </main>
   </body>
