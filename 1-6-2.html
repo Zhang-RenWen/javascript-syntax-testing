@@ -955,6 +955,151 @@ describe('&lt;WeatherFetch /&gt;', function () {
 })
         </code></pre>
         <h3>元件可測試性</h3>
+        <p>
+          我們一直在提「可測試性」，上面也列出了測試使用案例程式，我認為是否具有測試意識，是區別進階程式設計師和一般程式設計師的標準之一。
+        </p>
+        <p>還記得上面提到的 Controls 元件嗎？它的最初實現程式如下。</p>
+        <pre><code class="language-js">
+class App extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { number: 0 }
+  }
+  render () {
+    return (
+    &lt;div className="app"&gt;
+      &lt;span className="number"&gt;{this.state.number} &lt;/span&gt;
+      &lt;Controls parent={this} /&gt;
+    &lt;/div&gt;
+    )
+  }
+}
+
+class Controls extends Component {
+  updateNumber(toAdd) {
+    this.props.parent.setState(prevState => ({
+      number: prevState.number + toAdd
+    }))
+  }
+  render(){
+    return (
+      &lt;div className="controls"&gt;
+      &lt;button onClick={()=&gt;this.updateNumber(+1)}&gt;
+         Increase 
+      &lt;/button&gt;
+      &lt;button onClick={()=&gt;this.updateNumber(-1)}&gt;
+        Decrease
+      &lt;/button&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+
+        </code></pre>
+        <p>
+          因為 Controls 元件的行為完全依賴其父元件，因此為了測試需要臨時建置一個父元件
+          Temp，程式如下。
+        </p>
+        <pre><code class="language-js">
+class Temp extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { number: 0 }
+  }
+  render () {
+    return null
+  }
+}
+describe ('&lt;Controls /&gt;', function () {
+  it('should update parent state', function() {
+    const parent = shallow(&lt;Temp/&gt;)
+    const wrapper = shallow(&lt;Controls parent={parent} /&gt;)
+    assert(parent.state('number') === 0)
+
+    wrapper.find('button').at(0).simulate('click')
+    assert(parent.state('number') === 1)
+
+    wrapper.find('button').at(1).simulate('click')
+    assert(parent.state('number') === 1);
+  });
+});
+        </code></pre>
+        <p>
+          這樣的測試撰寫起來會令人覺得非常痛苦，而經過重構之後，撰寫測試就變得非常簡單了，實際程式如下。
+        </p>
+        <pre><code class="language-js">
+class App extends Component {
+  constructor (props) {
+    super(props)
+    this.state = { number: 0 }
+  }
+  updateNumber (toAdd) {
+    this.setState(prevState => ({
+      number: prevState.number + toAdd
+    }))
+  }
+  render () {
+    return (
+      &lt;div className="app" &gt;
+        &lt;span className="number"&gt;{this.state.number}&lt;/span&gt;
+      &lt;Controls
+        onIncrease={() =&gt; this.updateNumber(+1) }
+        onDecrease={() =&gt; this,updateNumber(-1) }
+      /&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+const Controls = ({ onIncrease,onDecrease })=>{
+  return (
+    &lt;div className="controls"&gt;
+      &lt;button onClick={onIncrease}&gt;Increase&lt;/button&gt;
+      &lt;button onClick={onDecrease}&gt;Decrease&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+describe ('&lt;Controls /&gt;', function () {
+  it('should execute callback on buttons click', function () {
+    const increase = sinon.spy()
+    decrease = sinon.spy()
+    const wrapper = shallow(
+      &lt;Controls onIncrease={increase} onDecrease={decrease} /&gt;
+    )
+    
+    wrapper.find('button').at(0).simulate('click')
+    assert(increase.calledOnce)
+
+    wrapper.find('button').at(1).simulate('click')
+    assert(decrease.calledOnce)
+  })
+})
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
