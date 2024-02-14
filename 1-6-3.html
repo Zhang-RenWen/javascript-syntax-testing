@@ -34,11 +34,34 @@
       </aside>
       <article>
         <h2 id="1-6-3">1-6-3 React: 資料狀態管理<h2>
+          <p>為什麼需要資料狀態管理，資料狀態管理到底在解決什麼樣的問題？這其實是架構、元件化帶來的概念。還是舉先前案例：在一個頁面上，點擊其中一處「訂閱」按鈕後，真面中的其他「訂閱」按鈕也會切換為「已訂閱」狀態。如果沒有資料狀態，也許就需要用以下方式來實現訂閱需求。</p>
         <h3 ></h3>
         <pre><code class="language-js">
+const btnEle1 = $('#btn1')
+const btnEle2 = $('#btn2')
+btnEle1.on('click', () => {
+  if(btnEle1.textContent ==='已訂閱'){
+    return
+  }
+  btnEle1.textContent ='已訂閱'
+  btnEle2.textContent ='已訂閱'
+})
+btnEle2.on('click', () => {
+  if(btnEle2.textContent ==='已訂閱'){
+    return
+  }
+  btnEle1.textContent ='已訂閱'
+  btnEle2.textContent ='已訂閱'
+})
+
         </code></pre>
+        <p>這只是兩個按鈕的情況，處理起來就非常混亂了，而且難以維護，在這種情況下非常容易滋生 bug。</p>
+        <p>現代化的架構解決這個問題的想法是元件化，元件依賴資料，對應這個場景的資料狀態的程式如下。</p>
         <pre><code class="language-js">
+hasMarked: false / true
         </code></pre>
+        <p>根據 hasMarked 這個狀態值，所有的訂閱元件都可以回應正確的視圖操作。把麵條式的程式轉換成可維護的程式後，對資料的管理就成了重中之重，這就是資料狀態的雛形。但是，一旦資料量越來越大，如何與元件形成良好的互動就是一種學問了。舉例來說，要考慮以下情況。</p>
+        
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
