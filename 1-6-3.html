@@ -85,12 +85,68 @@ Redux store 會在每次真面掛載後都重新產生一份新的資料，因�
           <p>如果一些完全不存在父子關係的元件需要共用資料，舉例來說，前面提到過的真面需要在多處展示使用者圖示，那麼常常會造成資料輻射分散的問題，對於React 模式的狀態管理十分不利。在這種場景下，使用 Redux 同樣是更好的選擇。</p>
           <p>如果應用有追蹤狀態的功能，舉例來說，需要完成「重放」「返回」或 "Redo/Undo" 等需求，那麽使用 Redux 無疑是最佳選擇，因為 Redux 天生擅長於此：每一個 action 都描述了資料狀態的改變和更新，非常便於進行資料的集中管理。</p>
           <p>Redux 可以被任何一個資料管理類別庫所取代。</p>
-        <pre><code class="language-js">
+          <h3>Redux使用方式</h3>
+        <p>先上模板</p>
+        <pre><code class="language-html">
+<ShoppingApp>
+  <Header />
+  <SideMenu />
+  <ProductsContainer>
+  </ProductsContainer>
+</ ShoppingApp>
         </code></pre>
+        補圖
+        <p>ProductsContainer 元件負責繪製每一個商品項目。</p>
         <pre><code class="language-js">
+import Product from './Product'
+export default class ProductsContainer extends Component {
+   constructor (props) {
+     super(props);
+     this.state = {
+       products: [
+         '商品1',
+         '商品2',
+         '商品3'
+       ]
+     }
+   }
+   renderProducts () {
+     return this.state.products.map((product) => {
+       return <Product name={product｝ />
+     })
+   }
+   render () {
+     return (
+       <div className='products-container'>
+         {this.renderProducts()}
+       </div>
+     )
+   }
+}
+
         </code></pre>
+        <p>Product 元件作為 UI 元件/展示元件，負責接收資料、展示資料。這樣一來，Product 元件即可用函數式/無狀態元件完成撰寫。</p>
         <pre><code class="language-js">
+import React, { Component } from 'react'
+export default class Product extends Component {
+   render(){
+     return (
+       <div className='product'>
+         {this.props.name}
+       </div>
+     )
+   }
+}
         </code></pre>
+        <p>使用 React state 就可以實現上面的設計需求，且合理高效。</p>
+        <p>但是，如果商品有「立即購買」按鈕，點擊「立即購買」後會將商品加入購物車（對應上面 Cart Info 部分），這時需要注意，購物車中的商品資訊會在多個頁面（如下所示）被消費。</p>
+        <ul>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+        <p>這就是單頁面應用需要對資料狀態進行管理的訊號。我們可以維護一個cartList陣列以供應用消費，這個陣列放在 Redux 或 Vuex 中都是可行的。</p>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
