@@ -87,15 +87,15 @@ Redux store 會在每次真面掛載後都重新產生一份新的資料，因�
           <p>Redux 可以被任何一個資料管理類別庫所取代。</p>
           <h3>Redux使用方式</h3>
         <p>先上模板</p>
-        <pre><code class="language-js">
-<ShoppingApp>
-  <Header />
-  <SideMenu />
-  <ProductsContainer>
-  </ProductsContainer>
-</ ShoppingApp>
+        <pre><code class="language-html">
+&lt;ShoppingApp&gt;
+  &lt;Header /&gt;
+  &lt;SideMenu /&gt;
+  &lt;ProductsContainer&gt;
+  &lt;/ProductsContainer&gt;
+&lt;/ShoppingApp&gt;
         </code></pre>
-        補圖
+        <img src="./assets/image/1-6-3/1.jpeg" alt="" />
         <p>ProductsContainer 元件負責繪製每一個商品項目。</p>
         <pre><code class="language-js">
 import Product from './Product'
@@ -112,7 +112,7 @@ export default class ProductsContainer extends Component {
    }
    renderProducts () {
      return this.state.products.map((product) => {
-       return <Product name={product｝ />
+       return <Product name={product} />
      })
    }
    render () {
@@ -158,29 +158,29 @@ export default class Product extends Component {
         <h4>合理的 connect 場景</h4>
         <p>在使用 Redux時，我們可以搭配 React-Redux 這個類別庫來聯通（connect）元件和資料，但是容易陷入的常見錯誤就是濫用 connect ，而沒有進行更合理的設計分析，或只在頂層進行 connect 設計，然後需要一層一層地進行資料傳遞。</p>
         <p>舉例來說，在一個頁面中存在 Profile、Feeds（資訊流）、Images（圖片）區域，如下圖</p>
-        補圖
+        <img src="./assets/image/1-6-3/2.jpeg" alt="" />
         <p>這些區域組成了頁面的主體，它們分別對應於 Profile、Feeds、Images 元件，共同作為 Page 元件的子元件而存在，對應的程式如下。</p>
         <pre><code class="language-js">
-<Page>
-  <Profile/>
-  <Feeds/ >
-  <Images/>
-</Page>
+&lt;Page&gt;
+  &lt;Profile/&gt;
+  &lt;Feeds/ &gt;
+  &lt;Images/&gt;
+&lt;/Page&gt;
         </code></pre>
         <p>如果只對 Page 這個頂層元件進行 connect 設計，其他元件的資料依靠 Page 元件進行分發，則設計如下圖所示</p>
-        補圖
+        <img src="./assets/image/1-6-3/3.jpeg" alt="" />
         <p>這樣做存在的問題如下</p>
         <ul>
           <li>當改動 Profile 元件中的使用者圖示時，由於資料變動，整個Page 元件都會被重新繪製。</li>
           <li>當刪除 Feeds 元件中的一筆資訊時，整個 Page 元件也都會被重新繪製。</li>
           <li>當在 Images 元件中增加一張圖片時，整個 Page元件同樣都會被重新繪製。</li>
         </ul>
-        <p>因此，更好的做法是對 Profile、Feeds、Images 這3個元件分別進行 comneet
-設計，在 connect 方法中使用 mapState ToProps 篩選出不同元件關心的 state部分，如圖</p>
-補圖
+        <p>因此，更好的做法是對 Profile、Feeds、Images 這3個元件分別進行 connect
+設計，在 connect 方法中使用 mapState ToProps 篩選出不同元件關心的 state 部分，如圖</p>
+<img src="./assets/image/1-6-3/4.jpeg" alt="" />
 <p>這樣做的好處很明顯，實際如下。</p>
 <ul>
-  <li>當改動 Profle 元件中的使用者圖示時，只有Profle 元件會被重新繪製。</li>
+  <li>當改動 Profile 元件中的使用者圖示時，只有 Profile 元件會被重新繪製。</li>
   <li>當刪除 Feeds 元件中的一筆資訊時，只有Feeds元件會被重新繪製。</li>
   <li>當在 Images 元件中增加一張圖片時，只有Images 元件會被重新繪製。</li>
 </ul>
@@ -198,7 +198,7 @@ export default class Product extends Component {
 }
         </code></pre>
         <p>這是一個文章列表加文章評論互動的場景，其對應於3個元件：Article、Comment 和Author。這樣的真面設計比比皆是，如下圖</p>
-        補圖
+        <img src="./assets/image/1-6-3/5.jpeg" alt="" />
         <p>按照上述資料結構，可以想像，reducer 函數的相關資料處理就很棘手了。如果 articles[2].comments[4].authors1 發生了變化，那麼想要傳回更新後的狀態，並確保不可變性，操作起來就沒有那麼簡單了，我們需要對深層物件結構進行拷貝或遞迴。</p>
         <p>因此，更好的資料結構設計一定是扁平化的，我們可以對 articles、comments、authors
 進行扁平化處理，舉例來說，使 comments 陣列不再儲存 authors 資料，而是記錄 userId 評論內容中需要使用者資料時，只需在 users 陣列中按照 userId 進行分析即可。</p>
@@ -210,6 +210,7 @@ export default class Product extends Component {
   comments: [{ 
     articleId:''
     userId: '',
+  }],
   users: [{
       // ...
   }]
@@ -227,11 +228,6 @@ export default class Product extends Component {
         </code></pre>
         <pre><code class="language-js">
         </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        
       </article>
     </main>
   </body>
