@@ -218,12 +218,66 @@ export default class Product extends Component {
         </code></pre>
         <p>不同元件只需要關心不同的資料片段，舉例來說 Comment 元件只關心 comments 陳列 Author 元件只關心 users 陣列。這樣不僅操作更合理，而目能有效減少繪製壓力。</p>
         <h3>Redux 優缺點</h3>
+        <p>歸納一下，Redux的限制主要表現在以下5個方面:</p>
+        <ul>
+          <li>Redux帶來了函數式程式設計、不可變性思懇等，為了配合這些理念，開發者必須要寫很多「模式程式」（boilerplate），繁瑣及重複是開發者不願意容忍的。當然，也有很多巧妙的方法旨在減少 boilerplate，但目前來看，可以說Redux 天生就帶有繁瑣的基因。</li>
+          <li>使用 Redux時，應用需要使用 objects或 arrays 描述狀態。</li>
+          <li>使用 Redux時，應用需要使用 plain objects 及 actions 來描述變化。</li>
+          <li>使用 Redux時，應用需要使用純函數去處理變化。</li>
+          <li>要將應用中的很多狀態抽象到 store，不能痛痛快快地寫業務程式，出現一個變化就要撰寫對應的 action（action creator）、reducer 等。</li>
+        </ul>
+        <p>和響應式結合函數式的 Mobx相比，這些缺點使 Redux 的程式設計體驗大打折扣。</p>
+        <p>為了彌補這些缺點，社區開啟了一輪又一輪的嘗試，其中一個努力方向是基於 Redlx封裝一整套上層解決方案，這個方向上的成果以Redux-sage、Dia、Rematch 類別庫或架構為主。</p>
+        <p>下面歸納一下這些解決方案的特點和想法。</p>
+        <h4>1. 簡化初始化過程</h4>
+        <p>傳統的 Redux 初始化充滿了一些巧妙的方法，過於函數式，且較為繁瑣，程式如下</p>
         <pre><code class="language-js">
+import {createstore, applyMiddleware, compose } from 'redux' 
+import thunk from 'redux-thunk'
+import rootReducer from 'reducers'
+const initialState = {
+// ...
+}
+const store = initialState => createStore (
+  rootReducer, initialState, compose(
+    applyiddleware(thunk),
+    // ....
+  )
+)
         </code></pre>
+        <p>這裡只應用了一個中介軟體，還沒有涉及 devtool 的設定，它類似 Dva 的 Redux 代替品，採用物件導向式的初始化設定。</p>
+        <h4>2. 簡化 reducer</h4>
+        <p>傳統的 reducer 可能需要撰寫惱人的switch.case 或很多樣板程式，而以Redux 為基礎的上層解決方案對 reducer 邏輯進行了封裝，以便使用起來能夠更加簡潔高效。</p>
         <pre><code class="language-js">
+const reducer = {
+  ACTIONTYPE1:(state, action) => newState,
+  ACTIONTYPE2:(state, action) => newState,
+}
         </code></pre>
+        <h4>3. 帶請求的副作用</h4>
+        <p>Redux 一般需要使用 thunk 中介軟體來處理網路請求，它的原理是：首先傳遞一個action，但是這個 action 不是 plain object 類型，而是一個函數；thunk 中介軟體發現 action type 為函數類型時，會把 dispatch和 getState 等方法作為參數傳遞給函數進行副作用邏輯。</p>
+        <p>如果不是React、Redux 的開發者：如許很那看懂上面一段描述，這也是 Redux 處理含有副作用的邏輯較為複雜的表現，更上層的解決方案 Redux-saga 採用 Generator（產生）的思想或 async/await 處理副作用，無疑更加人性化合理。</p>
+        <p>為了更進一步地配合產生器方案，上層方案將 action 分為普通 action 和副作用 action，開發者使用起來也更加清晰。</p>
+        <h4>4. 將 reducer 和 action 合併</h4>
+        <p>為了進一步減少模式程式，一個通用的做法是在 Redux 之上，將 reducer 和 action 宣告合併，這樣可以使宣告一步合格，如下所示</p>
         <pre><code class="language-js">
+const store = {
+  state: {
+    count: 0, 
+    state1: {}
+  },
+  reduers: {
+    action1:(state, action) => newState,
+    action2:(state, action) => newState
+  }
+}
+
         </code></pre>
+        <p>這裡定義了兩個 action:action1 和 action2。它們出自 store.reducers 的鍵名，而對應鍵值即 reducer 邏輯。</p>
+        <p>這些都是以 Redux 為基礎進行封裝的上層解決方案的基本思想，了解了這些，就不會再對 Dva、Redux-saga 的原理感到陌生了</p>
+        <p>理清了資料狀態管理的意義，簡化了資料管理的操作後，還要分析到底應該如何組織資料。</p>
+        <p>經過整理，基本已經確定開發者真正的核心訴求只是：方便地修改資料，方便地取得資料。僅此而已</p>
+        <h3>新的發展趨勢：Mobx</h3>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
