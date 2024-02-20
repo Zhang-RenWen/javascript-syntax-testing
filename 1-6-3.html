@@ -278,11 +278,35 @@ const store = {
         <p>理清了資料狀態管理的意義，簡化了資料管理的操作後，還要分析到底應該如何組織資料。</p>
         <p>經過整理，基本已經確定開發者真正的核心訴求只是：方便地修改資料，方便地取得資料。僅此而已</p>
         <h3>新的發展趨勢：Mobx</h3>
+        <p>對核心訴求申的修改資料來說，Redux 建議以函數式、不可獲性、資料扁平化的形式進行；而其中的取得資料說到底是依賴發佈/訂閱模式進行的。相對地，Mobx是物件導向和響應式的結合，它的資料來源是可變的，對資料的觀察是響應式的。下面來看一段用Mobx 處理資料的程式範例。</p>
         <pre><code class="language-js">
+const foo = observable ({
+  a:1,
+  b: 2
+})
+autoRun(()=>{
+  console.log (foo.)
+})
+foo.b= 3 // 沒有任何輸出
+foo.a= 2 // 輸出:2
         </code></pre>
+        <p>用 Mobx 處理資料原理是資料綁架/資料代理 。將上面的程式改為以下形式。</p>
         <pre><code class="language-js">
+const state = observable ({
+  state1: {}
+})
+autoRun(()=>｛
+  return (<Component state1={state1} />)
+})
+state.state1 = {}
         </code></pre>
+        <p>當修改state state1 時，將觸發 autoRun 的回呼，引起元件的重新繪數。不同於 Redux，這就是另一種流派 Mobx 的核心理念。</p>
+        <p>不管是 Redux 還是 Mobx，它們都做到了：元件可以讀取 state，修改state，且在有新 state 時更新。這裡的 state 都是單一資料來源，只不過修改 state 的方式不同。更進一步地說，Mobx 透過將物件和陣列包裝為可觀察物件，隱藏了大部分樣板程式，比 Redux 更加簡潔，更像是進行了雙向綁定。</p>
+        <p>在資料狀態不太複雜的情況下：使用 Mobx也許更加簡潔高效：但是如果資料狀態非常複雜，或你是函數式式設計的粉絲，則可以考慮使用
+Redux ，當需要在 Redux 層面上進行封裝時，使用像 Dva 這樣的方案：是一個明智的選擇。</p>
       </article>
+      <h4>如何做到脫離 Redux（context 和 hook）</h4>
+      <p>有兩種方法可以做到脱離 Redux：一是 Mobx 或 GraphQL，只是這樣做還是沒有脱離架構或類別庫；二是使用原生 React 方案，舉例來說，使用 context API,React 16.3 介紹了穩定版的 context 特性，它從某種程度上可以更方便地實現元件間通訊，尤其是對跨越多層父子元件的情況更加高效。Redux-React 就是以 context 實現為基礎的，那麼在一些簡單的情況下，完全可以使用穩定的 context，而拋棄 Redux。</p>
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
