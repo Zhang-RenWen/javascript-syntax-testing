@@ -112,14 +112,14 @@ export default class ProductsContainer extends Component {
    }
    renderProducts () {
      return this.state.products.map((product) => {
-       return <Product name={product} />
+       return &lt;Product name={product} /&gt;
      })
    }
    render () {
      return (
-       <div className='products-container'>
+       &lt;div className='products-container'&gt;
          {this.renderProducts()}
-       </div>
+       &lt;/div&gt;
      )
    }
 }
@@ -131,9 +131,9 @@ import React, { Component } from 'react'
 export default class Product extends Component {
    render(){
      return (
-       <div className='product'>
+       &lt;div className='product'&gt;
          {this.props.name}
-       </div>
+       &lt;/div&gt;
      )
    }
 }
@@ -162,9 +162,9 @@ export default class Product extends Component {
         <p>這些區域組成了頁面的主體，它們分別對應於 Profile、Feeds、Images 元件，共同作為 Page 元件的子元件而存在，對應的程式如下。</p>
         <pre><code class="language-js">
 &lt;Page&gt;
-  &lt;Profile/&gt;
-  &lt;Feeds/ &gt;
-  &lt;Images/&gt;
+  &lt;Profile /&gt;
+  &lt;Feeds /&gt;
+  &lt;Images /&gt;
 &lt;/Page&gt;
         </code></pre>
         <p>如果只對 Page 這個頂層元件進行 connect 設計，其他元件的資料依靠 Page 元件進行分發，則設計如下圖所示</p>
@@ -181,8 +181,8 @@ export default class Product extends Component {
 <p>這樣做的好處很明顯，實際如下。</p>
 <ul>
   <li>當改動 Profile 元件中的使用者圖示時，只有 Profile 元件會被重新繪製。</li>
-  <li>當刪除 Feeds 元件中的一筆資訊時，只有Feeds元件會被重新繪製。</li>
-  <li>當在 Images 元件中增加一張圖片時，只有Images 元件會被重新繪製。</li>
+  <li>當刪除 Feeds 元件中的一筆資訊時，只有 Feeds元件會被重新繪製。</li>
+  <li>當在 Images 元件中增加一張圖片時，只有 Images 元件會被重新繪製。</li>
 </ul>
    <h4>扁平化資料狀態</h4>
    <p>扁平化的資料結構是一個很有意義的概念，它不僅能夠合理啟動開發邏輯，同時也是效能最佳化的一種表現。請看如下所示的資料結構。</p>
@@ -227,12 +227,12 @@ export default class Product extends Component {
           <li>要將應用中的很多狀態抽象到 store，不能痛痛快快地寫業務程式，出現一個變化就要撰寫對應的 action（action creator）、reducer 等。</li>
         </ul>
         <p>和響應式結合函數式的 Mobx相比，這些缺點使 Redux 的程式設計體驗大打折扣。</p>
-        <p>為了彌補這些缺點，社區開啟了一輪又一輪的嘗試，其中一個努力方向是基於 Redlx封裝一整套上層解決方案，這個方向上的成果以Redux-sage、Dia、Rematch 類別庫或架構為主。</p>
+        <p>為了彌補這些缺點，社區開啟了一輪又一輪的嘗試，其中一個努力方向是基於 Redux封裝一整套上層解決方案，這個方向上的成果以Redux-sage、Dva、Rematch 類別庫或架構為主。</p>
         <p>下面歸納一下這些解決方案的特點和想法。</p>
         <h4>1. 簡化初始化過程</h4>
         <p>傳統的 Redux 初始化充滿了一些巧妙的方法，過於函數式，且較為繁瑣，程式如下</p>
         <pre><code class="language-js">
-import {createstore, applyMiddleware, compose } from 'redux' 
+import {createStore, applyMiddleware, compose } from 'redux' 
 import thunk from 'redux-thunk'
 import rootReducer from 'reducers'
 const initialState = {
@@ -240,7 +240,7 @@ const initialState = {
 }
 const store = initialState => createStore (
   rootReducer, initialState, compose(
-    applyiddleware(thunk),
+    applyMiddleware(thunk),
     // ....
   )
 )
@@ -266,7 +266,7 @@ const store = {
     count: 0, 
     state1: {}
   },
-  reduers: {
+  reducers: {
     action1:(state, action) => newState,
     action2:(state, action) => newState
   }
@@ -282,10 +282,10 @@ const store = {
         <pre><code class="language-js">
 const foo = observable ({
   a:1,
-  b: 2
+  b:2
 })
 autoRun(()=>{
-  console.log (foo.)
+  console.log(foo.a)
 })
 foo.b= 3 // 沒有任何輸出
 foo.a= 2 // 輸出:2
@@ -295,18 +295,17 @@ foo.a= 2 // 輸出:2
 const state = observable ({
   state1: {}
 })
-autoRun(()=>｛
-  return (<Component state1={state1} />)
+autoRun(()=>{
+  return (&lt;Component state1={state1} /&gt;)
 })
 state.state1 = {}
         </code></pre>
         <p>當修改state state1 時，將觸發 autoRun 的回呼，引起元件的重新繪數。不同於 Redux，這就是另一種流派 Mobx 的核心理念。</p>
         <p>不管是 Redux 還是 Mobx，它們都做到了：元件可以讀取 state，修改state，且在有新 state 時更新。這裡的 state 都是單一資料來源，只不過修改 state 的方式不同。更進一步地說，Mobx 透過將物件和陣列包裝為可觀察物件，隱藏了大部分樣板程式，比 Redux 更加簡潔，更像是進行了雙向綁定。</p>
-        <p>在資料狀態不太複雜的情況下：使用 Mobx也許更加簡潔高效：但是如果資料狀態非常複雜，或你是函數式式設計的粉絲，則可以考慮使用
-Redux ，當需要在 Redux 層面上進行封裝時，使用像 Dva 這樣的方案：是一個明智的選擇。</p>
+        <p>在資料狀態不太複雜的情況下：使用 Mobx也許更加簡潔高效：但是如果資料狀態非常複雜，或你是函數式式設計的粉絲，則可以考慮使用 Redux ，當需要在 Redux 層面上進行封裝時，使用像 Dva 這樣的方案：是一個明智的選擇。</p>
+<h4>如何做到脫離 Redux（context 和 hook）</h4>
+<p>有兩種方法可以做到脱離 Redux：一是 Mobx 或 GraphQL，只是這樣做還是沒有脱離架構或類別庫；二是使用原生 React 方案，舉例來說，使用 context API,React 16.3 介紹了穩定版的 context 特性，它從某種程度上可以更方便地實現元件間通訊，尤其是對跨越多層父子元件的情況更加高效。Redux-React 就是以 context 實現為基礎的，那麼在一些簡單的情況下，完全可以使用穩定的 context，而拋棄 Redux。</p>
       </article>
-      <h4>如何做到脫離 Redux（context 和 hook）</h4>
-      <p>有兩種方法可以做到脱離 Redux：一是 Mobx 或 GraphQL，只是這樣做還是沒有脱離架構或類別庫；二是使用原生 React 方案，舉例來說，使用 context API,React 16.3 介紹了穩定版的 context 特性，它從某種程度上可以更方便地實現元件間通訊，尤其是對跨越多層父子元件的情況更加高效。Redux-React 就是以 context 實現為基礎的，那麼在一些簡單的情況下，完全可以使用穩定的 context，而拋棄 Redux。</p>
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>

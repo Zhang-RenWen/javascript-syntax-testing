@@ -160,7 +160,7 @@ export const menu = [
           },
           {
             id: '1-6-3',
-            title: '1-6-3 React: 資料狀態管理🚧',
+            title: '1-6-3 React: 資料狀態管理',
             href: '1-6-3.html'
           },
           {
