@@ -56,7 +56,7 @@
           <li>無狀態（函數式）元件 + React hook 時期</li>
         <ul>
         <h4>createClass 建立元件時期</h4>
-        <p>creatClass 是一個函數，接收參數並傳回元件實例。<p>
+        <p>createClass 是一個函數，接收參數並傳回元件實例。<p>
             
         <pre><code class="language-js">
 import React from 'react'
@@ -76,14 +76,14 @@ const component1 = React.createClass({
   },
   render () {
     return (
-      <p onclick={this.handleClick}></p>
+      &lt;p onclick={this.handleClick}&gt;&lt;/p&gt;
     )
   }
 })
         </code></pre>
         <p>以上程式看起來很好了解，但是撰寫還是有些違背直覺。從 React 15:5 版本開始，官方就不再開始推薦使用該函數，到了 React 16 版本，就將其徵底廢棄了。</p>
         <h4>ES class 宣告元件時期</h4>
-        <p<當時 ES6 剛推出 class 特性就被 React 團隊所採用，取代了原本 createClass</p>
+        <p></p>當時 ES6 剛推出 class 特性就被 React 團隊所採用，取代了原本 createClass</p>
         <pre><code class="language-js">
 class Component1 extends React.Component{
   handleClick = e => {
@@ -97,9 +97,9 @@ class Component1 extends React.Component{
   }
   render () {
     return (
-      <div onClick=(this. handleClick)>
+      &lt;div onClick={this.handleClick}&gt;
         {{this.state.name}}
-      </div>
+      &lt;/div&gt;
     )
   }
 }
@@ -116,16 +116,18 @@ class Component1 extends React.Component{
         <ul>
           <li>
             帶來了針對生命週期式設計的因擾，隨著邏輯變複雜，元件的生命週期函數隨之變得很難維護和了解。我們想弄清楚 componentDidMount、
-componentDidUpdate、componentWillUnmount 、componentWillRecieveProps
+componentDidUpdate、componentWillUnmount 、componentWillReceiveProps
 這些鉤子的邏輯並不困難。但是，這些生命週期函數中的程式和 render 中的 state 及 props 有什麼關係？這種問題將隨著應用越來越複雜被無限放大。</li>
 <li>React 是函數式的，而 class 宣告元件這種物件導向的行為顯得不倫不類。</li>
         </ul>
         <p>基於這兩點，React 很快推出了函數式元件，（或無狀態元件，下面統稱為函數式元件，因為在 hook 特性下元件也會有狀態）。</p>
         <h4>函數式元件</h4>
-        
+        <p>函數式元件非常簡單，下面就用函數定義一個元件，該函數接收 props 作為參數，只負責繪製。</p>
         <pre><code class="language-js">
-
+const component = props => &lt;div&gt;{ props.name }&lt;/div&gt;
         </code></pre>
+        <p>然而它是完全無法取代 class 元件的，因為它不存在生命運期，完全的無狀態讓我們無法處理必要的邏輯。</p>
+        <h3>顛覆性的 React hook</h3>
         <pre><code class="language-js">
 
         </code></pre>
