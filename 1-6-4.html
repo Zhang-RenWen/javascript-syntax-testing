@@ -34,13 +34,95 @@
       </aside>
       <article>
         <h2 id="1-6-4">1-6-4 React: 新一代特性<h2>
-        <h3 ></h3>
+        <h3 >
+          React 現狀分析
+        </h3>
+        <p>歸納出3個特點。</p>
+        <ul>
+          <li>開發模式已經定型，有利於開發者持續學習。</li>
+          <li>仍然由強大的開發團隊進行維護，不斷帶來改變，這些改愛一方面使 React 更好，另一方面甚至推動了 JavaScript 語言的發展。</li>
+          <li>社區生態強大，有一系列解決方案，資料狀態管理、元件函數庫、伺服器端繪製生態群百花齊放。</li>
+        <ul>
+        <ul>
+          <li>概念越來越多。某種程度上，新舊概念並存，使學習曲線激增。</li>
+          <li>存在較多帶有 unsafe_ 標記的API ，使開發者始終擔憂相關 API 會有徹底放棄的那一天。</li>
+          <li>新特性的有點疑慮</li>
+        </ul>
+        <h3>從 React Component 看 React 發展史</h3>
+        <p>React Component 的發展主要經歷了以下3個階段。</p>
+        <ul>
+          <li>createClass 建立元件時期</li>
+          <li>ES class 宣告元件時期</li>
+          <li>無狀態（函數式）元件 + React hook 時期</li>
+        <ul>
+        <h4>createClass 建立元件時期</h4>
+        <p>creatClass 是一個函數，接收參數並傳回元件實例。<p>
+            
         <pre><code class="language-js">
-
+import React from 'react'
+const component1 = React.createClass({
+  propTypes: {
+    foo: React.ProtoTypes.string
+  },
+  getDefaultProps () {
+    return  {foo:'bar'}
+  },
+  getInitialState () {
+    return {
+      state1: 'lucas'
+    }
+  },
+  handleClick (){
+  },
+  render () {
+    return (
+      <p onclick={this.handleClick}></p>
+    )
+  }
+})
         </code></pre>
+        <p>以上程式看起來很好了解，但是撰寫還是有些違背直覺。從 React 15:5 版本開始，官方就不再開始推薦使用該函數，到了 React 16 版本，就將其徵底廢棄了。</p>
+        <h4>ES class 宣告元件時期</h4>
+        <p<當時 ES6 剛推出 class 特性就被 React 團隊所採用，取代了原本 createClass</p>
         <pre><code class="language-js">
-
+class Component1 extends React.Component{
+  handleClick = e => {
+    console.log (e)
+    state = {
+      name: 'Lucas'
+    }
+    this.setState ({
+      name:'Messi',
+    })
+  }
+  render () {
+    return (
+      <div onClick=(this. handleClick)>
+        {{this.state.name}}
+      </div>
+    )
+  }
+}
         </code></pre>
+        <p>class 宣告方式和早期的 createClass 相比有非常重要的兩點差別，如下。<p>
+        <ul>
+          <li>React.createClass 支援在事件處理函數中自動綁定 this，而 class 宣告的元件需要開發者手動綁定。</li>
+          <li>React.Component 不能使用 React mixins 來實現重複使用。<li>
+        </ul>
+        <p>第一點差別決定了 React 放棄了多管閒事地綁定 this，雖然這個行為在很多人看來毫無必要，很多類別 React 架構都會幫助開發者對事件處理函數綁定 this ，Vue 也是如此。</p>
+        <p>綁定 this 的方案有很多種，上述程式採用了 ES Next 的屬性初始化方法，對 handleClick 進行了綁定。</p>
+        <p>第二點差別決定了 React 實現重複使用方式的發展方向。首先肯定的是，官方認為使用 mixins 是弊大於利的，所以已經做底放棄使用它。社區跟進的圍校使用方案主要有兩種，分別是使用高階元件和 render prop 模式。</p>
+        <p>使用 class 宣告元件並不是完美的。React 官方團隊認為，這種方式已背離了 React 的初衷。歸納了一下，class 宣告元件的問題有以下兩個。</p>
+        <ul>
+          <li>
+            帶來了針對生命週期式設計的因擾，隨著邏輯變複雜，元件的生命週期函數隨之變得很難維護和了解。我們想弄清楚 componentDidMount、
+componentDidUpdate、componentWillUnmount 、componentWillRecieveProps
+這些鉤子的邏輯並不困難。但是，這些生命週期函數中的程式和 render 中的 state 及 props 有什麼關係？這種問題將隨著應用越來越複雜被無限放大。</li>
+<li>React 是函數式的，而 class 宣告元件這種物件導向的行為顯得不倫不類。</li>
+        </ul>
+        <p>基於這兩點，React 很快推出了函數式元件，（或無狀態元件，下面統稱為函數式元件，因為在 hook 特性下元件也會有狀態）。</p>
+        <h4>函數式元件</h4>
+        
         <pre><code class="language-js">
 
         </code></pre>
