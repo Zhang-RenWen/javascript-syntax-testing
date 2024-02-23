@@ -128,24 +128,136 @@ const component = props => &lt;div&gt;{ props.name }&lt;/div&gt;
         </code></pre>
         <p>然而它是完全無法取代 class 元件的，因為它不存在生命運期，完全的無狀態讓我們無法處理必要的邏輯。</p>
         <h3>顛覆性的 React hook</h3>
+        <p>它可以使開發者按業務邏輯拆分程式，而非按生命週期。這樣如果根實現重複使用，直接在任何元件中引用相關 hook 即可。hook 把程式按照業務邏輯的相關性進行拆分，把同一業務的程式集中在一起，不同業務的程式獨立開來，維護起來就清楚很多。</p>
+        <h4>輕量級 useState</h4>
+        <p>事實上，setState API 並沒有什麼問題，也足夠輕量，真正笨重的是 class 元件與 setState 的結合。使用 useState hook 使得函數式元件也具備了操作 state 的能力，且不需要引用生命週期函數。</p>
+        <p>useState 是一個函數，其中的輸入參數是 initialState；它會傳回一個陣列，第一個值是 state，第二個值是改變 state 的函數。</p>
+        <p>這裡多說一個細節，為什麼 useState 會傳回一個陣列呢？如果傳回的是一個物件是否會更合適呢？這樣表意更加清晰且簡單，也支援我們自動設定別名。</p>
+        
         <pre><code class="language-js">
-
+const React = (function () {
+  let stateValue
+  return Object.assign(React, {
+    useState (initialStateValue) {
+      stateValue = stateValue || initialStateValue
+      function setState (value){
+        stateValue = value
+      }
+      return [stateValue, setState]
+    }
+  })
+})()
         </code></pre>
+        <p>我們使用 stateValue 閉包變數儲存 state，並提供修改 state Value 的方法 setState，一併作為陣列傳回。</p>
+        <h4>useEffect 和生命週期那些事</h4>
+        <p>函數式元件透過
+useState 具備了操控 state 的能力，修改 state 需要在適當的
+場景下進行：class 宣告的元件在元件生命週期中進行 state 更迭，那麼在函數式元件中呢？我們需要用 useEffect 模擬生命週期。目前，useEffect 相當於綜合了 class Component 中的 componentDidMount、componentDidUpdate、component WillUnmount這3個生命週期。</p>
+<p>也就是說，useEffect 宣告的回呼函數會在元件掛載、更新、移除的時候執行。為了避免每次繪製都執行所有的 useBffect 回呼，useEffect 提供了第二個參數，該參數是陣列類型。只有在繪製時陣列中的值發生了變化，才會執行該uiscEfteot 回呼。如果 useEffect 的第二個參數是個空陣列，也就是說目前資料狀態並不依賴任何其他資料，那麼 useEfiect就只會在元件第一次掛載後和
+移除前被呼。</p>
+<p>下面嘗試實現 useEffect，程式如下。</p>
         <pre><code class="language-js">
-
+const React = (function () {
+  let deps
+  return Object.assign(React, {
+    useEffect(callback, depsArray){
+      const shouldUpdate = !depsArray
+      const depsChange = deps ? Ideps.evezy((depitem, index)=>depltem ===depsArray[index]) : true
+      if (shouldUpdate||depsChange){
+        callback()
+        deps = depsArray || []
+      }
+    }
+  })
+})()
         </code></pre>
+        <p>閉包變數 deps 會儲存前一刻 useEffect 的依賴陣列中的值。每次呼叫 useEffect
+時，都會檢查 deps 陣列和目前 depsArray 傳列中的值，如果其中任何一項有變化，depsChange 的值都將為 true，進而執行 useEffect 的回呼。</p>
+<p>那麼如何模擬生命週期 shouldComponentU pdate 呢？事實上：我們不需要用 useEffect 來實現 shouldComponentUpdate。React 新特性中專門提供了 React.memo來幫助開發者進行效能最佳化。另外，useEffect是無
+法模擬 getSnapshotBeforeUpdate 和 componentDidCatch 兩個生命週期函數
+的。</p>
+<p>上述兩種實現都是簡易版的，旨在剖析這兩個 hook 的工作原理，很多細節都沒有實現。最重要的一點是，如果元件內多次呼叫 useState 或 useEffect，實現為了區分每次呼叫 useState 之前不同的 state 值及對應的 Setter 函數，就需要額外使用一個陣列來儲存每次呼叫的配對值，程式如下。</p>
         <pre><code class="language-js">
-
+const React =（function(){
+  let hooks =［］
+  let currentHook = 0
+  return Object.assign (React, {
+    useState(initialStateValue){
+      hooks[currentHook] = hooks([currentHook] || initialStateValue
+      function setState (value) {
+        hooks[currentHook] = value
+      }
+      return [hooks[currentHook++], setState]
+    },
+    useEffect (callback, depsArray) {
+      const shouldUpdate = depsArray
+      const depsChange = hooks[currentHook] ? !hooks[currentHook].every((depItem, index) => depItem === [depsArray[index]) : true
+      if (shouldUpdate || depsChange) {
+        callback ()
+        hooks[currentHook++] = depsArray ||[]
+      }
+    }
+  })
+})()
         </code></pre>
+        <p>這也是 hook 只可以在頂層使用，不能寫在循環本體、條件繪製，或巢狀結構 function 裡的原因。React 內部實現需要按呼叫順序來記錄每個 useState 的呼叫，以做區分。</p>
+        <h4>useReducer 和 Redux</h4>
+        <p>如果 State 的變化有比較複雜的狀態流轉，則可以使用新的hook：
+useReducer 可以讓應用更加Redux化，使邏輯更加清晰。那麼首先思考一個問題：到底該用 useState 還是 useReducer 呢？為此，歸納如下。</p>
+        <p>使用 useState 的場景有以下幾種。</p>
+        <ul>
+          <li>state 為基本類型（也要看實際情況）。</li>
+          <li>state 轉換邏輯簡單的場景。</li>
+          <li>state 轉換只會在目前元件中出現，其他元件不需要感知這個 state。</li>
+          <li>多個 useState hook 之間的 state 並沒有連結關係。</li>
+        </ul>
+        <p>使用 useReducer 的場景有以下幾種。</p>
+        <ul>
+          <li>state 為參考類型（也要看情況）。</li>
+          <li>state 轉換邏輯比較複雜的場景。</li>
+          <li>不同 state 之間存在較強的連結關係，應該作為一個 object，用一個 state 來表示的場景。</li>
+          <li>需要更好的可維護性和可測試性的場景。</li>
+        </ul>
+        <p>翻看 React 原始程式中的 useState 實現就會發現，useState 本質上是 useReducer 的語法糖。</p>
+        <p>再思考第二個問題：useReducer 是否代表 React 內建了 Redux，以便我們可以脱離 Redux呢？事實上，確實可以用簡單的 React 程式，借助 context API 實現一個 React 附帶的全域 Redux 或局部 Redux。</p>
+        <p>在 store.js 檔案中設定 reducer 和資料初始狀態，程式如下所示。</p>
         <pre><code class="language-js">
-
+import React from 'react'
+const store = React.createContext(null)
+export const initialState = {
+  // ...
+}
+export const reducer = （state, action）=>｛
+  switch (action.type) {
+    // ...
+  }
+}
+export default store
         </code></pre>
+        <p>接著使用 Provider 來進行根元件掛載，程式如下。</p>
+          
         <pre><code class="language-js">
-
+import React, { useReducer } from 'react' 
+import store, { reducer, initialState } from './store'
+function App () {
+  const [state, dispatch] = useReducer(reducer, initialState)
+  return (
+    <store.Provider value={{state, dispatch}} > <div/>
+    </store>
+  )
+}
         </code></pre>
+        <p>有了 store，業務元件就可以按照下面提式所示的方式來實現狀態管理了。</p>
         <pre><code class="language-js">
-
+import React, { useContext } from 'react' 
+import store from './store'
+cosnt Child = props =>｛
+  const {state, dispatch } = useContext(store)
+  // ...
+}
         </code></pre>
+        <p>但是這樣的行為仍然不足以完全取代 Redux</p>
+        <h4>React hook 之 hook 之所以被設計為 hook 的原因</h4>
         <pre><code class="language-js">
 
         </code></pre>
