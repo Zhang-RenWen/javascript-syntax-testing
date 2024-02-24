@@ -258,6 +258,24 @@ cosnt Child = props =>｛
         </code></pre>
         <p>但是這樣的行為仍然不足以完全取代 Redux</p>
         <h4>React hook 之 hook 之所以被設計為 hook 的原因</h4>
+        <p>總結以上內容</p>
+        <ul>
+          <li>useState：讓函數式元件能夠使用 state。</li>
+          <li>useEffect 讓函數式元件可以模擬生命週期方法，並進行副作用操作。</li>
+          <li>useReducer 讓我們能夠更清晰地處理狀態資料。</li>
+          <li>useContext 可以取得 context 值。</li>
+        </ul>
+        <p>React.memo 並沒有成為一個hook 原因其實是 React 認為能夠成為 hook 有兩個特定條件。</p>
+        <ul>
+          <li> 可組合：這個新特性需要具有組合能力，也就是說需要有重複使用價值，因為 hook的一大目標就是完成元件的重複使用。因此，開發者可以自訂hook，而不必使用官方指定的 hook。</li>
+          <li>可偵錯：hook 的一大特性就是能夠偵錯，如果應用出現差錯，要能夠從錯誤的 props 和 state 中找到錯誤的元件或邏輯，具有這樣偵錯功能的特性才有資格成為一個 hook。</li>
+        </ul>
+        <p>詳細可以看 Dan Abramoy 專門寫的文章 Why Isn' tX a HOok？</p>
+        <h3>令人期待的新特性</h3>
+        
+
+
+
         <pre><code class="language-js">
 
         </code></pre>
