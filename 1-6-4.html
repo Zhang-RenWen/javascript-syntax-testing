@@ -153,7 +153,7 @@ const React = (function () {
         <p>函數式元件透過
 useState 具備了操控 state 的能力，修改 state 需要在適當的
 場景下進行：class 宣告的元件在元件生命週期中進行 state 更迭，那麼在函數式元件中呢？我們需要用 useEffect 模擬生命週期。目前，useEffect 相當於綜合了 class Component 中的 componentDidMount、componentDidUpdate、component WillUnmount這3個生命週期。</p>
-<p>也就是說，useEffect 宣告的回呼函數會在元件掛載、更新、移除的時候執行。為了避免每次繪製都執行所有的 useBffect 回呼，useEffect 提供了第二個參數，該參數是陣列類型。只有在繪製時陣列中的值發生了變化，才會執行該uiscEfteot 回呼。如果 useEffect 的第二個參數是個空陣列，也就是說目前資料狀態並不依賴任何其他資料，那麼 useEfiect就只會在元件第一次掛載後和
+<p>也就是說，useEffect 宣告的回呼函數會在元件掛載、更新、移除的時候執行。為了避免每次繪製都執行所有的 useEffect 回呼，useEffect 提供了第二個參數，該參數是陣列類型。只有在繪製時陣列中的值發生了變化，才會執行該 useEffect 回呼。如果 useEffect 的第二個參數是個空陣列，也就是說目前資料狀態並不依賴任何其他資料，那麼 useEffect 就只會在元件第一次掛載後和
 移除前被呼。</p>
 <p>下面嘗試實現 useEffect，程式如下。</p>
         <pre><code class="language-js">
@@ -162,7 +162,7 @@ const React = (function () {
   return Object.assign(React, {
     useEffect(callback, depsArray){
       const shouldUpdate = !depsArray
-      const depsChange = deps ? Ideps.evezy((depitem, index)=>depltem ===depsArray[index]) : true
+      const depsChange = deps ? !deps.every((depItem, index)=>depItem ===depsArray[index]) : true
       if (shouldUpdate||depsChange){
         callback()
         deps = depsArray || []
@@ -173,17 +173,17 @@ const React = (function () {
         </code></pre>
         <p>閉包變數 deps 會儲存前一刻 useEffect 的依賴陣列中的值。每次呼叫 useEffect
 時，都會檢查 deps 陣列和目前 depsArray 傳列中的值，如果其中任何一項有變化，depsChange 的值都將為 true，進而執行 useEffect 的回呼。</p>
-<p>那麼如何模擬生命週期 shouldComponentU pdate 呢？事實上：我們不需要用 useEffect 來實現 shouldComponentUpdate。React 新特性中專門提供了 React.memo來幫助開發者進行效能最佳化。另外，useEffect是無
+<p>那麼如何模擬生命週期 shouldComponentUpdate 呢？事實上：我們不需要用 useEffect 來實現 shouldComponentUpdate。React 新特性中專門提供了 React.memo來幫助開發者進行效能最佳化。另外，useEffect是無
 法模擬 getSnapshotBeforeUpdate 和 componentDidCatch 兩個生命週期函數
 的。</p>
 <p>上述兩種實現都是簡易版的，旨在剖析這兩個 hook 的工作原理，很多細節都沒有實現。最重要的一點是，如果元件內多次呼叫 useState 或 useEffect，實現為了區分每次呼叫 useState 之前不同的 state 值及對應的 Setter 函數，就需要額外使用一個陣列來儲存每次呼叫的配對值，程式如下。</p>
         <pre><code class="language-js">
-const React =（function(){
-  let hooks =［］
+const React =(function(){
+  let hooks =[]
   let currentHook = 0
   return Object.assign (React, {
     useState(initialStateValue){
-      hooks[currentHook] = hooks([currentHook] || initialStateValue
+      hooks[currentHook] = hooks[currentHook] || initialStateValue
       function setState (value) {
         hooks[currentHook] = value
       }
@@ -227,7 +227,7 @@ const store = React.createContext(null)
 export const initialState = {
   // ...
 }
-export const reducer = （state, action）=>｛
+export const reducer = (state, action)=>{
   switch (action.type) {
     // ...
   }
@@ -242,8 +242,8 @@ import store, { reducer, initialState } from './store'
 function App () {
   const [state, dispatch] = useReducer(reducer, initialState)
   return (
-    <store.Provider value={{state, dispatch}} > <div/>
-    </store>
+    &lt;store.Provider value={{state, dispatch}} &gt; &lt;div/&gt;
+    &lt;/store&gt;
   )
 }
         </code></pre>
@@ -251,7 +251,7 @@ function App () {
         <pre><code class="language-js">
 import React, { useContext } from 'react' 
 import store from './store'
-cosnt Child = props =>｛
+const Child = props =>{
   const {state, dispatch } = useContext(store)
   // ...
 }
@@ -270,33 +270,69 @@ cosnt Child = props =>｛
           <li> 可組合：這個新特性需要具有組合能力，也就是說需要有重複使用價值，因為 hook的一大目標就是完成元件的重複使用。因此，開發者可以自訂hook，而不必使用官方指定的 hook。</li>
           <li>可偵錯：hook 的一大特性就是能夠偵錯，如果應用出現差錯，要能夠從錯誤的 props 和 state 中找到錯誤的元件或邏輯，具有這樣偵錯功能的特性才有資格成為一個 hook。</li>
         </ul>
-        <p>詳細可以看 Dan Abramoy 專門寫的文章 Why Isn' tX a HOok？</p>
+        <p>詳細可以看 Dan Abramoy 專門寫的文章 Why Isn' tX a HOok?</p>
         <h3>令人期待的新特性</h3>
-        
-
+<p>React.Suspense 和 React.lazy。React.Suspense 給了 React 元任非同步（中斷）繪製的能力，打破了React 元件之前同步繪製整個元件的格局。而 React.lazy帶來了延遲載入的能力，可以極佳地取代社區上的一些輪子實現。</p>        
+<p>看一個場景，結合使用 React.Suspense 和 React.lazy 實現程式分割和隨選載入。
+  目前，隨選載入一般都採用 react-loadable，這個函數庫穩定優雅且支援伺服器端繪製，程式如下。</p>
 
 
         <pre><code class="language-js">
-
+const Loading = ({ delay }) => {
+  if(delay){
+    return &lt;Spinner &gt;
+  }
+  return null
+}
+export const AsyncComponent = Loadable({
+  loader:() => import(/* webpackChunkName:"Component1"*/'./component1'),
+  loading: Loading,
+  delay: 500
+})
         </code></pre>
+        <p>這段程式定義了一個 Loading 元件，在請求傳回之前進行伺服器端繪製； delay 參數表示時間超過 500ms 才顯示 Loading，防止閃爍 Loading的出現。</p>
+        <p>如果換成結合使用 React.Suspense 和 React.lazy 的方式・則程式如下。</p>
         <pre><code class="language-js">
-
+const Component = React.Lazy(() => import(/* webpackChunkName: "Component1"*/ './component1/'))
+export const AsyncComponent = props =>(
+  &lt;React.Suspense fallback={&lt;Loading /&gt;}&gt;
+    &lt;Component {...props} /&gt;
+  &lt;/React.Suspense&gt;
+)
         </code></pre>
+        <p>React.lazy 封裝動態 import 的 React 元件 要求 import 必須傳回一個 Promise
+物件，並且這個 Promise 物件會被決議為一個ES 模組，模組的 export default 必須是一個合法的 React 元件。</p>
+        <p>React.Suspense 元件中設定了 fallback prop ，當發現 Component 是一個 Promise
+          類型，且這個 Promise 沒有被決議時，就啟用 fallback prop 所提供的元件，以便在等待網路傳回結果時進行伺服器端繪製。</p>
+        <p>我們可以結合 Error Boundary 特性，在出現網路錯誤或其他錯誤時進行錯誤處理。應用 Error Boundary 特性處理可能出現的錯誤的程式如下。</p>
         <pre><code class="language-js">
-
+&lt;MyCustomErrorBoundary&gt;
+  &lt;AsyncComponent /&gt;
+&lt;/MyCustomErrorBoundary&gt;
         </code></pre>
+        <p>這樣就實現了簡單的 react-loadable 函數庫。當然，React.Suspense 在最新的 React 18 已經正式推出。但透過自己手動實現一個 React.Suspense 元件可以更加了解其中背後設計的思路，下面的程式提供了一個簡單的版本，但未考慮邊界情況。 
+        </p>
         <pre><code class="language-js">
-
+export class Suspense extends React.Component {
+  state = {
+    isLoading: false
+  }
+  componentDidCatch (error) {
+    if(typeof error.then === 'function') {
+      this.setState({ isLoading: true })
+      error.then(() => {
+        this.setState({ isLoading: false })
+      })
+    }
+  }
+  render () {
+    const { children, fallback } = this.props
+    const { isLoading } = this.state
+    return isLoading ? fallback: children
+  }
+}
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>這段程式的核心想法就是，在第一次繪製 Promise出錯時使用 componentDid Catch 進行捕捉，然後透過狀態切換繪製 fallback 元件；在 Promise 決議之後，透過狀態切換繪製目標群元件。</p>
       </article>
     </main>
   </body>
