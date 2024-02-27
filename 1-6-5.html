@@ -34,11 +34,93 @@
       </aside>
       <article>
         <h2 id="1-6-5">1-6-5 同構應用</h2>
-        <h3></h3>
+        <p>同構應用能夠實現的基礎是虛擬 DOM，以虛擬 DOM為基礎，我們可以產生真實的DOM，並由瀏覽器繪製；也可以呼叫不同架構的不同API，將虛擬DOM 產生字串，由伺服器端傳輸給客戶端。</p>
+        <h3>
+          包裝環境區分
+        </h3>
+        <p>同構應用實現了客戶端程式和伺服器端程式的基本統一，只需要選寫一種元件，就能產生適用於伺服器端和客戶端的元件。但伺服器端程式和客戶端程式在大多數情況下還是需要單獨處理的。舉例來說，以下差別就決定了客戶端和伺服器端程式完全重複使用的難易程度。</p>
+        <h4>1.路由程式差別</h4>
+        <p>伺服器端需要根據請求路徑比對頁面元件，客戶端需要透過瀏覽器中的位址比對頁面元件。</p>
+        <p>對於路由程式的差別化處理，可以參考如下所示的客戶端程式。</p>
+        
         <pre><code class="language-js">
-
+const App = () => {
+return (
+<Provider store={store}>
+<BrowserRouter>
+<div>
+<Route path='/' component={Home}>
+<Route path='/product' component={Product}>
+</div>
+</BrowserRouter>
+</Provider>
+)
+}
+ReactDom.render(<App/>, document. querySelector('#root'))
         </code></pre>
-        <div class="border-block"></div>
+        <p>BrowserRouter 元件根據 window.location 及 history API 實現頁面切換，而伺服器端一定是無法取得 window.location 的，伺服器端的程式如下。</p>
+        <pre><code class="language-js">
+const App = () => {
+return
+<Provider store=(store}>
+<StaticRouter location={reg.path} context={context}> <div>
+<Route path='/' component={Home}>
+</div>
+</StaticRouter>
+</Provider>
+}
+Return ReactDom.renderToString(<App/>)
+        </code></pre>
+        <p>伺服器端需要使用 StaticRouter 元件，並將請求位址和上下文資訊作為 location 和 context 傳入 StaticRouter 。</p>
+        <h4>2.程式打包的差別</h4>
+        <p>伺服器端程式如果需要依賴 Node.js 核心模組或協力廠商模組，就不再需要把這些模組程式包裝到最後程式中了。因為環境已經安裝了這些依賴，伺服器端程式可以直接參考。這樣一來，就需要在 webpack 中設定 target:node，並借助 webpack-node-externals 外掛程式解決協力廠商依賴包裝的問題。</p>
+        <p>對於圖片等靜態資源，url-loader 會在伺服器端程式和客户端程式包裝過程中分別參考它們，因此在資原原始目錄中會產生重複的檔案。當然，後包裝出來的檔案會因為名稱重複而覆蓋前一次包裝出來的結果，但並不影響專案的執行，只是整個建置過程並不優雅。</p>
+        <p>由於路由程式在伺服器端和客戶端之間存在差別，因此 webpack 設定檔的 entry 也會不同，其程式如下。</p>
+        <pre><code class="language-js">
+          {
+          entry: './src/client/index.js',
+          }
+          {
+          entry: './src/server/index.js',
+          }
+          
+        </code></pre>
+        <h3>注水和脫水</h3>
+        
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
       </article>
     </main>
   </body>
