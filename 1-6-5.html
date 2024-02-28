@@ -34,91 +34,123 @@
       </aside>
       <article>
         <h2 id="1-6-5">1-6-5 同構應用</h2>
-        <p>同構應用能夠實現的基礎是虛擬 DOM，以虛擬 DOM為基礎，我們可以產生真實的DOM，並由瀏覽器繪製；也可以呼叫不同架構的不同API，將虛擬DOM 產生字串，由伺服器端傳輸給客戶端。</p>
-        <h3>
-          包裝環境區分
-        </h3>
-        <p>同構應用實現了客戶端程式和伺服器端程式的基本統一，只需要選寫一種元件，就能產生適用於伺服器端和客戶端的元件。但伺服器端程式和客戶端程式在大多數情況下還是需要單獨處理的。舉例來說，以下差別就決定了客戶端和伺服器端程式完全重複使用的難易程度。</p>
+        <p>
+          同構應用能夠實現的基礎是虛擬 DOM，以虛擬
+          DOM為基礎，我們可以產生真實的DOM，並由瀏覽器繪製；也可以呼叫不同架構的不同API，將虛擬DOM
+          產生字串，由伺服器端傳輸給客戶端。
+        </p>
+        <h3>包裝環境區分</h3>
+        <p>
+          同構應用實現了客戶端程式和伺服器端程式的基本統一，只需要選寫一種元件，就能產生適用於伺服器端和客戶端的元件。但伺服器端程式和客戶端程式在大多數情況下還是需要單獨處理的。舉例來說，以下差別就決定了客戶端和伺服器端程式完全重複使用的難易程度。
+        </p>
         <h4>1.路由程式差別</h4>
         <p>伺服器端需要根據請求路徑比對頁面元件，客戶端需要透過瀏覽器中的位址比對頁面元件。</p>
         <p>對於路由程式的差別化處理，可以參考如下所示的客戶端程式。</p>
-        
+
         <pre><code class="language-js">
 const App = () => {
-return (
-<Provider store={store}>
-<BrowserRouter>
-<div>
-<Route path='/' component={Home}>
-<Route path='/product' component={Product}>
-</div>
-</BrowserRouter>
-</Provider>
-)
+  return (
+    &lt;Provider store={store}&gt;
+      &lt;BrowserRouter&gt;
+        &lt;div&gt;
+          &lt;Route path='/' component={Home}&gt;
+          &lt;Route path='/product' component={Product}&gt;
+        &lt;/div&gt;
+      &lt;/BrowserRouter&gt;
+    &lt;/Provider&gt;
+  )
 }
-ReactDom.render(<App/>, document. querySelector('#root'))
+ReactDom.render(&lt;App/&gt;, document.querySelector('#root'))
         </code></pre>
-        <p>BrowserRouter 元件根據 window.location 及 history API 實現頁面切換，而伺服器端一定是無法取得 window.location 的，伺服器端的程式如下。</p>
+        <p>
+          BrowserRouter 元件根據 window.location 及 history API
+          實現頁面切換，而伺服器端一定是無法取得 window.location 的，伺服器端的程式如下。
+        </p>
         <pre><code class="language-js">
 const App = () => {
-return
-<Provider store=(store}>
-<StaticRouter location={reg.path} context={context}> <div>
-<Route path='/' component={Home}>
-</div>
-</StaticRouter>
-</Provider>
+  return
+    &lt;Provider store={store}&gt;
+      &lt;StaticRouter location={req.path} context={context}&gt; 
+        &lt;div&gt;
+          &lt;Route path='/' component={Home}&gt;
+        &lt;/div&gt;
+      &lt;/StaticRouter&gt;
+    &lt;/Provider&gt;
 }
-Return ReactDom.renderToString(<App/>)
+Return ReactDom.renderToString(&lt;App/&gt;)
         </code></pre>
-        <p>伺服器端需要使用 StaticRouter 元件，並將請求位址和上下文資訊作為 location 和 context 傳入 StaticRouter 。</p>
+        <p>
+          伺服器端需要使用 StaticRouter 元件，並將請求位址和上下文資訊作為 location 和 context 傳入
+          StaticRouter 。
+        </p>
         <h4>2.程式打包的差別</h4>
-        <p>伺服器端程式如果需要依賴 Node.js 核心模組或協力廠商模組，就不再需要把這些模組程式包裝到最後程式中了。因為環境已經安裝了這些依賴，伺服器端程式可以直接參考。這樣一來，就需要在 webpack 中設定 target:node，並借助 webpack-node-externals 外掛程式解決協力廠商依賴包裝的問題。</p>
-        <p>對於圖片等靜態資源，url-loader 會在伺服器端程式和客户端程式包裝過程中分別參考它們，因此在資原原始目錄中會產生重複的檔案。當然，後包裝出來的檔案會因為名稱重複而覆蓋前一次包裝出來的結果，但並不影響專案的執行，只是整個建置過程並不優雅。</p>
-        <p>由於路由程式在伺服器端和客戶端之間存在差別，因此 webpack 設定檔的 entry 也會不同，其程式如下。</p>
+        <p>
+          伺服器端程式如果需要依賴 Node.js
+          核心模組或協力廠商模組，就不再需要把這些模組程式包裝到最後程式中了。因為環境已經安裝了這些依賴，伺服器端程式可以直接參考。這樣一來，就需要在
+          webpack 中設定 target:node，並借助 webpack-node-externals
+          外掛程式解決協力廠商依賴包裝的問題。
+        </p>
+        <p>
+          對於圖片等靜態資源，url-loader
+          會在伺服器端程式和客户端程式包裝過程中分別參考它們，因此在資原原始目錄中會產生重複的檔案。當然，後包裝出來的檔案會因為名稱重複而覆蓋前一次包裝出來的結果，但並不影響專案的執行，只是整個建置過程並不優雅。
+        </p>
+        <p>
+          由於路由程式在伺服器端和客戶端之間存在差別，因此 webpack 設定檔的 entry
+          也會不同，其程式如下。
+        </p>
         <pre><code class="language-js">
-          {
-          entry: './src/client/index.js',
-          }
-          {
-          entry: './src/server/index.js',
-          }
-          
+{
+  entry: './src/client/index.js',
+}
+{
+  entry: './src/server/index.js',
+}
         </code></pre>
         <h3>注水和脫水</h3>
-        <p>什麼叫作注水和脱水呢？這和同構應用中的資料取得有關：在伺服器端繪製時，伺服器端會請求介面取得資料，並處理準備好的資料狀態（如果使用
-Redux，就是進行 store 的更新），為了減少用戶端的請求，我們需要保留這個狀態。保留這個狀態的一般做法是在伺服器端傳回 HTML 字串的時候，將資料 JSON.stringify 一併傳回，這個過程叫作脱水（dehydrate）；用戶端不需要請求取得資料，因為它可以直接使用伺服器端下發的資料，這個過程叫作注水（hydrate）。</p>
+        <p>
+          什麼叫作注水和脱水呢？這和同構應用中的資料取得有關：在伺服器端繪製時，伺服器端會請求介面取得資料，並處理準備好的資料狀態（如果使用
+          Redux，就是進行 store
+          的更新），為了減少用戶端的請求，我們需要保留這個狀態。保留這個狀態的一般做法是在伺服器端傳回
+          HTML 字串的時候，將資料 JSON.stringify
+          一併傳回，這個過程叫作脱水（dehydrate）；用戶端不需要請求取得資料，因為它可以直接使用伺服器端下發的資料，這個過程叫作注水（hydrate）。
+        </p>
         <p>上述過程可以用程式來表示。伺服器端的程式如下。</p>
         <pre><code class="language-js">
 ctx.body = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-</head>
-<body>
-<script>
-window.context{
-initialState:${JSON.stringify(store.getState())}
-}
-</script>
-<div id="app">
-// ...
-</div>
-</body>
-</html>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;script&gt;
+      window.context={
+        initialState:${JSON.stringify(store.getState())}
+      }
+    &lt;/script&gt;
+    &lt;div id="app"&gt;
+      // ...
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
 `
         </code></pre>
         <p>同時，用戶端的程式如下。</p>
-        
+
         <pre><code class="language-js">
 export const getClientStore = ()=>{
   const defaultState = JSON.parse(window.context.state)
   return createStore(reducer, defaultState, applyMiddleware(thunk))
 }
         </code></pre>
-        <p>這一系列操作非常典型，有幾個細節非常值得探討：在伺服器端繪製時，伺服器端如何能夠請求所有的 API，確保資料已經全部被請求了呢？</p>
-        <p>這個問題一般可以用兩種方法來解決。第一種方法是設定路由 route-config，結合 matchRoutes，找到頁面上相關元件所需的請求介面的方法並執行請求。這種方法要求開發者透過路由設定資訊，顯性地告知伺服器端他們要請求的內容。</p>
+        <p>
+          這一系列操作非常典型，有幾個細節非常值得探討：在伺服器端繪製時，伺服器端如何能夠請求所有的
+          API，確保資料已經全部被請求了呢？
+        </p>
+        <p>
+          這個問題一般可以用兩種方法來解決。第一種方法是設定路由 route-config，結合
+          matchRoutes，找到頁面上相關元件所需的請求介面的方法並執行請求。這種方法要求開發者透過路由設定資訊，顯性地告知伺服器端他們要請求的內容。
+        </p>
         <p>首先來設定路由，程式如下。</p>
         <pre><code class="language-js">
 const routes = [
@@ -133,9 +165,9 @@ const routes = [
 import { routes } from "/routes"
 function App() {
   return (
-    <Switch>
-      {routes.map(route =>(<Route ｛...route｝/>))}
-    </Switch>
+    &lt;Switch&gt;
+      {routes.map(route =&gt;(&lt;Route {...route}/&gt;))}
+    &lt;/Switch&gt;
   )
 }
         </code></pre>
@@ -152,100 +184,173 @@ Promise.all(promises).then(data => {
   putTheDataSomewhereTheClientCanFindIt(data)
 })
         </code></pre>
-        <p>另外一種方法的設計想法與 Next.js 的設計想法類似，需要在 React 元件上定義靜態方法。舉例來說，定義靜態 loadData 方法，在伺服器端繪製時，我們可以檢查所有元件的 loadData 方法，取得需要請求的介面。這樣的方式參考了早期 react-apollo 的解決方案。以下為Facebook 團隊的開放原始碼專案 react-apollo 貢獻的程式，其功能就是檢查元件，取得請求介面。</p>
+        <p>
+          另外一種方法的設計想法與 Next.js 的設計想法類似，需要在 React
+          元件上定義靜態方法。舉例來說，定義靜態 loadData
+          方法，在伺服器端繪製時，我們可以檢查所有元件的 loadData
+          方法，取得需要請求的介面。這樣的方式參考了早期 react-apollo 的解決方案。以下為Facebook
+          團隊的開放原始碼專案 react-apollo 貢獻的程式，其功能就是檢查元件，取得請求介面。
+        </p>
         <pre><code class="language-js">
-Function getPromi sesFromTree （｛
-rootElement,
-rootContext = {},
-i: PromiseTreeArgument) : PromiseTreeResultI] \
-const promises: PromiseTreeResult|] = [];
-walKTree (rootElement, rootContext, (, instance, context, childcontext) → \ if (instance && hasFetchDataFunction (instance)) \
-const promise = instance. fetchData ();
-if (isPromise<Object> (promise)) \
-promises. push (1 promise, context: childContext || context, instance ili
-return false;
-｝）；
-return promises;
-export
-function walkTree (
-element: React. ReactNode, context: Context, visitor: ( element: React. ReactNode, instance: React.Component<any> | null, context: Context, childContext?: Context, => boolean | void,
-if (Array. isArray (element)) {
-element. forEach (item = walkTree (item, context, visitor));
-return;
-if (!element) {
-return;
-if (isReactElement (element)) {
-if (typeof
-element.type === 'function') (
-const Comp = element. type;
-const
-props = Object. assign (1), Comp.defaultProps, getProps (element)) ;
-let childContext = context;
-let child;
-if (isComponentClass (Comp)) 1
-const instance = new Comp (props, context) i
-Object.defineProperty (instance, 'props', {
-value: instance. props | props,
-｝）；
-instance. context = instance. context || context;
-instance. state = instance. state || null;
-instance. setState = newState =>｛
-if (typeof newState === 'function') \
-newState = (newState as any) (instance. state, instance. props,
-instance. context) ;
-instance. state = Object.assign (l), instance. state, newState);
-｝；
-if (Comp. getDerivedStateFromProps) (
-const result = Comp. getDerivedStateFromProps (instance. props,
-instance. state) ;
-if (result !== null) {
-instance. state = Object.assign (f}, instance. state, result);
-} else if (instance. UNSAFE_componentWillMount) {
-instance. UNSAFE componentWillMount () ; else if (instance. componentWillMount) \ instance. componentWi11Mount () ;
-if (providesChildContext (instance)) {
-childContext = Object.assign (1}, context, instance. getChildContext ()) ;
+function getPromisesFromTree({
+  rootElement,
+  rootContext = {},
+}: PromiseTreeArgument): PromiseTreeResult[] {
+  const promises: PromiseTreeResult[] = [];
+
+  walkTree(rootElement, rootContext, (_, instance, context, childContext) => {
+    if (instance && hasFetchDataFunction(instance)) {
+      const promise = instance.fetchData();
+      if (isPromise&lt;Object&gt;(promise)) {
+        promises.push({ promise, context: childContext || context, instance });
+        return false;
+      }
+    }
+  });
+
+  return promises;
 }
-if (visitor (element, instance, context, childContext) === false) \ return;
-child = instance. render);
-else {
-if (visitor (element, null, context) === false) ( return;
-child = Comp (props, context) ;
-if (child) {
-if (Array. isArray (child)) \
-child.forEach （item => walkTree （item, childContext, visitor））；
-} else {
-walkTree (child, childContext, visitor);
-| else if (lelement, type as any). context I| (element. type as any).
-Consumer) {
-if (visitor (element, null, context)
-=== false） ｛
-return;
-let child;
-if ((element. type as any) .context) {
-((element. type as any). context as any) • currentvalue = element.
-props. value;
-child = element. props. children;
-else｛
-child = element. props. children ( (element. type as any). currentValue);
-if (child)
-if (Array. isArray (child)) f
-child. forEach (item = walkTree (item, context, visitor));
-else {
-walkTree (child, context, visitor);
-｝
-else｛
-if (visitor (element, null, context) === false) {
-return;
-if (element. props & element. props. children) \
-React. Children. forEach (element. props. children, (child: any) = (
-1f (child) {
-walkTree (child, context, visitor);
-' number') t
-else if (typeof element === 'string' || typeof element === visitor (element, null, context) ;
+          
+// Recurse a React Element tree, running visitor on each element.
+// If visitor returns `false`, don't call the element's render function
+// or recurse into its child elements.
+export function walkTree(
+  element: React.ReactNode,
+  context: Context,
+  visitor: (
+    element: React.ReactNode,
+    instance: React.Component&lt;any&gt; | null,
+    context: Context,
+    childContext?: Context,
+  ) => boolean | void,
+) {
+  if (Array.isArray(element)) {
+    element.forEach(item => walkTree(item, context, visitor));
+    return;
+  }
+
+  if (!element) {
+    return;
+  }
+
+  // A stateless functional component or a class
+  if (isReactElement(element)) {
+    if (typeof element.type === 'function') {
+      const Comp = element.type;
+      const props = Object.assign({}, Comp.defaultProps, getProps(element));
+      let childContext = context;
+      let child;
+
+      // Are we are a react class?
+      if (isComponentClass(Comp)) {
+        const instance = new Comp(props, context);
+        // In case the user doesn't pass these to super in the constructor.
+        // Note: `Component.props` are now readonly in `@types/react`, so
+        // we're using `defineProperty` as a workaround (for now).
+        Object.defineProperty(instance, 'props', {
+          value: instance.props || props,
+        });
+        instance.context = instance.context || context;
+
+        // Set the instance state to null (not undefined) if not set, to match React behaviour
+        instance.state = instance.state || null;
+
+        // Override setState to just change the state, not queue up an update
+        // (we can't do the default React thing as we aren't mounted
+        // "properly", however we don't need to re-render as we only support
+        // setState in componentWillMount, which happens *before* render).
+        instance.setState = newState => {
+          if (typeof newState === 'function') {
+            // React's TS type definitions don't contain context as a third parameter for
+            // setState's updater function.
+            // Remove this cast to `any` when that is fixed.
+            newState = (newState as any)(instance.state, instance.props, instance.context);
+          }
+          instance.state = Object.assign({}, instance.state, newState);
+        };
+
+        if (Comp.getDerivedStateFromProps) {
+          const result = Comp.getDerivedStateFromProps(instance.props, instance.state);
+          if (result !== null) {
+            instance.state = Object.assign({}, instance.state, result);
+          }
+        } else if (instance.UNSAFE_componentWillMount) {
+          instance.UNSAFE_componentWillMount();
+        } else if (instance.componentWillMount) {
+          instance.componentWillMount();
+        }
+
+        if (providesChildContext(instance)) {
+          childContext = Object.assign({}, context, instance.getChildContext());
+        }
+
+        if (visitor(element, instance, context, childContext) === false) {
+          return;
+        }
+
+        child = instance.render();
+      } else {
+        // Just a stateless functional
+        if (visitor(element, null, context) === false) {
+          return;
+        }
+
+        child = Comp(props, context);
+      }
+
+      if (child) {
+        if (Array.isArray(child)) {
+          child.forEach(item => walkTree(item, childContext, visitor));
+        } else {
+          walkTree(child, childContext, visitor);
+        }
+      }
+    } else if ((element.type as any)._context || (element.type as any).Consumer) {
+      // A React context provider or consumer
+      if (visitor(element, null, context) === false) {
+        return;
+      }
+
+      let child;
+      if ((element.type as any)._context) {
+        // A provider - sets the context value before rendering children
+        ((element.type as any)._context as any)._currentValue = element.props.value;
+        child = element.props.children;
+      } else {
+        // A consumer
+        child = element.props.children((element.type as any)._currentValue);
+      }
+
+      if (child) {
+        if (Array.isArray(child)) {
+          child.forEach(item => walkTree(item, context, visitor));
+        } else {
+          walkTree(child, context, visitor);
+        }
+      }
+    } else {
+      // A basic string or dom element, just get children
+      if (visitor(element, null, context) === false) {
+        return;
+      }
+
+      if (element.props && element.props.children) {
+        React.Children.forEach(element.props.children, (child: any) => {
+          if (child) {
+            walkTree(child, context, visitor);
+          }
+        });
+      }
+    }
+  } else if (typeof element === 'string' || typeof element === 'number') {
+    // Just visit these, they are leaves so we don't keep traversing.
+    visitor(element, null, context);
+  }
+}
         </code></pre>
         <p>此外，注水和脱水也是同構應用中最為核心和關鍵的細節。</p>
         <h3>請求認證處理</h3>
-        
+
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
