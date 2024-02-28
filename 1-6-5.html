@@ -86,17 +86,166 @@ Return ReactDom.renderToString(<App/>)
           
         </code></pre>
         <h3>注水和脫水</h3>
+        <p>什麼叫作注水和脱水呢？這和同構應用中的資料取得有關：在伺服器端繪製時，伺服器端會請求介面取得資料，並處理準備好的資料狀態（如果使用
+Redux，就是進行 store 的更新），為了減少用戶端的請求，我們需要保留這個狀態。保留這個狀態的一般做法是在伺服器端傳回 HTML 字串的時候，將資料 JSON.stringify 一併傳回，這個過程叫作脱水（dehydrate）；用戶端不需要請求取得資料，因為它可以直接使用伺服器端下發的資料，這個過程叫作注水（hydrate）。</p>
+        <p>上述過程可以用程式來表示。伺服器端的程式如下。</p>
+        <pre><code class="language-js">
+ctx.body = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<script>
+window.context{
+initialState:${JSON.stringify(store.getState())}
+}
+</script>
+<div id="app">
+// ...
+</div>
+</body>
+</html>
+`
+        </code></pre>
+        <p>同時，用戶端的程式如下。</p>
         
         <pre><code class="language-js">
+export const getClientStore = ()=>{
+  const defaultState = JSON.parse(window.context.state)
+  return createStore(reducer, defaultState, applyMiddleware(thunk))
+}
         </code></pre>
+        <p>這一系列操作非常典型，有幾個細節非常值得探討：在伺服器端繪製時，伺服器端如何能夠請求所有的 API，確保資料已經全部被請求了呢？</p>
+        <p>這個問題一般可以用兩種方法來解決。第一種方法是設定路由 route-config，結合 matchRoutes，找到頁面上相關元件所需的請求介面的方法並執行請求。這種方法要求開發者透過路由設定資訊，顯性地告知伺服器端他們要請求的內容。</p>
+        <p>首先來設定路由，程式如下。</p>
         <pre><code class="language-js">
+const routes = [
+  {
+    path: "/",
+    component: Root,
+    loadData: () => getSomeData()
+  },
+  // etc.
+]
+
+import { routes } from "/routes"
+function App() {
+  return (
+    <Switch>
+      {routes.map(route =>(<Route ｛...route｝/>))}
+    </Switch>
+  )
+}
         </code></pre>
+        <p>在伺服器端程式中，根據靜態設定來請求資料，程式如下。</p>
         <pre><code class="language-js">
+import { matchPath } from "react-router-dom"
+const promises = []
+routes.some(route =>{
+  const match = matchPath(reg.path, route)
+  if(match) promises.push(route.loadData(match))
+  return match
+})
+Promise.all(promises).then(data => {
+  putTheDataSomewhereTheClientCanFindIt(data)
+})
         </code></pre>
+        <p>另外一種方法的設計想法與 Next.js 的設計想法類似，需要在 React 元件上定義靜態方法。舉例來說，定義靜態 loadData 方法，在伺服器端繪製時，我們可以檢查所有元件的 loadData 方法，取得需要請求的介面。這樣的方式參考了早期 react-apollo 的解決方案。以下為Facebook 團隊的開放原始碼專案 react-apollo 貢獻的程式，其功能就是檢查元件，取得請求介面。</p>
         <pre><code class="language-js">
+Function getPromi sesFromTree （｛
+rootElement,
+rootContext = {},
+i: PromiseTreeArgument) : PromiseTreeResultI] \
+const promises: PromiseTreeResult|] = [];
+walKTree (rootElement, rootContext, (, instance, context, childcontext) → \ if (instance && hasFetchDataFunction (instance)) \
+const promise = instance. fetchData ();
+if (isPromise<Object> (promise)) \
+promises. push (1 promise, context: childContext || context, instance ili
+return false;
+｝）；
+return promises;
+export
+function walkTree (
+element: React. ReactNode, context: Context, visitor: ( element: React. ReactNode, instance: React.Component<any> | null, context: Context, childContext?: Context, => boolean | void,
+if (Array. isArray (element)) {
+element. forEach (item = walkTree (item, context, visitor));
+return;
+if (!element) {
+return;
+if (isReactElement (element)) {
+if (typeof
+element.type === 'function') (
+const Comp = element. type;
+const
+props = Object. assign (1), Comp.defaultProps, getProps (element)) ;
+let childContext = context;
+let child;
+if (isComponentClass (Comp)) 1
+const instance = new Comp (props, context) i
+Object.defineProperty (instance, 'props', {
+value: instance. props | props,
+｝）；
+instance. context = instance. context || context;
+instance. state = instance. state || null;
+instance. setState = newState =>｛
+if (typeof newState === 'function') \
+newState = (newState as any) (instance. state, instance. props,
+instance. context) ;
+instance. state = Object.assign (l), instance. state, newState);
+｝；
+if (Comp. getDerivedStateFromProps) (
+const result = Comp. getDerivedStateFromProps (instance. props,
+instance. state) ;
+if (result !== null) {
+instance. state = Object.assign (f}, instance. state, result);
+} else if (instance. UNSAFE_componentWillMount) {
+instance. UNSAFE componentWillMount () ; else if (instance. componentWillMount) \ instance. componentWi11Mount () ;
+if (providesChildContext (instance)) {
+childContext = Object.assign (1}, context, instance. getChildContext ()) ;
+}
+if (visitor (element, instance, context, childContext) === false) \ return;
+child = instance. render);
+else {
+if (visitor (element, null, context) === false) ( return;
+child = Comp (props, context) ;
+if (child) {
+if (Array. isArray (child)) \
+child.forEach （item => walkTree （item, childContext, visitor））；
+} else {
+walkTree (child, childContext, visitor);
+| else if (lelement, type as any). context I| (element. type as any).
+Consumer) {
+if (visitor (element, null, context)
+=== false） ｛
+return;
+let child;
+if ((element. type as any) .context) {
+((element. type as any). context as any) • currentvalue = element.
+props. value;
+child = element. props. children;
+else｛
+child = element. props. children ( (element. type as any). currentValue);
+if (child)
+if (Array. isArray (child)) f
+child. forEach (item = walkTree (item, context, visitor));
+else {
+walkTree (child, context, visitor);
+｝
+else｛
+if (visitor (element, null, context) === false) {
+return;
+if (element. props & element. props. children) \
+React. Children. forEach (element. props. children, (child: any) = (
+1f (child) {
+walkTree (child, context, visitor);
+' number') t
+else if (typeof element === 'string' || typeof element === visitor (element, null, context) ;
         </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
+        <p>此外，注水和脱水也是同構應用中最為核心和關鍵的細節。</p>
+        <h3>請求認證處理</h3>
+        
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
