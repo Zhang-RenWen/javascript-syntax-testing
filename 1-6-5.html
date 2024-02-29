@@ -350,15 +350,96 @@ export function walkTree(
         </code></pre>
         <p>此外，注水和脱水也是同構應用中最為核心和關鍵的細節。</p>
         <h3>請求認證處理</h3>
+        <p>上面蔣到伺服器端預先請求資料，那麼請思考以下場景中的問題：某個請求成類cookie所表明的使用者資訊，如請求「我的學習計畫清單」•這種情況下何股譯端發生的請求是不同於用戶端的，伺服器端發出的請求不會自動帶有瀏覽器增加的cookie，也不含有瀏覽器附帶的 heeder（訊息表頭）資訊，因此在伺服器端發送這個請求後，一定不會獲得預期的結果。</p>
+        <p>對於這個問題，下面來看一下以 react-apollo 為基礎的解決方案。</p>
+        <pre><code class="language-js">
+import { ApolloProvider } from 'react-apollo' 
+import { ApolloClient } from 'apollo-client' 
+import { createHttpLink } from 'apollo-link-http' 
+import Express from 'express'
+import { StaticRouter } from 'react-router' 
+import { InMemoryCache } from "apollo-cache-inmemory"
+import Layout from './routes/Layout'
 
-        <pre><code class="language-js">
+const app = new Express () ;
+app.use(reg, res) => {
+  const client = new ApolloClient ({
+    ssrMode: true,
+    link: createHttpLink {
+      uri: 'http://localhost: 3010', 
+      credentials: 'same-origin',
+      headers: {
+        cookie: reg.header ('Cookie'),
+      },
+    }),   
+    cache: new InMemoryCache()
+  });
+  const context = {}
+  const App =（
+    <ApolloProvider client={client}>
+      <StaticRouter location={reg.ux]} context={context}>
+        <Layout />
+      </ StaticRouter>
+    </ApolloProvider>
+  );
+})
         </code></pre>
+        <p>該解決方案非常簡單，其原理是這樣的：伺服器端發出請求時需要保留用戶端頁面請求的資訊，並在 API 請求取得資訊時攜帶並透傳這個資訊。在上述程式中，呼叫 createHttpLink 方法時，以下設定項目是關鍵。它使伺服器端發出的請求完整地還原了用戶端資訊，因此驗證類別介面也不會再出現問題。</p>
         <pre><code class="language-js">
+headers: {
+  cookie:req.header('Cookie'),
+}
         </code></pre>
+        <p>事實上，在早期 React 中，很多伺服器端繪製的輪子都參考了 react-apollo 的優秀思想，所以可以抽空去了解一下 react-apollo。</p>
+        <h3>樣式問題處理</h3>
+        <p>同構應用的樣式處理容易被開發者所忽視，而一旦忽視，就會掉到坑裡。舉例來說，正常的伺服器端繪製只是傳回了 HTML 字串，樣式需要瀏覽器載入完 CSS 後才會加上，而這個樣式增加的過程就會造成頁面的閃動。再舉例來說，我們不能再使用 style-loader 了，因為這個 webpack loader 會在編譯時將樣式模組載入 HTML header 中。但是在伺服器端繪製環境下，沒有 window 物件，style-loader 就會顯示出錯。我們一般會將 style-loader 換為 isomorphic-style-loader 來實現樣式處理，實際如下。</p>
         <pre><code class="language-js">
+{
+  test: /\.css$/, 
+  use: [
+    'isomorphic-style-loader',
+    'css-loader',
+    'postcss-loader'
+  ],
+}
         </code></pre>
+        <p>此外，使用 'isomorphic-style-loader' 還可以解決真面樣式閃動的問題。它的寶現原理也不難了解；在伺服器端輸出 HTML 字串的同時，可以將樣式插入 HTML 字串中，將結果一同傳送到用戶端。</p>
+        <p>isomorphic-style-loader 的原理：對 webpack 來說，所有的資源都是模組，webpack loader 在編譯過程中可以將匯入的 CSS 檔案轉換成物件，拿到樣式資訊，因此，isomorphic-style-loader 可以取得頁面中的所有元件樣式。為了使程式實現更加通用化，isomorphic-style-loader 可以利用 context API 在繪製頁面元件時取得所有 React 元件的樣式資訊，最後插入 HTML 字串中。</p>
+        <p>在伺服器端繪製時，需要加入以下邏輯。</p>
         <pre><code class="language-js">
+import express from 'express' 
+import React from 'react' 
+import ReactDOM from 'react-dom' 
+import StyleContext from 'isomorphic-style-loader/StyleContext' 
+import App from './App.js'
+
+const server = express ()
+const port = process.env.PORT || 3000
+server.get('*',(reg,res,next)=>{
+const css = new Set () // CSS for all rendered React components
+const insertss = (...styles) => styles.forBach(style = css.add(style._getCss()))
+const body = ReactDOM.renderToString(
+<StyleContext.Provider value={{insertCss}}>
+  <App />
+</StyleContext.Provider>
+const html = `<!doctype html>
+<html>
+<head>
+<script src="client.js" defer></script>
+<style>${[...css].join ('')}</style>
+</head>
+<body>
+<div id="root">${body}</div>
+<body>
+</html>`
+res.status(200).send(html)
+server.listen(port, () => {
+console.log(`Node.js app is running at http://localhost:${port}/`)
+})
         </code></pre>
+        <p>這裡定義了 css Set 類型來儲存真面所有的樣式，並定義了 insertCss 方法，透過 context 可以將該方法傳遞給每個 React 元件。這樣一來，每個 React 元件就都可以呼叫 insertCss 方法了，並在呼叫該方法時，將元件樣式加入 css Set 函數中。</p>
+        <p>最後，用 [..css].join('') 就可以取得真面的所有樣式字串了</p>
+        <h3>meta tags 繪製</h3>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
