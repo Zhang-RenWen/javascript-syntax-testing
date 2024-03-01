@@ -440,22 +440,109 @@ console.log(`Node.js app is running at http://localhost:${port}/`)
         <p>這裡定義了 css Set 類型來儲存真面所有的樣式，並定義了 insertCss 方法，透過 context 可以將該方法傳遞給每個 React 元件。這樣一來，每個 React 元件就都可以呼叫 insertCss 方法了，並在呼叫該方法時，將元件樣式加入 css Set 函數中。</p>
         <p>最後，用 [..css].join('') 就可以取得真面的所有樣式字串了</p>
         <h3>meta tags 繪製</h3>
+        <p>React 應用的程式骨架常常如下所示。</p>
         <pre><code class="language-js">
+          eact 應用的程式骨架常常如下所示。
+const App =（）=>{
+  return (
+    <div>
+      <Component1 />
+      <Component2 />
+    </div>
+  )
+}
+ReactDom.render(<App/>, document.querySelector('#root'))
         </code></pre>
+        <p>將 App 元件嵌入 document.querySelector('#root') 節點中的時候 React 元件一般是不包含 head 標籤內容的。但是，單頁面應用在切換路由時可能也會需要動態修改 head 標籤資訊：如 title內容。也就是說，雖然單頁面應用在切換頁面時不會經過伺服器端繪製，但是仍然需要更改 document 中 title 的內容。</p>
+        <p>那麼，伺服器端如何繪製 meta tags 的 head 標籤就是一個常被忽略但是非常重要的話題。一般情況下，常常使用 react-helmet 函數庫來解決該問題。</p>
+        <p>舉例來說，在 Home 元件中加入 react-helmet 函數庫所提供的 Helmet 元件的程式如下。</p>
         <pre><code class="language-js">
+import Helmet from "react-helmet"；
+<div>
+<Helmet>
+<title>Home page</title>
+<meta name="description" content="Home page description" />
+</Helmet>
+<h1>Home component</h1>
         </code></pre>
+        <p>在 Users 元件中加入 react-helmet 函數庫所提供的 Helmet 元件的程式如下。</p>
         <pre><code class="language-js">
+<Helmet>
+<title›Users page</title>
+<meta name="description" content="Users page description" />
+</Helmet>
         </code></pre>
+        <p>react-helmet這個函數庫會在 Home 元件和 Users 元件繪製時檢測到 Helmet，並自動執行副作用邏輯。</p>
+        <h3>404處理</h3>
+        <p>當進行伺服器端繪製時，還需要留心對出現 404 的情況進行處理。假設 layout.js 檔案中的內容如下。</p>
         <pre><code class="language-js">
+<Switch>
+<Route path="/" exact component={Home} />
+<Route path="/users" exact component={Users}/>
+</Switch>
         </code></pre>
+        <p>當存取：/home時，會獲得一個空白頁面，瀏覽器也沒有獲得 404的狀態碼。</p>
+        <p>為了處理這種情況，可以加入以下內容。</p>
         <pre><code class="language-js">
+<Switch>
+<Route path="/" exact component={Home} />
+<Route path="/users" exact component={Users} />
+<Route component={NotFound} />
+</Switch>
         </code></pre>
+        <p>同時建立 NotFound.js 檔案，檔案中的內容如下所示。</p>
         <pre><code class="language-js">
+import React from 'react'
+export default function NotFound({ staticContext }){
+  if (staticContext) {
+    staticContext.notFound = true
+  }
+  return (
+    <div>Not found</div>
+  )
+}
         </code></pre>
+        <p>當存取一個不存在的位址時，要傳回 404 狀態碼。一般來說，Reactrouter 類別庫已經對此進行了較好的封裝，Static Router 會在元件中植入一個 contextprop，並將 context.notFound 設定值為 true，所以我們只需在 server/index.js 中加入以下內容即可。</p>
         <pre><code class="language-js">
+const context = {}
+const html = renderer(data, req.path, context);
+if(context.notFound){
+  res.status(404)
+}
+res.send(html)
         </code></pre>
+        <h3>安全問題</h3>
+        <p>伺服器端繪製時，開發者要格外小心。這裡要特別說明一點是，前面提到了注水和脫水的過程，其中的過程非常容易遭受 XSS 攻擊，JSON.stringify（如下所示）可能會造成 script 植入。</p>
         <pre><code class="language-js">
+ctx.body =`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<script>
+window.context = {
+initialState: ${JSON.stringify(store.getState())}
+}
+</script>
+<div id="app">
+//...
+</div>
+</body>
+<html>
+`
         </code></pre>
+        <p>因此，需要嚴格清洗 JSON 字串中的 HTML 標籤和其他危險的字元。推薦使用 serialize-JavaScript 函數庫進行處理，這也是同構應用中最容易被忽視的細節。</p>
+        <p>React dangerouslySetInnerHTML API 也有類似的風險。</p>
+        <h3>效能最佳化</h3>
+        <p>將資料請求移到了伺服器端，但是依然要格外重視效能最佳化。目前，業界對此的普遍做法包含以下幾點。</p>
+        <ul>
+          <li>使用快取：伺服器端最佳化的最重要的方法就是快取，不同於傳統伺服器端的快取措施，目前的措施可以實現元件級快取，業界的 Walmart Labs 在這方面進行的費作非常多，使效能有了較大的提升。</li>
+          <li>採用 HSF 代替 HTTP:HSF 是 High-Speed Service Framework 的縮寫，可譯為分散式的遠端服務呼叫架構。在對外提供服務上，HSF 的效能遠超過 HTTP。</li>
+          <li>升級Node.js。</li>
+          <li>升級 React。</li>
+        </ul>
       </article>
     </main>
   </body>
