@@ -443,7 +443,7 @@ console.log(`Node.js app is running at http://localhost:${port}/`)
         <p>React 應用的程式骨架常常如下所示。</p>
         <pre><code class="language-js">
           eact 應用的程式骨架常常如下所示。
-const App =（）=>{
+const App =()=>{
   return (
     <div>
       <Component1 />
@@ -457,7 +457,7 @@ ReactDom.render(<App/>, document.querySelector('#root'))
         <p>那麼，伺服器端如何繪製 meta tags 的 head 標籤就是一個常被忽略但是非常重要的話題。一般情況下，常常使用 react-helmet 函數庫來解決該問題。</p>
         <p>舉例來說，在 Home 元件中加入 react-helmet 函數庫所提供的 Helmet 元件的程式如下。</p>
         <pre><code class="language-js">
-import Helmet from "react-helmet"；
+import Helmet from "react-helmet";
 <div>
 <Helmet>
 <title>Home page</title>
@@ -468,7 +468,7 @@ import Helmet from "react-helmet"；
         <p>在 Users 元件中加入 react-helmet 函數庫所提供的 Helmet 元件的程式如下。</p>
         <pre><code class="language-js">
 <Helmet>
-<title›Users page</title>
+<title></title>Users page</title>
 <meta name="description" content="Users page description" />
 </Helmet>
         </code></pre>
