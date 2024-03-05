@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-6-7">前端模組化發展及專案規劃</h2>
+        <p>
+          日常生活還是其他科學領域，都離不開模組化的概念，它主要表現了可重複使用性、可組合性、中心化、獨立性等原則。
+        </p>
+        <p>
+          所謂程式的模組化，就是將一套可重複使用的邏輯封裝成一個實體，其內部完成共同的或類似的邏輯，透過對外暴露一些資料或呼叫方法，與外部完成整合。
+        </p>
+        <p>
+          每個檔案彼此獨立，容易開發和維護程式，模組之間也能夠互相呼叫和通訊，這就是現代化開發的基本模式。
+        </p>
+        <h3>模組化發展歷程</h3>
+        <p>前端模組化發展主要經歷了以下3個階段。</p>
+        <ul>
+          <li>早期「假」模組化時代</li>
+          <li>標準時代</li>
+          <li>ES 原生時代</li>
+        </ul>
+        <h4>早期「假」模組化時代</h4>
+        <p>
+          在早期，JavaScript
+          屬於執行在瀏覽器端的玩具指令稿，它只負責實現一些簡單的互動。隨著網際網路技術的演進，這樣的設計逐漸不能滿足業務的需求，這時開發者常常會從程式可讀性上借助函數作用域來模擬模組化，我稱其為函數模式，即將不同功能封裝成不同的函數。
+        </p>
+        <pre><code class="language-js">
+function f1(){ 
+  //…
+}
+function f2(){ 
+  //…
+}
+        </code></pre>
+        <p>
+          這樣的實現其實根本不算模組化：各個函數在同一個檔案中、混亂地互相呼叫，而且存在命名衝突的風險。這沒有從根本上解決問題，只是從程式撰寫的角度，將程式拆分成了更小的函數單元而已。
+        </p>
+        <p>
+          聰明的開發者很快就想出了第二種方式，姑且稱它為物件模式，即利用物件，實現命名空間的概念，使用這種方式的範例程式如下。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
