@@ -70,32 +70,82 @@ function f2(){
           聰明的開發者很快就想出了第二種方式，姑且稱它為物件模式，即利用物件，實現命名空間的概念，使用這種方式的範例程式如下。
         </p>
         <pre><code class="language-js">
-
+const modulel = {
+foo: 'bar',
+£11: function f11 () {//... f12: function f12 () {//...
+const module2 = {
+data: 'data' f21:
+function £21 () {//... }, f22: function f22 () {//... },
         </code></pre>
+        <p>這裡模擬了簡單的 module1、module2 命名空間，因此可以在函數主體中呼叫以下敘述。</p>
         <pre><code class="language-js">
-
+modulel. f11 ()
+console. 10g (module2. data)
         </code></pre>
+        <p>可是，這樣做的問題也很明顯，modulel 和 module2 中的資料並不安全，任何開發者都可以修改。舉例來說，像下面這樣直接修改設定值的程式。</p>
         <pre><code class="language-js">
-
+module2. data = modified data'
         </code></pre>
+        <p>這會使得物件內部成員可以隨意被改寫，極易出現bug。</p>
+        <p>閉包簡直就是一個天生解決資料存取性問題的方案。透過立即執行函數（IIFE），我們建置一個私有作用域，再透過閉包，將需要對外曝露的資料和介面輸出，我們稱之為
+IFE 模式。將立即執行函數與閉包結合使用的實現程式如下。</p>
         <pre><code class="language-js">
-
+const module = (function () {
+var foo = 'bar'
+var fnl = function (){
+//...
+var fn2 = function fn2 (){
+/1
+return {
+En1: fnl,
+En2: fn2
+｝） （）
         </code></pre>
+        <p>我們在呼叫 module時，如果想要存取愛數foo，是存取不到費際資料的，程式如下所示。</p>
         <pre><code class="language-js">
-
+module. fnl ()
+module. foo
+// undefined
         </code></pre>
+        <p>了解了這種模式，我們就可以在此基礎上「玩出另外一種花樣」來，這種模式的變種可以結合頂層window物件進行實現，程式如下。</p>
         <pre><code class="language-js">
-
+(function (window) {
+var data = 'data'
+function foo () {
+console.log（fo0 executing, data is $｛data｝、）
+function bar () {
+data = 'modified data'
+console. log (bar executing, data is now $(data) ')
+window. modulel = { foo, bar }
+i (window)
         </code></pre>
+        <p>資料data 完全做到了私有，外界無法修改daita 值。那麼如何存取data 呢？這時就需要模組內部設計並曝露相關介面。上述程式只需要呼叫模組 modilel
+曝露給外界（window）的函數即可，呼叫方式如下。</p>
         <pre><code class="language-js">
-
+modulel. foo ()
+I foo executing, data is data
         </code></pre>
+        <p>修改 data 值的途徑，也只能由模組 module1 提供。</p>
         <pre><code class="language-js">
-
+modulel. bar ()
+// bar executing, data is
+now modified data
         </code></pre>
+        <p>如此一來，程式已經初具「模組化」的實質了，實現了模組化所應該具備的初級功能。</p>
+        <p>進一步思考，如果 modulel 依賴外部模組 module2，該怎麼辦？可以將程式寫為如下所示的形式。</p>
         <pre><code class="language-js">
-
+(function (window, $) 1
+var data = 'data'
+function foo () {
+console.1og （'foo executing, data is $（data｝"）
+console. 10g (S)
+function bar () {
+data = 'modified data'
+console. log | bar executing, data is now §(data} )
+window. modulel = { foo, bar }
+1) (window, jQuery)
         </code></pre>
+        <p>事實上，這就是現代模組化方案的基礎。至此，我們經歷了模組化的第一階段：「假」模組化時代。這種實現極具阿Q精神，它並不是語言原生層面上的實現，而是開發者利用語言，借助 JavaScript 特性，對類似的功能進行了模擬，為後續方案開啟了大門。</p>
         <pre><code class="language-js">
 
         </code></pre>
