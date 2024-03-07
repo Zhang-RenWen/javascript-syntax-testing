@@ -82,13 +82,18 @@ function £21 () {//... }, f22: function f22 () {//... },
 modulel. f11 ()
 console. 10g (module2. data)
         </code></pre>
-        <p>可是，這樣做的問題也很明顯，modulel 和 module2 中的資料並不安全，任何開發者都可以修改。舉例來說，像下面這樣直接修改設定值的程式。</p>
+        <p>
+          可是，這樣做的問題也很明顯，modulel 和 module2
+          中的資料並不安全，任何開發者都可以修改。舉例來說，像下面這樣直接修改設定值的程式。
+        </p>
         <pre><code class="language-js">
 module2. data = modified data'
         </code></pre>
         <p>這會使得物件內部成員可以隨意被改寫，極易出現bug。</p>
-        <p>閉包簡直就是一個天生解決資料存取性問題的方案。透過立即執行函數（IIFE），我們建置一個私有作用域，再透過閉包，將需要對外曝露的資料和介面輸出，我們稱之為
-IFE 模式。將立即執行函數與閉包結合使用的實現程式如下。</p>
+        <p>
+          閉包簡直就是一個天生解決資料存取性問題的方案。透過立即執行函數（IIFE），我們建置一個私有作用域，再透過閉包，將需要對外曝露的資料和介面輸出，我們稱之為
+          IFE 模式。將立即執行函數與閉包結合使用的實現程式如下。
+        </p>
         <pre><code class="language-js">
 const module = (function () {
 var foo = 'bar'
@@ -107,7 +112,9 @@ module. fnl ()
 module. foo
 // undefined
         </code></pre>
-        <p>了解了這種模式，我們就可以在此基礎上「玩出另外一種花樣」來，這種模式的變種可以結合頂層window物件進行實現，程式如下。</p>
+        <p>
+          了解了這種模式，我們就可以在此基礎上「玩出另外一種花樣」來，這種模式的變種可以結合頂層window物件進行實現，程式如下。
+        </p>
         <pre><code class="language-js">
 (function (window) {
 var data = 'data'
@@ -119,8 +126,11 @@ console. log (bar executing, data is now $(data) ')
 window. modulel = { foo, bar }
 i (window)
         </code></pre>
-        <p>資料data 完全做到了私有，外界無法修改daita 值。那麼如何存取data 呢？這時就需要模組內部設計並曝露相關介面。上述程式只需要呼叫模組 modilel
-曝露給外界（window）的函數即可，呼叫方式如下。</p>
+        <p>
+          資料data 完全做到了私有，外界無法修改daita 值。那麼如何存取data
+          呢？這時就需要模組內部設計並曝露相關介面。上述程式只需要呼叫模組 modilel
+          曝露給外界（window）的函數即可，呼叫方式如下。
+        </p>
         <pre><code class="language-js">
 modulel. foo ()
 I foo executing, data is data
@@ -132,7 +142,9 @@ modulel. bar ()
 now modified data
         </code></pre>
         <p>如此一來，程式已經初具「模組化」的實質了，實現了模組化所應該具備的初級功能。</p>
-        <p>進一步思考，如果 modulel 依賴外部模組 module2，該怎麼辦？可以將程式寫為如下所示的形式。</p>
+        <p>
+          進一步思考，如果 modulel 依賴外部模組 module2，該怎麼辦？可以將程式寫為如下所示的形式。
+        </p>
         <pre><code class="language-js">
 (function (window, $) 1
 var data = 'data'
@@ -145,22 +157,138 @@ console. log | bar executing, data is now §(data} )
 window. modulel = { foo, bar }
 1) (window, jQuery)
         </code></pre>
-        <p>事實上，這就是現代模組化方案的基礎。至此，我們經歷了模組化的第一階段：「假」模組化時代。這種實現極具阿Q精神，它並不是語言原生層面上的實現，而是開發者利用語言，借助 JavaScript 特性，對類似的功能進行了模擬，為後續方案開啟了大門。</p>
+        <p>
+          事實上，這就是現代模組化方案的基礎。至此，我們經歷了模組化的第一階段：「假」模組化時代。這種實現極具阿Q精神，它並不是語言原生層面上的實現，而是開發者利用語言，借助
+          JavaScript 特性，對類似的功能進行了模擬，為後續方案開啟了大門。
+        </p>
+        <h4>標準時代：CommonJS</h4>
+        <p>
+          Nodejs 無疑對前端的發展具有相當大的促進作用，它帶來的CommouJs
+          模組化標準像一股「改革春風」：在Nodejs
+          中，每一個檔案就是一個模組，具有單獨的作用域，對其他檔案是不可見的。關於 CommonJs
+          的標準，這裡不做過多介紹，讀者可自行了解其基礎內容，這裡只看一下它的幾個容易被忽略的特點。
+        </p>
+        <ul>
+          <li>檔案即模組，檔案內的所有程式都執行在獨立的作用域中，因此不會污染全域空間。</li>
+          <li>
+            模組可以被多次參考、載入。在第一次被較入時，會被快取，之後都從快取中直接讀取結果。
+          </li>
+          <li>載入某個模組，就是引用該模組的module.exports 屬性</li>
+          <li>
+            module.exports屬性輸出的是值的拷貝，一旦這個值被輸出，模組內再發生變化也不會影響到輸出的值。
+          </li>
+          <li>模組按照程式引用的順序進行載入。</li>
+          <li>注意 module.exports 和 exports 的區別</li>
+        </ul>
+        <p>
+          CommonJS 標準如何用程式在瀏覽器端實現呢？其實就是實現 module.exports 和 require 方法。
+        </p>
+        <p>
+          實現想法：根據 require
+          的檔案路徑載入檔案內容並執行，同時將對外介面進行快取。因此我們需要定義一個 module
+          物件，程式如下。
+        </p>
         <pre><code class="language-js">
-
+let module = {}
+module. exports = 1}
+接著，借助立即執行函數，對 module 和 module.exports 物件進行設定值，如下。
+(function (module, exports)
+11
+1 (module, module. exports))
         </code></pre>
+        <h4>標準時代：AMD</h4>
+        <p>
+          由於 Node.js
+          執行於伺服器上，所有的檔案一般都已經儲存在本機硬碟中了，不需要額外的網路請求進行非同步載入，因此透過
+          CommonJS 標準載入模組是同步的。只有載入完成，才能執行後續操作。但是，如果 Node.js
+          在瀏覽器環境中執行，那麼由於需要從伺服器端取得模組檔案，所以此時採用同步的方式顯然就不合適了。為此，社區推出了AMD標準
+        </p>
+        <p>
+          AMD 標準的全稱為 Asynchronous Module Definition，看到
+          Asynchronous，我們就能夠知道它的模組化標準不同於CommonJs，按照該標準載入模組時是非同步的，這種標準是完全適用於瀏覽器的。
+        </p>
+        <p>
+          AND根準規定了如何定義模組，如何對外輸出，如何弓/用依賴。這一切都需要程式去實現，因此一個著名的函數庫一一Tequiejs應運而生，reguire.js的實現很簡單：透過
+          define 方法，將程式定義為模組；透過 reguire 方法，實現程式的模組載入。
+        </p>
+        <p>define 和 require 就是 require.js 在全域植入的函數。</p>
+        <p>
+          在熟練使用 require.js
+          的基礎上，建議讀者閱讀一下其原始程式。事實上，reguirejs也是借助一個立即執行函數來賞現的，其中的程式如下。
+        </p>
         <pre><code class="language-js">
-
+var require, define;
+(function (global, setTimeout) (
+11
+1 (this,
+(typeof setTimeout ===
+'undefined'? undefined: setTimeout)l);
         </code></pre>
+        <p>
+          我們看到，require.js 在全域定義了 require 和
+          define兩個方法，利用立即執行函數將全域物件（this）和 setTimeout 傳入函數本體內。define
+          方法的實作方式邏輯如下。
+        </p>
         <pre><code class="language-js">
-
+define = function (name, deps, callback) \
+//
+if (context) {
+context. defQueue. push ([name, deps, callback]) ;
+context. defQueueMap [name] = true;
+else {
+globalDefQueue. push ([name, deps, callback);
         </code></pre>
+        <p>
+          以上理式主要用於將依賴植入依賴佇列•reguice的主要作用是完成
+          seTip4棵籤的建立去請求對應的模組，並對模組進行載入和執行，其程式如下。
+        </p>
         <pre><code class="language-js">
+reg. Load = function (context, moduleName, url) t
+var config = (context && context.config) || l},
+node;
+if (isBrowser) \
+/create a async script element
+node = reg. createNode (config, moduleName, url);
+//add Events (onreadystatechange, load, error)
 
+//set url for loading
+node. src = url;
+//insert script element to head and start load
+currentlyAddingScript = node;
+if (baseElement)
+｛
+head. insertBefore (node, baseElement) ;
+} else f
+head. appendChild (node) ;
+currentlyAddingScript = null;
+return node;
+} else if (isWebworker) {
+req.createNode = function（config, moduleName, url）｛
+var node = config. xhtml ?
+document. createElementNS (http://www.w3.0rg/1999/xhtml', html:script') :
+aocument.createElement（'script "）；
+node. type = config. scriptType || 'text/javascript';
+node. charset = 'utf-8';
+node. async = true;
+return node;
+｝；
         </code></pre>
+        <p>
+          了解了上面的程式，細心的讀者可能會有疑問：在我們使用 require.js 後，並沒有發現額外多出來的
+          script標籤，這個秘密就在於 checkL oaded
+          方法會把已經載入完畢的指令稿刪除，因為我們需要的是模組內容，所以一旦載入完成，就沒有必要保留
+          script 標籤了。刪除 script標籤的實作方式程式如下。
+        </p>
         <pre><code class="language-js">
-
+function removeScript (name) 1
+if（isBrowser）｛
+each (scripts (), function (scriptNode) \
+1f (scriptNode. getAttribute ('data-requiremodule) === name &&
+scriptNode.getAttribute（'data-requirecontext'） ===
+context. contextName) {
+scriptNode. parentNode. removeChild (scriptNode) ; return true;
         </code></pre>
+        <h4>標準時代：CMD</h4>
         <pre><code class="language-js">
 
         </code></pre>
