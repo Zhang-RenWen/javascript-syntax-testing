@@ -312,15 +312,28 @@ function removeScript(name) {
 }
         </code></pre>
         <h4>標準時代：CMD</h4>
-        <p></p>
-        <p></p>
+        <p>
+          CMD 標準整合了 CommonJS 和 AMD標準的特點，它的全稱為 Common Module Definition，與
+          require.js 類似，CMD 標準的實現為 sea.js。
+        </p>
+        <p>AMD 和CMD的兩個主要區別如下。</p>
         <ul>
-          <li></li>
-          <li></li>
+          <li>
+            AMD
+            需要非同步載入模組，而CMD在載入模組時，可以透過同步的形式（require），也可以透過非同步的形式（require.async）。
+          </li>
+          <li>
+            CMD
+            遵循依賴就近原則，AMD遵循依賴前置原則。也就是說，在AMD中，我們需要把模組所需要的依賴都提前宣告在依賴陣列中；而在CMD中，我們只需要在實際程式邏輯內，使用依賴前，引用依賴的模組即可。
+          </li>
         </ul>
-        <p></p>
         <h4>標準時代：UMD</h4>
-        <p></p>
+        <p>
+          UMD 的全稱為 Universal Module Definition，看到
+          Universal，我們可以猜到它允許在環境中同時使用 AMD 標準與 CommonJS
+          標準，相當於一個整合的標準。該標準的核心思想在於利用立即執行函數根據環境來判斷需要的參數類別，譬如，UMD
+          在判斷出目前模組遵循 CommonJs 標準時，模組化程式會以以下方式執行。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
