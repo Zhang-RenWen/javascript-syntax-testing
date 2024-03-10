@@ -70,92 +70,103 @@ function f2(){
           聰明的開發者很快就想出了第二種方式，姑且稱它為物件模式，即利用物件，實現命名空間的概念，使用這種方式的範例程式如下。
         </p>
         <pre><code class="language-js">
-const modulel = {
-foo: 'bar',
-£11: function f11 () {//... f12: function f12 () {//...
+const module1 = {
+  foo: 'bar',
+  f11: function f11 () {//... },
+  f12: function f12 () {//... }
+}
 const module2 = {
-data: 'data' f21:
-function £21 () {//... }, f22: function f22 () {//... },
+  data: 'data',
+  f21: function f21 () {//... }, 
+  f22: function f22 () {//... }
+}
         </code></pre>
         <p>這裡模擬了簡單的 module1、module2 命名空間，因此可以在函數主體中呼叫以下敘述。</p>
         <pre><code class="language-js">
-modulel. f11 ()
-console. 10g (module2. data)
+module1.f11()
+console.log(module2.data)
         </code></pre>
         <p>
-          可是，這樣做的問題也很明顯，modulel 和 module2
+          可是，這樣做的問題也很明顯，module1 和 module2
           中的資料並不安全，任何開發者都可以修改。舉例來說，像下面這樣直接修改設定值的程式。
         </p>
         <pre><code class="language-js">
-module2. data = modified data'
+module2.data = 'modified data'
         </code></pre>
-        <p>這會使得物件內部成員可以隨意被改寫，極易出現bug。</p>
+        <p>這會使得物件內部成員可以隨意被改寫，極易出現 bug。</p>
         <p>
           閉包簡直就是一個天生解決資料存取性問題的方案。透過立即執行函數（IIFE），我們建置一個私有作用域，再透過閉包，將需要對外曝露的資料和介面輸出，我們稱之為
-          IFE 模式。將立即執行函數與閉包結合使用的實現程式如下。
+          IIFE 模式。將立即執行函數與閉包結合使用的實現程式如下。
         </p>
         <pre><code class="language-js">
 const module = (function () {
-var foo = 'bar'
-var fnl = function (){
-//...
-var fn2 = function fn2 (){
-/1
-return {
-En1: fnl,
-En2: fn2
-｝） （）
+  var foo = 'bar'
+  var fnl = function (){
+    // ...
+  }
+  var fn2 = function fn2 (){
+    // ...
+  }
+  return {
+    fn1: fn1,
+    fn2: fn2
+  }
+})()
         </code></pre>
-        <p>我們在呼叫 module時，如果想要存取愛數foo，是存取不到費際資料的，程式如下所示。</p>
+        <p>我們在呼叫 module 時，如果想要存取變數 foo，是存取不到實際資料的，程式如下所示。</p>
         <pre><code class="language-js">
-module. fnl ()
-module. foo
+module.fn1()
+module.foo
 // undefined
         </code></pre>
         <p>
-          了解了這種模式，我們就可以在此基礎上「玩出另外一種花樣」來，這種模式的變種可以結合頂層window物件進行實現，程式如下。
+          了解了這種模式，我們就可以在此基礎上「玩出另外一種花樣」來，這種模式的變種可以結合頂層
+          window 物件進行實現，程式如下。
         </p>
         <pre><code class="language-js">
 (function (window) {
-var data = 'data'
-function foo () {
-console.log（fo0 executing, data is $｛data｝、）
-function bar () {
-data = 'modified data'
-console. log (bar executing, data is now $(data) ')
-window. modulel = { foo, bar }
-i (window)
+  var data = 'data'
+  function foo () {
+    console.log(`foo executing, data is ${data}`)
+  }
+  function bar () {
+    data = 'modified data'
+    console.log(`bar executing, data is now ${data}`)
+  }
+  window.module1 = { foo, bar }
+})(window)
         </code></pre>
         <p>
-          資料data 完全做到了私有，外界無法修改daita 值。那麼如何存取data
-          呢？這時就需要模組內部設計並曝露相關介面。上述程式只需要呼叫模組 modilel
+          資料 data 完全做到了私有，外界無法修改 data 值。那麼如何存取 data
+          呢？這時就需要模組內部設計並曝露相關介面。上述程式只需要呼叫模組 module1
           曝露給外界（window）的函數即可，呼叫方式如下。
         </p>
         <pre><code class="language-js">
-modulel. foo ()
-I foo executing, data is data
+module1.foo()
+// foo executing, data is data
         </code></pre>
         <p>修改 data 值的途徑，也只能由模組 module1 提供。</p>
         <pre><code class="language-js">
-modulel. bar ()
-// bar executing, data is
-now modified data
+module1.bar()
+// bar executing, data is now modified data
         </code></pre>
         <p>如此一來，程式已經初具「模組化」的實質了，實現了模組化所應該具備的初級功能。</p>
         <p>
-          進一步思考，如果 modulel 依賴外部模組 module2，該怎麼辦？可以將程式寫為如下所示的形式。
+          進一步思考，如果 module1 依賴外部模組 module2，該怎麼辦？可以將程式寫為如下所示的形式。
         </p>
         <pre><code class="language-js">
-(function (window, $) 1
-var data = 'data'
-function foo () {
-console.1og （'foo executing, data is $（data｝"）
-console. 10g (S)
-function bar () {
-data = 'modified data'
-console. log | bar executing, data is now §(data} )
-window. modulel = { foo, bar }
-1) (window, jQuery)
+(function (window, $){
+  var data = 'data'
+  function foo () {
+    console.log (`foo executing, data is ${data}`)
+    console.log($)
+  }
+  function bar () {
+    data = 'modified data'
+    console.log( `bar executing, data is now ${data}` )
+  }
+  window.module1 = { foo, bar }
+}) (window, jQuery)
         </code></pre>
         <p>
           事實上，這就是現代模組化方案的基礎。至此，我們經歷了模組化的第一階段：「假」模組化時代。這種實現極具阿Q精神，它並不是語言原生層面上的實現，而是開發者利用語言，借助
@@ -163,8 +174,8 @@ window. modulel = { foo, bar }
         </p>
         <h4>標準時代：CommonJS</h4>
         <p>
-          Nodejs 無疑對前端的發展具有相當大的促進作用，它帶來的CommouJs
-          模組化標準像一股「改革春風」：在Nodejs
+          Nodejs 無疑對前端的發展具有相當大的促進作用，它帶來的 CommonJs
+          模組化標準像一股「改革春風」：在 Nodejs
           中，每一個檔案就是一個模組，具有單獨的作用域，對其他檔案是不可見的。關於 CommonJs
           的標準，這裡不做過多介紹，讀者可自行了解其基礎內容，這裡只看一下它的幾個容易被忽略的特點。
         </p>
@@ -173,9 +184,10 @@ window. modulel = { foo, bar }
           <li>
             模組可以被多次參考、載入。在第一次被較入時，會被快取，之後都從快取中直接讀取結果。
           </li>
-          <li>載入某個模組，就是引用該模組的module.exports 屬性</li>
+          <li>載入某個模組，就是引用該模組的 module.exports 屬性</li>
           <li>
-            module.exports屬性輸出的是值的拷貝，一旦這個值被輸出，模組內再發生變化也不會影響到輸出的值。
+            module.exports
+            屬性輸出的是值的拷貝，一旦這個值被輸出，模組內再發生變化也不會影響到輸出的值。
           </li>
           <li>模組按照程式引用的順序進行載入。</li>
           <li>注意 module.exports 和 exports 的區別</li>
@@ -190,119 +202,192 @@ window. modulel = { foo, bar }
         </p>
         <pre><code class="language-js">
 let module = {}
-module. exports = 1}
-接著，借助立即執行函數，對 module 和 module.exports 物件進行設定值，如下。
-(function (module, exports)
-11
-1 (module, module. exports))
+module.exports = {}
         </code></pre>
+        <p>接著，借助立即執行函數，對 module 和 module.exports 物件進行設定值，如下。</p>
+        <pre><code class="language-js">
+(function (module, exports){
+  // ...
+}(module, module.exports))
+                  </code></pre>
         <h4>標準時代：AMD</h4>
         <p>
           由於 Node.js
           執行於伺服器上，所有的檔案一般都已經儲存在本機硬碟中了，不需要額外的網路請求進行非同步載入，因此透過
           CommonJS 標準載入模組是同步的。只有載入完成，才能執行後續操作。但是，如果 Node.js
-          在瀏覽器環境中執行，那麼由於需要從伺服器端取得模組檔案，所以此時採用同步的方式顯然就不合適了。為此，社區推出了AMD標準
+          在瀏覽器環境中執行，那麼由於需要從伺服器端取得模組檔案，所以此時採用同步的方式顯然就不合適了。為此，社區推出了
+          AMD 標準
         </p>
         <p>
           AMD 標準的全稱為 Asynchronous Module Definition，看到
-          Asynchronous，我們就能夠知道它的模組化標準不同於CommonJs，按照該標準載入模組時是非同步的，這種標準是完全適用於瀏覽器的。
+          Asynchronous，我們就能夠知道它的模組化標準不同於 CommonJs
+          ，按照該標準載入模組時是非同步的，這種標準是完全適用於瀏覽器的。
         </p>
         <p>
-          AND根準規定了如何定義模組，如何對外輸出，如何弓/用依賴。這一切都需要程式去實現，因此一個著名的函數庫一一Tequiejs應運而生，reguire.js的實現很簡單：透過
-          define 方法，將程式定義為模組；透過 reguire 方法，實現程式的模組載入。
+          AMD
+          根據規定了如何定義模組，如何對外輸出，如何引用依賴。這一切都需要程式去實現，因此一個著名的函數庫一
+          require.js 應運而生， require.js 的實現很簡單：透過 define 方法，將程式定義為模組；透過
+          require 方法，實現程式的模組載入。
         </p>
         <p>define 和 require 就是 require.js 在全域植入的函數。</p>
         <p>
           在熟練使用 require.js
-          的基礎上，建議讀者閱讀一下其原始程式。事實上，reguirejs也是借助一個立即執行函數來賞現的，其中的程式如下。
+          的基礎上，建議讀者閱讀一下其原始程式。事實上，require.js也是借助一個立即執行函數來賞現的，其中的程式如下。
         </p>
         <pre><code class="language-js">
 var require, define;
-(function (global, setTimeout) (
-11
-1 (this,
-(typeof setTimeout ===
-'undefined'? undefined: setTimeout)l);
+(function(global, setTimeout) {
+  // ..
+} (this,(typeof setTimeout ==='undefined'? undefined: setTimeout)));
         </code></pre>
         <p>
-          我們看到，require.js 在全域定義了 require 和
-          define兩個方法，利用立即執行函數將全域物件（this）和 setTimeout 傳入函數本體內。define
+          我們看到，require.js 在全域定義了 require 和 define
+          兩個方法，利用立即執行函數將全域物件（this）和 setTimeout 傳入函數本體內。define
           方法的實作方式邏輯如下。
         </p>
         <pre><code class="language-js">
-define = function (name, deps, callback) \
-//
-if (context) {
-context. defQueue. push ([name, deps, callback]) ;
-context. defQueueMap [name] = true;
-else {
-globalDefQueue. push ([name, deps, callback);
+define = function (name, deps, callback) {
+  // ...
+  if (context) {
+    context.defQueue.push([name, deps, callback]) ;
+    context.defQueueMap[name] = true;
+  } else {
+    globalDefQueue.push([name, deps, callback]);
+  }
+}
         </code></pre>
         <p>
-          以上理式主要用於將依賴植入依賴佇列•reguice的主要作用是完成
-          seTip4棵籤的建立去請求對應的模組，並對模組進行載入和執行，其程式如下。
+          以上程式主要用於將依賴植入依賴佇列。require 的主要作用是完成 script
+          標籤的建立去請求對應的模組，並對模組進行載入和執行，其程式如下。
         </p>
         <pre><code class="language-js">
-reg. Load = function (context, moduleName, url) t
-var config = (context && context.config) || l},
-node;
-if (isBrowser) \
-/create a async script element
-node = reg. createNode (config, moduleName, url);
-//add Events (onreadystatechange, load, error)
-
-//set url for loading
-node. src = url;
-//insert script element to head and start load
-currentlyAddingScript = node;
-if (baseElement)
-｛
-head. insertBefore (node, baseElement) ;
-} else f
-head. appendChild (node) ;
-currentlyAddingScript = null;
-return node;
-} else if (isWebworker) {
-req.createNode = function（config, moduleName, url）｛
-var node = config. xhtml ?
-document. createElementNS (http://www.w3.0rg/1999/xhtml', html:script') :
-aocument.createElement（'script "）；
-node. type = config. scriptType || 'text/javascript';
-node. charset = 'utf-8';
-node. async = true;
-return node;
-｝；
+reg.load = function (context, moduleName, url) {
+  var config = (context && context.config) || {},
+  node;
+  if (isBrowser) {
+    // create a async script element
+    node = reg.createNode(config, moduleName, url);
+    // add Events[onreadystatechange, load, error]
+    //set url for loading
+    node.src = url;
+    // insert script element to head and start load
+    currentlyAddingScript = node;
+    if (baseElement){
+      head.insertBefore(node, baseElement) ;
+    } else {
+      head.appendChild(node) ;
+    }
+    currentlyAddingScript = null;
+    return node;
+  } else if (isWebWorker) {
+    // ...
+  }
+}
+req.createNode = function(config, moduleName, url){
+  var node = config.xhtml ?
+  document.createElementN(http://www.w3.0rg/1999/xhtml', html:script') :
+  document.createElement('script');
+  node.type = config.scriptType || 'text/javascript';
+  node.charset = 'utf-8';
+  node.async = true;
+  return node;
+};
         </code></pre>
         <p>
           了解了上面的程式，細心的讀者可能會有疑問：在我們使用 require.js 後，並沒有發現額外多出來的
-          script標籤，這個秘密就在於 checkL oaded
+          script 標籤，這個秘密就在於 checkLoaded
           方法會把已經載入完畢的指令稿刪除，因為我們需要的是模組內容，所以一旦載入完成，就沒有必要保留
-          script 標籤了。刪除 script標籤的實作方式程式如下。
+          script 標籤了。刪除 script 標籤的實作方式程式如下。
         </p>
         <pre><code class="language-js">
-function removeScript (name) 1
-if（isBrowser）｛
-each (scripts (), function (scriptNode) \
-1f (scriptNode. getAttribute ('data-requiremodule) === name &&
-scriptNode.getAttribute('data-requirecontext') ===
-context. contextName) {
-scriptNode. parentNode. removeChild (scriptNode) ; return true;
+function removeScript(name) {
+  if(isBrowser){
+    each(scripts(), function (scriptNode) {
+      if(scriptNode.getAttribute('data-requiremodule') === name &&
+        scriptNode.getAttribute('data-requirecontext') === context.contextName) {
+        scriptNode.parentNode.removeChild(scriptNode) ; return true;
+      }
+    })
+  }
+}
         </code></pre>
         <h4>標準時代：CMD</h4>
-        <p>CMD標準整合了CommonJS和AMD標準的特點，它的全稱為CommonModule Definition，與 require.js 類似，CMD 標準的實現為 sea.js。</p>
+        <p>
+          CMD 標準整合了 CommonJS 和 AMD標準的特點，它的全稱為 Common Module Definition，與
+          require.js 類似，CMD 標準的實現為 sea.js。
+        </p>
         <p>AMD 和CMD的兩個主要區別如下。</p>
         <ul>
-          <li>AMD 需要非同步載入模組，而CMD在載入模組時，可以透過同步的形式（require），也可以透過非同步的形式（require.async）。</li>
-          <li>CMD 遵循依賴就近原則，AMD遵循依賴前置原則。也就是說，在AMD中，我們需要把模組所需要的依賴都提前宣告在依賴陣列中；而在CMD中，我們只需要在實際程式邏輯內，使用依賴前，引用依賴的模組即可。</li>
+          <li>
+            AMD
+            需要非同步載入模組，而CMD在載入模組時，可以透過同步的形式（require），也可以透過非同步的形式（require.async）。
+          </li>
+          <li>
+            CMD
+            遵循依賴就近原則，AMD遵循依賴前置原則。也就是說，在AMD中，我們需要把模組所需要的依賴都提前宣告在依賴陣列中；而在CMD中，我們只需要在實際程式邏輯內，使用依賴前，引用依賴的模組即可。
+          </li>
         </ul>
         <h4>標準時代：UMD</h4>
-        <p>UMD 的全稱為 Universal Module Definition，看到 Universal，我們可以猜到它允許在環境中同時使用AMD 標準與 CommonJS標準，相當於一個整合的標準。該標準的核心思想在於利用立即執行函數根據環境來判斷需要的參數類別，譬如，UMID 在判斷出目前模組遵循CommonJs 標準時，模組化程式會以以下方式執行。</p>
+        <p>
+          UMD 的全稱為 Universal Module Definition，看到
+          Universal，我們可以猜到它允許在環境中同時使用 AMD 標準與 CommonJS
+          標準，相當於一個整合的標準。該標準的核心思想在於利用立即執行函數根據環境來判斷需要的參數類別，譬如，UMD
+          在判斷出目前模組遵循 CommonJs 標準時，模組化程式會以以下方式執行。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
+        <p></p>
         <pre><code class="language-js">
 
         </code></pre>
+        <p></p>
+        <h3>ES 原生時代</h3>
+        <p></p>
+        <p></p>
+        <p></p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <p></p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <p></p>
+        <h4>ES 模組為什麼要設計成靜態的</h4>
+        <p></p>
+        <p></p>
+        <ul>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+        <p></p>
+        <h4>tree shaking</h4>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <p></p>
+        <h4>ES 的 export 和 export default</h4>
+        <p></p>
+        <h3>未來趨勢和思考</h3>
+        <p></p>
+        <h4>在瀏覽器中快速使用 ES 模組化</h4>
+        <p></p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <p></p>
+        <h4>在 Node.js 中使用 ES 模組化</h4>
+        <p></p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <p></p>
+        <p></p>
       </article>
     </main>
   </body>
