@@ -335,34 +335,94 @@ function removeScript(name) {
           在判斷出目前模組遵循 CommonJs 標準時，模組化程式會以以下方式執行。
         </p>
         <pre><code class="language-js">
-
+function(factory){
+  module.exports = factory();
+}
         </code></pre>
-        <p></p>
+        <p>
+          而如果 UMD 判斷出目前模組遵循 AMD 標準，則函數的參數就會變成 define，適用 AMD 標準，實際程式如下。
+        </p>
         <pre><code class="language-js">
-
+function (root, factory) {
+  if(typeof define === 'function' && define.amd){
+    // AMD標準
+    define(['b'], factory);
+  }else if (typeof module === 'object'&& module.exports){ 
+    // 類別 Node 環境，並不支援完全嚴格的 CommonJS 標準
+    // 但是屬於 CommonJS-like環境，支援 module.exports 用法 
+    module.exports = factory(require('b'));
+  }else{
+    //瀏覽器環境
+    root.returnExports = factory(root.b);
+  }
+}(this, function (b) {
+    //傳回值作為曝露內容
+    return {}
+}))
         </code></pre>
-        <p></p>
+        <p>
+          至此，我們便介紹完了模組化的 Node.js 和社區解決方案。這些方案充分利用了 JavaScript 的語言特性，並結合瀏覽器端的特點，加以實現。不同的實現方式表現了不同的設計哲學，但是它們的最後方向都指向了模組化的幾個原則：可重複使用性、可組合性、中心化、獨立性。下一節會繼續探討模組化這個主題，介紹ES 原生時代的解決方案。
+        </p>
         <h3>ES 原生時代</h3>
-        <p></p>
-        <p></p>
-        <p></p>
+        <p>
+          ES 模組的設計思想是儘量靜態化，這樣能確保在編譯時就確定模組之間的依賴關係，每個模組的輸入和輸出變數也都是確定的；而 CommonJS 和 AMD 模組無法保證在編譯時就確定這些內容，它們都只能在執行時期確定。這是 ES 模組和其他模組標準最顯著的差別。第二個差別在於，CommonJS 模組輸出的是一個值的拷貝，ES 模組輸出的是值的參考。下面來看一個範例。
+        </p>
         <pre><code class="language-js">
-
+// data.js
+export let data = 'data'
+export function modifyData () {
+  data = 'modified data'
+}
+// index.js
+import { data, modifyData } from './lib'
+console.log(data) // data modifyData()
+console.log(data) // modified data
         </code></pre>
-        <p></p>
+        <p>
+          我們在 index.js 中呼叫了 modifyData 方法，之後查詢 data 值，獲得了最新的變化；而同樣的邏輯在 CommonJS 標準下的表現如下。
+        </p>
         <pre><code class="language-js">
+// data. js
+var data = 'data'
+function modifyData () {
+  data = 'modified data'
+}
+module.exports = {
+  data: data,
+  modifyData: modifyData
+}
 
+// index.js
+var data = require('./data').data
+var modifyData = require('./data').modifyData
+console.log(data) // data
+modifyData()
+console.log(data) // data
         </code></pre>
-        <p></p>
+        <p>
+          因為在 CommonJS 標準下輸出的是值的拷貝，而非參考，因此在呼叫 modifyData 之後，index.js 的 data 值並沒有發生變化，其值為一個全新的拷貝。
+        </p>
         <h4>ES 模組為什麼要設計成靜態的</h4>
-        <p></p>
-        <p></p>
+        <p>
+          將 ES 模組設計成靜態的，一個明顯的優勢是，透過靜態分析，我們能夠分析出匯入的依賴。如果匯入的模組沒有被使用，我們便可以透過 Tree Shakting 等方法減少程式體積，進而提升執行效能。這就是基於 ESM 實現 tree shaking 的基礎。
+        </p>
+        <p>
+          下面從設計的角度分析這種標準的利弊。靜態性需更標準去強制保證，因此 ES 模組標準不像 CommonJS 標準那樣靈活，其靜態性會帶來以下一些限制。
+        </p>
         <ul>
-          <li></li>
-          <li></li>
-          <li></li>
+          <li>
+            只能在檔案頂部引用依賴。
+          </li>
+          <li>
+            匯出的變數類型受到嚴格限制。
+          </li>
+          <li>
+            愛數不允許被重新綁定，引用的模組名稱只能是字串常數，即不可以動態確定依賴。
+          </li>
         </ul>
-        <p></p>
+        <p>
+          這樣的限制在語言層面帶來的便利之一是，我們可以透過分析作用域，得出程式中變數所屬的作用域及它們之間的參考關係，進而可以推導出變數和匯入依賴變數之間的參考關係，在沒有明顯參考時，可以對程式進行去容錯。
+        </p>
         <h4>tree shaking</h4>
         <p></p>
         <p></p>
