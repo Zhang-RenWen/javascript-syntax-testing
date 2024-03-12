@@ -417,37 +417,72 @@ console.log(data) // data
             匯出的變數類型受到嚴格限制。
           </li>
           <li>
-            愛數不允許被重新綁定，引用的模組名稱只能是字串常數，即不可以動態確定依賴。
+            變數不允許被重新綁定，引用的模組名稱只能是字串常數，即不可以動態確定依賴。
           </li>
         </ul>
         <p>
           這樣的限制在語言層面帶來的便利之一是，我們可以透過分析作用域，得出程式中變數所屬的作用域及它們之間的參考關係，進而可以推導出變數和匯入依賴變數之間的參考關係，在沒有明顯參考時，可以對程式進行去容錯。
         </p>
         <h4>tree shaking</h4>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
-        <p></p>
+        <p>
+          上面說到的「在沒有明顯參考時，可以對程式進行去容錯」，就是我們經常提到的 tree shaking，它的目的是減少應用中沒有被實際運用的JavaScript 程式。對無用程式進行清除，表示可以獲得更小的程式體積，而程式體積的縮減對使用者體驗可以造成積極的作用
+        </p>
+        <p>
+          在電腦科學中，一個典型的去除無用程式、冗餘碼的方法是 DCE（Dead CodeBlimination，死碼消除）。那麼，tree shaking 和 DCE 有什麼區別？
+        </p>
+        <p>
+          Rollup 的主要貢獻者 Rich Haris 做過這樣的比喻：假設我們用雞蛋做蛋糕，顯然不需要蛋殼而只需要蛋清和蛋黃，那麼如何去除蛋殼呢？DCE 是這樣做的，直接把整個雞蛋放到碗裡攪拌，蛋糕做完後再慢慢地從裡面挑出蛋殼。
+        </p>
+        <p>
+          相反，與 DCE 不同，tree shaking 是一開始就把蛋殼剝離，留下蛋清和蛋黃。事實上，也可以將 tree shaking 了解為一種廣義上的 DCE，它在包裝時便會去掉用不到的程式。
+        </p>
+        <p>
+          當然：說到底， tree shaking 只是一種輔助方法，良好的模組拆分和設計才是減少程式體積的關鍵。
+        </p>
+        <p>
+          tree shaking 的使用也存在一些侷限，它還有很多不能清除無用程式的場景，舉例來說，Rollup的 tree Shaking 只能處理函數和頂層的 impor/export 匯入的變數，不能把沒用到的類別的方法清除；具有副作用的指令稿無法被清除。
+        </p>
+        <p>
+          webpack 和 Rollup 建置工具目前在實現 tree shaking 方面都有成熟的方案，但並不建議將其馬上引入專案中。事實上，是否要在成熟的專案上立即實施 tree shaking 需要妥善考慮。
+        </p>
         <h4>ES 的 export 和 export default</h4>
-        <p></p>
+        <p>
+          ES 模組化匯出有 export 和 export default 兩種。這裡建議減少使用exportdefault 匯出，一方面是因為 export default 會進出整體物件結果，不利於透過tree shaking 進行分析；另一方面是因為 export default 匯出的結果可以隨意命名變數，不利於團隊統一管理。
+        </p>
         <h3>未來趨勢和思考</h3>
         <p></p>
         <h4>在瀏覽器中快速使用 ES 模組化</h4>
-        <p></p>
+        <p>
+          個人認為，ES 模組化是未來的發展趨勢，它的優點毫無爭議，舉例來說，具有開箱即用的 tree shaking 和對未來瀏覽器的相容性支援。Node.js 的 CommonJS 模組化方案甚至會慢慢過渡到 ES 模組化上。如果你正在使用 webpack 建置應用專案，那麼 ES 模組化應該是首選方案；如果你的專案是一個前端函數庫，也建議你使用 ES 模組化。這麼看來，或許只有在撰寫 Node.js 程式時，才需要考慮使用 CommonJS 模組化方案。
+        </p>
         <pre><code class="language-js">
-
+<script type="module">
+import module1 from './modulel'
+</script>
+<script nomodule>
+alert（'你的瀏覽器不支援ES模組，請先升級！'）
+</script>
         </code></pre>
-        <p></p>
+        <p>
+          使用 type="motule" 的另一個作用是進行 ES Next 相容性偵測。因為支援了 ES 模組化的瀏覽器，所以能夠直接支援很多 ES 新特性。
+        </p>
         <h4>在 Node.js 中使用 ES 模組化</h4>
-        <p></p>
+        <p>
+           Nodejs 從 9.0 版本開始支援 ES 模組化，執行指令稿啟動時需要加上 experimental-modules，不過這一用法要求對應的檔案副檔名必須為，mjs，這樣就可以在 Node.js 中使用 ES 模組化了。
+        </p>
         <pre><code class="language-js">
-
+node --experimental-modules modulel.mjs
+import module1 from '/module1.mjs'
+console.log(module1)
         </code></pre>
-        <p></p>
-        <p></p>
+        <p>
+          另外，在Node.js 中使用ES模組化的另一種方式是，安裝 babel-cli 和 babel-
+preset-env，設定，.babelrc 檔案後，執行 ./node_modules/.bin/babel-node 或 npx
+babel-node 。
+        </p>
+        <p>
+          在工具方面，webpack 本身維護了一套模組系統，這套模組系統相容了幾呼所有前端歷史處理程序下的模組標準，包含 AMD、CommonJS、ES模組等
+        </p>
       </article>
     </main>
   </body>
