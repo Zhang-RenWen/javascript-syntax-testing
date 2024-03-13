@@ -340,7 +340,8 @@ function(factory){
 }
         </code></pre>
         <p>
-          而如果 UMD 判斷出目前模組遵循 AMD 標準，則函數的參數就會變成 define，適用 AMD 標準，實際程式如下。
+          而如果 UMD 判斷出目前模組遵循 AMD 標準，則函數的參數就會變成 define，適用 AMD
+          標準，實際程式如下。
         </p>
         <pre><code class="language-js">
 function (root, factory) {
@@ -361,11 +362,17 @@ function (root, factory) {
 }))
         </code></pre>
         <p>
-          至此，我們便介紹完了模組化的 Node.js 和社區解決方案。這些方案充分利用了 JavaScript 的語言特性，並結合瀏覽器端的特點，加以實現。不同的實現方式表現了不同的設計哲學，但是它們的最後方向都指向了模組化的幾個原則：可重複使用性、可組合性、中心化、獨立性。下一節會繼續探討模組化這個主題，介紹ES 原生時代的解決方案。
+          至此，我們便介紹完了模組化的 Node.js 和社區解決方案。這些方案充分利用了 JavaScript
+          的語言特性，並結合瀏覽器端的特點，加以實現。不同的實現方式表現了不同的設計哲學，但是它們的最後方向都指向了模組化的幾個原則：可重複使用性、可組合性、中心化、獨立性。下一節會繼續探討模組化這個主題，介紹ES
+          原生時代的解決方案。
         </p>
         <h3>ES 原生時代</h3>
         <p>
-          ES 模組的設計思想是儘量靜態化，這樣能確保在編譯時就確定模組之間的依賴關係，每個模組的輸入和輸出變數也都是確定的；而 CommonJS 和 AMD 模組無法保證在編譯時就確定這些內容，它們都只能在執行時期確定。這是 ES 模組和其他模組標準最顯著的差別。第二個差別在於，CommonJS 模組輸出的是一個值的拷貝，ES 模組輸出的是值的參考。下面來看一個範例。
+          ES
+          模組的設計思想是儘量靜態化，這樣能確保在編譯時就確定模組之間的依賴關係，每個模組的輸入和輸出變數也都是確定的；而
+          CommonJS 和 AMD 模組無法保證在編譯時就確定這些內容，它們都只能在執行時期確定。這是 ES
+          模組和其他模組標準最顯著的差別。第二個差別在於，CommonJS 模組輸出的是一個值的拷貝，ES
+          模組輸出的是值的參考。下面來看一個範例。
         </p>
         <pre><code class="language-js">
 // data.js
@@ -379,7 +386,8 @@ console.log(data) // data modifyData()
 console.log(data) // modified data
         </code></pre>
         <p>
-          我們在 index.js 中呼叫了 modifyData 方法，之後查詢 data 值，獲得了最新的變化；而同樣的邏輯在 CommonJS 標準下的表現如下。
+          我們在 index.js 中呼叫了 modifyData 方法，之後查詢 data
+          值，獲得了最新的變化；而同樣的邏輯在 CommonJS 標準下的表現如下。
         </p>
         <pre><code class="language-js">
 // data. js
@@ -400,88 +408,108 @@ modifyData()
 console.log(data) // data
         </code></pre>
         <p>
-          因為在 CommonJS 標準下輸出的是值的拷貝，而非參考，因此在呼叫 modifyData 之後，index.js 的 data 值並沒有發生變化，其值為一個全新的拷貝。
+          因為在 CommonJS 標準下輸出的是值的拷貝，而非參考，因此在呼叫 modifyData 之後，index.js 的
+          data 值並沒有發生變化，其值為一個全新的拷貝。
         </p>
         <h4>ES 模組為什麼要設計成靜態的</h4>
         <p>
-          將 ES 模組設計成靜態的，一個明顯的優勢是，透過靜態分析，我們能夠分析出匯入的依賴。如果匯入的模組沒有被使用，我們便可以透過 Tree Shakting 等方法減少程式體積，進而提升執行效能。這就是基於 ESM 實現 tree shaking 的基礎。
+          將 ES
+          模組設計成靜態的，一個明顯的優勢是，透過靜態分析，我們能夠分析出匯入的依賴。如果匯入的模組沒有被使用，我們便可以透過
+          Tree Shaking 等方法減少程式體積，進而提升執行效能。這就是基於 ESM 實現 tree shaking
+          的基礎。
         </p>
         <p>
-          下面從設計的角度分析這種標準的利弊。靜態性需更標準去強制保證，因此 ES 模組標準不像 CommonJS 標準那樣靈活，其靜態性會帶來以下一些限制。
+          下面從設計的角度分析這種標準的利弊。靜態性需更標準去強制保證，因此 ES 模組標準不像
+          CommonJS 標準那樣靈活，其靜態性會帶來以下一些限制。
         </p>
         <ul>
-          <li>
-            只能在檔案頂部引用依賴。
-          </li>
-          <li>
-            匯出的變數類型受到嚴格限制。
-          </li>
-          <li>
-            變數不允許被重新綁定，引用的模組名稱只能是字串常數，即不可以動態確定依賴。
-          </li>
+          <li>只能在檔案頂部引用依賴。</li>
+          <li>匯出的變數類型受到嚴格限制。</li>
+          <li>變數不允許被重新綁定，引用的模組名稱只能是字串常數，即不可以動態確定依賴。</li>
         </ul>
         <p>
           這樣的限制在語言層面帶來的便利之一是，我們可以透過分析作用域，得出程式中變數所屬的作用域及它們之間的參考關係，進而可以推導出變數和匯入依賴變數之間的參考關係，在沒有明顯參考時，可以對程式進行去容錯。
         </p>
         <h4>tree shaking</h4>
         <p>
-          上面說到的「在沒有明顯參考時，可以對程式進行去容錯」，就是我們經常提到的 tree shaking，它的目的是減少應用中沒有被實際運用的JavaScript 程式。對無用程式進行清除，表示可以獲得更小的程式體積，而程式體積的縮減對使用者體驗可以造成積極的作用
+          上面說到的「在沒有明顯參考時，可以對程式進行去容錯」，就是我們經常提到的 tree
+          shaking，它的目的是減少應用中沒有被實際運用的JavaScript
+          程式。對無用程式進行清除，表示可以獲得更小的程式體積，而程式體積的縮減對使用者體驗可以造成積極的作用
         </p>
         <p>
-          在電腦科學中，一個典型的去除無用程式、冗餘碼的方法是 DCE（Dead CodeBlimination，死碼消除）。那麼，tree shaking 和 DCE 有什麼區別？
+          在電腦科學中，一個典型的去除無用程式、冗餘碼的方法是 DCE（Dead
+          CodeElimination，死碼消除）。那麼，tree shaking 和 DCE 有什麼區別？
         </p>
         <p>
-          Rollup 的主要貢獻者 Rich Haris 做過這樣的比喻：假設我們用雞蛋做蛋糕，顯然不需要蛋殼而只需要蛋清和蛋黃，那麼如何去除蛋殼呢？DCE 是這樣做的，直接把整個雞蛋放到碗裡攪拌，蛋糕做完後再慢慢地從裡面挑出蛋殼。
+          Rollup 的主要貢獻者 Rich Haris
+          做過這樣的比喻：假設我們用雞蛋做蛋糕，顯然不需要蛋殼而只需要蛋清和蛋黃，那麼如何去除蛋殼呢？DCE
+          是這樣做的，直接把整個雞蛋放到碗裡攪拌，蛋糕做完後再慢慢地從裡面挑出蛋殼。
         </p>
         <p>
-          相反，與 DCE 不同，tree shaking 是一開始就把蛋殼剝離，留下蛋清和蛋黃。事實上，也可以將 tree shaking 了解為一種廣義上的 DCE，它在包裝時便會去掉用不到的程式。
+          相反，與 DCE 不同，tree shaking 是一開始就把蛋殼剝離，留下蛋清和蛋黃。事實上，也可以將
+          tree shaking 了解為一種廣義上的 DCE，它在包裝時便會去掉用不到的程式。
         </p>
         <p>
           當然：說到底， tree shaking 只是一種輔助方法，良好的模組拆分和設計才是減少程式體積的關鍵。
         </p>
         <p>
-          tree shaking 的使用也存在一些侷限，它還有很多不能清除無用程式的場景，舉例來說，Rollup的 tree Shaking 只能處理函數和頂層的 impor/export 匯入的變數，不能把沒用到的類別的方法清除；具有副作用的指令稿無法被清除。
+          tree shaking 的使用也存在一些侷限，它還有很多不能清除無用程式的場景，舉例來說，Rollup的
+          tree Shaking 只能處理函數和頂層的 import/export
+          匯入的變數，不能把沒用到的類別的方法清除；具有副作用的指令稿無法被清除。
         </p>
         <p>
-          webpack 和 Rollup 建置工具目前在實現 tree shaking 方面都有成熟的方案，但並不建議將其馬上引入專案中。事實上，是否要在成熟的專案上立即實施 tree shaking 需要妥善考慮。
+          webpack 和 Rollup 建置工具目前在實現 tree shaking
+          方面都有成熟的方案，但並不建議將其馬上引入專案中。事實上，是否要在成熟的專案上立即實施
+          tree shaking 需要妥善考慮。
         </p>
         <h4>ES 的 export 和 export default</h4>
         <p>
-          ES 模組化匯出有 export 和 export default 兩種。這裡建議減少使用exportdefault 匯出，一方面是因為 export default 會進出整體物件結果，不利於透過tree shaking 進行分析；另一方面是因為 export default 匯出的結果可以隨意命名變數，不利於團隊統一管理。
+          ES 模組化匯出有 export 和 export default 兩種。這裡建議減少使用 export default
+          匯出，一方面是因為 export default 會進出整體物件結果，不利於透過tree shaking
+          進行分析；另一方面是因為 export default 匯出的結果可以隨意命名變數，不利於團隊統一管理。
         </p>
         <h3>未來趨勢和思考</h3>
         <p></p>
         <h4>在瀏覽器中快速使用 ES 模組化</h4>
         <p>
-          個人認為，ES 模組化是未來的發展趨勢，它的優點毫無爭議，舉例來說，具有開箱即用的 tree shaking 和對未來瀏覽器的相容性支援。Node.js 的 CommonJS 模組化方案甚至會慢慢過渡到 ES 模組化上。如果你正在使用 webpack 建置應用專案，那麼 ES 模組化應該是首選方案；如果你的專案是一個前端函數庫，也建議你使用 ES 模組化。這麼看來，或許只有在撰寫 Node.js 程式時，才需要考慮使用 CommonJS 模組化方案。
+          個人認為，ES 模組化是未來的發展趨勢，它的優點毫無爭議，舉例來說，具有開箱即用的 tree
+          shaking 和對未來瀏覽器的相容性支援。Node.js 的 CommonJS 模組化方案甚至會慢慢過渡到 ES
+          模組化上。如果你正在使用 webpack 建置應用專案，那麼 ES
+          模組化應該是首選方案；如果你的專案是一個前端函數庫，也建議你使用 ES
+          模組化。這麼看來，或許只有在撰寫 Node.js 程式時，才需要考慮使用 CommonJS 模組化方案。
         </p>
         <pre><code class="language-js">
-<script type="module">
-import module1 from './modulel'
-</script>
-<script nomodule>
-alert（'你的瀏覽器不支援ES模組，請先升級！'）
-</script>
+&lt;script type="module"&gt;
+import module1 from './module1'
+&lt;/script&gt;
+&lt;script nomodule&gt;
+alert('你的瀏覽器不支援ES模組，請先升級!')
+&lt;/script&gt;
         </code></pre>
         <p>
-          使用 type="motule" 的另一個作用是進行 ES Next 相容性偵測。因為支援了 ES 模組化的瀏覽器，所以能夠直接支援很多 ES 新特性。
+          使用 type="module" 的另一個作用是進行 ES Next 相容性偵測。因為支援了 ES
+          模組化的瀏覽器，所以能夠直接支援很多 ES 新特性。
         </p>
         <h4>在 Node.js 中使用 ES 模組化</h4>
         <p>
-           Nodejs 從 9.0 版本開始支援 ES 模組化，執行指令稿啟動時需要加上 experimental-modules，不過這一用法要求對應的檔案副檔名必須為，mjs，這樣就可以在 Node.js 中使用 ES 模組化了。
+          Nodejs 從 9.0 版本開始支援 ES 模組化，執行指令稿啟動時需要加上
+          --experimental-modules，不過這一用法要求對應的檔案副檔名必須為，mjs，這樣就可以在 Node.js
+          中使用 ES 模組化了。
         </p>
         <pre><code class="language-js">
-node --experimental-modules modulel.mjs
+node --experimental-modules module1.mjs
 import module1 from '/module1.mjs'
 console.log(module1)
         </code></pre>
         <p>
           另外，在Node.js 中使用ES模組化的另一種方式是，安裝 babel-cli 和 babel-
-preset-env，設定，.babelrc 檔案後，執行 ./node_modules/.bin/babel-node 或 npx
-babel-node 。
+          preset-env，設定，.babelrc 檔案後，執行 ./node_modules/.bin/babel-node 或 npx babel-node
+          。
         </p>
         <p>
-          在工具方面，webpack 本身維護了一套模組系統，這套模組系統相容了幾呼所有前端歷史處理程序下的模組標準，包含 AMD、CommonJS、ES模組等
+          在工具方面，webpack
+          本身維護了一套模組系統，這套模組系統相容了幾呼所有前端歷史處理程序下的模組標準，包含
+          AMD、CommonJS、ES模組等
         </p>
       </article>
     </main>
