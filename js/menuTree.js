@@ -184,6 +184,11 @@ export const menu = [
             href: '1-6-7.html'
           },
           {
+            id: '1-6-8',
+            title: '1-6-8 webpack 前端知識點',
+            href: '1-6-8.html'
+          },
+          {
             id: '1-6-9',
             title: '1-6-9 權限 🚧',
             href: '1-6-9.html'
