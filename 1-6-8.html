@@ -34,7 +34,82 @@
       </aside>
       <article>
         <h2 id="1-6-8">1-6-8 webpack 前端知識點</h2>
-        <h3></h3>
+        <h3>CommonJS 標準下的包裝結果</h3>
+        <p>
+          如何者手分析 CommonJS 標準下的包裝結果？首先，如下所示，建立並切入到專案，進行初始化。
+        </p>
+        <pre><code class="language-bash">
+mkdir webpack-demo
+cd webpack-demo 
+npm init -y
+        </code></pre>
+        <p>接著，安裝 webpack 的最新版本，安裝指令如下。</p>
+        <pre><code class="language-bash">
+npm install --save-dev webpack 
+npm install --save-dev webpack-cli
+        </code></pre>
+        <p>在根目錄下建立 index.html，其中的程式如下。</p>
+        <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app"&gt;&lt;/div&gt;
+    &lt;script src="./dist/main.js"&gt;&lt;/script&gt;
+  &lt;/body&gt; 
+&lt;/html&gt;
+        </code></pre>
+        <p>
+          然後建立 ./src 資料夾，在 src
+          資料夾中，因為我們要研究模組化打包產出，這有關依賴關係，所以要在 ./src 目錄下建立 hello.js
+          和 index.js。index.js 為入口指令稿，它將依賴 hello.js，實際程式如下。
+        </p>
+        <pre><code class="language-js">
+const sayHello = require('./hello')
+console.log(sayHello('lucas'))
+        </code></pre>
+        <p>hello.js 中的內容如下。</p>
+        <pre><code class="language-js">
+module.exports = function(name) {
+  return 'hello + name
+}
+        </code></pre>
+        <p>
+          這裡為了示範，採用了 CommonJS 標準，也沒有加入 Babel
+          編譯環節。直接執行以下指令，可以獲得產出，產出內容出現在 ./dist 檔案中。
+        </p>
+        <pre><code class="language-bash">
+node_modules/.bin/webpack --mode development
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
