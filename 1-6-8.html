@@ -73,7 +73,7 @@ console.log(sayHello('lucas'))
         <p>hello.js 中的內容如下。</p>
         <pre><code class="language-js">
 module.exports = function(name) {
-  return 'hello + name
+  return 'hello' + name
 }
         </code></pre>
         <p>
@@ -83,9 +83,95 @@ module.exports = function(name) {
         <pre><code class="language-bash">
 node_modules/.bin/webpack --mode development
         </code></pre>
+        <p>開啟 ./dist/main.js，可以看到最後的編譯結果。</p>
         <pre><code class="language-js">
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/hello.js":
+/*!**********************!*\
+  !*** ./src/hello.js ***!
+  \**********************/
+/***/ ((module) => {
+
+eval("module.exports = function(name) {\r\n  return 'hello' + name\r\n}\n\n//# sourceURL=webpack://webpack-demo/./src/hello.js?");
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const sayHello = __webpack_require__(/*! ./hello */ \"./src/hello.js\")\r\nconsole.log(sayHello('lucas'))\n\n//# sourceURL=webpack://webpack-demo/./src/index.js?");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
+/******/ 	
+/******/ })()
+;
         </code></pre>
+        <p>把以上程式最核心的骨架分析出來，會發現它其實就是一個 IIFE（立即呼叫函數運算式）。</p>
+        <p>
+          Ben Cherry 的著名文章 JavaScript Module Pattern: In-Depth 介紹了用 IIFE
+          實現模組化的多種進階嘗試，阮一峰老師在其部落格中也提到了相關內容。對用 IIFE
+          實現模組化並不陌生。 深入研究上述程式結果（已增加註釋），可以提煉出以下幾個關鍵點。
+        </p>
+        <ul>
+          <li>
+            webpack 的包裝結果就是一個 IIFE：一般被稱為 WebpackBootstrap。這個 IIFE 接收一個物件
+            modules 作為參數，modules 物件的 key 是依賴路徑，value
+            是經過簡單處理後的指令稿（它不完全等於我撰寫的業務指令稿。而是被 webpack
+            包裹後的內容）。
+          </li>
+          <li>包裝結果中定義了一個重要的模組載入函數 __webpack_require__。</li>
+          <li>首先使用模組載入函數 __webpack_require__ 去載入入口模組， ./src/index.js。</li>
+          <li>
+            載入函數 __webpack_require__ 使用了閉包變數
+            installedModules，它的作用是將已載入過的模組結果儲存在記憶體中。
+          </li>
+        </ul>
         <pre><code class="language-js">
 
         </code></pre>
