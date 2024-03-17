@@ -172,6 +172,154 @@ eval("const sayHello = __webpack_require__(/*! ./hello */ \"./src/hello.js\")\r\
             installedModules，它的作用是將已載入過的模組結果儲存在記憶體中。
           </li>
         </ul>
+        <h4>ES 標準下的包裝結果</h4>
+        <p>
+          以上是以 CommonJS 標準為基礎的模組化寫法，而業務中的程式常常遵循 ESNext 模組化標準，並透過
+          Babel 進行編譯。
+        </p>
+        <p>首先，安裝依賴，程式如下。</p>
+        <pre><code class="language-bash">
+npm install --save-dev webpack
+npm install --save-dev webpack-cli
+npm install --save-dev babel-loader
+nom install --save-dev @babel/core
+npm install --save-dev @babel/preset-env
+        </code></pre>
+        <p>同時設定 package.json，即在 package.json 檔案中寫入以下內容。</p>
+        <pre><code class="language-js">
+"scripts": {
+  "build": "webpack --mode development --progress --display-modules --colors --display-reasons"
+  s
+},
+        </code></pre>
+        <p>
+          設定 npm script 以便執行 webpack 的建置流程程式，同時在 package.json 中加入如下所示的
+          Babel 設定。
+        </p>
+        <pre><code class="language-js">
+"babel": {
+  "presets": ["@babel/preset-env"]
+}
+        </code></pre>
+        <p>將 index.js 和 hello.js 改寫為 ESM 形式，如下。</p>
+        <pre><code class="language-js">
+// hello. js
+const sayHello = name => `hello ${name}`
+export default sayHello
+
+// index. js
+import sayHello from './hello.js'
+console.log(sayHello('lucas'))
+        </code></pre>
+        <p>執行以下程式，獲得的包裝主體與之前的內容基本一致。</p>
+        <pre><code class="language-bash">
+npm run build
+        </code></pre>
+        <p>但是在細節上，發現在執行指令稿中多了以下敘述。</p>
+        <pre><code class="language-js">
+__webpack_require __.r(webpack_exports__)
+        </code></pre>
+        <p>
+          實際上，__webpack_require __.r 這個方法是用來給模組的 exports 物件加上 ES
+          模組化標準的標記的。
+        </p>
+        <p>
+          實際標記方式為：如果目前環境支援 Symbol 物件，則可以透過 Object.defineProperty 為 exports
+          物件的 Symbol.toStringTag 屬性設定值 Module，這樣做的結果是 exports 物件在呼叫 toString
+          方法時會傳回 Module，同時將 exports.__esModule 設定值為 true。
+        </p>
+        <p>
+          除了 CommonJS 和 ES Module 標準，webpack 和樣支援 AMD
+          標準，可以在此標準下對程式重新包裝來觀察這3種標準之間的差別。
+        </p>
+        <h4>隨選載入下的包裝結果</h4>
+        <p>
+          在現代化的業務中，尤其是在單頁應用中，我們常常會使用隨選載入的方式，那麼在這種相對較新的載入方式下，webpack
+          又會產出什麼樣的程式呢？
+        </p>
+        <p>首先安裝 Babel 外掛程式，以支援動態引用（dynamic import）。</p>
+        <pre><code class="language-js">
+npm install --save-dev babel-plugin-dynamic-import-webpack
+        </code></pre>
+        <p>在 webpack.config.js 中増加相關外掛程式設定。</p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
