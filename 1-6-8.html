@@ -243,17 +243,75 @@ npm install --save-dev babel-plugin-dynamic-import-webpack
         </code></pre>
         <p>在 webpack.config.js 中増加相關外掛程式設定。</p>
         <pre><code class="language-js">
+module.exports={
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader:"babel-loader",
+        options: {
+            "plugins": ["dynamic-import-webpack"]
+        }
+      }
+    ]
+  }
+}
 
         </code></pre>
+        <p>
+          同時，在 index.js 檔案中使用動態引用的方式隨選載入 ./hello 檔案，實現隨選載入的程式如下。
+        </p>
+        <pre><code class="language-js">
+import('./hello').then(sayHello =>{
+  console.log(sayHello('lucas'))
+})
+        </code></pre>
+        <p>最後執行以下程式。</p>
+        <pre><code class="language-bash">
+npm run build
+        </code></pre>
+        <p>
+          這樣一來，發現重新建置後會輸出兩個檔案，分別是執行入口檔案 main.js 和非同步載入檔案
+          0.js，因為非同步隨選載入時，顯然不能把所有的程式再包裝到一個 bundle 中了。
+        </p>
+        <p>0.js檔案中的內容如下。</p>
         <pre><code class="language-js">
 
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>main.js 檔案中的內容也與之前相比變化較大。</p>
+        <p>
+          相比正常打包產出的結果，隨選載入下包裝的產出結果變化較大，也更加複雜，下面歸納了兩點變化。
+        </p>
+        <ul>
+          <li>多了一個 __webpack_require__.e</li>
+          <li>多了一個 webpackJsonp。</li>
+        </ul>
+        <p>
+          其中， __webpack_require__.e 實現非常重要，它初始化了一個 Promise 陣列， 使用
+          Promise.all() 非同步插入 script 指令稿；webpackJsonp 會掛載到全域物件 window
+          上，進行模組安裝。
+        </p>
+        <p>
+          熟悉 webpack 的可能會知道 CommonsChunkPlugin 外掛程式（在webpackV4
+          版本中已經被取代），這個外掛程式用來分割協力廠商依賴或公共函數庫的式，將業務邏輯和穩定的函數庫指令稿分離，以達到最佳化程式體積、合理使用快取的目的。實際上，這樣的想法和上述隨選載入的想法不謀而合，實作方式也一致。可以推測，開發者使用
+          CommonsChunkPlugin 外掛程式對程式進行包裝後的結構和上面的程式結構類似，都存在
+          webpack_require.e 和
+          webpackJsonp，因為分析公共程式和非同步載入本質上都是建置時進行程式分割，再在必要時進行載入。實作方式可以觀察
+          webpack_require.e 和 webpackJsonp 。
+        </p>
+        <p>
+          至此，分析了業務中幾乎所有的包裝方式及 webpack
+          產出結果。雖然這些內容較為晦澀，原始程式冗長而難以閱讀，但是這對了解 webpack
+          內的工作原理，以及撰寫 webpack loader、webpack
+          外掛程式意義重大。只有分析過這些最基本的編譯後的程式，才能對上線後的程式品質做到心裡有底。在出現問題時，能夠幫輕就熟。這也是進階
+          Web 工程師所必備的素養。
+        </p>
+        <p>
+          細節實現相對包裝思想設計來說並沒有那麼重要。也許試著去設計一個模組系統，了解一下
+          require.js 或 sea.js 的實現，就不會覺得這些內容那麼高深了。
+        </p>
+        <h3>webpack 工作基本原理</h3>
         <pre><code class="language-js">
 
         </code></pre>
