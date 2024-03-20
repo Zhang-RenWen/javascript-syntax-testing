@@ -312,19 +312,136 @@ npm run build
           require.js 或 sea.js 的實現，就不會覺得這些內容那麼高深了。
         </p>
         <h3>webpack 工作基本原理</h3>
+        <p>webpack 工作流程圖</p>
         <img src="./assets/image/1-6-8/1.jpeg" alt="" />
+        <p>簡單歸納起來，流程如下:</p>
+        <ul>
+          <li>
+            首先：webpack 會讀取專案中由開發者定義的 webpack.config.js 設定檔，或從 shell
+            敘述中獲得必要的參數。這是 webpack 內部接收業務設定資訊的
+            方式。這樣就完成了設定讀取的初步工作。
+          </li>
+          <li>
+            接著，將所需的 webpack 外掛程式產生實體，在 webpack
+            事件流上掛載外掛程式鉤子，這樣在合適的建置過程中，外掛程式就具備了改動產出結果的能力。
+          </li>
+          <li>
+            同時，根據設定所定義的入口檔案，從入口檔案（可以不只一個）開始，進行依賴收集，對所有依賴的檔案進行編譯，這個編譯過程依賴
+            loaders，不同類型的檔案根據開發者定義的不同loader 進行解析。編譯好的內容使用 acorn
+            或其他抽象語法樹能力，解析產生抽象語法樹，分析檔案依賴關係，將不同模組化語法（如
+            require）等取代為 __webpack_require__，即使用 webpack 自己的載入器進行模組化實現。
+          </li>
+          <li>上述步驟完成後，產出結果，根據開發者設定，將結果包裝到對應目錄。</li>
+        </ul>
+        <p>
+          值得一提的是，在整個包裝過程中，webpack
+          和外掛程式都採用以事件流為基礎的發佈/訂閱模式，監聽某些關鍵過程，並在這些環節中執行外掛程式任務。最後，所有檔案的編譯和轉化都已經完成，輸出最後資源。
+        </p>
+        <p>
+          如果深入剖析原始程式，則上述過程可以用更加專業的術語歸納為：模組會經歷載入（loaded）、封存（sealed）、最佳化（optimized）、分段（chunked）、雜湊（hashed）和重新建立（restored）這幾個經典步驟。
+        </p>
+        <h4>抽象語法樹</h4>
+        <p>
+          在電腦科學中，抽象語法樹（Abstract Syntax Tree ，AST）
+          是原始程式語法結構的一種抽象表示。它以樹狀的形式表現程式語言的語法結構，樹上的每個節點都表示原始程式中的一種結構和表達。
+        </p>
+        <p>
+          之所以說語法是抽象的，是因為這裡的語法並不會表示出真寶語法中出現的每個細節。舉例來說，類似
+          if-condition-then 這樣的條件跳躍陳述式可以用帶有兩個分支的節點來表示。
+        </p>
+        <p>
+          AST 並不會被電腦所識別，更不會被執行，它是對裡式語言的一種表達，為程式分析提供了基礎。
+          webpack 將檔案轉換成 AST
+          的目的就是方便開發者分析模組檔案中的關鍵資訊。這樣一來，就可以知曉開發者到底寫了什麼東西，也就可以根據這些寫出的東西進行分析和擴充。在程式層面，可以把
+          AST 了解為一個object。舉例來說，下面這句簡單的設定陳述式：
+        </p>
+        <pre><code class="language-js">
+var ast = 'AST demo'
+        </code></pre>
+        <p>轉為 AST 後的程式如下所示。</p>
+        <pre><code class="language-js">
+{
+  "type": "Program",
+  "start": 0,
+  "end": 20,
+  "body": [{
+    "type": "VariableDeclaration",
+    "start": 0,
+    "end": 20,
+    "declarations": [{
+      "type": "VariableDeclarator",
+      "start": 4,
+      "end": 20,
+      "id": {
+        "type": "Identifier",
+        "start": 4,
+        "end": 7,
+        "name": "ast"
+      },
+      "init": {
+        "type": "Literal",
+        "start": 10,
+        "end": 20,
+        "value": "AST demo",
+        "raw": "'AST demo'",
+      }
+    }],
+    "kind": "var"
+  }],
+  "sourceType": "module"
+}
+        </code></pre>
+        <p>
+          從以上程式中可以看出，AST
+          結果精確地表明了這是一筆變數宣告敘述，敘述起始於哪裡、設定值結果是什麼等資訊都被表達出來。
+        </p>
+        <p>有了這樣的語法樹，開發者便可以針對原始檔案進行一些分析、加工或轉換操作了。</p>
+        <h3>compiler 和 compilation</h3>
+        <p>
+          compiler 和 compilation 這兩個物件是 webpack 核心原理中最重要的概念。它們是了解 webpack
+          工作原理、loader 和外掛程式工作的基礎。
+        </p>
+        <p>
+          compiler 物件：它的實例包含了完整的 webpack設定，且全域只有一個compiler
+          實例，因此它就像webpack 的骨架或神經中樞。當外掛程式被產生實體的時候，就會收到一個
+          compiler 物件，透過這個物件可以造訪 webpack 的內部環境。
+        </p>
+        <p>
+          compilation 物件：當 webpack 以開發模式執行時期，每當檢測到檔案變化時，一個新的
+          compilation
+          物件就會被建立。這個物件包含了目前的模組資源、編譯產生資源、變化的檔案等資訊。也就是說，所有建置過程中讀取設定產生的建置資料都會被儲存在該物件上，它也掌控著建置過程中的每一個環節。該物件還提供了很多事件回呼供外掛程式做擴充。
+        </p>
+        <p>兩者的關係可以透過圖2 來說明。</p>
         <img src="./assets/image/1-6-8/2.jpeg" alt="" />
+        <p>
+          webpack 的建置過程是透過 compiler 控制流程，透過 compilation
+          進行程式解析的。在開發外掛程式時，我們可以從 compiler 物件中獲得所有與 webpack
+          主環授相關的內容，包含事件鉤子。
+        </p>
+        <p>
+          compiler 物件和 compilation 物件都繼承自 tapable
+          函數庫，該函數庫曝露了所有和事件相關的發佈/訂閱的方法。webpack 中以事件流為基礎的 tapable
+          函數庫不僅能確保外掛程式的有序性，還能使整個系統擴充性更好。
+        </p>
+        <h3>撰寫 webpack loader</h3>
+        <p>
+          熟悉了概念，下面就來進行實戰，了解如何撰寫一個 webpack loader。事實上，在 webpack
+          中，loader 是真正發生魔法的階段：Babel 將 ES Next 編譯成 ES5,sass-loader 將 SCSS/Sass
+          編譯成 CSS，等等，都是由相關的 loader 或 plugin 完成的。因此，從直觀上了解，loader
+          的工作就是接收原始檔案，對原始檔案進行處理，並傳回編譯後的檔案，如圖3所示。
+        </p>
         <img src="./assets/image/1-6-8/3.jpeg" alt="" />
+        <p>
+          可以看到，loader
+          秉承了單一職責，完成了最小單元的檔案轉換。當然，一個原始檔案可能需要經歷多步轉換才能正常使用，舉例來說，Sass
+          檔案會先透過 sass-loader 輸出 CSS，之後將內容交給 css-loader 處理，甚至還需要將 css-loader
+          輸出的內容交給 style-loader 處理，並轉換成透過指令稿載入的 JavaScript 程式，使用方式如下。
+        </p>
+
+        <pre><code class="language-js">
+
+        </code></pre>
         <img src="./assets/image/1-6-8/4.jpeg" alt="" />
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
