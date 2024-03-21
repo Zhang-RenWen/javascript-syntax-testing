@@ -439,48 +439,265 @@ var ast = 'AST demo'
         </p>
 
         <pre><code class="language-js">
-
+module.exports = {
+  //...
+  module: {
+    rules: [{
+      test:/\.less$/,
+      use: [{
+        loader:'style-loader' // 透過 Javascript 字串建立 style node
+      },{
+        loader:'css-loader' // 編譯 CSS 使其符合 CommonJS 標準
+      },{
+        loader:'less-loader'// 將 Less編譯為 CSS
+      }]
+    }]
+  }
+}
         </code></pre>
+        <p>
+          當串聯地呼叫多個 loader 去轉換一個檔案時，每個 loader 都會鏈式地循序執行。在 webpack
+          中，在同一檔案存在多個比對 loader 的情況下，各個 loader 的執行過程會遵循以下原則。
+        </p>
+        <ul>
+          <li>
+            loader 的執行順序和設定順序是相反的，即設定的最後一個 loader 最先執行，第一個 loader
+            最後執行。
+          </li>
+          <li>
+            第一個執行的 loader 接收原始檔案中的內容作為參數，其他 loader 接收前一個執行的 loader
+            的傳回值作為參數。最後執行的 loader 會傳回最後結果。
+          </li>
+        </ul>
+        <p>下圖所示的流程就對應了上面程式中的設定內容。</p>
         <img src="./assets/image/1-6-8/4.jpeg" alt="" />
+        <p>
+          因此，在開發一個 loader 時，只需關心輸入和輸出，但需要注意保持其職責的單一性。
+          不難了解，loader 的本質就是函數，其最簡單的結構如下所示。
+        </p>
         <pre><code class="language-js">
+module.exports = function(source){
+  // some magic...
+  return content
+}
 
         </code></pre>
+        <p>
+          loader 就是一個以 CommonJS
+          標準為基礎的函數模組，它接收內容（這裡的內容可能是原始檔案，也可能是經過其他 loader
+          處理後的結果），並傳回新的內容。
+        </p>
+        <p>
+          更進一步，我們知道在設定 webpack 時，可以對 loader 增加一些設定，例如著名的 babel-loader
+          的簡單設定，如下所示。
+        </p>
         <pre><code class="language-js">
-
+module: {
+  rules: [{
+    test: /\.js$/, 
+    exclude: /node_modules/,
+    loader: "babel-loader",
+    options: {
+      "plugins": [
+        "dynamic-import-webpack"
+      ]
+    }
+  }]
+}
         </code></pre>
+        <p>
+          這樣一來，上文中簡單的 loader 寫法便不能滿足需求了，因為撰寫 loader 時，除了撰寫 source
+          內容，還需要根據開發者設定的 options
+          資訊進行建置訂製化處理，以輸出最後的結果。那麼，如何取得 options 呢？這時就需要用到
+          loader-utils 模組了。
+        </p>
         <pre><code class="language-js">
-
+const loaderUtils = require("loader-utils")
+module.exports = function(source) {
+  // 取得開發者設定的 options
+  const options = loaderUtils.getOptions(this)
+  //  some magic...
+  return content
+}
         </code></pre>
+        <p>
+          另外，對於 loader 傳回的內容，在實際開發中，單純對 content
+          進行改寫並傳回改寫後的內容，也許是不夠的。
+        </p>
+        <p>
+          舉例來說，我們想對 loader 處理過程中的錯誤進行捕捉，或想匯出 sourceMap
+          等資訊時，該如何做呢？
+        </p>
+        <p>
+          這種情況需要用 loader 中的 this.callback 來傳回內容。this.callback 中可以傳入 4
+          個參數，分別如下。
+        </p>
+        <ul>
+          <li>error: 當 loader 出錯時向外拋出一個 error。</li>
+          <li>content: 經過 loader 編譯後需要匯出的內容。</li>
+          <li>sourceMap: 為方便偵錯編譯後的 source map。</li>
+          <li>
+            ast: 本次編譯產生的抽象語法樹。之後執行的 loader 可以直接使用這個 AST ，進而省去重複產生
+            AST 的過程。
+          </li>
+        </ul>
+        <p>
+          使用 this.callback 後，我們的 loader
+          程式就變得更加複雜了，同時能夠處理更加多樣的需求，舉例來說，下面的程式可用於取得開發者傳入的設定資訊，並根據資訊做出處理。
+        </p>
         <pre><code class="language-js">
-
+module.exports = function (source) {
+  //取得開發者設定的 options
+  const options = loaderUtils.getOptions(this)
+  // some magic...
+  // return content
+  this.callback(null, content)
+}
         </code></pre>
+        <p>
+          注意，當使用 this.callback傳 回內容時，該 loader 必須傳回 undefined ，這樣webpack 就知道該
+          loader 傳回的結果在 this.callback 中，而不在 return 中。
+        </p>
+        <p>
+          這裡的 this 指向誰？事實上，這裡的 this 指向的是一個叫 loaderContext 的 loader-runner
+          特有物件。如果根究底，就要細讀 webpack loader 部分的相關原始程式了。
+        </p>
+        <p>
+          預設情況下，webpack 傳給 loader 的內容來源都是 UTF-8 格式編碼的字串。 但 file-loader
+          這個常用的 loader 不是處理文字檔的，而是處理二進位檔案的，在這種情況下，可以透過 source
+          instanceof Buffer === true 來判斷內容來源類型，範例如下。
+        </p>
         <pre><code class="language-js">
-
+module.exports = function (source) {
+  source instanceof Buffer === true
+  return source
+}
         </code></pre>
+        <p>如果自訂的 loader 也會傳回二進位檔案，則需要在檔案中顯性註明，如下所示。</p>
         <pre><code class="language-js">
-
+module.exports.raw = true
         </code></pre>
+        <p>
+          當然，還會有使用非同步 loader 的情況，即並不能同步完成對 source
+          的處理的情況，這時使用簡單的 async-await即可，程式如下。
+        </p>
         <pre><code class="language-js">
-
+module.exports = async function(source){
+  function timeout(delay){
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(source)
+      }, delay)
+    })
+  }
+  const content = await timeout(1000)
+  this.callback(null, content)
+}
         </code></pre>
+        <p>
+          另一種非同步 loader 的解決方案是使用 webpack 提供的 this.async，呼叫 this.async
+          會傳回一個回呼函數，可以在非同步作業完成後進行呼叫。上面的範例程式可以改寫為以下形式。
+        </p>
         <pre><code class="language-js">
-
+module.exports = async function(source){
+  function timeout(delay){
+    return new Promise((resolve, reject) => {
+      setTimeout(() =>{
+        resolve(source)
+      }, delay)
+    });
+  }
+  const callback = this.async()
+  timeout(1000).then(data =>{
+    callback(null, data)
+  })
+}
         </code></pre>
+        <p>
+          實際上，less-loader，翻看其原始程式，就能發現它的核心是利用 Less 這個函數庫來解析 less
+          樣式程式，less 函數庫解析後會傳回一個 Promise，因此 less-loader 是非同步的，其正是運用了
+          this.async() 來實現的。
+        </p>
+        <p>
+          工趕師想要進階，就一定要學以致用，解決實際問題。下面就來撰寫一個 path-replace-loader
+          來實際演練一下。這個loader 將允許把 require 敘述中的 base path 取代為動態指定的
+          path，使用和設定方式如下。
+        </p>
         <pre><code class="language-js">
-
+module.exports = {
+  module: {
+    rules: [{
+      test: /\.js$/,
+      loader: 'path-replace-loader',
+      exclude: /(mode_modules)/,
+      options: {
+        path:'ORIGINAL_PATH'/,
+        replacePath: 'REPLACE_PATH'
+      }
+    }]
+  }
+}
         </code></pre>
+        <p>根據上面所介紹的內容，列出 path-replace-loader 原始程式，如下所示。</p>
         <pre><code class="language-js">
+const fs = require('fs')
+const loaderUtils = require('loader-utils')
 
+module.exports = function (source) {
+this.cacheable && this.cacheable()
+const callback = this.async()
+const options = loaderUtils.getOptions(this)
+
+  if(this.resourcePath.indexOf(options.path)>-1){
+    const newPath = this.resourcePath.replace(options. path, options.replacePath)
+    fs.readFile(newPath, (err, data) => {
+      if (err) {
+        if (err.code === 'ENOENT') return callback(null, source)
+        return callback(err)
+      }
+      this.addDependency(newPath)
+      callback (null, data)
+    })
+  } else {
+    callback (null, source)
+  }
+}
+
+module.exports.raw = true
         </code></pre>
+        <p>
+          這只是一個簡單的實例，但卻涵蓋了撰寫 loader
+          時需要注意的不少內容，下面就來膳單分析一下。由於以上所撰寫的是一個非同立 loader
+          因此可以使用下面的傳回方式。
+        </p>
         <pre><code class="language-js">
-
+const callback = this.async()
+// ...
+callback(null, data)
         </code></pre>
+        <p>
+          透過以下敘述，可以取得開發者的設定資訊，並透過比較開發者設定的路徑與
+          this.resourcePath（目前資源檔路徑）來進行路徑取代。
+        </p>
         <pre><code class="language-js">
-
+const options = loaderUtils.getOptions(this)
+// ...
+const newPath = this.resourcePath.replace(options.path, options.replacePath)
         </code></pre>
+        <p>該實例對錯誤的處理也很簡單：如果新的目標路徑檔案不存在，則傳回原路徑檔案，程式如下。</p>
         <pre><code class="language-js">
-
+if(err.code === 'ENOENT') return callback(null, source)
         </code></pre>
+        <p>其他錯誤也一併是透過 return callback(err) 抛出的。</p>
+        <p>
+          該實例的主邏輯使用了 this.addDependency(newPath) 將新的檔案加入 webpack 依賴中，並透過
+          callback(null, data) 傳回內容。
+        </p>
+        <p>
+          這個過程並不複雜，同時想法非常清晰。透過這個案例，讀者可以根據本身團隊的需求，撰寫不同複雜度的
+          webpack loader ，以實現不同程度的擴充。
+        </p>
+        <h3>撰寫 webpack plugin</h3>
         <pre><code class="language-js">
 
         </code></pre>
