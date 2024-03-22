@@ -694,19 +694,55 @@ if(err.code === 'ENOENT') return callback(null, source)
           callback(null, data) 傳回內容。
         </p>
         <p>
-          這個過程並不複雜，同時想法非常清晰。透過這個案例，讀者可以根據本身團隊的需求，撰寫不同複雜度的
+          這個過程並不複雜，同時想法非常清晰。透過這個案例，可以根據本身團隊的需求，撰寫不同複雜度的
           webpack loader ，以實現不同程度的擴充。
         </p>
         <h3>撰寫 webpack plugin</h3>
+        <p>
+          webpack 事件流機制是說，在 webpack 建置的生命週期中，webpack
+          會廣播許多事件。在該機制下，開發者註冊的各種外掛程式可以根據需要監聽與本身相關的事件。外掛程式捕捉事件後，可以在合適的時機透過
+          webpack 提供的 API 去改變編譯輸出結果。
+        </p>
+        <p>實際來說，webpack loader 和 webpack plugin 的差異如下。</p>
+        <ul>
+          <li>loader 其實就是一個轉換器，執行單純的檔案轉換操作。</li>
+          <li>
+            plugin 是一個擴充器，它豐富了 webpack 本身，在 loader 中的操作執行結束後，webpack
+            進行包裝時，webpack plugin 並不直接操作檔案，而是基於事件機制工作，監聽 webpack
+            包裝過程中的某些事件，見縫插針，修改包裝結果。
+          </li>
+        </ul>
+        <p>如何撰寫一個 webpack 外掛程式?</p>
+        <p>
+          首先，要清楚目前外掛程式要解決什麼問題，根據問題找到對應的鉤子事件，在相關事件中操作，改變輸出結果。這就需要清楚開發中都有哪些鉤子。下面列舉一些常用的鉤子，完整內容可以在官網檢視「compiler
+          曝露的所有事件鉤子」的相關內容。
+        </p>
+        <p>
+          compiler 物件曝露了和 webpack 整個生命週期相關的鉤子，可以透過以下方式對相關鉤子進行存取。
+        </p>
         <pre><code class="language-js">
-
+// 基本寫法
+compiler.hooks.someHook.tap(...)
         </code></pre>
+        <p>
+          舉例來說，如果希望 webpack 在讀取 entry 設定後就執行某項工作，就可以使用以下程式實現。
+        </p>
         <pre><code class="language-js">
-
+compiler.hooks.entryOption.tap(...)
         </code></pre>
+        <p>
+          這是因為名為 entry Option 的 SyneBailHook 類型的
+          hook，會監聽入口設定資訊執行完畢的事件，並在該事件觸發時執行插入的自訂操作。
+        </p>
+        <p>又如，如果希望在產生的資源輸出之前執行某個功能，則可以透過下面的程式來實現。</p>
         <pre><code class="language-js">
-
+compiler.hooks.emit.tap(...)
         </code></pre>
+        <p>
+          這是因為名為 emit 的 AsyncSeriesHook 須型的hook（夠子），會監聽資源輸出
+          前的時間節點，並基於此節點執行插入的自訂操作。
+        </p>
+        <p>一個自訂 webpack plugin 的骨架結構就是一個帶有 apply 方法的類別，範例如下。</p>
         <pre><code class="language-js">
 
         </code></pre>
