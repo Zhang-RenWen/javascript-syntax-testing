@@ -745,15 +745,20 @@ compiler.hooks.emit.tap(...)
         <p>一個自訂 webpack plugin 的骨架結構就是一個帶有 apply 方法的類別，範例如下。</p>
         <pre><code class="language-js">
 class CustomPlugin {
-constructor (options) 1
-this. options = options
-apply（compiler）1
-1/相關鉤子的註冊回呼
-compiler.hooks.someHook.tap （'CustomPlugin'，（）=>｛
-/ magic here...
-1/列印出此時compiler物件曝露的鉤子
-for （var hook of Object.keys （compiler.hooks））｛
-console. 10g (hook)
+  constructor (options) {
+    this.options = options
+  }
+  apply(compiler){
+    // 相關鉤子的註冊回呼
+    compiler.hooks.someHook.tap ('CustomPlugin',()=>{
+      // magic here...
+    })
+    // 列印出此時 compiler 物件曝露的鉤子
+    for (var hook of Object.keys(compiler.hooks)){
+      console.log(hook)
+    }
+  }
+}
 module.exports = customPlugin
         </code></pre>
         <pre><code class="language-js">
