@@ -798,9 +798,18 @@ module.exports = customPlugin
           中也存在非同步作業的情況，舉例來說，一些事件鉤子所執行的就是非同步作業。對應地，可以使用
           tapAsync 和 tapPromise 方法來處理非同步作業，程式如下。
         </p>
+        <h4>實戰案例</h4>
+        <p>接下來，撰寫一個簡單的 webpack plugin 。相信不少 React 開發者都了解，在使用 create-react-app 開發專案時，如果發生錯誤，就會出現 error overay 提
+示。下面就來開發一個類似的功能，程式如下。</p>
         <pre><code class="language-js">
-
+module.exports = {
+  // ...
+  plugins:[new ErrorOverlayPlugin()]
+  devtool: 'cheap-module-source-map', 
+  devServer: {}
+}
         </code></pre>
+        <p>借助 errorOverlay Middleware 中介軟體來進行錯誤攔截並展示，程式如下。</p>
         <pre><code class="language-js">
 
         </code></pre>
