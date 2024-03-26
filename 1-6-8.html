@@ -811,8 +811,47 @@ module.exports = {
         </code></pre>
         <p>借助 errorOverlay Middleware 中介軟體來進行錯誤攔截並展示，程式如下。</p>
         <pre><code class="language-js">
+import errorOverlayMiddleware from 'react-dev-utils/errorOverlayMiddleware'
+class ErrorOverlayPlugin {
+apply (compiler) {
+const className = this. constructor. name
+if(compiler.options.mode !== 'development') return
+compiler.hooks.entryOption.tap(className, (context, entry) => {
+const chunkPath = require. resolve('./entry')
+adjustEntry (entry, chunkPath)
+compiler hooks.afterResolvers.tap (className, (1 options 1) =
+if (options. devServer) {
+const originalBefore = options. devServer before
+option.devServer.before = （app, server）=>{
+if (originalBefore) {originalBefore (app, server)
+app.use(errorOverlayMiddleware ())
 
+function adjustEntry (entry, chunkPath) \ if (Array. isArray (entry)) (
+if (!entry. includes (chunkPath)) \
+entry.unshift (chunkPath)
+else
+Object.keys(entry).forEach (entryName = (
+entry [namel = adjustEntry (entry[entryName], chunkPath)
+｝
+W
+module. exports = ErrorOverlayPlugin
         </code></pre>
+        <p>簡單分析一下上面的程式。在非生產環境下不能開啟錯誤視窗，而應該直接傳回，這樣是為了避免影響線上體驗。</p>
+        <p>在 entryOption hook 中取得開發者設定的entry，並透過 adjustEntry 方法取得正確的入口模組，該方法支援將 entry 設定為 array 和 object 兩種形式。在 afterResolvers hook 中判斷開發者是否開啟 devServer，並透 app.use(errorOverlayMiddleware())對相關中介軟體進行註冊。</p>
+        <p>在實際生產環境中，webpack pulgin 的生態豐富多樣，一般來說，已有外掛程式就可以滿足大部分開發需求。如果團隊結合本身業務需求，自主撰寫webpack plugin，進而反哺生態，也是非常值得鼓勵的。</p>
+        <h4>webpack plugin 的開發重點</h4>
+        <p>在學習過程中會發現，webpack plugin 的開發重點在於對 compilation 和 compiler，以及兩者對應的鉤子事件的了解、運用。webpack 的事件機制基於rapable函數庫，因此想完全了解 webpack 事件和鉤子，就有必要學習 tapable 函數庫。</p>
+        <p>事實上，tapable 函數庫更加複雜且神通廣大，它除了可以提供同步和非同步類型的鉤子，還可以根據執行方式（串列/平行）衍生出Bail、Waterfall、Loop 多種類型。站在 tapable 等函數庫的肩膀上，webpack plugin 的開發更加靈活，可擴張性更強。</p>
+        <h3>webpack 和 Rollup</h3>
+        <p>Rollup 號稱下一代包裝方案，它的功能和特點非常突出，如下。</p>
+        <ul>
+          <li>依賴解析，包裝建置。</li>
+          <li>僅支援 ES Next 模組。</li>
+          <li>內建支援 tree shaking功能。</li>
+        </ul>
+        <p>如果說 webpack 是目前最流行的包裝方案，那麼Rollup 就是下一代包裝方案。既然同為包裝方案，那壓兩者有何區別呢？目前，業界對兩者的定位可以歸納為一句話：建函數庫用 Rollup，其他場景用 webpack。</p>
+        <p>從結果上看，使用 webpack包裝會產生比較多的冗餘碼，這對業務程式來說沒什麼問題，能確保較強的程式穩固性和語法邊原度，同時有利於確保相容性。也詳開發者會關心存式量多帶來的容錯問題，但衡量其優缺點和開發效率方面的對比值：webpack 始終是業務開發的首選：但對函數庫來說就不一樣了，幫相同的指令稿進行包裝，如果使用 Rollup，則複雜的模組容錯就會完全消失。Rollup 透過將程式順序引用同一個檔案來解決模組依賴問題，因此透過
+Rollup 來做拆包就會出現問題，原因是模組完全透明了。在複雜應用中，我們常常需要進行拆包，而在函數庫的撰寫中很少用到這樣的功能，因此使用 Rollup 對函數庫進行包裝是沒有問題的。</p>
         <pre><code class="language-js">
 
         </code></pre>
