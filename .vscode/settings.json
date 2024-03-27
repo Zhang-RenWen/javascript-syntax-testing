@@ -17,6 +17,7 @@
     "Bevacqua",
     "bien",
     "cacheable",
+    "cantonjs",
     "caracter",
     "codeline",
     "communiqué",
@@ -86,10 +87,12 @@
     "trailmix",
     "unmappped",
     "vcard",
+    "WECHAT",
     "Weixin",
     "WHATWG",
     "woofmark",
-    "w̅o̅r̅l̅d̅"
+    "w̅o̅r̅l̅d̅",
+    "wxml"
   ],
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
