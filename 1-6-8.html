@@ -799,8 +799,11 @@ module.exports = customPlugin
           tapAsync 和 tapPromise 方法來處理非同步作業，程式如下。
         </p>
         <h4>實戰案例</h4>
-        <p>接下來，撰寫一個簡單的 webpack plugin 。相信不少 React 開發者都了解，在使用 create-react-app 開發專案時，如果發生錯誤，就會出現 error overay 提
-示。下面就來開發一個類似的功能，程式如下。</p>
+        <p>
+          接下來，撰寫一個簡單的 webpack plugin 。相信不少 React 開發者都了解，在使用
+          create-react-app 開發專案時，如果發生錯誤，就會出現 error overay 提
+          示。下面就來開發一個類似的功能，程式如下。
+        </p>
         <pre><code class="language-js">
 module.exports = {
   // ...
@@ -813,35 +816,66 @@ module.exports = {
         <pre><code class="language-js">
 import errorOverlayMiddleware from 'react-dev-utils/errorOverlayMiddleware'
 class ErrorOverlayPlugin {
-apply (compiler) {
-const className = this. constructor. name
-if(compiler.options.mode !== 'development') return
-compiler.hooks.entryOption.tap(className, (context, entry) => {
-const chunkPath = require. resolve('./entry')
-adjustEntry (entry, chunkPath)
-compiler hooks.afterResolvers.tap (className, (1 options 1) =
-if (options. devServer) {
-const originalBefore = options. devServer before
-option.devServer.before = （app, server）=>{
-if (originalBefore) {originalBefore (app, server)
-app.use(errorOverlayMiddleware ())
+  apply(compiler) {
+    const className = this.constructor.name
+    if(compiler.options.mode !== 'development') return
+    compiler.hooks.entryOption.tap(className, (context, entry) => {
+      const chunkPath = require.resolve('./entry')
+      adjustEntry(entry, chunkPath)
+    })
+    compiler.hooks.afterResolvers.tap(className, ({options }) =>{
+      if (options.devServer) {
+        const originalBefore = options.devServer.before
+        option.devServer.before = (app, server)=>{
+          if (originalBefore) {
+            originalBefore (app, server)
+          }
+          app.use(errorOverlayMiddleware ())
+        }
+      }
+    })
+  }
+}
 
-function adjustEntry (entry, chunkPath) \ if (Array. isArray (entry)) (
-if (!entry. includes (chunkPath)) \
-entry.unshift (chunkPath)
-else
-Object.keys(entry).forEach (entryName = (
-entry [namel = adjustEntry (entry[entryName], chunkPath)
-｝
-W
-module. exports = ErrorOverlayPlugin
+function adjustEntry (entry, chunkPath){ 
+  if (Array.isArray(entry)) {
+    if (!entry.includes(chunkPath)) {
+      entry.unshift(chunkPath)
+    }
+    else{
+      Object.keys(entry).forEach(entryName => {
+        entry[name] = adjustEntry(entry[entryName], chunkPath)
+      })
+    }
+  }
+}
+module.exports = ErrorOverlayPlugin
         </code></pre>
-        <p>簡單分析一下上面的程式。在非生產環境下不能開啟錯誤視窗，而應該直接傳回，這樣是為了避免影響線上體驗。</p>
-        <p>在 entryOption hook 中取得開發者設定的entry，並透過 adjustEntry 方法取得正確的入口模組，該方法支援將 entry 設定為 array 和 object 兩種形式。在 afterResolvers hook 中判斷開發者是否開啟 devServer，並透 app.use(errorOverlayMiddleware())對相關中介軟體進行註冊。</p>
-        <p>在實際生產環境中，webpack pulgin 的生態豐富多樣，一般來說，已有外掛程式就可以滿足大部分開發需求。如果團隊結合本身業務需求，自主撰寫webpack plugin，進而反哺生態，也是非常值得鼓勵的。</p>
+        <p>
+          簡單分析一下上面的程式。在非生產環境下不能開啟錯誤視窗，而應該直接傳回，這樣是為了避免影響線上體驗。
+        </p>
+        <p>
+          在 entryOption hook 中取得開發者設定的entry，並透過 adjustEntry
+          方法取得正確的入口模組，該方法支援將 entry 設定為 array 和 object 兩種形式。在
+          afterResolvers hook 中判斷開發者是否開啟 devServer，並透
+          app.use(errorOverlayMiddleware())對相關中介軟體進行註冊。
+        </p>
+        <p>
+          在實際生產環境中，webpack plugin
+          的生態豐富多樣，一般來說，已有外掛程式就可以滿足大部分開發需求。如果團隊結合本身業務需求，自主撰寫
+          webpack plugin，進而反哺生態，也是非常值得鼓勵的。
+        </p>
         <h4>webpack plugin 的開發重點</h4>
-        <p>在學習過程中會發現，webpack plugin 的開發重點在於對 compilation 和 compiler，以及兩者對應的鉤子事件的了解、運用。webpack 的事件機制基於rapable函數庫，因此想完全了解 webpack 事件和鉤子，就有必要學習 tapable 函數庫。</p>
-        <p>事實上，tapable 函數庫更加複雜且神通廣大，它除了可以提供同步和非同步類型的鉤子，還可以根據執行方式（串列/平行）衍生出Bail、Waterfall、Loop 多種類型。站在 tapable 等函數庫的肩膀上，webpack plugin 的開發更加靈活，可擴張性更強。</p>
+        <p>
+          在學習過程中會發現，webpack plugin 的開發重點在於對 compilation 和
+          compiler，以及兩者對應的鉤子事件的了解、運用。webpack 的事件機制基於 tapable
+          函數庫，因此想完全了解 webpack 事件和鉤子，就有必要學習 tapable 函數庫。
+        </p>
+        <p>
+          事實上，tapable
+          函數庫更加複雜且神通廣大，它除了可以提供同步和非同步類型的鉤子，還可以根據執行方式（串列/平行）衍生出Bail、Waterfall、Loop
+          多種類型。站在 tapable 等函數庫的肩膀上，webpack plugin 的開發更加靈活，可擴張性更強。
+        </p>
         <h3>webpack 和 Rollup</h3>
         <p>Rollup 號稱下一代包裝方案，它的功能和特點非常突出，如下。</p>
         <ul>
@@ -849,33 +883,156 @@ module. exports = ErrorOverlayPlugin
           <li>僅支援 ES Next 模組。</li>
           <li>內建支援 tree shaking功能。</li>
         </ul>
-        <p>如果說 webpack 是目前最流行的包裝方案，那麼Rollup 就是下一代包裝方案。既然同為包裝方案，那壓兩者有何區別呢？目前，業界對兩者的定位可以歸納為一句話：建函數庫用 Rollup，其他場景用 webpack。</p>
-        <p>從結果上看，使用 webpack包裝會產生比較多的冗餘碼，這對業務程式來說沒什麼問題，能確保較強的程式穩固性和語法邊原度，同時有利於確保相容性。也詳開發者會關心存式量多帶來的容錯問題，但衡量其優缺點和開發效率方面的對比值：webpack 始終是業務開發的首選：但對函數庫來說就不一樣了，幫相同的指令稿進行包裝，如果使用 Rollup，則複雜的模組容錯就會完全消失。Rollup 透過將程式順序引用同一個檔案來解決模組依賴問題，因此透過
-Rollup 來做拆包就會出現問題，原因是模組完全透明了。在複雜應用中，我們常常需要進行拆包，而在函數庫的撰寫中很少用到這樣的功能，因此使用 Rollup 對函數庫進行包裝是沒有問題的。</p>
+        <p>
+          如果說 webpack 是目前最流行的包裝方案，那麼 Rollup
+          就是下一代包裝方案。既然同為包裝方案，那壓兩者有何區別呢？目前，業界對兩者的定位可以歸納為一句話：建函數庫用
+          Rollup，其他場景用 webpack。
+        </p>
+        <p>
+          從結果上看，使用
+          webpack包裝會產生比較多的冗餘碼，這對業務程式來說沒什麼問題，能確保較強的程式穩固性和語法邊原度，同時有利於確保相容性。也詳開發者會關心存式量多帶來的容錯問題，但衡量其優缺點和開發效率方面的對比值：webpack
+          始終是業務開發的首選：但對函數庫來說就不一樣了，幫相同的指令稿進行包裝，如果使用
+          Rollup，則複雜的模組容錯就會完全消失。Rollup
+          透過將程式順序引用同一個檔案來解決模組依賴問題，因此透過 Rollup
+          來做拆包就會出現問題，原因是模組完全透明了。在複雜應用中，我們常常需要進行拆包，而在函數庫的撰寫中很少用到這樣的功能，因此使用
+          Rollup 對函數庫進行包裝是沒有問題的。
+        </p>
+        <p>
+          當然，「建函數庫用 Rollup，其他場景用
+          webpack」不是一個絕對的原則。如果你需要進行程式拆分（Code
+          Splitting），或有很多靜態資源需要處理，或建置的專案需要引用很多 CommonJS
+          標準的模組，又或需要獲得相對更大的社區的支援，那麼 webpack 就是不錯的選擇。
+        </p>
+        <p>
+          如果你的程式庫是以 ES Next
+          模組為基礎的，而且你希望自己寫的程式能夠被其他人直接使用，那麼，你需要的包裝工具可能就是
+          Rollup。
+        </p>
+        <p>
+          我們借用上一節中的程式，來看一看經過 Rollup 編譯之後的程式會是什麼樣子的。 main.js
+          檔案中的內容如下。
+        </p>
         <pre><code class="language-js">
-
+import sayHello from './hello.js' 
+console.log(sayHello('lucas'))
         </code></pre>
+        <p>hello.js檔案中的內容如下。</p>
         <pre><code class="language-js">
-
+const sayHello = name => `hello ${name}`
+export default sayHello
         </code></pre>
+        <p>編譯結果，如下。</p>
         <pre><code class="language-js">
-
+const sayHello = name = `hello ${name}`
+console.log(sayHello('lucas'))
         </code></pre>
+        <p>
+          這與 webpack 的打包產出結果形成了鮮明的比較。此外，這種包裝方式天然支援 tree
+          shaking。下面，我們改寫上例，加入一個沒有用到的 sayHi 函數。
+        </p>
         <pre><code class="language-js">
-
+// main.js 檔案中的內容如下。
+import { sayHello }  from './hello. js'
+console.log(sayHello('lucas'))
         </code></pre>
+        <p>向 hello.js 檔案中加入以下內容。</p>
         <pre><code class="language-js">
-
+export const sayHi = name => `hi ${name}`
+export const sayHello = name => `hello ${name}`
         </code></pre>
+        <p>包裝結果如下。</p>
         <pre><code class="language-js">
+'use strict';
 
+const sayHello = name => `hello ${name}`;
+console.log(sayHello('lucas'));
         </code></pre>
+        <p>透過順序引用依賴，包裝結果非常簡單、清晰，並且自動做到了 tree shaking</p>
+        <h3>綜合運用</h3>
+        <p>綜合運用這些知識到底能解決哪些問題?</p>
+        <p>
+          2018
+          年號稱小程式元年，以微信小程式為首，百度智慧小程式、支付寶小程式、頭條小程式紛紛入局。作為開發人員應該注意到，由於各平台小程式的開發語法和技術方案不盡相同，所以小程式在帶來無限開發紅利的同時，也帶來了極大的多端開發成本。
+        </p>
+        <p>
+          如果團隊能夠實現這樣一個鷹架—以微信小程式為基礎將微信小程式的程式平滑轉為各端小程式，那豈不是會大幅加強開發效率？
+        </p>
+        <p>
+          可是在技術方案上應該如何實現呢？受 cantonjs
+          函數庫的啟發，我們團隊打造了一款跨多端的小程式鷹架，其基本原理正是以 webpack
+          開發架構為基礎的；而對於後信小程式的標準化包裝，以及不同平台的差異化編譯。則主要依靠自訂實現
+          webpack loader 和 webpack plugin 來處理。
+        </p>
+        <p>
+          在這套鷹架的基礎上，開發者可以選擇任何一套小程式原始程式（基於微信小程式/
+          支付寶小程式/百度小程式）來開發多端小程式。鷹架支援自動編譯 wxml 檔案（微信小程式）為 axml
+          檔案（支付寶小程式）或 swan 檔案（百度小程式），能夠轉換基礎平台API，舉例來說，將
+          wx（微信小程式核心物件）轉為 my（支付寶小程式核心物件）或
+          swan（百度小程式核心物件）。對於個別介面在平台上的天生差異，開發者可以透過 __WECHAT__
+          、__ALIPAY__ 或 __BAIDU__ 來動態處理。
+        </p>
+        <p>
+          至於 __WECHAT__ 、 __ALIPAY__ 或 __BAIDU__ 全域變數的註冊，可以 透過 DefinePlugin 這個
+          webpack 的內建外掛程式在 webpack 編譯階段進行。 DefinePlugin 的程式如下。
+        </p>
         <pre><code class="language-js">
-
+new webpack.DefinePlugin({
+  // Definitions...
+})
         </code></pre>
+        <p>
+          透過 webpack loader 可以使 webpack 能編譯或處理 *.wxml 上參考的檔案，並 將原 App 中的 API
+          進行轉換，使用方式與正常的 webpack 設定 loader 完全相同。實際實用案例的程式如下。
+        </p>
         <pre><code class="language-js">
-
+{
+  test: /\.wxml$/,
+  include: /src/, 
+  use:[
+    {
+      loader: 'file-loader'
+      options: {
+        name: '[name].[ext]',
+        useRelativePath: true,
+        context: resolve('src'),
+      },
+    },
+    {
+      loader:'mini-program-loader'/
+      options: {
+        root: resolve('src'),
+        enforceRelativePath: true,
+      }
+    }
+  ]
+}
         </code></pre>
+        <p>
+          注意，宣告 loader 的循序串列明，要先透過 mini-program-loader 進行處理，再將其結果交給
+          file-loader 處理。mini-program-loader 的實現並不複雜，可以先使用 sax.js 解析 wxml （XML
+          風格）檔案，然後進行 API 轉換實現。sax.js 是解析 XML 或 HTML
+          的基礎函數庫，正好適用於各端小程式的主文件檔案 (wxml 、swan、axml) °
+        </p>
+        <p>
+          下面透過 webpack-plugin 外掛程式實現對 /app.js 入口檔案的自動分析，智慧包裝，同時抹平 API
+          之間的差異。
+        </p>
+        <pre><code class="language-js">
+import MiniProgramWebpackPlugin from 'mini-program-webpack-plugin'
+
+export default {
+  // ...configs,
+  plugins: [
+    // ...other,
+    new MiniProgramWebpackPlugin(options)
+  ]
+}
+        </code></pre>
+        <p>
+          在撰寫的 loader 和 plugin 的基礎上，實現的這個鷹架可以透過 script
+          指令稿啟動不同目標的小程式平台編譯工具：yarn start、yarn start:alipay、yarn
+          start:baidu。同時，開發者可以根據本身專案的特點，在鷹架中增加 prettier 和l int 標準等。
+        </p>
       </article>
     </main>
   </body>
