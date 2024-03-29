@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-6-9">1-6-9 前端專案化背後的專案組織設計</h2>
+        <h3>大型前端專案的組織設計</h3>
+        <p>
+          隨著業務複雜度的直線上升，前端專案不管是從程式量上，還是從依賴關係上都呈爆炸式增長。同時，由於團隊中一般不只有一個業務專案，所以「多個專案之間如何配合」、「如何維護相互關係」、「公司自己的公共函數庫版本如何管理」這些問題隨著業務擴充紛紛浮出水面。一名合格的進階前端工程師，必需能在巨觀上妥善處理這些問題。
+        </p>
+        <p>
+          當然，不是每個開發者都有機會接觸專案設計。如果讀者沒有面對過上述問題，也許並不容易了解這些問題究竟表示什麼。舉個實例，團隊主業務專案名稱為
+          App-project ，這個倉庫依賴了元件函數庫 Component-lib，因此 App-Project 專案的 package.json
+          檔案中會有類似下面的程式。
+        </p>
+        <pre><code class="language-js">
+{
+  "name": "App-project",
+  "version": "1.0.0",
+  "description": "This is our main app project",
+  "scripts": {
+    "test": "echo \\"Error: no test specified\\" && exit 1"
+  },
+  "main": "index.js",
+  "dependencies":{
+    "Component-lib":"^1.0.0"
+  }
+}
+        </code></pre>
+        <p>
+          針對以上情況，產品經理提出要更改 Component-lib 元件函數庫中的 modal
+          元件樣式及互動行為，那麼作為開發者，我們需要切換到 Component.lib
+          專案，進行相關需求開發，開發完畢後進行測試。這裡的測試包含 Component.lib
+          中的單元測試，當然也包含在實際專案中進行的效果驗收。為了方便偵錯，有經驗的開發者也許會使用
+          npm link/yarn link 來開發和偵錯效果。當確認一切沒問題後，我們還需要發佈 Component-lib
+          專案的新版本，並將 App-project 專案中的 Component-lib 版本提升為
+          1.0.1。所有這些都順利完成後，才能在 App-project 專案中進行升級。
+        </p>
+        <pre><code class="language-js">
+{
+  // ...
+  "dependencies": {
+    "Component-lib": "^1.0.1"
+  } 
+}
+        </code></pre>
+        <p>
+          這個過程已經比較複雜了。中間環節出現任何紕漏都要重複上述所有步驟。另外，這裡只存在單一依賴關係，現實中的
+          App-project 不可能只依賴
+          Component-lib。這種專案管理的方式無疑是低效且痛苦的。那麼在專案設計哲學上，有更好的方式嗎？答案是一定的。下面就對管理組織程式的兩種主要方式（monorepo
+          和 multirepo）説明。
+        </p>
+        <h4>monorepo 和 multirepo</h4>
+        <p>
+          multirepo，顧名思義，就是將應用按照模組分別在不同的倉庫中進行管理，即上述 App-project 和
+          Component-lib 專案的管理模式；而 monorepo
+          就是將應用中所有的模組一股腦兒全部放在同一個專案中，這樣自然就完全避開了前文描述的困擾，不需要單獨發送包裝、測試，且所有程式都在一個專案中管理，一同部署上線，能夠在開發階段更早地複現
+          bug，曝露問題。
+        </p>
+        <p>
+          這就是專案釋式在組線上的不同哲學：一種宣導分而治之，一種宣導集中管理。究竟是把雞蛋放在同一個籃子裡，還是宣導多元化，這就要根據團隊的風格及面臨的實際場景進行選型了。
+        </p>
+        <p>下面試著從 multirepo 和 monorepo 兩種處理方式的弊端說起，multirepo 存在以下問題。</p>
+        <ul>
+          <li>開發偵錯及版本更新效率不佳。</li>
+          <li>
+            團隊技術選型分散，不同函數庫的實現風格可能存在較大差異（例如有的函數庫依賴 Vue，有的依賴
+            React）。
+          </li>
+          <li>changelog 整理困難，Issues 管理混亂（對開放原始碼函數庫來說）。</li>
+        </ul>
+        <p>而 monorepo 缺點也非常明顯，實際如下。</p>
+        <ul>
+          <li>庫體積超大，目錄結構複雜度上升。</li>
+          <li>需要使用維護 monorepo 的工具，這就表示學習成本比較高。</li>
+        </ul>
+        <p>清楚了不同專案組織管理的缺點，再來看一下社區上的經典選型案例。</p>
+        <p>
+          Babel 和 React 都是典型的 monorepo，其 Issues 和 Pull requests
+          都集中在唯一的專案中，changelog 可以簡單地從一份 commits 列表中整理出來。先來看一下 React
+          專案倉庫，從如下所示的目錄結構中即可看出其強烈的 monorepo 風格。
+        </p>
+        <pre><code class="language-js">
+react-16.2.0/ 
+  packages/ 
+  react/ 
+  react-art/
+  react-.../
+        </code></pre>
+        <p>
+          因此：react和 react-dom 在 npm 上是兩個不同的函數庫，它們只不過是在 React 專案中透過
+          monorepo 的方式進行管理的。至於為什麼 react 和 react-dom
+          是兩個套件，讀者可以自行思考一下。
+        </p>
+        <h3>使用 Lerna 實現 monorepo</h3>
+        <p>
+          Lema 是Babel 管理本身專案的開放原始碼工具：這網對 Lema 的定位非常商單直接：A tool for
+          managing JavaScript projects with multiple
+          packages.（Lema是一個管理多套件共存問題的JavaScript 專案工具。）
+        </p>
+        <p>來建立一個簡單的 demo。首先安裝依賴，並建立專案，程式如下。</p>
+        <pre><code class="language-bash">
+mkir new-monorepo & cd new-monorepo
+
+npm init -Y
+
+#有需要的話要執行sudo
+npm i -g lerna
+
+git init new-monorepo 
+
+lerna init
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
