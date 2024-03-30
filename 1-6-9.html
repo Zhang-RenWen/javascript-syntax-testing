@@ -124,9 +124,9 @@ react-16.2.0/
         </p>
         <h3>使用 Lerna 實現 monorepo</h3>
         <p>
-          Lema 是Babel 管理本身專案的開放原始碼工具：這網對 Lema 的定位非常商單直接：A tool for
+          Lerna 是Babel 管理本身專案的開放原始碼工具：這網對 Lerna 的定位非常商單直接：A tool for
           managing JavaScript projects with multiple
-          packages.（Lema是一個管理多套件共存問題的JavaScript 專案工具。）
+          packages.（Lerna是一個管理多套件共存問題的JavaScript 專案工具。）
         </p>
         <p>來建立一個簡單的 demo。首先安裝依賴，並建立專案，程式如下。</p>
         <pre><code class="language-bash">
@@ -141,11 +141,28 @@ git init new-monorepo
 
 lerna init
         </code></pre>
+        <p>建立成功後，Lerna 會在 new-monorepo 專案下自動增加以下3個檔案。</p>
+<ul>
+  <li>packages</li>
+  <li>lerna.json</li>
+  <li>package.json</li>
+</ul>
+<p>透過以下程式增加第一個專案 module-1。</p>
         <pre><code class="language-js">
-
+cd packages 
+mkdir module-1
+cd module-1
+npm init -y
         </code></pre>
+        <p>此時，讀者可以自行觀察 new-monorepo 專案下的目錄結構，如下所示。</p>
         <pre><code class="language-js">
-
+packages/ 
+  module-1/
+    package.json
+  module-2/
+    package.json
+  module-3/
+    package.json
         </code></pre>
         <pre><code class="language-js">
 
