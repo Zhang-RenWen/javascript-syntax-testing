@@ -164,18 +164,67 @@ packages/
   module-3/
     package.json
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>透過以下程式增加第一個專案 module-1。</p>
+        <pre><code class="language-bash">
+cd packages 
+mkdir module-1
+cd module-1
+npm init -y
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>
+          這樣便在 ./packages 目錄下新增了第一個專案 module-1，並在 module-1
+          中增加了一些依賴，使模擬的場景更加真實。接下來，用同樣的方式建立 module-2 及 module-3 。
+        </p>
+        <p>此時，可以自行觀察 new-monorepo 專案下的目錄結構，如下所示。</p>
+        <pre><code class="language-bash">
+packages/ 
+  module-1/
+    package.json
+  module-2/
+    package.json
+  module-3/
+    package.json
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>然後，退到根目錄下安裝依賴。</p>
+        <pre><code class="language-bash">
+cd..
+lerna bootstrap
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>
+          關於該指令的作用，官網上的直述為：Bootstrap the packages in the current Lerna repo.
+          Installs all of their dependencies and links any cross-dependencies.
+        </p>
+        <p>
+          也就是說，假設我們在 module-1 專案中增加了依賴 module-2，那麼執行 lemna bootstrap
+          指令後，就會在 module-1 專案的 node_modules 目錄下建立軟連結直接指向 module-2
+          目錄。也就是說，lerna bootstrap
+          指令會建立整個專案內子應用模組之間的依賴關係，這種建立方式不是透過硬安裝，而是透過軟連結指向相關依賴的。
+        </p>
+        <p>在正確連接了 Git 遠端倉庫後，就可以透過以下指令來發佈專案了。</p>
+        <pre><code class="language-bash">
+lerna publish
         </code></pre>
+        <p>
+          這行指令可以將各個 package 一步步發佈到 npm 中。Lerna 還可以支援自動產生 changelog
+          等功能。
+        </p>
+        <p>至此，你可能覺得 Lerna 還挺簡單。但其實裡面還有更多學問，如 Lerna 支援下面兩種模式。</p>
+        <ul>
+          <li>1.Fixed/Locked 模式</li>
+        </ul>
+        <p>
+          Babel便採用了這樣的模式。這個模式的特點是，開發者執行 lema publish 指令後，Lema 會在
+          lemna,json
+          中找到指定的版本編號。如果這一次發佈包含某個專案的更新，那麼就會自動更新版本編號。對於各個專案相連結的場景。
+        </p>
+        <ul>
+          <li>2.Independent 模式</li>
+        </ul>
+        <p>
+          下同於 FixedlLocked 模式，在 Independent
+          模式下，各個專案相互獨立。開發首總要獨立管理多個套件（package）的版本更新。也就是說，我們可以商際到更新每個套件的版本。每次發佈時，Lema
+          都會配合 Git 檢查相關套件權案的變動，只發佈有改動的套件。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
