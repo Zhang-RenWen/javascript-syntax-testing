@@ -213,16 +213,16 @@ lerna publish
           <li>1.Fixed/Locked 模式</li>
         </ul>
         <p>
-          Babel便採用了這樣的模式。這個模式的特點是，開發者執行 lema publish 指令後，Lema 會在
-          lemna,json
+          Babel 便採用了這樣的模式。這個模式的特點是，開發者執行 Lerna publish 指令後， Lerna 會在
+          lerna.json
           中找到指定的版本編號。如果這一次發佈包含某個專案的更新，那麼就會自動更新版本編號。對於各個專案相連結的場景。
         </p>
         <ul>
           <li>2.Independent 模式</li>
         </ul>
         <p>
-          下同於 FixedlLocked 模式，在 Independent
-          模式下，各個專案相互獨立。開發首總要獨立管理多個套件（package）的版本更新。也就是說，我們可以商際到更新每個套件的版本。每次發佈時，Lema
+          下同於 Fixed/Locked 模式，在 Independent
+          模式下，各個專案相互獨立。開發首總要獨立管理多個套件（package）的版本更新。也就是說，我們可以實際到更新每個套件的版本。每次發佈時，Lerna
           都會配合 Git 檢查相關套件權案的變動，只發佈有改動的套件。
         </p>
         <pre><code class="language-js">
