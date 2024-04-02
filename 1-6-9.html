@@ -213,39 +213,105 @@ lerna publish
           <li>1.Fixed/Locked 模式</li>
         </ul>
         <p>
-          Babel便採用了這樣的模式。這個模式的特點是，開發者執行 lema publish 指令後，Lema 會在
-          lemna,json
+          Babel 便採用了這樣的模式。這個模式的特點是，開發者執行 Lerna publish 指令後， Lerna 會在
+          lerna.json
           中找到指定的版本編號。如果這一次發佈包含某個專案的更新，那麼就會自動更新版本編號。對於各個專案相連結的場景。
         </p>
         <ul>
           <li>2.Independent 模式</li>
         </ul>
         <p>
-          下同於 FixedlLocked 模式，在 Independent
-          模式下，各個專案相互獨立。開發首總要獨立管理多個套件（package）的版本更新。也就是說，我們可以商際到更新每個套件的版本。每次發佈時，Lema
+          下同於 Fixed/Locked 模式，在 Independent
+          模式下，各個專案相互獨立。開發首總要獨立管理多個套件（package）的版本更新。也就是說，我們可以實際到更新每個套件的版本。每次發佈時，Lerna
           都會配合 Git 檢查相關套件權案的變動，只發佈有改動的套件。
         </p>
-        <pre><code class="language-js">
-
+        <p>開發者可以根據團隊需求進行模式選擇。</p>
+        <p>我們也可以使用 Lerna 安裝依賴，該指令可以在專案下的任何資料夾中執行。</p>
+        <pre><code class="language-bash">
+lerna add dependencyName
         </code></pre>
+        <p>Lerna 預設支援 hoist 選項，即預設在 lerna.json 檔案中有以下設定內容。</p>
         <pre><code class="language-js">
-
+{bootstrap: { hoist: true }}
         </code></pre>
+        <p>
+          這樣一來，專案中所有套件下的 package.json 檔案中都會出現 dependencyName
+          套件宣告敘述，內容如下。
+        </p>
         <pre><code class="language-js">
-
+packages/
+module-1/
+  package.json(+ dependencyName)
+  node_modules
+module-2/
+  package.json(+ dependencyName)
+  node_modules
+module-3/
+  package.json(+ dependencyName)
+  node_modules
+node_modules
+  dependencyName
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>
+          這種方式會在父資料夾的 node_modules 中高效安裝 dependencyName 依賴 (Node.js
+          會向上在祖先資料夾中尋找依賴) 。對於未開啟 hoist 的情況，執行 lerna add
+          後需要執行以下指令。
+        </p>
+        <pre><code class="language-bash">
+lerna bootstrap --hoist
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>
+          如果想有選擇地升級某個依賴，例如只想為 module-1 升級 dependencyName 依賴的版本，則可以使用
+          scope 參數，如下所示。
+        </p>
+        <pre><code class="language-bash">
+lerna add dependencyName --scope-module-1
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>
+          這時：module-1 資料夾下會有一個 node_modules 檔案，其中包含了 dependencyName
+          依賴的最新版本。
+        </p>
+        <h3>分析一個專案遷移案例</h3>
+        <p>
+          接下來會選取一個正在線上執行的 multirepo 專案，來示範使用 Lerna 將其選移到 monorepo
+          的過程。
+        </p>
+        <h4>背景介紹</h4>
+        <p>
+          該專案使用 TypeScript 和 Rollup 工具進行開發，並使用 TypeDoc 產生標準化文件。在使用 Lerna
+          進行 monorepo
+          化之前，這樣的技術方案帶來的困擾顯而易見，下面就來分析一下目前技術堆疊的弊端，以及
+          monorepo化能為這些專案帶來哪些好處。
+        </p>
+        <ul>
+          <li>
+            如果 @mitter-io/core 中出現任何一處改動，其他所有的套件就都需要升級到 @mitter-io/core
+            最新版本，不管這些改動是為了發佈新特性還是為了修復問題，所要花費的成本都比較大。
+          </li>
+          <li>如果這些套件都能共同分享版本，那麼帶來的收益也是非常大的。</li>
+          <li>
+            對這些不同的倉庫來說，由於技術堆疊相似，一些建置指令稿大致相同，部署流程也都一致，所以如果能夠將這些指令稿統一抽象，也將帶來便利。
+          </li>
+        </ul>
+        <h4>遷移步驟</h4>
+        <p>使用 Lerna 建置 monorepo 專案，指令如下。</p>
+        <pre><code class="language-bash">
+mkdir my-new-monorepo & cd my-new-monorepo 
+git init . 
+lerna init
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>
+          不同於之前的範例，這次是在新的專案 my-new-monorepo 中匯入已有專案 my-single-repo-package-1
+          並完成 my-new-monorepo 的 monorepo 化設計，因此可以使用以下指令。
+        </p>
+        <pre><code class="language-bash">
+lerna import ~/projects/my-single-repo-package-1 --flatten
         </code></pre>
+        <p>
+          這行指令不僅可以匯入專案，同時會將已有專案中的 commit 記錄一併搬遷過來。可以放心地在新
+          monorepo 倉庫中使用 git blame 指令來進行回溯。
+        </p>
+        <p></p>
         <pre><code class="language-js">
 
         </code></pre>
