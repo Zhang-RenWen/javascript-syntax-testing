@@ -365,15 +365,57 @@ npm_package_version = 0.6.28
 npm_package_repository_type = git
         </code></pre>
         <h3>流程最佳化</h3>
-        <pre><code class="language-js">
-
+        <p>
+          團隊中的正常開發流程是，每個程式設計師新增一個git 分支，透過程式審核後進行合併。整套流程在
+          monorepo 架構下非常清晰，下面來整理一下。
+        </p>
+        <ul>
+          <li>開發完成後，我們計畫進行版本升級，只需要執行 lerna version 指令。</li>
+          <li>Lerna 會提供互動式 prompt，對下一版本進行序號升級。</li>
+        </ul>
+        <pre><code class="language-bash">
+lerna version --force-publish 
+lerna notice cli v3.8.1
+lerna info current version 0.6.2
+lerna info Looking for changed packages since v0.6.2 
+? Select a new version (currently 0.6.2) (Use arrow keys)
+Patch (0.6.3)
+Minor (0.7.0)
+Major (1.0.0)
+Prepatch (0.6.3-alpha. 0)
+Preminor (0.7.0-alpha. O)
+Premajor (1.0.0-alpha. 0)
+Custom Prerelease
+Custom Version
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>
+          選定新版本之後，Lerna 會自動改變每個套件的版本編號，在遠端倉庫中建立一個新的
+          tag，並將所有的改動發送到 GitLab 實例中。
+        </p>
+        <p>接下來，透過 CI （Continuous Integration ，持續整合）進行建置實際上只為要以下兩步。</p>
+        <ul>
+          <li>build，即建置。</li>
+          <li>publish，即發佈。</li>
+        </ul>
+        <p>建置實際上就是執行以下程式。</p>
+        <pre><code class="language-bash">
+lerna bootstrap 
+lerna run build
         </code></pre>
-        <pre><code class="language-js">
-
+        <p>而發佈也不複雜，只需要執行以下程式即可。</p>
+        <pre><code class="language-bash">
+git checkout master 
+lerna bootstrap 
+git reset --hard 
+lerna publish from-package --yes
         </code></pre>
+        <p>
+          注意，這裡使用了 lerna publish from-package，而非簡單的 lerna
+          publish。因為開發者在本機已經執行了 lerna version，這時再執行 lerna publish
+          會收到「目前放本已經發佈」的提示。
+        </p>
+        <p>而 from- package參數會告訴 Lerna 發佈所有非目前 npm package 版本的專案。</p>
+        <h3>依賴關係簡介</h3>
         <pre><code class="language-js">
 
         </code></pre>
