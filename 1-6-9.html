@@ -311,22 +311,60 @@ lerna import ~/projects/my-single-repo-package-1 --flatten
           這行指令不僅可以匯入專案，同時會將已有專案中的 commit 記錄一併搬遷過來。可以放心地在新
           monorepo 倉庫中使用 git blame 指令來進行回溯。
         </p>
-        <p></p>
+        <p>如此一來，便可以獲得如下所示的專案結構。</p>
         <pre><code class="language-js">
-
+packages/
+  core/
+  models/
+  node/
+  react-native/
+  web/
+lerna.json
+package.json
         </code></pre>
+        <p>接下來，執行以下程式進行依賴維護和發佈。</p>
+        <pre><code class="language-bash">
+lerna bootstrap 
+lerna publish
+        </code></pre>
+        <p>
+          注意，並不是每次都需要執行 lerna
+          bootstrap，在第一次切換到專案，安裝所有依賴時執行一次即可。
+        </p>
+        <p>對每一個 package 來說，其 package.json 檔案中都有如下所示的 npm script 宣告。</p>
         <pre><code class="language-js">
-
+"scripts": {
+  "prepare": "yarn run build",
+  "prepublishOnly": "./../../ci-scripts/publish-tsdocs.sh"
+  "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc
+  -out docs --target es6 --theme minimal --mode file src"
+}
         </code></pre>
+        <p>
+          受益於 monorepo，所有專案得以集中管理在一個倉庫中，這樣我們便可以將所有 package 中公共的
+          npm 指令稿移到 ./scripts 檔案中，且可以在單一 monorepo
+          專案的不同套件之間共用建置指令稿了。
+        </p>
+        <p>
+          執行公共指令搞時，有時侯有必要知道目前執行的專案資訊，npm 能夠讀取到每個 package.json
+          檔案中的資訊，因此，可以在每個套件的 package.json 的檔案中增加以下資訊。
+        </p>
         <pre><code class="language-js">
-
+{
+  "name": "@mitter-io/core",
+  "version": "0.6.28"
+  "repository": {
+    "type": "git"
+  }
+}
         </code></pre>
+        <p>之後，以下變數就都可以被 npm script 使用了。</p>
         <pre><code class="language-js">
-
+npm_package_name = @mitter-io/core
+npm_package_version = 0.6.28
+npm_package_repository_type = git
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <h3>流程最佳化</h3>
         <pre><code class="language-js">
 
         </code></pre>
