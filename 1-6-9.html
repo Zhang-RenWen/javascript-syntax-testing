@@ -365,36 +365,332 @@ npm_package_version = 0.6.28
 npm_package_repository_type = git
         </code></pre>
         <h3>流程最佳化</h3>
+        <p>
+          團隊中的正常開發流程是，每個程式設計師新增一個git 分支，透過程式審核後進行合併。整套流程在
+          monorepo 架構下非常清晰，下面來整理一下。
+        </p>
+        <ul>
+          <li>開發完成後，我們計畫進行版本升級，只需要執行 lerna version 指令。</li>
+          <li>Lerna 會提供互動式 prompt，對下一版本進行序號升級。</li>
+        </ul>
+        <pre><code class="language-bash">
+lerna version --force-publish 
+lerna notice cli v3.8.1
+lerna info current version 0.6.2
+lerna info Looking for changed packages since v0.6.2 
+? Select a new version (currently 0.6.2) (Use arrow keys)
+Patch (0.6.3)
+Minor (0.7.0)
+Major (1.0.0)
+Prepatch (0.6.3-alpha. 0)
+Preminor (0.7.0-alpha. O)
+Premajor (1.0.0-alpha. 0)
+Custom Prerelease
+Custom Version
+        </code></pre>
+        <p>
+          選定新版本之後，Lerna 會自動改變每個套件的版本編號，在遠端倉庫中建立一個新的
+          tag，並將所有的改動發送到 GitLab 實例中。
+        </p>
+        <p>接下來，透過 CI （Continuous Integration ，持續整合）進行建置實際上只為要以下兩步。</p>
+        <ul>
+          <li>build，即建置。</li>
+          <li>publish，即發佈。</li>
+        </ul>
+        <p>建置實際上就是執行以下程式。</p>
+        <pre><code class="language-bash">
+lerna bootstrap 
+lerna run build
+        </code></pre>
+        <p>而發佈也不複雜，只需要執行以下程式即可。</p>
+        <pre><code class="language-bash">
+git checkout master 
+lerna bootstrap 
+git reset --hard 
+lerna publish from-package --yes
+        </code></pre>
+        <p>
+          注意，這裡使用了 lerna publish from-package，而非簡單的 lerna
+          publish。因為開發者在本機已經執行了 lerna version，這時再執行 lerna publish
+          會收到「目前放本已經發佈」的提示。
+        </p>
+        <p>而 from- package參數會告訴 Lerna 發佈所有非目前 npm package 版本的專案。</p>
+        <h3>依賴關係簡介</h3>
+        <p>
+          說到專案中的依賴關係，常會想到使用 yarn/npm
+          解決依賴問題。依賴關係大致上可以分為巢狀結構依賴和扁平依賴。
+        </p>
+        <p>
+          在專案中，參考了3個套件：PackageA、PackageB、PackageC，它們都依賴了 PackageD
+          的不同版本。那麼在安裝時，如果 PackageA、PackageB、PackageC 在各自的 node_modules
+          目錄中分別含有 PackageD ，那麼就將其了解為巢狀結構依賴，範例如下。
+        </p>
         <pre><code class="language-js">
+PackageA 
+  node_modules/PackageD@v1.1
+PackageB
+  node_modules/PackageD@v1.2
+PackageC
+  node_modules/PackageD@v1.3
+        </code></pre>
+        <p>
+          如果在安裝時，先安裝了 PackageA，那麼 PackageA 依賴的 PackageD
+          版本就會成為主版本，但它又和 PackageA、PackageB、PackageC
+          一起出現，所以認為這是扁平依賴。此時 PackageB、PackageC 各自的 node_modules
+          目錄中也含有各自的 PackageD 版本。
+        </p>
+        <pre><code class="language-js">
+PackageA
+PackageD@v1.1
+PackageB
+  node_modules/PackageD@v1.2
+PackageC
+  node_modules/PackageD@v1.3
+        </code></pre>
+        <p>
+          npm 在安裝依賴套件時，會將依賴套件下載到目前的 node_modules 目錄中。
+          對於巢狀結構依賴和扁平依賴的話題，npm 列出了不同的處理方案。npm3
+          以下的版本在安裝依賴時非常直接，它會按照套件依賴的樹狀結構將其下載到本機 node_modules
+          目錄中，也就是說，每個套件都會將該套件的依賴放到目前套件所在的 node_modules 目錄中。
+        </p>
+        <p>
+          這麼做是因為考慮到了套件依賴的版本錯綜複雜，同一個套件因為被依賴的關係會出現多個版本，確保樹狀結構的安裝能夠簡化和統一對於套件的安裝和刪除行為。這樣能夠簡單地解決多版本相容問題，但也帶來了較大的容錯。
+        </p>
+        <p>
+          npm3 採用了扁平結構，在安裝依賴套件時更加智慧，實際表現在：在安裝依賴套件時，npm3 會按照
+          package.json 中宣告的順序依次安裝套件，遇到新的套件就把它放在第一級 node_modules
+          目錄中。後面再進行安裝時，如果遇到一級 node_modules
+          目錄已經存在的套件，就會先判斷套件版本，如果版本一樣則跳過安裝，否則會按照 npm2
+          的方式安裝在樹狀目錄結構下。
+        </p>
+        <p>
+          npm3
+          這種安裝方式只能夠部分解決依賴重複的問題，對一些場景，依然無法做到將依賴去重。舉例來說，專案中有
+          PackageA、PackageB、 PackageC 、PackageD、PackageB、PackageC 依賴模組 PackageD v2.0 -
+          PackageA 依賴模組 PackageD v1.0，如果在安裝時先安裝了 PackageD v1.0，然後分別在 PackageB、
+          PackageC 樹狀結構內部安裝了 PackageD
+          v2.0，則會造成菜權程度的容錯。為了解決這個問題，就有了 npm dedupe 指令。
+        </p>
+        <p>
+          另外，為了確保同一個專案中不同團隊或不同團隊成員安裝的版本依賴相同，常會使用
+          package-lock.json 或 yarn-lock.json 這種檔案，並透過 Git 上傳 package-lock.json 或
+          yarn-lock.json 以共用指定版本的依賴。
+        </p>
+        <p>
+          這些內容與開發息息相關，但是常常會被開發者忽視。依賴問題說小很小，説複雜也很複雜，下面再來看一個循環依賴的問題。
+        </p>
+        <h3>複雜依賴關係分析和處理</h3>
+        <p>
+          簡單來說，循環依賴就是模組A 和模組B
+          相互參考。在不同的模組化標準下，對循環依賴的處理不盡相同。
+        </p>
+        <p>下面在 Node.js 中製造一個簡單的循環參考場景。</p>
+        <pre><code class="language-js">
+// 假設模組A 的內容如下。
+
+
+exports.loaded = false
+const D = require('./b')
+module.exports = {
+  bWasLoaded: b.loaded, 
+  loaded: true
+}
+
+// 模組B 的內容如下。
+exports.loaded = false
+const a = require ('./a')
+module.exports = {
+  aWasLoaded: a.loaded,
+  loaded: true
+}
+
+// 在 index.js 檔案中呼叫以下程式。
+const a = require('./a');
+const b = require('./b');2
+console.log(a)
+console.log(b)
 
         </code></pre>
+        <p>在這種情況下執行程式，並未出現無窮迴圈當機的現象，而是輸出以下結果。</p>
         <pre><code class="language-js">
+{ bWasLoaded: true, loaded: true }
+{ aWasLoaded: false, loaded: true }
+        </code></pre>
+        <p>
+          這多虧了模組載入過程中的快取機制，使 Node.js
+          對模組載入進行了快取。按照執行順序，第一次載入 a 時會執行 const b =
+          require('./b')，所以可以直接進入模組 B 中，而此時在模組 B 中又會執行 const a =
+          require('./a')，由於模組A 已經被快取，因此模組B 傳回的結果如下。
+        </p>
+        <pre><code class="language-js">
+{aWasLoaded: false, loaded: true}
+        </code></pre>
+        <p>模組B 載入完成後，回到模組A 中繼續執行，模組A傳回的結果如下。</p>
+        <pre><code class="language-js">
+{aWasLoaded: true, loaded: true}
+        </code></pre>
+        <p>
+          整體來說，Node.js 或 CommonJS
+          標準得益於其快取機制，可以使程式在遇見循環參考時不會當機。但是，這樣的機制仍然會有問題：它只會輸出已執行部分，對未執行部分
+          export 來說，其內容為 undefined。
+        </p>
+        <p>
+          ES 模組與 CommonJS 標準不同，ES 模組不存在快取機制，而是動態参考依賴的模組。 ES
+          模組的設計思想是，儘量靜態化，這樣在編譯時就能確定模組之間的依賴關係。這也是 import
+          指令一定要出現在模組開頭部分的原因：在模組中，import
+          實際上不會直接執行模組：而是只產生一個参考。在模組內真正参考依賴邏輯時，模組會從依賴中進行設定值。這樣的設計非常有利於
+          Tree shaking 技術的實現。
+        </p>
+        <p>
+          在專案實作中，循環參考的出現常常是由設計不合理造成的。如果使用 webpack
+          進行專案建置，則可以使用 webpack 外掛程式 circular-dependency-plugin
+          來幫助檢測專案中存在的所有循環依賴。循環依賴這個問題說大不大，說小不小，應該盡可能在設計之初避開。
+        </p>
+        <p>另外，複雜的依賴關係至少還會帶來以下問題。</p>
+        <ul>
+          <li>依賴版本不一致</li>
+          <li>依賴遺失</li>
+        </ul>
+        <p>
+          對此，開發者需要根據實際情況進行處理，同時，合理使用 npm/yarn 工具也能造成十分重要的作用。
+        </p>
+        <h3>使用yarn workspace 管理依賴關係</h3>
+        <p>
+          monorepo 專案中的依賴管理問題值得重視。現在來看一下非常流行的 yarn workspace
+          是如何處理這種問題的。
+        </p>
+        <p>
+          workspace 的定位為: It allows you to setup multiple packages in such a way that you only
+          need to run yarn install once to install all of them in a single pass.
+        </p>
+        <p>
+          翻譯過來的意思就是，workspace 能幫助你更進一步地管理有多個子套件的 monorepo
+          ：開發者既可以在每個子套件下使用獨立的 package.json 管理依賴，又可以享受透過一行 yarn
+          指令安裝或升級所有依賴的便利。
+        </p>
+        <p>引用 workspace 後，在根目錄下執行以下指令，所有的依賴都會被安裝或更新。</p>
+        <pre><code class="language-js">
+yarn install / yarn upgrade XX
+        </code></pre>
+        <p>當然，如果只想更新某一個套件內的版本，則可以透過以下程式完成。</p>
+        <pre><code class="language-js">
+yarn workspace &lt;workspace-name&gt; upgrade XX
+        </code></pre>
+        <p>
+          在使用 yarn 的專案中，使用 yarn workspace 時不需要安裝其他的珍件，只需要簡單更改
+          package.json 便可以工作。
+        </p>
+        <pre><code class="language-js">
+// package. json
+{
+  "private": true,
+  "workspaces": ["workspace-1", "workspace-2"]
+}
+        </code></pre>
+        <p>
+          需要注意的是，如果需要啟用 workspace，則必須將這裡的 private 欄位設定為
+          true。同時，workspaces 這個欄位的值對應一個陣列，陣列中的每一項都是字串，分別表示一個
+          workspace(可以視為一個 repo)。
+        </p>
+        <p>
+          接著，可以在 workspace-1 和 workspace-2 專案中分別増加 package.json
+          檔案中的內容，如下所示。
+        </p>
+        <pre><code class="language-js">
+// workspace-1 專案：
+{
+  "name": "workspace-1",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "16.2.3"
+  }
+}
+// workspace-2 專案：
+{
+  "name": "workspace-2",
+  "version": "1.0.0",
+  "dependencies": {
+    "react" : "16.2.3",
+    "workspace-1": "1.0.0"
+  }
+}
 
         </code></pre>
+        <p>
+          執行 yarn install 指令後，可以發現專案根目錄下的 node_modules
+          內已經包含了所有宣告的依賴，而且各個子套件的 node_modules
+          中不會重複存在依賴：只會參考根目錄下 node_modules 中的 React 套件。
+        </p>
+        <p>
+          yarn workspace和 Lerna 有很多共同之處，解決的問題也有部分重疊。下面比較 yarn workspace 和
+          Lerna。
+        </p>
+        <ul>
+          <li>
+            yarn workspace 暫存於 yarn
+            中，不需要開發者額外安裝工具即可使用，使用起來也非常簡單，只需要在 package.json
+            中進行相關的設定，但不像 Lerna 那樣提供了大量 API。
+          </li>
+          <li>yarn workspace 只能在根目錄中引用，不需要在各個子專案中引用。</li>
+        </ul>
+        <p>
+          事實上，Lerna 可以與 yarn workspace
+          共存，兩者搭配使用能夠發揮更大的作用。在團隊中，Lerna負責版本管理與發佈，其強大的 API
+          和設定可以在開發時做到靈活細緻；workspace 負責依賴管理，使整個流程非常清晰。
+        </p>
+        <p>在 Lerna 中使用 workspace，首先需要修改 lerna.json 檔案中的設定。</p>
         <pre><code class="language-js">
-
+{
+  // ...
+  "npmClient": "yarn",  
+  "useWorkspaces": true,
+  // ...
+}
         </code></pre>
+        <p>
+          然後，將根目錄下 package.json 檔案中的 workspaces 欄位設定為 Lerna 標準的 packages 目錄。
+        </p>
         <pre><code class="language-js">
-
+{
+  "private": true,
+  "workspaces": [
+    "packages/*'
+  ],
+  // ...
+}
         </code></pre>
+        <p>
+          注意，如果開啟了 workspace 功能，則 lerna.json 中的 packages 值便不再生效。原因是 Lerna
+          會將 package.json 檔案的 workspaces 中所設定的 workspaces 陣列作為 lerna packages
+          的路徑，也就是各個子倉庫的路徑。換句話說 Lerna 會優先使用 package.json 中的 workspaces
+          模組，在不存在該欄位的情況下使用 lerna.json 中的 packages 欄位。如果未開啟 workspace
+          功能，則 lerna.json 檔案中的設定如下所示。
+        </p>
         <pre><code class="language-js">
-
+{
+  "npmClient": "yarn",
+  "useWorkspaces": false,
+  "packages":[
+    "packages/11/",
+    "packages/12/"
+  ]
+}
         </code></pre>
+        <p>根目錄下 package.json 檔案中的設定如下所示。</p>
         <pre><code class="language-js">
-
+{
+  "private": true,
+  "workspaces": [
+    "packages/21/*"
+    "packages/22/*",
+  ]
+}
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>
+          那麼，這就表示使用 yarn 管理的是 package.json 檔案中 workspaces
+          所對應的專案路徑下的依賴：packages/21/* 及 packages/22/*；而 Lerna 管理的是 lerna.json
+          檔案中 packages 所對應的 packages/11/* 及 packages/12/*。
+        </p>
       </article>
     </main>
   </body>
