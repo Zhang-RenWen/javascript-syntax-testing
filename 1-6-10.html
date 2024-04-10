@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-6-10">1-6-10 標準化工具管理團隊</h2>
+        <p>
+          不管是團隊的擴張還是業務的發展，都會導致專案程式量出現爆炸式增長。
+          為了防止「野蠻生長」現象，需要有一個良好的技術選型和成熟的架構做支撐，也需要團隊中每一個開發者都能用心維護專案。在此方向上，會使用一些標準工具。
+        </p>
+        <h3>prettier</h3>
+        <p>
+          首先從 prettier 說起，所以顧名思義，prettier
+          這個工具能夠美化程式，或說格式化、標準化程式，使其更加工整。它一般不會檢查程式的寶際寫法，而是在「可讀性」上做文章，目前支援包含
+          JavasScript、JSX、Angular、Vue、Flow 、TypeScript、CSS （Less 、SCSS）、JSON
+          等多種語言，以及資料交換格式、語法標準擴充。歸納一下，它能夠將原始程式風格移除，並取代為團隊統一設定的程式風格。幾乎所有團隊都在使用這款工具。
+        </p>
+        <ul>
+          <li>建置並統一程式風格。</li>
+          <li>幫助團隊新成員快速融入團隊。</li>
+          <li>開發者可以完全聚焦業務開發，不必在程式整理上花費過多心思。</li>
+          <li>方便低成本靈活連線，並快速發揮作用。</li>
+          <li>清理並標準已有程式。</li>
+          <li>減少潛在 bug。</li>
+          <li>有豐富強大的社區支援。</li>
+        </ul>
+        <p>下面來看一個簡單的 demo。首先，透過下面的指令建立一個專案。</p>
+
+        <pre><code class="language-bash">
+mkdir prettier-demo && cd prettier-demo
+        </code></pre>
+        <p>然後，透過下面的指令進行專案初始化。</p>
+        <pre><code class="language-bash">
+yarn init -y
+        </code></pre>
+        <p>接著安裝依賴，指令如下。</p>
+        <pre><code class="language-bash">
+yarn add prettier --dev --exact
+        </code></pre>
+        <p>在 package.json 檔案中加入 scripts，如下所示。</p>
+        <pre><code class="language-js">
+{
+  "name": "prettier-demo",
+  "version": "1.0.0",
+  "scripts": {
+    "prettier":"prettier --write src/index.js"
+  }
+}
+        </code></pre>
+        <p>
+          prettier --write src/index.js 的意思是執行 prettier，並對 src/index.js
+          檔案進行處理，--write 標識告訴 prettier 要把格式化後的內容儲存到目前檔案中。
+        </p>
+        <p>在 ./sre 目錄中新增 index.js 檔案，並在檔案中輸入一些格式缺失的程式，如下所示。</p>
+        <pre><code class="language-js">
+let person = {
+  name: "Yoda",
+  designation: 'Jedi Master '
+}
+
+function trainJedi (jediWarrion) {
+  if (jediWarrion.name === 'Yoda') {
+    console.log('No need! already trained')
+  }
+  console.log (`Training ${jediWarrion.name} complete` )
+}
+
+trainJedi(person)
+trainJedi({name:'Adeel', designation: 'padawan'})
+        </code></pre>
+        <p>同時，在 root 檔案中建立 prettier.config.js 檔案，並在檔案中增加 prettier 規則。</p>
+        <pre><code class="language-js">
+module.exports = {
+  printWidth: 100, 
+  singleQuote: true, 
+  trailingComma: 'all', 
+  bracketSpacing: true, 
+  jsxBracketSameLine: false, 
+  tabWidth: 2,
+  semi: true,
+}
+        </code></pre>
+        <p>
+          prettier
+          會讀取這些規則，並按照以上規則設定、美化程式。對於這些規則，透過其名稱便能了解其大概意思，更多內容可去官網檢視。
+        </p>
+        <p>執行以下指令，程式就會被自動格式化了。</p>
+        <pre><code class="language-bash">
+yarn prettier
+        </code></pre>
+        <p>
+          當然：prettier 也可以與編輯器結合，在開發者儲存程式後立即對程式進行美化：也可以將 prettier
+          整合到 CI 環節或 git pre-commit 階段。舉例來說，使用 pretty-quick
+          在程式提交時對程式進行美化，指令如下。
+        </p>
+        <pre><code class="language-bash">
+yarn add prettier pretty-quick husky--dev
+        </code></pre>
+        <p>同時，需要要在 package.json 中設定以下內容。</p>
+        <pre><code class="language-js">
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick —-staged"
+    }
+  }
+}
+        </code></pre>
+        <p>
+          在 husky 中定義 pre-commit 階段，並只對 staged 的檔案進行格式化。 這裡使用了官方推薦的
+          pretty-quick 來實現 pre-commit 階段的美化，這只是其中一種實現方式，還可以透過 lint-staged
+          來實現。在下面介紹 ESLint 和 husky 時會講到 lint-staged。透過 demo 可以看出，prettier
+          確實很靈活，且自動化程度很高，連入專案也十分方便。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
