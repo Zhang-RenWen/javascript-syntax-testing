@@ -303,3 +303,10 @@ table.standard-table tr:nth-child(odd) th {
     pointer-events: initial;
   }
 }
+
+@media screen and (min-width: 768px) {
+  h1::before {
+    content: '📓';
+    margin-right: 10px;
+  }
+}
