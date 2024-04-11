@@ -142,6 +142,125 @@ yarn add prettier pretty-quick husky--dev
           來實現。在下面介紹 ESLint 和 husky 時會講到 lint-staged。透過 demo 可以看出，prettier
           確實很靈活，且自動化程度很高，連入專案也十分方便。
         </p>
+        <h3>ESLint</h3>
+        <p>
+          下面來看一下以 ESLint 為代表的 linter。多數程式語言都有
+          linter，它們常常被整合在編譯階段，完成 coding linting。code linting
+          表示基於靜態分析程式原理找出程式反模式的過程。
+        </p>
+        <p>
+          對 JavaScript 這種動態、鬆類型的語言來說，開發者在撰寫程式時更容易犯錯。由於 JavaScript
+          不具備先天編譯流程，因此常常會在執行時期曝露錯誤，而 linter，尤其是最具代表性的
+          ESLint，可以使開發者在執行前就發現程式錯誤或不合理的寫法。
+        </p>
+        <p>ESLint 中最重要的幾點哲學思想如下。</p>
+        <ul>
+          <li>所有規則都外掛程式化。</li>
+          <li>所有規則都可抽換（隨時開關）。</li>
+          <li>所有設計都透明化。</li>
+          <li>使用 espree 進行 JavaScript 解析。</li>
+          <li>使用 AST 分析語法。</li>
+        </ul>
+        <p>下面來簡單設定一個 ESLint 規則，步驟如下。</p>
+        <p>首先，初始化專案，指令如下。</p>
+        <pre><code class="language-bash">
+yarn init -y
+        </code></pre>
+        <p>然後，透過以下指令安裝依賴。</p>
+        <pre><code class="language-bash">
+yarn add eslint --dev
+        </code></pre>
+        <p>接著，執行以下指令。</p>
+        <pre><code class="language-bash">
+npx eslint --init
+        </code></pre>
+        <p>之後就可以使用 eslint 對任意檔案進行處理了，指令如下。</p>
+        <pre><code class="language-bash">
+eslint XXX.js
+        </code></pre>
+        <p>當然，想要順利執行 eslint，還需要安裝應用規則外掛程式。</p>
+        <p>那麼，如何宣告並使用規則呢？在根目錄中開啟 .eslintrc 設定檔，在該檔案中加入以下內容。</p>
+        <pre><code class="language-js">
+{
+  "rules": {
+    "semi": ["error", "always"],
+    "quote": ["error", "double"]
+  }
+}
+        </code></pre>
+        <p>
+          semi、quote 就是 ESLint 規則的名稱，其值對應的陣列第一項可以為
+          off/0、warn/1、error/2，分別表示關閉規則、以 warning 形式開啟規則、以 error 形式開啟規則。
+        </p>
+        <p>同樣，還會在 .eslintrc 檔案中發現以下內容，表示 ESLint 的預設規則都將被開啟。</p>
+        <pre><code class="language-js">
+"extends": "eslint: recommended"
+        </code></pre>
+        <p>當然，也可以選取其他規則集合，此較出名的有以下兩個。</p>
+        <ul>
+          <li>Google JavaScript Style Guide</li>
+          <li>Airbnb JavaScript Style Guide</li>
+        </ul>
+        <p>繼續拆分 .eslintrc 檔案，可以看到它主要由 6 個欄位組成，程式如下。</p>
+        <pre><code class="language-js">
+module.exports = {
+  env: {},
+  extends: {},
+  parser: {},
+  parserOptions: {},
+  rules: {},
+}
+        </code></pre>
+        <ul>
+          <li>env：指定啟用的環境。</li>
+          <li>extends：指定額外設定的選項，如 ['airbnb'] 表示使用 Airbnb 的 linting 規則。</li>
+          <li>plugins 設定規則外掛程式。</li>
+          <li>parser：預設情況下，ESLint 使用 espree 進行解析。</li>
+          <li>parserOptions：如果更改了預設解析器，則需要設定 parserOptions 來自訂解析器。</li>
+          <li>rules：定義擴充的及透過外掛程式增加的所有規則。</li>
+        </ul>
+        <p>
+          注意，上述程式採用了.eslintrc.js 的 JavaScript 檔案格式，此外還可以採用.yaml、.json、yml
+          等格式。如果專案中含有多種設定檔格式，則優先順序順序如下。
+        </p>
+        <pre><code class="language-js">
+.eslintrc.js
+.eslintrc.yaml
+.eslintrc.yml
+.eslintrc.json
+.eslintrc
+.package.json
+        </code></pre>
+        <p>最後，可以在 package.json 中增加 scripts，如下所示。</p>
+        <pre><code class="language-js">
+"scripts": {
+  "lint": "eslint --debug src/"
+  "lint:write": "eslint --debug src/ --fix"
+}
+        </code></pre>
+        <p>
+          scripts 中的 lint
+          將檢查所有檔案，並在每個存在錯誤的檔案中提供詳細記錄檔，但開發者需要手動開啟這些檔案並更正錯誤；lint:write
+          與 lint 類似，但它可以自動校正錯誤。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
