@@ -38,7 +38,7 @@
           不管是團隊的擴張還是業務的發展，都會導致專案程式量出現爆炸式增長。
           為了防止「野蠻生長」現象，需要有一個良好的技術選型和成熟的架構做支撐，也需要團隊中每一個開發者都能用心維護專案。在此方向上，會使用一些標準工具。
         </p>
-        <h3>prettier</h3>
+        <h4>prettier</h4>
         <p>
           首先從 prettier 說起，所以顧名思義，prettier
           這個工具能夠美化程式，或說格式化、標準化程式，使其更加工整。它一般不會檢查程式的寶際寫法，而是在「可讀性」上做文章，目前支援包含
@@ -142,7 +142,7 @@ yarn add prettier pretty-quick husky--dev
           來實現。在下面介紹 ESLint 和 husky 時會講到 lint-staged。透過 demo 可以看出，prettier
           確實很靈活，且自動化程度很高，連入專案也十分方便。
         </p>
-        <h3>ESLint</h3>
+        <h4>ESLint</h4>
         <p>
           下面來看一下以 ESLint 為代表的 linter。多數程式語言都有
           linter，它們常常被整合在編譯階段，完成 coding linting。code linting
@@ -243,18 +243,90 @@ module.exports = {
           將檢查所有檔案，並在每個存在錯誤的檔案中提供詳細記錄檔，但開發者需要手動開啟這些檔案並更正錯誤；lint:write
           與 lint 類似，但它可以自動校正錯誤。
         </p>
-        <pre><code class="language-js">
-
+        <h4>linter 和 prettier</h4>
+        <p>
+          應該如何比較以 ESLint 為代表的 linter 和 prettier
+          呢？它們到底是什麼關係？就像本篇開頭所提到的那樣，它們用來解決不同的問題，定位不同，但又可以相輔相成。
+          所有的 linter 都與 ESLint 類似，其規則可以劃分為以下兩種。
+        </p>
+        <p>1.格式化規則（formatting rule）</p>
+        <p>
+          典型的格式化規則有
+          max-len、no-mixed-spaces-and-tabs、keyword-spacing、comma-style，它們有「限制一行的最大長度」、「禁止使用空格和Tab
+          混合縮排」等程式格式方面的標準。事實上，如果開發者寫出的程式違反了這種規則，且在 lint
+          階段前需要先經過 prettier 進行處理，那麼這些問題就會先在 prettier 階段被校正，因此 linter
+          不會拋出提醒，非常讓人省心，這是 linter 和 prettier 重疊的地方。
+        </p>
+        <p>2.程式品質規則（code quality rule）</p>
+        <p>
+          程式品質規則有
+          no-unused-vars、no-extra-bind、no-implicit-globals、prefer-promise-reject-errors，它們有「限制宣告未使用變數」、「限制不必要的函數綁定」等程式寫法方面的標準。這時，prettier
+          對這些規則就無法進行審查和美化了。但是，這些規則對於程式品質和強健性非常重要，還是需要
+          linter 來保障的。
+        </p>
+        <p>
+          如同 prettier, ESLint 也可以被整合到編輯器或 git pre-commit 階段。前面已經示範過了
+          prettier 搭配 husky 的使用方式，下面就來介紹一下 husky 。
+        </p>
+        <h4>husky 和 lint-staged</h4>
+        <p>
+          其實：husky 就是透過 Git 指令的勾子，在 Git
+          指令進行到某一時段時，可以被交給開發者完成某些特定的操作。安裝 husky 的指令如下。
+        </p>
+        <pre><code class="language-bash">
+yarn add --dev husky
         </code></pre>
+        <p>然後，在 package.json 檔案中增加以下內容。</p>
         <pre><code class="language-js">
-
+"husky": {
+  "hooks": {
+    "pre-commit": "YOUR_SCRIPT",
+    "pre-push": "YOUR_SCRIPT"
+  }
+}
         </code></pre>
+        <p>
+          這樣，每次提交（commit）或發送（push）程式時，就可以執行相關 npm
+          指令稿。需要注意的是，在整個專案上執行 lint
+          會很慢。一般只會對更改的檔案進行檢查，這時就需要用到 lint-staged，如下所示。
+        </p>
+        <pre><code class="language-bash">
+yarn add --dev lint-staged
+        </code></pre>
+        <p>然後，在 package.json 檔案中增加以下內容。</p>
         <pre><code class="language-js">
-
+"lint-staged": {
+  ".(js|jsx)": ["npm run lint:write", "git add"]
+}
+// 最後程式如下。
+"scripts": {
+  "lint": "eslint --debug src/",
+  "lint:write": "eslint --debug src/ --fix"
+  "prettier": "prettier --write src/**/*.js"
+},
+"husky": {
+  "hooks": {
+    "pre-commit": "lint-staged"
+  }
+},
+"lint-staged": {
+  "*.(js|jsx)": ["npm run lint:write", "npm run prettier", "git add"]
+}
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>
+          這段程式表示在 pre-commit 階段使用 ESLint 和 prettier 對副檔名為 js 或 jsx
+          且進行過修政的檔案進行處理，之後再透過 git add 指令將本次改動增加到暫存區。
+        </p>
+        <h3>工具背後的技術原理和設計</h3>
+        <p>
+          在這一節中，挑選實現更為複雜精妙的 ESLint 進行分析。大家都清楚，ESLint
+          是以抽象語法樹（AST）進行工作為基礎的，AST 已經不是一個新鮮話題。ESLint 使用 espree 來解析
+          JavaScript 敘述，產生AST。有了完整的解析樹，就可以基於解析樹對式進行檢測和修改了。
+        </p>
+        <p>
+          ESLint
+          的靈魂是其中的每筆規則，每筆規則都是獨立且外掛程式化的，下面選擇比較簡單的「禁止區塊級註釋規則」的原始程式來分析。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
