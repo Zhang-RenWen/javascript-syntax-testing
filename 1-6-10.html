@@ -328,8 +328,39 @@ yarn add --dev lint-staged
           的靈魂是其中的每筆規則，每筆規則都是獨立且外掛程式化的，下面選擇比較簡單的「禁止區塊級註釋規則」的原始程式來分析。
         </p>
         <pre><code class="language-js">
-
+module.exports = {
+  meta: {
+    docs: {
+      description:'禁止區塊級註釋',
+      category: 'Stylistic Issues',
+      recommended: true
+    }
+  },
+  create(context) {
+    const sourceCode = context.getSourceCode()
+    return {
+      Program(){
+        const comments = sourceCode.getAllComments()
+        const blockComments = comments.filter(({ type }) => type === 'Block')
+        blockComments.length && context.report({
+          message: 'No block comments'
+        })
+      }
+    }
+  }
+}
         </code></pre>
+        <p>
+          從中可以看出，一筆規則就是一個 node 模組，它由 meta 和 create 組成。meta
+          包含了該筆規則的文件描述，相對簡單；而 create 會接收一個 context 參數，傳回一個物件。
+        </p>
+        <p>
+          同時，create 可以從 context
+          中取得目前執行的程式，並透過選擇器取得目前需要的內容。如以上程式所示，會取得程式的所有
+          comments (sourceCode.getAIlComments())，如果 blockComments 的長度大於
+          0，則會顯示出錯，拋出 No block comments 資訊。
+        </p>
+        <p>再來看一個 no-console 規則的實現，程式如下。</p>
         <pre><code class="language-js">
 
         </code></pre>
