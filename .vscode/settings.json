@@ -17,6 +17,7 @@
     "Berners",
     "Bevacqua",
     "bien",
+    "Burak",
     "cacheable",
     "cantonjs",
     "caracter",
@@ -33,6 +34,8 @@
     "espree",
     "está",
     "Esto",
+    "Feenstra",
+    "fileoverview",
     "filfilled",
     "foofoofabc",
     "gianduankaifahexinzhishijinjie",
@@ -51,6 +54,7 @@
     "joestar",
     "JOJO",
     "Kars",
+    "Kaya",
     "laceholder",
     "Lema",
     "lemna",
@@ -69,9 +73,11 @@
     "Nico",
     "Nicolás",
     "notecard",
+    "Oberkofler",
     "olleh",
     "padawan",
     "Phoy",
+    "Pluggable",
     "Premajor",
     "Preminor",
     "Prepatch",
@@ -107,7 +113,8 @@
     "WHATWG",
     "woofmark",
     "w̅o̅r̅l̅d̅",
-    "wxml"
+    "wxml",
+    "Yigit"
   ],
   "editor.defaultFormatter": "esbenp.prettier-vscode"
 }

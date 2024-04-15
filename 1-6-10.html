@@ -362,6 +362,623 @@ module.exports = {
         </p>
         <p>再來看一個 no-console 規則的實現，程式如下。</p>
         <pre><code class="language-js">
+"use strict";
+module.exports = {
+  meta: {
+    type: "suggestion",
+    docs: {
+      description: "disallow the use of `console`",
+      category: "Possible Errors",
+      recommended: false,
+      url: "https://eslint.org/docs/rules/no-console"
+    },
+    schema: [{
+      type: "object",
+      properties: {
+        allow: {
+          type: "array"
+          items: {
+            type: "string"
+          },
+          minItems: 1,
+          uniqueItems: true
+        },
+      },
+      additionalProperties: false
+    }],
+    messages: {
+      unexpected: "Unexpected console statement."
+    },
+  },
+  create (context) {
+    const options = context.options[0] || {}
+    const allowed = options.allow || [];
+    function isConsole (reference) {
+      const id = reference.identifier;
+      return id && [id.name] === "console";
+    }
+    function isAllowed (node) {
+      const propertyName = astUtils.getStaticPropertyName (node);
+      return propertyName && allowed.indexOf (propertyName) != -1;
+    } 
+    function isMemberAccessExceptAllowed (reference) {
+      const node = reference.identifier;
+      const parent = node.parent;
+      return (
+        parent.type === "MemberExpression" && parent.object === node && !isAllowed (parent)
+      )
+    }
+    function report (reference) {
+      const node = reference.identifier.parent;
+      context.report({
+        node,
+        loc: node.loc,
+        messageId: "unexpected"
+      })
+    }
+    return {
+      "Program:exit" () {
+        const scope = context.getScope() ;
+        const consoleVax = astUtils.getVariableByName(scope, "console'");
+        const shadowed = consoleVar && consoleVar.defs.length > 0;
+        const references = consoleVar? consoleVar.references: scope.through.filter(isConsole);
+        if (!shadowed){
+          references
+          .filter(isMemberAccessExceptAllowed)
+          .forEach(report);
+        }
+      }
+    }
+  }
+}
+        </code></pre>
+        <a href="https://github.com/eslint/eslint/blob/main/lib/rules/no-console.js">
+          最新版本 no-console.js
+        </a>
+        <p>
+          以上程式透過 astUtils.getVariableByName(scope,"consoler") 及 iSConsole
+          函數來判別是否出現了 console 敘述，透過 allowed.indexOf(propertyName) i=-1 來過濾白名單。
+        </p>
+        <p>
+          其實現非常簡單，只要了解了這些，相信你也能寫出 no-alert,no-debugger 規則的程式。再來看一下
+          no-duplicate-case 規則，它監測 switch..case 中是否存在相同的 case 分支，程式如下。
+        </p>
+        <a href="https://github.com/eslint/eslint/blob/main/lib/rules/no-duplicate-case.js">
+          最新版本 no-duplicate-case.js
+        </a>
+        <pre><code class="language-js">
+/**
+ * @fileoverview Rule to disallow a duplicate case label.
+ * @author Dieter Oberkofler
+ * @author Burak Yigit Kaya
+ */
+
+"use strict";
+
+//------------------------------------------------------------------------------
+// Requirements
+//------------------------------------------------------------------------------
+
+const astUtils = require("./utils/ast-utils");
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
+
+/** @type {import('../shared/types').Rule} */
+module.exports = {
+    meta: {
+        type: "problem",
+
+        docs: {
+            description: "Disallow duplicate case labels",
+            recommended: true,
+            url: "https://eslint.org/docs/latest/rules/no-duplicate-case"
+        },
+
+        schema: [],
+
+        messages: {
+            unexpected: "Duplicate case label."
+        }
+    },
+
+    create(context) {
+        const sourceCode = context.sourceCode;
+
+        /**
+         * Determines whether the two given nodes are considered to be equal.
+         * @param {ASTNode} a First node.
+         * @param {ASTNode} b Second node.
+         * @returns {boolean} `true` if the nodes are considered to be equal.
+         */
+        function equal(a, b) {
+            if (a.type !== b.type) {
+                return false;
+            }
+
+            return astUtils.equalTokens(a, b, sourceCode);
+        }
+        return {
+            SwitchStatement(node) {
+                const previousTests = [];
+
+                for (const switchCase of node.cases) {
+                    if (switchCase.test) {
+                        const test = switchCase.test;
+
+                        if (previousTests.some(previousTest => equal(previousTest, test))) {
+                            context.report({ node: switchCase, messageId: "unexpected" });
+                        } else {
+                            previousTests.push(test);
+                        }
+                    }
+                }
+            }
+        };
+    }
+}
+        </code></pre>
+        <p>
+          以上程式非常簡單，在初始化時使用一個空的 mapping，然後透過每次增加 case 來對 mapping
+          進行擴充，如果存在相同的 case 則進行報告。
+        </p>
+        <p>
+          雖然 ESLint背後的技術內容比較複雜，但是以 AST
+          技術為基礎，它已經給開發者提供了較為成熟的API。寫一筆自己的規則並不是很難，只需要開發者找到相關的
+          AST 選擇器，如上面程式中的getAlIComments()，更多的選擇器可以參考
+          <a href="https://eslint.org/docs/latest/extend/selectors">
+            Selectors- ESLint - Pluggable JavaScript linter
+          </a>
+          一文。
+        </p>
+        <p>
+          有一些場景遠不止這麼簡單，舉例來說，多筆規則串聯起來生效的場景。事實上，實際的規則可以從多個來源來定義，舉例來說，可以在程式的註釋或設定檔中進行規則定義。
+        </p>
+        <p>
+          ESLhint 首先收集到所有規則的設定來源，將所有規則歸併後進行多重檢查； 首先由原始程式產生的
+          AST 將語法節點傳入佇列中；之後檢查所有應用規則，採用事件發佈/訂閱模式（類似 webpack
+          tapable）為所有規則的選擇器增加監聽事件；在觸發事件時執行規則外掛程式，如果發現有問題，則將上報資訊記錄下來。最後記錄下來的問題資訊將被輸出。
+        </p>
+        <p>ESLint 的相關原始程式如下。</p>
+        <pre><code class="language-js">
+function runRules(sourceCode, configuredRules, ruleMapper, parserName, languageOptions, settings, filename, disableFixes, cwd, physicalFilename) {
+    const emitter = createEmitter();
+    const nodeQueue = [];
+    let currentNode = sourceCode.ast;
+    Traverser.traverse(sourceCode.ast, {
+        enter(node, parent) {
+            node.parent = parent;
+            nodeQueue.push({ isEntering: true, node });
+        },
+        leave(node) {
+            nodeQueue.push({ isEntering: false, node });
+        },
+        visitorKeys: sourceCode.visitorKeys
+    });
+
+    const sharedTraversalContext = Object.freeze(
+        Object.assign(
+            Object.create(BASE_TRAVERSAL_CONTEXT),
+            {
+                getAncestors: () => getAncestors(currentNode),
+                getDeclaredVariables: sourceCode.scopeManager.getDeclaredVariables.bind(sourceCode.scopeManager),
+                getCwd: () => cwd,
+                getFilename: () => filename,
+                getPhysicalFilename: () => physicalFilename || filename,
+                getScope: () => getScope(sourceCode.scopeManager, currentNode),
+                // *
+                getSourceCode: () => sourceCode,
+                markVariableAsUsed: name => markVariableAsUsed(sourceCode.scopeManager, currentNode, languageOptions, name),
+                parserOptions: {
+                    ...languageOptions.parserOptions
+                },
+                parserPath: parserName,
+                languageOptions,
+                parserServices: sourceCode.parserServices,
+                settings
+            }
+        )
+    );
+
+
+    const lintingProblems = [];
+
+    Object.keys(configuredRules).forEach(ruleId => {
+        // ...
+        const messageIds = rule.meta && rule.meta.messages;
+        let reportTranslator = null;
+
+        const ruleContext = Object.freeze(
+            Object.assign(
+                Object.create(sharedTraversalContext),
+                {
+                    id: ruleId,
+                    options: getRuleOptions(configuredRules[ruleId]),
+                    report(...args) {
+                        if (reportTranslator === null) {
+                            reportTranslator = createReportTranslator({
+                                ruleId,
+                                severity,
+                                sourceCode,
+                                messageIds,
+                                disableFixes
+                            });
+                        }
+                        const problem = reportTranslator(...args);
+                        // ...
+                        lintingProblems.push(problem);
+                    }
+                }
+            )
+        );
+        
+
+        const ruleListeners = createRuleListeners(rule, ruleContext);
+        
+        function addRuleErrorHandler(ruleListener) {
+            return function ruleErrorHandler(...listenerArgs) {
+                try {
+                    return ruleListener(...listenerArgs);
+                } catch (e) {
+                    e.ruleId = ruleId;
+                    throw e;
+                }
+            };
+        }
+
+
+        Object.keys(ruleListeners).forEach(selector => {
+            const ruleListener = timing.enabled
+                ? timing.time(ruleId, ruleListeners[selector])
+                : ruleListeners[selector];
+
+            emitter.on(selector, addRuleErrorHandler(ruleListener));
+        });
+    });
+
+    const eventGenerator = nodeQueue[0].node.type === "Program"
+        ? new CodePathAnalyzer(new NodeEventGenerator(emitter, { visitorKeys: sourceCode.visitorKeys, fallback: Traverser.getKeys }))
+        : new NodeEventGenerator(emitter, { visitorKeys: sourceCode.visitorKeys, fallback: Traverser.getKeys });
+
+    nodeQueue.forEach(traversalInfo => {
+        currentNode = traversalInfo.node;
+        try {
+            if (traversalInfo.isEntering) {
+                eventGenerator.enterNode(currentNode);
+            } else {
+                eventGenerator.leaveNode(currentNode);
+            }
+        } catch (err) {
+            err.currentNode = currentNode;
+            throw err;
+        }
+    });
+
+    return lintingProblems;
+}
+        </code></pre>
+        <p>
+          程式中免不了有各種條件陳述式、循環敘述，因此程式的執行是非順序的。這種敘述的相關規則，如「檢測定義但不使用變數」、「switch-ease
+          中避免執行多筆 case敘述」等，有關 ESLint 更進階的程式路徑分析（code path
+          analysis）概念等。ESLint 將程式路徑抽象為以下5個事件。
+        </p>
+        <ul>
+          <li>onCodePathStart</li>
+          <li>onCodePathEnd</li>
+          <li>onCodePathSegmentStart</li>
+          <li>onCodePathSegmentEnd</li>
+          <li>onCodePathSegmentLoop</li>
+        </ul>
+        <p>
+          利用這 5 個事件：可以更加精確地控制檢測範團和粒度。更多 ESlint
+          規則實現可以透過翻看程式碼原理學習。總之，根據這 5
+          個事件即可監測非順序性程式，其核心原理還是事件機制。
+        </p>
+        <p>
+          下面以 no-unreachable
+          規則為例來說明如何透過事件機制來監測非順序性程式，並對相關程式進行檢查。 no-unreachable
+          規則可以透過監測 return、throws、break、continue
+          的使用識別出不會被執行的程式，並列出錯誤報告。
+        </p>
+        <a href="https://github.com/eslint/eslint/blob/main/lib/rules/no-unreachable.js">最近版本 no-unreachable.js</a>
+        <pre><code class="language-js">
+/**
+ * @fileoverview Checks for unreachable code due to return, throws, break, and continue.
+ * @author Joel Feenstra
+ */
+"use strict";
+
+//------------------------------------------------------------------------------
+// Helpers
+//------------------------------------------------------------------------------
+
+/**
+ * @typedef {Object} ConstructorInfo
+ * @property {ConstructorInfo | null} upper Info about the constructor that encloses this constructor.
+ * @property {boolean} hasSuperCall The flag about having `super()` expressions.
+ */
+
+/**
+ * Checks whether or not a given variable declarator has the initializer.
+ * @param {ASTNode} node A VariableDeclarator node to check.
+ * @returns {boolean} `true` if the node has the initializer.
+ */
+function isInitialized(node) {
+    return Boolean(node.init);
+}
+
+/**
+ * Checks all segments in a set and returns true if all are unreachable.
+ * @param {Set<CodePathSegment>} segments The segments to check.
+ * @returns {boolean} True if all segments are unreachable; false otherwise.
+ */
+function areAllSegmentsUnreachable(segments) {
+
+    for (const segment of segments) {
+        if (segment.reachable) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * The class to distinguish consecutive unreachable statements.
+ */
+class ConsecutiveRange {
+    constructor(sourceCode) {
+        this.sourceCode = sourceCode;
+        this.startNode = null;
+        this.endNode = null;
+    }
+
+    /**
+     * The location object of this range.
+     * @type {Object}
+     */
+    get location() {
+        return {
+            start: this.startNode.loc.start,
+            end: this.endNode.loc.end
+        };
+    }
+
+    /**
+     * `true` if this range is empty.
+     * @type {boolean}
+     */
+    get isEmpty() {
+        return !(this.startNode && this.endNode);
+    }
+
+    /**
+     * Checks whether the given node is inside of this range.
+     * @param {ASTNode|Token} node The node to check.
+     * @returns {boolean} `true` if the node is inside of this range.
+     */
+    contains(node) {
+        return (
+            node.range[0] >= this.startNode.range[0] &&
+            node.range[1] &lt;= this.endNode.range[1]
+        );
+    }
+
+    /**
+     * Checks whether the given node is consecutive to this range.
+     * @param {ASTNode} node The node to check.
+     * @returns {boolean} `true` if the node is consecutive to this range.
+     */
+    isConsecutive(node) {
+        return this.contains(this.sourceCode.getTokenBefore(node));
+    }
+
+    /**
+     * Merges the given node to this range.
+     * @param {ASTNode} node The node to merge.
+     * @returns {void}
+     */
+    merge(node) {
+        this.endNode = node;
+    }
+
+    /**
+     * Resets this range by the given node or null.
+     * @param {ASTNode|null} node The node to reset, or null.
+     * @returns {void}
+     */
+    reset(node) {
+        this.startNode = this.endNode = node;
+    }
+}
+
+//------------------------------------------------------------------------------
+// Rule Definition
+//------------------------------------------------------------------------------
+
+/** @type {import('../shared/types').Rule} */
+module.exports = {
+    meta: {
+        type: "problem",
+
+        docs: {
+            description: "Disallow unreachable code after `return`, `throw`, `continue`, and `break` statements",
+            recommended: true,
+            url: "https://eslint.org/docs/latest/rules/no-unreachable"
+        },
+
+        schema: [],
+
+        messages: {
+            unreachableCode: "Unreachable code."
+        }
+    },
+
+    create(context) {
+
+        /** @type {ConstructorInfo | null} */
+        let constructorInfo = null;
+
+        /** @type {ConsecutiveRange} */
+        const range = new ConsecutiveRange(context.sourceCode);
+
+        /** @type {Array&lt;Set&lt;CodePathSegment&gt;&gt;} */
+        const codePathSegments = [];
+
+        /** @type {Set&lt;CodePathSegment&gt;} */
+        let currentCodePathSegments = new Set();
+
+        /**
+         * Reports a given node if it's unreachable.
+         * @param {ASTNode} node A statement node to report.
+         * @returns {void}
+         */
+        function reportIfUnreachable(node) {
+            let nextNode = null;
+
+            if (node && (node.type === "PropertyDefinition" || areAllSegmentsUnreachable(currentCodePathSegments))) {
+
+                // Store this statement to distinguish consecutive statements.
+                if (range.isEmpty) {
+                    range.reset(node);
+                    return;
+                }
+
+                // Skip if this statement is inside of the current range.
+                if (range.contains(node)) {
+                    return;
+                }
+
+                // Merge if this statement is consecutive to the current range.
+                if (range.isConsecutive(node)) {
+                    range.merge(node);
+                    return;
+                }
+
+                nextNode = node;
+            }
+
+            /*
+             * Report the current range since this statement is reachable or is
+             * not consecutive to the current range.
+             */
+            if (!range.isEmpty) {
+                context.report({
+                    messageId: "unreachableCode",
+                    loc: range.location,
+                    node: range.startNode
+                });
+            }
+
+            // Update the current range.
+            range.reset(nextNode);
+        }
+
+        return {
+
+            // Manages the current code path.
+            onCodePathStart() {
+                codePathSegments.push(currentCodePathSegments);
+                currentCodePathSegments = new Set();
+            },
+
+            onCodePathEnd() {
+                currentCodePathSegments = codePathSegments.pop();
+            },
+
+            onUnreachableCodePathSegmentStart(segment) {
+                currentCodePathSegments.add(segment);
+            },
+
+            onUnreachableCodePathSegmentEnd(segment) {
+                currentCodePathSegments.delete(segment);
+            },
+
+            onCodePathSegmentEnd(segment) {
+                currentCodePathSegments.delete(segment);
+            },
+
+            onCodePathSegmentStart(segment) {
+                currentCodePathSegments.add(segment);
+            },
+
+            // Registers for all statement nodes (excludes FunctionDeclaration).
+            BlockStatement: reportIfUnreachable,
+            BreakStatement: reportIfUnreachable,
+            ClassDeclaration: reportIfUnreachable,
+            ContinueStatement: reportIfUnreachable,
+            DebuggerStatement: reportIfUnreachable,
+            DoWhileStatement: reportIfUnreachable,
+            ExpressionStatement: reportIfUnreachable,
+            ForInStatement: reportIfUnreachable,
+            ForOfStatement: reportIfUnreachable,
+            ForStatement: reportIfUnreachable,
+            IfStatement: reportIfUnreachable,
+            ImportDeclaration: reportIfUnreachable,
+            LabeledStatement: reportIfUnreachable,
+            ReturnStatement: reportIfUnreachable,
+            SwitchStatement: reportIfUnreachable,
+            ThrowStatement: reportIfUnreachable,
+            TryStatement: reportIfUnreachable,
+
+            VariableDeclaration(node) {
+                if (node.kind !== "var" || node.declarations.some(isInitialized)) {
+                    reportIfUnreachable(node);
+                }
+            },
+
+            WhileStatement: reportIfUnreachable,
+            WithStatement: reportIfUnreachable,
+            ExportNamedDeclaration: reportIfUnreachable,
+            ExportDefaultDeclaration: reportIfUnreachable,
+            ExportAllDeclaration: reportIfUnreachable,
+
+            "Program:exit"() {
+                reportIfUnreachable();
+            },
+
+            /*
+             * Instance fields defined in a subclass are never created if the constructor of the subclass
+             * doesn't call `super()`, so their definitions are unreachable code.
+             */
+            "MethodDefinition[kind='constructor']"() {
+                constructorInfo = {
+                    upper: constructorInfo,
+                    hasSuperCall: false
+                };
+            },
+            "MethodDefinition[kind='constructor']:exit"(node) {
+                const { hasSuperCall } = constructorInfo;
+
+                constructorInfo = constructorInfo.upper;
+
+                // skip typescript constructors without the body
+                if (!node.value.body) {
+                    return;
+                }
+
+                const classDefinition = node.parent.parent;
+
+                if (classDefinition.superClass && !hasSuperCall) {
+                    for (const element of classDefinition.body.body) {
+                        if (element.type === "PropertyDefinition" && !element.static) {
+                            reportIfUnreachable(element);
+                        }
+                    }
+                }
+            },
+            "CallExpression > Super.callee"() {
+                if (constructorInfo) {
+                    constructorInfo.hasSuperCall = true;
+                }
+            }
+        };
+    }
+};
+        </code></pre>
+        <p>以上程式是透過 isUnreachable 函數來判別一個程式路徑是否無法觸及，下面提供相關的範例來幫助大家了解。請看以下程式。</p>
+        <pre><code class="language-js">
 
         </code></pre>
         <pre><code class="language-js">
