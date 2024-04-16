@@ -681,7 +681,9 @@ function runRules(sourceCode, configuredRules, ruleMapper, parserName, languageO
           規則可以透過監測 return、throws、break、continue
           的使用識別出不會被執行的程式，並列出錯誤報告。
         </p>
-        <a href="https://github.com/eslint/eslint/blob/main/lib/rules/no-unreachable.js">最近版本 no-unreachable.js</a>
+        <a href="https://github.com/eslint/eslint/blob/main/lib/rules/no-unreachable.js">
+          最近版本 no-unreachable.js
+        </a>
         <pre><code class="language-js">
 /**
  * @fileoverview Checks for unreachable code due to return, throws, break, and continue.
@@ -710,7 +712,7 @@ function isInitialized(node) {
 
 /**
  * Checks all segments in a set and returns true if all are unreachable.
- * @param {Set<CodePathSegment>} segments The segments to check.
+ * @param {Set&lt;CodePathSegment&gt;} segments The segments to check.
  * @returns {boolean} True if all segments are unreachable; false otherwise.
  */
 function areAllSegmentsUnreachable(segments) {
@@ -977,19 +979,118 @@ module.exports = {
     }
 };
         </code></pre>
-        <p>以上程式是透過 isUnreachable 函數來判別一個程式路徑是否無法觸及，下面提供相關的範例來幫助大家了解。請看以下程式。</p>
+        <p>
+          以上程式是透過 isUnreachable
+          函數來判別一個程式路徑是否無法觸及，下面提供相關的範例來幫助了解。請看以下程式。
+        </p>
         <pre><code class="language-js">
+function foo () {
+  return true;
+  console.log("done");
+}
 
+function bar(){
+  throw new Error("Oops!");
+  console.log("done");
+}
+
+
+while (value) {
+  break;
+  console.log("done");
+}
+
+throw new Error("Oops!") ; 
+console.log("done");
+
+function baz () {
+  if(Math.random() &lt; 0.5) {
+    return;
+  } else {
+    throw new Error ();
+  }
+  console.log("done");
+}
         </code></pre>
+        <p>
+          因為 unreachable
+          的程式需要被放在一個區塊中了解，透過單行敘述是無法進行判別的，因此需要使用
+          ConsecutiveRange 類別來保留連續程式資訊。
+        </p>
+        <p>
+          最後，這種優秀的外掛程式擴充機制對設計一個函數庫，尤其是設計一個標準工具來說，是非常值得參考的。事實上，prettier
+          也會在新的版本中引用外掛程式機制，目前已經在 beta 版本中引用。
+        </p>
+        <h3>自動化標準與團隊建設</h3>
+        <p>
+          自動化標轉中還有一些其他細節，舉例來說，使用 EditorConfig
+          來確保編輯器的统一設定，確保在定位字元空格或換行方面的一致性，以及透過結合使用 commitlint
+          和 husky 來確保 commit 資訊的標準。
+        </p>
+        <p>首先安裝 commitlint cli 和 conventional config，指令如下。</p>
+        <pre><code class="language-bash">
+npm install --save-dev @commitlint/(config-conventional, cli)
+        </code></pre>
+        <p>接著設定 commitlint，指令如下。</p>
+        <pre><code class="language-bash">
+echo "module.exports = {extends: ['@commitlint/config-conventional']}" >
+commitlint.config.js
+        </code></pre>
+        <p>
+          並在 commit-msg 的 git hook 階段檢查 commit 資訊，在 package.json 檔案中烤加以下程式。
+        </p>
         <pre><code class="language-js">
-
+{
+  "husky" : {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>
+          也可以根據團隊需求做更多訂製化的嘗試，舉例來說，自動標準化或生產 commit
+          資訊，有了標準的commit 資訊後，就可以分析關鍵內容，標準化生產 changelog 等。
+        </p>
+        <p>對於程式標準，還可以從團隊文件的生產入手，進行程式約束和標準制定。</p>
+        <p>
+          舉個實例，如果使用 React 開發專案，那麼 React
+          元件文件是如何標準化產生的呢？如何加強元件使用的效率，減少學習成本？想產生關於管理平台的閱讀文件（包含常用的樣式命名、工具方法、通用群元件、複雜
+          API 互動流程等）。
+        </p>
+        <p>
+          問題是：針對 React
+          程式的可維護性和可持續發展（避免每個團隊成員都把單一功能實現一遍，當新成員加入時能夠知道有哪些功能可以從現有的程式中重複使用，也能夠知道有哪些功能還沒有，可以增加進去），業內有哪些工具、npm
+          函數庫或開發模式是可以確切幫助解決痛點或改善現狀的呢？
+        </p>
+        <p>
+          隨著專案複雜度的提升，各種元件也呈爆炸式增長。讓這些元件方便好用，滿足快速上手的需求，同時不成為負擔，避免重複造輪子的現象。
+        </p>
+        <p>社區在 React 元件管理方面的探討很多，相關方案也各有特色，下面簡單整理一下。</p>
+        <ul>
+          <li>
+            最知名的方案一定是
+            <a href="https://storybook.js.org/">storybook</a>
+            ，它會產生一個靜態頁面；專門用來展示元件的實際效果及用法；缺點是業務侵入性較強，且 story
+            的撰寫成本較高。
+          </li>
+          <li>
+            還有一個方案是 react-docgen，它的風格比較極客，能夠分析並分析 React 元件資訊。原理是使用
+            recast 和 @babel/parser AST 進行分析，最後產出一個JSON
+            文件。它的缺點是較為輕量，缺乏有效的視覺化能力。
+          </li>
+          <li>
+            在 react docgen 之上，可以考慮使用的方案是 React Styleguidist ，這是一款 React
+            元件文件產生器，支援豐富的 demo，可能會更多地滿足日常需求。
+          </li>
+          <li>
+            一些小而美的解決方案，如 react-doc、react-doc-generator、cherrypdoc，也都可以考慮嘗試。
+          </li>
+        </ul>
+        <p>
+          「自己動手，豐衣足食」，其實開發一個類似的工具並不會太複雜。如果有時間和精力，可以根據自己的需求，整理一個完全符合自己團隊的
+          React 元件管理文件，或其他與架構或業務相關的文件，這非常有意義。
+        </p>
       </article>
     </main>
   </body>
