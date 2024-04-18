@@ -180,17 +180,17 @@ function bar(){
   console.log('bar1')
 }
 var bar = function(){
-  console.log ('bar2')
+  console.log('bar2')
 }
 bar() // 'bar2'
         </code></pre>
         <p>會輸出 bar2 ，接著我們調換程式順序，執行以下程式。</p>
         <pre><code class="language-js">
 var bar = function(){
-  console.log ('bar2')
+  console.log('bar2')
 } 
 function bar(){
-  console.log ('bar1')
+  console.log('bar1')
 }
 bar() // 'bar2'
         </code></pre>
