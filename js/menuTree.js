@@ -126,8 +126,8 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-4-1',
-            title: '1-4-1 🚧',
-            href: '1-4.html#1-4-1'
+            title: '1-4-1 效能監控和錯誤收集與上報 🚧',
+            href: '1-4-1.html'
           }
         ]
       },
