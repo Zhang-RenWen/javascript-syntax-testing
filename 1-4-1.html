@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-4-1">1-4-1 效能監控和錯誤收集與上報</h2>
+        <h3>效能監控指標</h3>
+        <p>
+          既然是效能監控，那麼首先就需要明確衡量指標。一般來說，業界認可的常用指撐有第一次繪製（FP）時間、第一次有內容繪製（FCP）時間、第一次有意義繪製（FMP）時間、初次載入畫面時間、使用者可互動（TTI）時間。接下來分別看一看每個指標的含義。
+        </p>
+        <ul>
+          <li>
+            <strong>第一次繪製時間(FP)：</strong>
+            對於應用頁面，第一次出現視覺上不同於跳羅之前內容的時間點，或說是頁面發生第一次繪製的時間點。
+          </li>
+          <li>
+            <strong>第一次有內容繪製時間(FCP)：</strong>
+            指瀏覽器完成繪製 DOM
+            中第一部分內容（可能是文字、影像或其他任何元素）的時間點，此時使用者應該在視覺上有直觀的感受。
+          </li>
+          <li>
+            <strong>第一次有意義繪製時間(FMP)：</strong>
+            指頁面關鍵元素的繪製時間。這個概念並沒有標準化定義，因為關鍵元素可以由開發者自行定義—究竟什麼是「有意義」的內容，只有開發者或產品經理自己了解。
+          </li>
+          <li>
+            <strong>初次載入畫面時間(TTI)：</strong>
+            對所有網頁應用，這是一個非常重要的指標。用白話來説，就是進入頁面之後，應用繪製完成整個手機螢幕（未捲動之前）內容的時間。需要注意的是，業界對這個指標其實沒有確切的定論，舉例來說，這個時間是否包含手機螢幕內圖片的繪製完成時間。
+          </li>
+          <li>
+            <strong>使用者可互動時間：</strong>
+            顧名思義，就是使用者可以與應用進行互動的時間。一般來講，我們認為是DOMReady
+            的時間，因為我們通常會在這時綁定事件操作。如果頁面中有關互動的指令稿沒有下載完成，那麼當然沒有到達所謂的使用者可互動時間。那麼，如何定義
+            DOMReady 時間呢？我推薦參考司徒正美的文章《何謂DOMReady》。
+          </li>
+        </ul>
+        <pre><code class="language-js">
+
+        </code></pre>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
