@@ -7,13 +7,13 @@
     <link rel="icon" href="./public/favicon.ico" />
     <meta http-equiv="cache-control" content="no-cache" />
     <title></title>
-    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.//normalize.css" />
     <link rel="stylesheet" href="./hightlight/default.min.css" />
     <link rel="stylesheet" href="./css/main.css" />
     <link rel="stylesheet" href="./css/copybutton.css" />
     <link rel="stylesheet" href="./css/hightlight.css" />
     <script src="./hightlight/hightlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.///clipboard.min.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
     <script src="./js/gtag.js"></script>
@@ -99,7 +99,151 @@
           所示。
         </p>
         圖3
+        <h3>FMP 的智慧獲取演算法</h3>
+        <p>
+          這裡結合自訂指標和第一次有意義繪製（FMP）時間，稍微延伸一點內容：
+          由於第一次有意義繪製比較主觀，開發者可以自行指定究竟哪些屬於有意義
+          的繪製元素，因此可以透過FMP的智慧獲取演算法來自訂FMP時間・該演 算法的實現過程如下。
+        </p>
+        <p>首先，取得有意義的繪製元素。一般認為，具備以下幾個條件的元素更像是有意義的元素。</p>
+        <ul>
+          <li>體積百分比比較大。</li>
+          <li>螢幕內可見百分比大。</li>
+          <li>屬於資源載入元素（img、svg、video、object、embed、canvas）。</li>
+          <li>由具備以上特徵的多種元素共同組成的元素。</li>
+        </ul>
+        <p>根據元素對頁面視覺的貢獻對元素特點的權重進行劃分，實際權重值如下所示。</p>
+        <pre><code class="language-js">
+const weightMap = {
+  SVG: 2,
+  IMG: 2,
+  CANVAS: 3,
+  OBJECT: 3, 
+  EMBED: 3,
+  VIDEO: 3,
+  OTHER: 1
+}
+        </code></pre>
+        <p>
+          接著，對整個頁面進行深度優先檢查搜尋，之後對每一個元素進行分數計算，實際透過
+          element.getBoundingClientRect 取得元素的位置和大小，然後透過計算所有元素的「width * height
+          * weight * 元素在 viewport
+          中的面積百分比」的乘積，確定元素的最後得分。將該元素的子元素得分之和與其得分進行比較，取較大值，記錄在候選集合中。這個集合是可視區域內得分最高的元素的集合，對這個集合的得分取平均值，然後過濾出在平均分之上的元素集合，進行時間計算。這就獲得了一個智慧的
+          FMP 時間。最後，程式由 qbright 實現。
+        </p>
+        <h3>效能資料取得</h3>
+        <p>了解了上述效能指標，下面來分析一下這些效能指標的資料究竟該如何計算並取得。</p>
+        <h4>window.performance：強大但有缺點</h4>
+        <p>
+          目前最為流行和可靠的方案是採用 window.performance API
+          計算效能指標資料，該API非常強大，不僅能計算出與頁面效能相關的資料，還能計算出與頁面資源載入和非同步請求相關的資料。
+          呼叫 window.performance timing 會傳回一個物件，這個物件包含各種頁面載入
+          和繪製的時間節點，如圖4所示。
+        </p>
+        圖4
+        <p>可以透過對上圖中的資訊進行計算獲得以下程式。</p>
 
+        <pre><code class="language-js">
+const window.performance = {
+  memory: {
+    usedJSHeapSize,
+    totalJSHeapSize, 
+    jsHeapSizeLimit
+  },
+  navigation: {
+    // 透過頁面重新導向跳躍到目前頁面的次數
+    redirectCount,
+    // 以哪種方式進入頁面
+    // 0 正常跳躍進入
+    // 1 透過 window.location.reload() 重新更新進入
+    // 2 透過瀏覽器歷史記錄及瀏覽器中的前進後退按鈕進入
+    // 255 透過其他方式進入
+    type,
+  },
+  timing: {
+    // 等於前一個頁面的 unLoad 時間，如果沒有前一個頁面，則等於 fetchStart 時間 navigationStart
+    // 前一個頁面的 unLoad 時間，如果沒有前一個頁面或前一個頁面與目前頁面在不同域中，則值為0
+    unloadEventStart,
+    // 前一個頁面中 unLoad 事件綁定的回呼函數執行完畢的時間
+    unloadEventEnd, 
+    redirectStart, 
+    redirectEnd,
+    // 檢查快取前，準備請求第一個資源的時間
+    fetchStart,
+    // 域名查詢開始的時間
+    domainLookupStart,
+    // 域名查詢結束的時間
+    domainLookupEnd,
+    // HTTP（TCP）開始建立連接的時間 connectStart，
+    // HTTP （TCP）建立連接結束的時間
+    connectEnd,
+    secureConnectionStart，
+    // 連接建立完成後，請求文件開始的時間 requestStart，
+    // 連接建立完成後，文件開始傳回並收到內容的時間
+    responseStart,
+    // 最後一個位元組傳回並收到內容的時間
+    responseEnd,
+    // Document.readyState 值為 loading 的時間
+    domLoading,
+    // Document.readyState值為interactive的時間
+    domInteractive,
+    // DOMContentLoaded事件開始的時間
+    domContentLoadedEventStart,
+    // DOMContentLoaded事件結束的時間
+    domContentLoadedEventEnd,
+    // Document.readyState值為 complete 的時間
+    domComplete,
+    // load事件開始的時間
+    loadEventStart,
+    // load事件結束的時間
+    loadEventEnd
+  }
+}
+        </code></pre>
+        <p>根據這些時間節點選擇對應的時間兩兩做差，便可以計算出一些典型指標，實際如下。</p>
+        <pre><code class="language-js">
+const calcTime = ()=> {
+  let times = {}
+  let t = window.performance.timing
+  // 重新導向時間
+  times.redirectTime = t.redirectEnd - t.redirectStart
+  // DNS 查詢耗時
+  times.dnsTime = t.domainLookupEnd - t.domainLookupStart
+  // TCP 建立連接完成驗證的時間
+  connect = t.connectEnd - t.connectStart
+  // TTFB 讀取頁面第一個位元組的時間
+  times. ttfbTime = t.responseStart - t.navigationStart
+  // DNS 快取時間
+  times.appcacheTime = t.domainLookupStart - t.fetchStart
+  // 移除頁面的時間
+  times.unloadTime = t.unloadEventEnd - t.unloadEventStart
+  // TCP 連接耗時
+  times.tcpTime = t.connectEnd - t.connectStart
+  // request 請求耗時
+  times.regTime = t.responseEnd - t.responseStart
+  // 解析 DOM 樹耗時
+  times.analysisTime = t.domComplete - t.domInteractive
+  // 空閒時間
+  times.blankTime = t.domLoading - t.fetchStart
+  // domReadyTime 即使用者可互動時間
+  times.domReadyTime = t.domContentLoadedEventEnd - t.fetchStart
+  // 使用者等待頁面完全可用的時間
+  times.loadPage = t.loadEventEnd - t.navigationStart
+  return times
+}
+        </code></pre>
+        <p>
+          這個 API 的功能非常強大，但是並不適用於所有場景。舉例來說，如果在單頁應用中改變 URL
+          但不更新頁面（單頁應用的典型路由方案），那麼使用 window.performance.timing
+          所取得的資料是不會更新的還需要開發者重新設計統計方案。同時，window.performance.timing
+          可能無法滿足一些自訂的資料。下面來分析一下部分無法直接取得的效能指標的計算方法。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
