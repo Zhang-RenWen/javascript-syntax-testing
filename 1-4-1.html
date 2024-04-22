@@ -99,7 +99,61 @@
           所示。
         </p>
         圖3
+        <h3>FMP 的智慧獲取演算法</h3>
+        <p>
+          這裡結合自訂指標和第一次有意義繪製（FMP）時間，稍微延伸一點內容：
+          由於第一次有意義繪製比較主觀，開發者可以自行指定究竟哪些屬於有意義
+          的繪製元素，因此可以透過FMP的智慧獲取演算法來自訂FMP時間・該演 算法的實現過程如下。
+        </p>
+        <p>首先，取得有意義的繪製元素。一般認為，具備以下幾個條件的元素更像是有意義的元素。</p>
+        <ul>
+          <li>體積百分比比較大。</li>
+          <li>螢幕內可見百分比大。</li>
+          <li>屬於資源載入元素（img、svg、video、object、embed、canvas）。</li>
+          <li>由具備以上特徵的多種元素共同組成的元素。</li>
+        </ul>
+        <p>根據元素對頁面視覺的貢獻對元素特點的權重進行劃分，實際權重值如下所示。</p>
+        <pre><code class="language-js">
+const weightMap = {
+  SVG: 2,
+  IMG: 2,
+  CANVAS: 3,
+  OBJECT: 3, 
+  EMBED: 3,
+  VIDEO: 3,
+  OTHER: 1
+}
+        </code></pre>
+        <p>
+          接著，對整個頁面進行深度優先檢查搜尋，之後對每一個元素進行分數計算，實際透過
+          element.getBoundingClientRect 取得元素的位置和大小，然後透過計算所有元素的「width * height
+          * weight * 元素在 viewport
+          中的面積百分比」的乘積，確定元素的最後得分。將該元素的子元素得分之和與其得分進行比較，取較大值，記錄在候選集合中。這個集合是可視區域內得分最高的元素的集合，對這個集合的得分取平均值，然後過濾出在平均分之上的元素集合，進行時間計算。這就獲得了一個智慧的
+          FMP 時間。最後，程式由 qbright 實現。
+        </p>
+        <h3>效能資料取得</h3>
+        <p>了解了上述效能指標，下面來分析一下這些效能指標的資料究竟該如何計算並取得。</p>
+        <h4>window.performance：強大但有缺點</h4>
+        <p>
+          目前最為流行和可靠的方案是採用 window.performance API
+          計算效能指標資料，該API非常強大，不僅能計算出與頁面效能相關的資料，還能計算出與頁面資源載入和非同步請求相關的資料。
+          呼叫 window.performance timing 會傳回一個物件，這個物件包含各種頁面載入
+          和繪製的時間節點，如圖4所示。
+        </p>
+        圖4
 
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
