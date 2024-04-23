@@ -238,6 +238,209 @@ const calcTime = ()=> {
           所取得的資料是不會更新的還需要開發者重新設計統計方案。同時，window.performance.timing
           可能無法滿足一些自訂的資料。下面來分析一下部分無法直接取得的效能指標的計算方法。
         </p>
+        <h4>自訂時間計算</h4>
+        <p>
+          初次載入畫面時間的計算方式不盡相同，開發者可以根據自己的需求來確定初次載入畫面時間的計算方式。下面列舉幾個典型的方案。
+        </p>
+        <p>
+          對網頁高度小於螢幕的網站來說，統計初次載入畫面繪製耗時非常簡單，只要在頁面底部加上指令稿，記錄執行該指令稿的時間，並將這個時間與
+          window.performance.timing.navigationStart 時間做差，即獲得初次載入畫面繪製耗時。
+        </p>
+        <p>
+          但網頁高度小於螢幕的網站畢竟是少數，對網頁高度大於一頁的頁面來說，需要先估算出接近於一螢幕的最後一個元素的位置，然後在該位置插入下面的指令稿。
+        </p>
+        <pre><code class="language-js">
+var time = +new Date() - window.performance. timing.navigationStart
+        </code></pre>
+        <p>上述方案顯然是比較理想化的，很難透過自動化工具或一段集中管理的程式對時間進行統計。</p>
+        <p>
+          開發者直接在頁面 DOM
+          中插入時間統計，不僅使程式侵入性太強，而且花費的成本很高。同時，這樣的計算方式其實並沒有考慮初次載入畫面圖片載入的情況，也就是說對於初次載入畫面圖片未載人完的情況，會被認為載入已經完成。如果要考慮初次載入畫面圖片的載入。建議使用透過集中化指令稿統計初次載入畫面時間的方法：使用計時器不斷檢測
+          img
+          節點，判斷圖片是否在初次載入畫面且載入完成，找到初次載入畫面載入最慢的圖片載入完成的時間，進一步計算出初次載入畫面時間；如果初次載入畫面沒有圖片，那就使用
+          DOMReady 時間。計算初次載入畫面繪製耗時的相關程式如下。
+        </p>
+        <pre><code class="language-js">
+const win = window
+const firstScreenHeight = win.screen.height
+let firstScreenImgs = []
+let isFindLastImg = false
+let allImgLoaded = false
+let collect = []
+const t = setInterval(() => {
+  let i, img 
+  if (isFindLastImg) {
+    if (firstScreenImgs.length){
+      for (i = 0; i &lt; firstScreenImgs.length; i++) {
+        img = firstScreenImgs[i]
+        if (!ing.complete) {
+          allImgLoaded = false
+          break
+        } else {
+          allImgLoaded = true
+        }
+      }
+    }else {
+      allImgLoaded = true
+    }
+    if (allImgLoaded) {
+      collect.push({
+        firstScreenLoaded: startTime - Date.now()
+      })
+      clearInterval(t)
+    }
+  } else {
+    var imgs = body.querySelector('img')
+    for (i = 0;i &lt; imgs.length; i++){
+      img = imgs[i]
+      let imgOffsetTop = getOffsetTop(img)
+      if (imgOffsetTop > firstScreenHeight) {
+        isFindLastImg = true
+        break
+      } else if (imgOffsetTop &lt;= firstScreenHeight && ! img.hasPushed) {
+        img.hasPushed = 1
+        firstScreenImgs.push(img)
+      }
+    }
+  }
+},0)
+
+const doc = document
+doc.addEventListener('DOMcontentLoaded',()=>{
+  const imgs = body.querySelector('img')
+  if (!imgs.length) {
+    isFindLastImg = true
+  }
+})
+
+win.addEventListener('load',()=>{
+  allImgLoaded = true
+  isFindLastImg = true
+  if (t) {
+    clearInterval(t)
+  }
+})
+        </code></pre>
+        <p>
+          另外一種方式是不使用計時器，且預設影響初次載入畫面時間的主要因素是圖片的載入，如果沒有圖片，那麼純粹繪製文字是很快的，因此，可以透過統計初次載入畫面內圖片的載入時間取得初次載入畫面繪製完成的時間，程式如下。
+        </p>
+        <pre><code class="language-js">
+(function logFirstScreen () {
+  let images = document.getElementsByTagName('img')
+  let iLen = images.length
+  let curMax = 0
+  let inScreenLen = 0
+
+  // 圖片的載入回呼
+  function imageBack () {
+    this.removeEventListener && this.removeEventListener('load',imageBack,!1)
+    if (++curMax === inScreenLen) {
+      // 所有在初次載入畫面的圖片均已載入完成的話，發送記錄檔
+      log()
+    }
+  }
+  //對所有位於指定區域的圖片綁定回呼事件
+  for (var s = 0; s &lt; iLen;s++){
+    var img = images[s]
+    var offset = {
+      top: 0
+    }
+    var curImg = img
+    while(curImg.offsetParent) {
+      offset.top += curImg.offsetTop
+      curImg = curImg.offsetParent
+    }
+    // 判斷圖片在不在初次載入畫面
+    if (document. documentElement. clientHeight &lt; offset.top) {
+      continue
+    }
+    // 圖片還沒有載入完成的話
+    if (!img.complete) {
+      inScreenLent+
+      img.addEventListener ('load', imageBack, !1)
+    }
+  }
+  //如果初次載入畫面沒有圖片，則直接發送記錄檔
+  if (inScreenLen ===0) {
+    log()
+  }
+  // 對發送記錄檔進行統計
+  function log () {
+    window.loginfo.firstScreen = +new Date()- window.performance.timing.navigationStart
+    console.log('初次載入畫面時間：'，+new Date()- window.performance.timing.navigationStart)
+  }
+})()
+        </code></pre>
+        <p>
+          可見，除了可以使用教科書般強大的 Performance
+          API，我們也完全擁有自主權來統計各種頁面效能資料。這需要開發者根據實際場景和業務需求，結合社區已有方案，找到完全適合自己的統計擷取方式。
+        </p>
+        <h3>錯誤訊息收集</h3>
+        <p>
+          錯誤訊息收集方式首先會想到兩種：透過ty catch 補捉錯誤，以及透過 window.onerror 進行監聽。
+        </p>
+        <h4>try catch 方案</h4>
+        <p>先來看一下 try catch 方案，程式如下。</p>
+        <pre><code class="language-js">
+try{
+  //程式區塊
+} catch (e){
+  //錯誤處理
+  //這裡可以將錯誤訊息發送給伺服器端
+}finally{
+  // 額外處理
+}
+        </code></pre>
+        <p>
+          這種方式需要開發者對預估存在錯誤風險的程式進行包裹，這個套件包裹過程可以手動增加，也可以透過自動化工具或類別庫完成。自動化方案是
+          AST 技術實現為基礎的，舉例來說，UglifyJS 透過提供操作 AST 的API，使得可以對每個函數增加
+          try catch，社區上的 foio 實現就是一個很好的實例。為函數自動包裹 try catch 的實現程式如下。
+        </p>
+        <pre><code class="language-js">
+const fs = require('fs')
+const = require('lodash')
+const UglifyJS = require('uglify-js')
+const isASTFunctionNode = node => node instanceof UglifyJS.AST_Defun || node instanceof UglifyJS.AST _Function
+const globalFuncTryCatch = (source, errorHandler) => {
+  if (!_.isFunction(errorHandler)) {
+    throw 'errorHandler should be a valid function'
+  }
+  const errorHandlerSource = errorHandler. toString ()
+  const errorHandlerAST = UglifyJS.parse('(' + errorHandlerSource + ')(error) ;')
+  var tryCatchAST = UglifyJS.parse('try{}catch(error){}')
+  const sourceAST = UglifyJS.parse(source)
+  var topFuncScope = []
+  tryCatchAST. body [0]. catch.body [0] = errorHandlerAST
+const walker = new UglifyJS.TreeWalker(function(node){
+if(isASTFunctionNode(node)) {
+  topFuncScope.push(node)
+}
+sourceAST.walk(walker)
+sourceAST.transform(transfer)
+const transfer = new UglifyJS.TreeTransformer(null,
+node => {
+if (isASTFunctionNode(node) &&
+_.includes(topFuncScope, node)) {
+var stream = UglifyJS. OutputStream ()
+for (var i = 0; i < node. body. length; i++) |
+node. body [i]. print (stream)
+var innerFuncCode = stream. toString ()
+tryCatchAST. body [0]. body. splice (0, tryCatchAST. body [0].body.
+length)
+var innerTyrCatchNode = UglifyJS. parse (innerFuncCode,
+{toplevel: tryCatchAST. body [0] /)
+node, body. splice (0, node. body. length) return UglifyJs.parse(innerTyrCatchNode.print_to_string(),
+{toplevel: node});
+const outputCode = sourceAST.print_to_string({beautify: true})
+return outputCode
+module. exports. globalFuncTryCatch = globalFuncTryCatch
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
