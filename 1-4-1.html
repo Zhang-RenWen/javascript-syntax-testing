@@ -405,42 +405,86 @@ const globalFuncTryCatch = (source, errorHandler) => {
   if (!_.isFunction(errorHandler)) {
     throw 'errorHandler should be a valid function'
   }
-  const errorHandlerSource = errorHandler. toString ()
+  const errorHandlerSource = errorHandler.toString()
   const errorHandlerAST = UglifyJS.parse('(' + errorHandlerSource + ')(error) ;')
   var tryCatchAST = UglifyJS.parse('try{}catch(error){}')
   const sourceAST = UglifyJS.parse(source)
   var topFuncScope = []
-  tryCatchAST. body [0]. catch.body [0] = errorHandlerAST
-const walker = new UglifyJS.TreeWalker(function(node){
-if(isASTFunctionNode(node)) {
-  topFuncScope.push(node)
+  tryCatchAST.body[0].catch.body[0] = errorHandlerAST
+  const walker = new UglifyJS.TreeWalker(function(node){
+    if(isASTFunctionNode(node)) {
+      topFuncScope.push(node)
+    }
+  })
+  sourceAST.walk(walker)
+  sourceAST.transform(transfer)
+  const transfer = new UglifyJS.TreeTransformer(null,
+  node => {
+    if (isASTFunctionNode(node) && _.includes(topFuncScope, node)) {
+      var stream = UglifyJS.OutputStream()
+      for (var i = 0; i &lt; node. body. length; i++) {
+        node.body[i].print(stream)
+      }
+      var innerFuncCode = stream.toString()
+      tryCatchAST.body[0].body.splice(0, tryCatchAST.body[0].body.length)
+      var innerTyrCatchNode = UglifyJS.parse(innerFuncCode,{toplevel: tryCatchAST.body[0]})
+      node,body.splice(0, node.body.length) 
+      return UglifyJS.parse(innerTyrCatchNode.print_to_string(),{toplevel: node});
+    }
+  })
+  const outputCode = sourceAST.print_to_string({beautify: true})
+  return outputCode
 }
+module.exports.globalFuncTryCatch = globalFuncTryCatch
+        </code></pre>
+        <p>
+          從 globalFuncTryCatch 函數的第一個參數中獲得目標程式 source，將其轉為 AST 的程式如下。
+        </p>
+        <pre><code class="language-js">
+ const sourceAST = UglifyJS.parse(source)
+        </code></pre>
+        <p>
+          globalFuncTryCatch
+          函數的第二個參數為開發者定義的出現錯誤時的回應函數，將錯誤回應函數字字元字串化並轉為 AST
+          插入 catch 區塊中，程式如下。
+        </p>
+        <pre><code class="language-js">
+var tryCatchAST = UglifyJS.parse('try{}catch(error){}')
+const errorHandlerSource = errorHandler.toString()
+const errorHandlerAST = UglifyJS.parse('(' +errorHandlerSource+')(error);')
+tryCatchAST.body[O].catch.body[0] = errorHandlerAST
+        </code></pre>
+        <p>
+          這樣，借助於 globalFuncTryCatch 便可以對每個函數增加 try catch 敘述，並根據
+          globalFuncTryCatch
+          的第二個參數傳入自訂的錯誤處理函數（可以在該函數中進行錯誤上報），程式如下。
+        </p>
+        <pre><code class="language-js">
+globalFuncTryCatch(inputCode, function(error) {
+  // 此處是異常處理程式，可以上報並記錄記錄檔
+})
+        </code></pre>
+        <p>這裡的關鍵在於要使用 UglifyJS 來對 AST 進行檢查，並在其中加入標記的內容，程式如下。</p>
+        <pre><code class="language-js">
+const walker = new UglifyJS.TreeWalker(function (node) {
+  if (isASTFunctionNode(node)) {
+    topFuncScope.push(node)
+  }
+})
 sourceAST.walk(walker)
 sourceAST.transform(transfer)
-const transfer = new UglifyJS.TreeTransformer(null,
-node => {
-if (isASTFunctionNode(node) &&
-_.includes(topFuncScope, node)) {
-var stream = UglifyJS. OutputStream ()
-for (var i = 0; i < node. body. length; i++) |
-node. body [i]. print (stream)
-var innerFuncCode = stream. toString ()
-tryCatchAST. body [0]. body. splice (0, tryCatchAST. body [0].body.
-length)
-var innerTyrCatchNode = UglifyJS. parse (innerFuncCode,
-{toplevel: tryCatchAST. body [0] /)
-node, body. splice (0, node. body. length) return UglifyJs.parse(innerTyrCatchNode.print_to_string(),
-{toplevel: node});
+        </code></pre>
+        <p>最後傳回經過處理後的程式，如下所示。</p>
+        <pre><code class="language-js">
 const outputCode = sourceAST.print_to_string({beautify: true})
 return outputCode
-module. exports. globalFuncTryCatch = globalFuncTryCatch
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>使用 try catch 可以確保頁面不當機，並對錯誤進行完整處理，這是一個非常好的習慣。</p>
+        <h4>try catch 方案的限制</h4>
+        <p>
+          try catch
+          處理異常的能力有限，對於處理執行時期同步錯誤是沒有問題的。但卻無法處理語法錯誤和非同步錯誤。下面來看一個處理執行時期同步錯誤的範例，程式如下。
+        </p>
         <pre><code class="language-js">
 
         </code></pre>
