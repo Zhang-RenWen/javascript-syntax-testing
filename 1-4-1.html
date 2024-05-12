@@ -486,6 +486,92 @@ return outputCode
           處理異常的能力有限，對於處理執行時期同步錯誤是沒有問題的。但卻無法處理語法錯誤和非同步錯誤。下面來看一個處理執行時期同步錯誤的範例，程式如下。
         </p>
         <pre><code class="language-js">
+try {
+  a //未定義變數
+} catch(e){
+  console.log(e)
+}
+        </code></pre>
+        <p>
+          上面程式中的錯誤可以被 try catch處理。但是，將上述程式改為語法錯誤後 （程式以下），try
+          catch 就無法捕捉錯誤了。
+        </p>
+        <pre><code class="language-js">
+try {
+  var a =\'a'
+} catch (e) {
+  console.log(e) ;
+}
+
+// X VM79:2 Uncaught SyntaxError: Invalid or unexpected token
+
+        </code></pre>
+        <p>再來看一下處理非同步錯誤的情況，程式如下。</p>
+        <pre><code class="language-js">
+try {
+  setTimeout(()=>{ a })
+} catch (e) {
+  console.log(e)
+}
+
+// X VM83:2 Uncaught ReferenceError: a is not defined at &lt;anonymous&gt;:2:20
+        </code></pre>
+        <p>歸納一下就是，try catch 能力有限，且對於程式的侵入性較強。</p>
+        <h3>認識 window.onerror</h3>
+        <p>
+          下面再看一下 window.onerror 對錯誤進行處理的方案。開發者只需要給 window 境加 onerror
+          事件監聽：同時注意將 window.onerror
+          放在所有指令搞之前，便能對語法異常和執行異常進行處理，程式如下。
+        </p>
+        <pre><code class="language-js">
+window.onerror = function (message, source, lineno, colno, error){
+  // ...
+}
+        </code></pre>
+        <p>這裡的參數較為重要，包含稍後需要上傳的資訊，實際解釋如下。</p>
+        <ul>
+          <li>message 為錯誤訊息提示。</li>
+          <li>source 為錯誤指令稿位址。</li>
+          <li>lineno 為錯誤程式所在的行號。</li>
+          <li>colno 為錯誤程式所在的列號。</li>
+          <li>error 為錯誤的物件資訊，舉例來説，error.stack 會取得錯誤的堆疊資訊。</li>
+        </ul>
+        <p>
+          window.onerror 這種方式對程式侵入性較小，因比不必透過 AST 向程式中自動插入指令稿。onerror
+          除了對語法錯誤和網路錯誤（因為網路請求異常不會發生事件上浮）無能為力，對非同步和同步錯誤都能捕捉到執行時錯誤。
+        </p>
+        <p>
+          但是需要注意的是，如果想使用 window.onerror 函數消化錯誤，則需要顯示傳回
+          true，以確保錯誤不會向上拋出，主控台上也不會出現一堆錯誤訊息資訊。
+        </p>
+        <h3>跨域指令稿的錯誤處理</h3>
+        <p>
+          干萬不要以為掌握了以上內容就萬事大吉了，現實中的場景有很多種，有一些場景有載入不同域的
+          Javascript
+          指令稿的需求，這樣的場景較為常見。舉例來說，載入協力廠商內容以展示廣告，進行效能測試、錯誤統計，使用協力廠商服務，等等。
+        </p>
+        <p>
+          對不同域的 JavaScript 檔案。window.onerror
+          不能保證取得到有效資訊：出於安全原因，不同瀏覽器傳回的錯誤訊息參數可能並不一致。舉例來說。跨域之後：window.onerror
+          在很多瀏覽器中是無法捕捉異常資訊的，要統一傳回指令稿錯誤（script error），就需要對 script
+          指令稿進行以下設定。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
 
         </code></pre>
         <pre><code class="language-js">
