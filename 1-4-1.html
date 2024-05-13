@@ -523,10 +523,28 @@ try {
           事件監聽：同時注意將 window.onerror
           放在所有指令搞之前，便能對語法異常和執行異常進行處理，程式如下。
         </p>
+        <div class="controls">
+          <button id="script-error" type="button">Generate script error</button>
+          <img class="bad-img" />
+        </div>
+
+        <div class="event-log">
+          <label for="eventLog">Event log:</label>
+          <textarea readonly class="event-log-contents" rows="8" cols="30" id="eventLog"></textarea>
+        </div>
         <pre><code class="language-js">
-window.onerror = function (message, source, lineno, colno, error){
-  // ...
-}
+const log = document.querySelector(".event-log-contents");
+
+window.addEventListener("error", (event) => {
+  log.textContent = `${log.textContent}${event.type}: ${event.message}\n`;
+  console.log(event);
+});
+
+const scriptError = document.querySelector("#script-error");
+scriptError.addEventListener("click", () => {
+  const badCode = "const s;";
+  eval(badCode);
+});
         </code></pre>
         <p>這裡的參數較為重要，包含稍後需要上傳的資訊，實際解釋如下。</p>
         <ul>
@@ -556,17 +574,38 @@ window.onerror = function (message, source, lineno, colno, error){
           在很多瀏覽器中是無法捕捉異常資訊的，要統一傳回指令稿錯誤（script error），就需要對 script
           指令稿進行以下設定。
         </p>
+        <p>令稿錯誤(script error)就需要對 script 指令稿進行下設定</p>
         <pre><code class="language-js">
-
+crossorigin="anonymous"
         </code></pre>
+        <p>要在伺服器端增加 Access-Control-Allow-Origin-header 內容以指定允許哪些域的請求存取。</p>
+        <h3>使用 source map 進行錯誤還原</h3>
+        <p>
+          目前為止,已經學習了取得錯訊息的方法但令稿是經過壓縮的,那麼也無用武之地，因為這樣捕捉到的錯誤訊息的位置(行列)會出現較大偏差,錯誤經過壓縮而難以辨認。這時就需要啟用
+          sourcemap 了。很多建置工具都支援 source map,舉例來說,對利用 webpack
+          包裝壓縮產生的一份對應指令稿的 map 檔案進行追蹤時,就在 webpack 中開 source map
+          功能，程式如下所示。
+        </p>
         <pre><code class="language-js">
-
+module.exports = {
+  // ...
+  devtool: '#source-map',
+  // ...
+}
         </code></pre>
+        <h3>針對 Promise 錯誤收集與處理</h3>
+        <p>
+          建議養成寫 Promise 的時候候最後寫上 catch 函數的習慣,不過 ESLint 外掛程式
+          eslint-plugin-promise 可以幫助完成這項工作,其會透過 catch-or-return 來確保程式中所有
+          Promise (被顯性傳回的除外)都有的 catch 處理,而以下寫法是無法透過程式檢查的。
+        </p>
         <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
+var p = new Promise()
+p.then(fn1)
+p.then(fn1, fn2)
+function fn1() {
+  p.then(doSomething)
+}
         </code></pre>
         <pre><code class="language-js">
 
@@ -584,4 +623,18 @@ window.onerror = function (message, source, lineno, colno, error){
     </main>
   </body>
   <script type="module" src="./js/main.js"></script>
+  <script>
+    const log = document.querySelector('.event-log-contents')
+
+    window.addEventListener('error', (event) => {
+      log.textContent = `${log.textContent}${event.type}: ${event.message}\n`
+      console.log(event)
+    })
+
+    const scriptError = document.querySelector('#script-error')
+    scriptError.addEventListener('click', () => {
+      const badCode = 'const s;'
+      eval(badCode)
+    })
+  </script>
 </html>
