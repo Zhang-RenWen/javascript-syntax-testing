@@ -607,6 +607,139 @@ function fn1() {
   p.then(doSomething)
 }
         </code></pre>
+        <p>這種 ESLint 掛程式是以 AST 實現為基礎的,其實現方式如下：</p>
+        <pre><code class="language-js">
+module.exports = {
+  meta: {
+    docs: {
+      //...
+    },
+    messages: {
+      // ...
+    }
+  },
+  create(context) {
+    const options = context.options[0] || {}
+    const allowThen = options.allowThen
+    let terminationMethod = options.terminationMethod || 'catch'
+    if (typeof terminationMethod === 'string') {
+      terminationMethod = [terminationMethod]
+    }
+    return {
+      ExpressionStatement(node) {
+        if (!isPromise(node.expression)) {
+          return
+        }
+        if (
+          (allowThen && node,
+          expression.type === 'CallExpression' &&
+            node.expression.callee.type === 'MemberExpression' &&
+            node.expression.callee.property.name === 'then' &&
+            node.expression.arguments.length === 2)
+        ) {
+          return
+        }
+        if (
+          (node.expression.type === 'CallExpression' && node,
+          expression.callee.type === 'MemberExpression' && terminationMethod,
+          indexOf(node.expression.callee.property.name) !== -1)
+        ) {
+          return
+        }
+        if (
+          node.expression.type === 'CallExpression' &&
+          node.expression.callee.type === 'MemberExpression' &&
+          node.expression.callee.property.type === 'Literal' &&
+          node.expression.callee.property.value === 'catch'
+        ) {
+          return
+        }
+        context.report({
+          node,
+          messageId: 'terminationMethod',
+          data: { terminationMethod }
+        })
+      }
+    }
+  }
+}
+
+        </code></pre>
+        <p>
+          上述程式依然是以 AST 為基礎的,對業務程式中含有Promise 邏輯述進行了判别,實際判斷規則是看
+          Promise 實例 then 方法後是否連線了catch 方法,如果沒有連線 catch 方法,則顯示出錯。
+        </p>
+        <p>
+          Promise 實例的 then 方法中的第二個 onRejected 函數也能處理錯誤,這和上面提到的 catch
+          差異請看下列程式。
+        </p>
+        <pre><code class="language-js">
+new Promise((resolve, reject) => {
+  throw new Error()
+}).then(()=> {
+  console.log('resolved')
+}, err => {
+  console.log('rejected')
+  throw err
+}).catch(err => {
+  console.log(err, 'catch')
+})
+        </code></pre>
+        <p>
+          上述程式執行後,將輸出 rejected,在有 onRejected 的情況下, onRejected 就會發揮作用，catch
+          不會被呼叫。而執行下面程式時，輸出 M705:10 Error at Promise.then (&lt;anonymous&gt;:4:9)
+          "catch"。此時, onRejected 並不能 捕捉 then 方法第一個參數onResolved 中的錯誤。
+        </p>
+        <pre><code class="language-js">
+new Promise((resolve, reject) => {
+  resolve()
+}).then(() => {
+  throw new Error()
+  console.log('resolved')
+},(err) => {
+  console.log('rejected')
+  throw err
+}).catch((err) => {
+  console.log(err, 'catch')
+})
+        </code></pre>
+        <p>
+          透過比較可以看出 catch
+          也許是進行錯誤處時最好的選擇。但是,這兩種方式各有特點，需要進步認識才能正確使用。
+        </p>
+        <p>
+          除此之外,在對 Promise 進行錯誤處理時,還可以捕捉事件 unhandlerejection，
+          並在此事件中集中進行錯誤收集,程式如下。
+        </p>
+        <pre><code class="language-js">
+window.addEventListener("unhandledrejection", e=> {
+  e.preventDefault()
+  console.log(e.reason)
+  return true
+})
+        </code></pre>
+        <h3>處理網路載入錯誤</h3>
+        <p>
+          前面提到的處理方式都是在瀏覽器端的指令稿邏輯產生錯誤時進行，下面設想用 script 標籤、link
+          標籤進行令稿或其他資源載入程式，此時會由於某種原因(可能服器錯誤,也可能網路不穩定)導致指令搞請求失敗,網路載入錯誤。
+        </p>
+        <pre><code class="language-html">
+&lt;script src="***.js"&gt;&lt;/script&gt;
+&lt;link ref="stylesheet" href="***.css"&gt;
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
