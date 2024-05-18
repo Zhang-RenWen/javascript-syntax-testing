@@ -727,15 +727,43 @@ window.addEventListener("unhandledrejection", e=> {
 &lt;script src="***.js"&gt;&lt;/script&gt;
 &lt;link ref="stylesheet" href="***.css"&gt;
         </code></pre>
+        <p>為了捕捉這些載入異常,可以進行以下操作。</p>
         <pre><code class="language-js">
-
+&lt;script src="***.js" onerror="errorHandler(this)">&lt;/script&gt;
+&lt;link rel-"stylesheet" href-"***.css" onerror="errorHandler(this)"&gt;
         </code></pre>
+        <p>
+          除此之外,也可以使用 window.addEventListener 方式對載入異常進行處理。注意,這時無法使用
+          window.onerror 進行處理,因為 window.onerror 事件是透過事件冒泡取得 error
+          資訊的,而網路載入錯誤是不會進行事件冒泡。
+        </p>
+        <p>
+          不支援冒泡的事件還有滑鼠(聚焦focus/失焦blur)
+          與滑鼠移動相關的事件(mouseleave/mouseenter)，一些 UI事件(如 scroll、resize)
+        </p>
+        <p>進一步對網路資源的載入異常進行處理的,程式如下。</p>
         <pre><code class="language-js">
-
+window.addEventListener('error',error => {
+  console.log(error)
+}, true)
         </code></pre>
+        <p>
+          怎麼區分網路資源載入錯誤和其他一般錯誤呢? 這裡有個小技巧,普通錯誤的 error 物件中會有一個
+          error.message ,表示錯訊息,而載入錯誤對應的 error 物件沒有,因此可以根據以下程式進行區分。
+        </p>
         <pre><code class="language-js">
-
+window.addEventListener('error', error => {
+  if (!error.message) {
+    //網路資源載入錯誤
+    console.1og(error)
+  }
+}, true)
         </code></pre>
+        <p>
+          但是,正因為沒有 error.message
+          屬性,也就沒有額外資訊取得實際的錯誤細節,現階段也無法實區分載入的錯誤類別，舉例來說，因為資源不存在產生的
+          404 服務端錯誤等,只能配合後端記錄檔進行排除。
+        </p>
         <pre><code class="language-js">
         </code></pre>
         <pre><code class="language-js">
