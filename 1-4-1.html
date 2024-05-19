@@ -764,22 +764,263 @@ window.addEventListener('error', error => {
           屬性,也就沒有額外資訊取得實際的錯誤細節,現階段也無法實區分載入的錯誤類別，舉例來說，因為資源不存在產生的
           404 服務端錯誤等,只能配合後端記錄檔進行排除。
         </p>
+        <p>
+          window.onerror 需要進行函數設定值,舉例來說，window.onerror = function(){ //...
+          }，因此重複宣告後會被取代,後續設定值會覆蓋之前的值，這是一個弊端。 如下面範例：
+        </p>
         <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
+window.onerror = function() {console.log(1)}
 
+window.onerror = function() {console.log(2)}
+
+window.dispatchEvent(new Event('error'))
+
+// 2
+// true 
+        </code></pre>
+        <p>window.addEventListener('error') 可以綁定多個回呼函數,按照綁定順序依次執行,如下範例。</p>
+        <pre><code class="language-js">
+window.addEventListener('error',()=>{console.log(1)})
+
+window.addEventListener('error',()=>{console.log(2)})
+
+window.dispatchEvent(new Event('error'))
+
+// 1
+// 2
+// true
+        </code></pre>
+        <h3>頁面當機收集和處理</h3>
+        <p>
+          成熟的系統還需要收集當機和卡頓資訊，為此以監聽 window 物件的 load 和 beforeunload
+          事件,並結合sessionStorage 對網頁當機實施監控。
+        </p>
+        <pre><code class="language-js">
+window.addEventListener('load', ()=>{
+  sessionStorage.setItem('good exit', 'pending')
+})
+
+window,addEventListener('beforeunload', ()=>{
+  sessionStorage.setItem('good exit', 'true')
+})
+
+if(sessionStorage.getItem('good exit') && sessionStorage.getItem('good exit'!== 'true')){
+  // 捕捉到頁面當機
+}
+        </code></pre>
+        <p>
+          這段程式想法是首先在網頁 load 事件的回呼裡利用 sessionStorage 將 good_exit 值記錄為
+          pending ; 接下來，在頁面無異常退出前，即在 beforeunload 事件回呼中將 sessionStorage 記錄的
+          good_exit 值修改為 true。
+        </p>
+        <p>
+          因此,如果頁面沒有當機的話 good_exit 值會在離開前被設定為 true，否則程式就可以透過
+          sessionStorage.getItem('good_exit')&& sessionStorage.getItem('good_exit')!=='true'
+          判斷出頁面當機,並進行處理。
+        </p>
+        <p>
+          如果應用中部署了 PWA ,那麼便可享受 service worker帶來的福利! 這裡可以透過 service worker
+          來完成網頁當機的處理工作。基本原理就是，service worker
+          和網頁的主執行緒相互獨立，因此即使網頁發生了當機現象，也不會影響 service worker
+          所在執行緒的工作。在監控網頁的狀態時，是透過
+          navigator.serviceWorker.controller.postMessage API 來進行資訊的取得和記錄的。
+        </p>
+        <h3>架構的錯誤處理</h3>
+        <p>
+          對架構來說，React 在16之前的版本是使用 unstable_handleError 來處理捕捉錯誤的; 16
+          之後的版本使用了著名的 componentDidCatch 來處理錯誤。Vue 中提供了 Vue.config.errorHandle
+          來處理捕到捉到的錯誤，如果開發者沒有設定 Vue.config.errorHandler，那捕捉到的錯誤會以
+          console.error 的方式輸出。
+        </p>
+        <p>
+          架構會透過 console.error 的方式拋出，因此可綁架 console.error
+          來捕捉架構中的錯誤並做出處理。
+        </p>
+        <pre><code class="language-js">
+const nativeConsoleError = window.console.error
+window.console,error = (...args) => nativeConsoleError.apply(this, [`I got ${args}`])
         </code></pre>
         <pre><code class="language-js">
-
+執行被綁架後的 console.error 邏輯，輸出如下圖所示：
         </code></pre>
+        <p>最後歸納一下處理的錯誤或異常,如下所示。</p>
+        <ul>
+          <li>JavaScript 語法錯誤、程式異常</li>
+          <li>AJAX 請求異常(xhr.addEventListener('error',function(e){//...}))</li>
+          <li>靜態資源載入異常</li>
+          <li>Promise 異常</li>
+          <li>跨域指令稿錯誤</li>
+          <li>頁面當機</li>
+          <li>架構錯誤</li>
+        </ul>
+        <p>
+          在真實生產境中,錯誤和異常有很多種,需要開發者格外留心,並注意覆蓋每一種情況。另外,除了效能和錯誤訊息,一些額外資訊,如頁面停留時間、長任務處理耗時等常常對分析網頁表現非常重要。對於錯誤訊息擷取和
+          處理的介紹就到此為止,接下來看一下資料的上報和系統設計。
+        </p>
+        <h2>效能資料和錯誤訊息上報</h2>
+        <p>
+          資料都有了,那麼該如何回報呢?可能有的開發者想:「不就是一個 AJAX 請求嗎？」
+          實際上還真沒有這麼簡單,有一些細節需要考慮。
+        </p>
+        <h4>1.回報採用單獨域名是否更好?</h4>
+        <p>成熟的網站資料回報的域名常常與業務域名並不相同。這樣做的好處主要有以下兩點。</p>
+        <ul>
+          <li>
+            使用單獨域名，可以防止主業務伺服器造成壓力，能夠避免記錄檔相關處理邏輯和資料在主業務伺服器上的堆積。
+          </li>
+          <li>
+            另外,很多瀏覽器對同一個域名的請求量有平行處理數的限制，單獨域名能夠充分利用現代瀏覽器的平行處理設定。
+          </li>
+        </ul>
+        <h4>2.獨立域名的跨域問題</h4>
+        <p>
+          對於單獨的記錄檔域名，一定有關跨域問題。經常發現頁面使用建置空的 Image
+          物件的方式（如下所示）進行資料回報。原因是請求圖片並不涉及跨域問題。
+        </p>
         <pre><code class="language-js">
-
+let url = 'xxx'
+let img = new Image()
+img.src = url
         </code></pre>
+        <p>可以將資料進行序列化，作為 URL 參數進行傳遞，程式如下。</p>
         <pre><code class="language-js">
-
+let url = 'xxx?data=' + JSON.stringify(data)
+let img = new Image()
+img.src = url
         </code></pre>
+        <h4>3.何時回報資料</h4>
+        <p>頁面載入效能資料可以在頁面穩定後進行回報。</p>
+        <p>
+          一次回報就是一次存取，對於其他錯誤和異常資料的回報，假設我們的應用記錄檔量很大，那麼就有必要將記錄檔合併，在同一時間統一回報。那麼，在什麼場景下回報效能資料呢?一般有以下4種場景。
+        </p>
+        <ul>
+          <li>頁面載入和重新更新</li>
+          <li>頁面切換路由</li>
+          <li>頁面所在的 Tab 標籤重新變得可見</li>
+          <li>頁面關閉</li>
+        </ul>
+        <p>但是，對越來越多的單頁應用來說，需要格外注意資料回報時機。</p>
+        <p>
+          如果切換路由是透過改變 hash 值實現的，那麼只需要監聽 hashchange 事件;如果是透過 history
+          API 改變 URL，那需使用 pushState 和 replaceState 事件。當然，一勞永逸的做法是進行系統更新
+          (monkey patch)，並結合發佈/訂閱模式為相關事件的觸發增加處理。
+        </p>
+        <pre><code class="language-js">
+const patchMethod = type =>
+() => {
+  const result = history[type].apply(this, arguments)
+  const event = new Event(type)
+  event.arguments = arguments
+  window.dispatchEvent (event)
+  return result
+}
+
+history.pushState = patchMethod('pushState')
+history.replaceState = patchMethod('replaceState')
+        </code></pre>
+        <p>
+          以上程式透過重新定義 history.pushState 和 history.replaceState 方法，增加並觸發 pushState
+          和 replaceState 事件,可以在history.pushState 和 history.replaceState
+          事件觸發時增加訂閱函數並進行回報。
+        </p>
+        <pre><code class="language-js">
+window.addEventListener('replaceState', e => {
+  // report...
+})
+window.addEventListener('pushState', e =>{
+  // report...
+})
+        </code></pre>
+        <p>對於非單頁面應用，該何時回報，以及如何回報呢?</p>
+        <p>
+          如果是在頁面離開時進行資料發送的，那麼在頁面移除期間是否能夠安全地發送完資料就是一個難題，因為在頁面跳轉進入下一個頁面時，
+          難以保證非同步資料的安全發送。如果使用同步 AJAX 方法，則程式如下所示。
+        </p>
+        <pre><code class="language-js">
+window.addEventListener('unload', logData, false)
+const logData = () => {
+  var client = new XMLHttpRequest() ,open("POST","/log",false) //第三個參數表明 XHR 是同步的
+  client.setRequestHeader("Content-Type", "text/plain;charset=UTF-8")
+  client.send(data)
+}
+        </code></pre>
+        <p>上述程式可以完成資料的回報,但是會對頁面跳躍的流暢程度和使用者體驗造成影響。</p>
+        <p>推薦一個 sendBeacon 方法,其程式如下。</p>
+        <pre><code class="language-js">
+window.addEventListener('unload', logData, false)
+const logData = () => {
+  navigator.sendBeacon("/log", data)
+}
+        </code></pre>
+        <p>
+          navigator.sendBeacon
+          天生是解決頁跳躍時的請求發送問題的。他的幾個特點決定了對應問題的解決方案。
+        </p>
+        <ul>
+          <li>
+            它的行為是非同步的,也就是說請求的發送不會阻塞跳躍到下一個頁面，因此可以確保跳躍的流暢度。
+          </li>
+          <li>它在沒有極端資料量和佇列總數的限制下，優先傳回 true 以確保請求成功發送。</li>
+        </ul>
+        <p>
+          目前,Google Analytics 使用 navigator.sendBeacon 回報資料，透過動態建立 img 標籤，以及在
+          img.src 中連接 URL 的方式發送請求，不存在跨域限制。如果 URL 太長，就採用 sendBeacon
+          的方式傳送請求;如果瀏覽器不支援 sendBeacon 方法，發送 AJAX post 同步請求。對URL
+          長度進行判斷的程式如下所示。
+        </p>
+        <pre><code class="language-js">
+const reportData = url => {
+  // ...
+  if (urlLength < 2083) {
+    imgReport(url, times)
+  } else if (navigator.sendBeacon){
+    sendBeacon(url, times)
+  } else {
+    xmlLoadData(url, times)
+  }
+}
+        </code></pre>
+        <p>
+          如果網頁存取量很大,那麼因為一個錯誤所發送的資訊就會非常多，我們可以給錯誤訊息的回報設定一個擷取率,如下所示。擷取率可以根據實際情況來設定，設定方法有很多種。
+        </p>
+        <pre><code class="language-js">
+const reportData = url => {
+  // 只擷取30%
+  if (Math.random() < 0.3) {
+    send(data)
+  }
+}
+        </code></pre>
+        <h2>無侵入和效能人性化的方案設計</h2>
+        <p>根據這些基礎知識,如何設計一個好的系統方案呢?</p>
+        <p>首先，這樣的系統大致可分為4個段,如下圖所示：</p>
+        <p>下面針對這幾個階段聊一下關鍵方面的核心細節。</p>
+        <h4>1.資料回報最佳化</h4>
+        <p>
+          HTTP 2.0 帶來的新特性，可以持續最佳化回報效能。 舉例來說，採用 HTTP 2.0
+          頭部壓縮，以減少資料傳送大小; 採用 HTTP 2.0 多工技術，以充分利用連結資源。
+        </p>
+        <h4>2.介面和智慧化設計</h4>
+        <p>由於線上情況複雜多樣，所以需要選擇更加智慧化的方案。可以從以下幾個方面考慮。</p>
+        <ul>
+          <li>識別流量高峰和低谷時期，動態設定上取樣速率。</li>
+          <li>增強資料清洗能力，加強資料的可用性，對一些垃圾資訊進行過濾。</li>
+          <li>透過設定化，減少業務連線成本。</li>
+          <li>
+            如果使用者一直觸發錯誤，則系統會不停地回報相同的錯誤內容，這時可以考慮是否需要進行短時間濾重。
+          </li>
+        </ul>
+        <h4>3.即時性</h4>
+        <p>
+          對系統資料的分析都是後置的,而如果想做到即時提醒,就要依賴後端服務,將超過設定值的情況進行郵件或簡訊發送。
+        </p>
+        <p>
+          在這個鏈路中,將每個細節單獨拿出來都是一個值得玩味的話題，舉例來說，警告設定值如何設定。在不同的時段和日期，應用的流量差別可能很大。
+          舉例來說，點評類別應用或酒店預訂類別應用在節假日產生的流量就遠高於平時。如果不對警告設定值做特殊處理，那由於警告過於敏感，運行維護人員或開發人員也許就會受到「騷擾」。業界流行
+          3-sigma 設定值設定。 3-sigma
+          是一個統計學概念，表示對一個正態分佈或近似正態分佈來說，數值分佈在 (μ-3σ , μ+3σ)
+          中屬於正常範圍區間。
+        </p>
       </article>
     </main>
   </body>
