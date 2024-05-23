@@ -63,11 +63,13 @@
             DOMReady 時間呢？我推薦參考司徒正美的文章《何謂DOMReady》。
           </li>
         </ul>
-        圖1
+        <div>圖1</div>
+        <img src="./assets/image/1-4-1/1.jpg" alt="" />
         <p>
           圖1是造訪 Medium 行動網站分析獲得的時序圖，可根據網頁載入的不同時段體會個時間節點變化。
         </p>
-        圖2
+        <div>圖2</div>
+        <img src="./assets/image/1-4-1/2.jpg" alt="" />
         <p>Google Lighthouse 對網站的分析結果如 圖2 所示。</p>
         <p>
           請注意，First Meaningful Paint、First Contentful Paint 及 Time to
@@ -98,7 +100,8 @@
           事件才會被觸發。因此，在時間除上，Load 事件常常會落後於 DOMContentLoaded 事件，如 圖3
           所示。
         </p>
-        圖3
+        <div>圖3</div>
+        <img src="./assets/image/1-4-1/3.jpg" alt="" />
         <h3>FMP 的智慧獲取演算法</h3>
         <p>
           這裡結合自訂指標和第一次有意義繪製（FMP）時間，稍微延伸一點內容：
@@ -140,7 +143,8 @@ const weightMap = {
           呼叫 window.performance timing 會傳回一個物件，這個物件包含各種頁面載入
           和繪製的時間節點，如圖4所示。
         </p>
-        圖4
+        <div>圖4</div>
+        <img src="./assets/image/1-4-1/4.jpg" alt="" />
         <p>可以透過對上圖中的資訊進行計算獲得以下程式。</p>
 
         <pre><code class="language-js">
@@ -840,9 +844,9 @@ if(sessionStorage.getItem('good exit') && sessionStorage.getItem('good exit'!== 
 const nativeConsoleError = window.console.error
 window.console,error = (...args) => nativeConsoleError.apply(this, [`I got ${args}`])
         </code></pre>
-        <pre><code class="language-js">
-執行被綁架後的 console.error 邏輯，輸出如下圖所示：
-        </code></pre>
+        <p>執行被綁架後的 console.error 邏輯，輸出如下圖所示：</p>
+        <div>圖5</div>
+        <img src="./assets/image/1-4-1/5.jpg" alt="" />
         <p>最後歸納一下處理的錯誤或異常,如下所示。</p>
         <ul>
           <li>JavaScript 語法錯誤、程式異常</li>
@@ -994,6 +998,8 @@ const reportData = url => {
         <h2>無侵入和效能人性化的方案設計</h2>
         <p>根據這些基礎知識,如何設計一個好的系統方案呢?</p>
         <p>首先，這樣的系統大致可分為4個段,如下圖所示：</p>
+        <div>圖6</div>
+        <img src="./assets/image/1-4-1/6.jpg" alt="" />
         <p>下面針對這幾個階段聊一下關鍵方面的核心細節。</p>
         <h4>1.資料回報最佳化</h4>
         <p>
