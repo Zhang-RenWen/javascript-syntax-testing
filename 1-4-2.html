@@ -293,15 +293,91 @@ window.onload = () => {
           節流和去抖動總是一起出現的,那麼它們有什麼不同呢?
           首先,節流和去抖動解決的問題相同,方向類似,兩者並不會減少事件的觸發,而是減少事件觸發時回呼數的執行次數但是,在達成這個目的的方式上,節流和去抖動採用的方法是不一樣的。
         </p>
+        <ul>
+          <li>
+            去抖動:抖動現象的本質是短時間內產生了高頻次觸發。因此,短時間內的多個連續呼叫歸併成一次,也就是只觸發一次回呼函數。
+          </li>
+          <li>
+            節流:使短時間內的函數呼叫以一個固定的頻率間隔執行,這就如同透過水龍頭開關限制出水口流量一樣。
+          </li>
+        </ul>
+        <p>另外,請參考圖示來進一步感受兩者的不同。去抖動圖示如下所示：</p>
+        <p>了解了原理,再來實現一下事件去抖動,程式如下。</p>
         <pre><code class="language-js">
+// 簡單的去抖動函數
+const debounce = (func, wait, immediate) => {
+  let timeout
+  return function (){
+    const context = this
+    const args = arguments
+    const callNow = immediate & !timeout
+    timeout && clearTimeout(timeout)
+    timeout = setTimeout(function() {
+      timeout = null
+      if (!immediate) func.apply(context, args)
+    }, wait)
+    if (callNow) func.apply(context, args)
+  }
+}
 
+// 使用了去抖動函數
+window.addEventListener('scroll', debounce(() => {
+  console.log('scroll')
+}, 500))
+
+// 沒使用去抖動函數
+window.addEventListener('scroll', () => {
+  console.log('scroll')
+})
         </code></pre>
+        <p>
+          如以上程式所示,使用 setTimeout 在 500ms 後執行事件回呼,如果在這 500ms
+          內又有相關事件觸發,則透過clearTimeout(timeout) 取消上一次設定的回呼。因此,在 500ms
+          沒有觸發 scroll 事件回呼函數,或說,500ms
+          內的多次呼叫被歸併了一次,在最後一次抖動執行完畢後才會執行回呼。同時,設定了 immediate
+          參數,用以即執行回呼。
+        </p>
+        <p>事件節流的實現思想與事件去抖動類似,程式如下。</p>
         <pre><code class="language-js">
+const throttle = (func, wait) => {
+  let startTime = 0
+  return function() {
+    let handleTime = +new Date()
+    let context = this
+    const args = arguments
+    if (handleTime - startTime >= wait) {
+      func.apply(context, args)
+      startTime = handleTime
+    }
+  }
+}
 
+window.addEventListener('scroll', throttle(()=>{
+  console.log('scroll')
+}, 500))
         </code></pre>
+        <p>也可以使用 setTimeout 來實作。</p>
         <pre><code class="language-js">
-
+const throttle = (func, wait) => {
+  let timeout
+  return function () {
+    const context = this
+    const args = arguments
+    if (!timeout) {
+      timeout = setTimeout(function() {
+        func.apply(context, args)
+        timeout = null
+      }, wait)
+    }
+  }
+}
         </code></pre>
+        <p>與事件去抖動相比,事件節流少了 clearTimeout 的操作。</p>
+        <p>
+          要準確了解節流和去抖動,還需要多動手實作。lodash
+          函數庫關於節流和去抖的實作可以做參考。事實上,這個話題還可以玩出很多花樣來,舉例來說,如何曝露給開發者
+          cancelDebounce,以上程式中 throttle 的兩種方式是否可以最佳化,等等。
+        </p>
       </article>
     </main>
   </body>
