@@ -98,6 +98,7 @@
           </li>
           <li>當對同一層級節點進行比較時,開發者可以使用 key 屬性來宣吿同一層級節點的更新方式。</li>
         </ul>
+        <img src="./assets/image/1-4-3/1.jpeg" alt="" />
         <p>
           另外，setState 方法會引發「蝴蝶效應」,並透過創新的diff
           演算法找到需要更新的最小單元集,但是這些變更並不一定立即同步生效。實際上, React 會執行
@@ -375,14 +376,126 @@ export class Component extends React.Component{
   }
 }
         </code></pre>
+        <p>
+          使用 PureComponent 宣的元件會自動在觸發繪製前後進行 {name , age, hobby}
+          物件值比較。如果物件值沒有發生變化,則 shouldComponentUpdate 回傳
+          false,以避開不必要的繪製。因此,使用 PureComponent
+          宣吿的元件效能明顯優於其他方式。在不同的瀏覽器環境下,結論如下。
+        </p>
+        <ul>
+          <li>在FirefoxPureComponent繪製效率高出 30%</li>
+          <li>在SafariT,PureComponent 繪製效率高出 6%</li>
+          <li>在Chrome,PureComponent 繪製效率高出15%</li>
+        </ul>
+        <p>
+          實際上是透過定義 changedItems 來表示變化陣列的專案，透過 array
+          表示所需繪製的陣列的。changedItems.length/array.length
+          的比值越小,表示陣列中變化的元素越少,React.PureComponent
+          有關的效能最佳化也就越有必要實施,因為React.PureComponent
+          透過淺比較避開了不必要的更新過程,而淺比較本身的計算成本一般都不值一提。
+        </p>
+        <p>
+          當然 PureComponent
+          也不是萬能的,尤其是使用它進行淺比較時,需要格外注意。因此在特定情況下,開發者根據需求自己實現
+          shouldComponentUpdate 中的比較邏輯將是更高效的選擇。
+        </p>
+        <h3>React 效能設計亮點</h3>
+        <p>
+          React 的效能設計亮點非常多,除了老生常談的虛擬
+          DOM,還有很多不為人知的細節,例如事件機制(合成和池化)、React Fiber 設計。
+        </p>
+        <h4>React 效能設計亮點之事件</h4>
+        <ul>
+          <li>將所有事件掛載到 document 節點上,利用事件代理實現最佳化。</li>
+          <li>採用合成事件，在原生事件的基礎上包裝合成事件,並結合池化想法實現記憶體保護。</li>
+        </ul>
+        <h4>React 效能設計亮點之 setState</h4>
+        <p>
+          其非同步
+          (或叫合併)設計也是出於效能的考慮。這種最佳化想法已經被很多框架所參考,Vue中也有類似的設計。
+        </p>
+        <h4>React 能設計亮點之 React Fiber</h4>
+        <p>
+          在瀏覽器主執行緒中,JavaScript 程式在呼叫堆 疊即時執行,可能會呼叫瀏覽器的 API 對 DOM
+          操作;也可能執行一些非同步任務,這些非同步任務如果是以回呼的方式處理的,常常會被增加到 event
+          queue 中;如果是以 Promise 的方式處理的,就會被先放到 job queue
+          中。這種操作有關巨任務和微任務,這些非同步任務和繪製任務將在下一個時序中由呼叫堆疊處理執行。
+        </p>
+        <p>
+          如果呼叫堆疊執行一個很耗時的指令稿,例如解析一個圖片,則呼叫堆疊就會像上下班高峰期的幹道入口一樣,被這個複雜任務堵塞。主執行緒中的其他任務都要排隊等待處理,進而阻塞UI回應。這時,使用者點擊、輸入、頁面動畫等都沒有了回應。
+        </p>
+        <p>
+          一般,有兩種方案可以用來突破上瓶頸,其中之一就是將耗時高、成本高、易阻塞的長任務進行切片,分成子任務,並非同步執行它們。
+        </p>
+        <p>
+          這樣一來,這些子任務就會在不同的執行堆疊的執行週期執行,進而使主執行緒可以在子任務間隙中執行
+          UI 更新操作。設想一個常見的場景:如果需要繪製一個由10萬資料組成的列表,就可以將資料分段,使用
+          setTimeout
+          進行分步處理,這樣建置繪製列表的工作就被分了不同的子任務並在瀏覽器中依次執行。在這些子任務執行的間隙,瀏覽器就可以處理UI更新。
+        </p>
+        <p>React 在 JavaScript 執行層面花費的時間較多,因為這一過程十分複雜：</p>
+        <ul>
+          <li>建置 Virtual DOM→計算 DOM diff→產生 render patch</li>
+        </ul>
+        <p>
+          也就是說,在某種程度上,React著名的排程策略 -- stack reconciler(堆疊協調),是 React
+          的效能瓶頸。因為該策略會深度優先檢查所有的 Virtual DOM 節點 ，計算完整棵 Virtual DOM 樹的
+          diff 後，才會使任務移出堆疊並釋放執行緒,所以瀏覽器主執行緒在被 React
+          更新任務佔據時,使用者與瀏覽器進行的任何互動都不會獲得回饋,只有等到任結束後,才能獲得瀏覽器的回應。
+        </p>
+        <h3>Vue3.0 動靜結合的 Dom diff</h3>
+        <p>
+          Vue 3.0 之所能夠做出動靜結合 DOM diff ,或把這個
+          問題放得更大,之所能夠做到預先編譯最佳化,是因為 Vue
+          可靜態解析範本,在解析範本時,整個解析過程是:利用正規表示法順序解析範本,當解析到開始標籤、閉合標籤和文字時就會分別執行對應的回呼函數，來達到建置
+          AST的目的。
+        </p>
+        <p>上述過程可以用下圖來概括。</p>
+        <p>將這個過程用程式進行表述,如下所示</p>
+        <img src="./assets/image/1-4-3/2.jpeg" alt="" />
         <pre><code class="language-js">
-
+const ast = parse(template, options)
+optimize(ast, options)
+const code = generate(ast, option)
         </code></pre>
+        <p>
+          借助預先編譯過程 Vue
+          可以大幅地做到預先編譯最佳化。舉例來說,在預先編譯時標記出範本中可能變化的元件節點,再次進行
+          diff
+          操作時就可以跳過「永遠不會變化的節點」,而只需要比較『可能變化的動態節點」。這也就是動靜結合的
+          DOM diff 將 diff 成本從與範本大小正相關最佳化到與動態節點正相關最佳化的理論依據。
+        </p>
+        <p>
+          也可標記出一些快速通道(fast path)。舉例說,對於某個複雜元件中的 className
+          發生變化的場景(這個場景很常見,例如透過根據變數更改 className
+          來應用不同的樣式)，就可以在預先編譯階段進行特定的標記，在重新繪製 diff 時只需要更新新的
+          className 即可。
+        </p>
+        <p>從預先編譯最佳化的本質上來看,React是否可像Vue 那樣進行預先編譯最佳化呢?</p>
+        <p>
+          在進行預先編譯最佳化時,Vue需要做資料雙向綁定,進行資料攔截或代理,所以需要在預先編譯階段靜態分析範本,分析出視圖依賴了哪些資料進行響應式處理;
+          而 React 只需進行局部重新繪製,它所負責的就是一堆遞迴 React. createElement
+          的執行呼叫,無法從範本層面進行靜態分析。
+        </p>
+        <p>以下這樣的JSX</p>
         <pre><code class="language-js">
-
+&lt;div&gt;
+  &lt;p&gt;
+    &lt;span&gt; This is a test &lt;/span&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
         </code></pre>
+        <p>將被編譯為以下內容。</p>
         <pre><code class="language-js">
-
+React.createElement (
+  "div", null,
+  React.createElement (
+    "p", null,
+    React.createElement (
+      "span", null, "This is a test"
+    )
+  )
+)
         </code></pre>
         <pre><code class="language-js">
 
