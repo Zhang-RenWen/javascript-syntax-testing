@@ -143,11 +143,237 @@ class MyComponent extends Component {
   // ...
 }
         </code></pre>
+        <p>lodash 函式庫中的 memoize 該函數可以簡化上述程式,如下。</p>
         <pre><code class="language-js">
-
+import memoize from 'lodash/memoize'
+class MyComponent extends Component{
+  _render = memoize((text) => &lt;div&gt;{text}&lt;/div&gt;)
+  render() {
+    return _render(this.props.text)
+  }
+}
         </code></pre>
+        <p>不妨在之前介的高階元件的基礎上設想這樣一種高階元件:</p>
+        <p>
+          顆粒較細地控制元件的繪製行為。舉例來說,某個元件僅在某一項 props
+          變化時才會觸發重新繪製。這樣一來,開發者就可以完全掌控元件繪製時機,更有針對性地進行繪製最佳化。
+        </p>
+        <p>
+          在社群中,優秀的 recompose 函數庫剛好可以滿足需求。舉例來說,以下是利用了 recompose
+          函數庫的onlyUpdateForKeys 修飾器的程式。
+        </p>
         <pre><code class="language-js">
+@onlyUpdateForKeys(['prop1', 'prop2'])
+class MyComponent2 extends Component {
+  render () {
+    // ...
+  }
+}
+        </code></pre>
+        <p>
+          在使用 onlyUpdateForKeys 修飾器的情況下, MyComponent2 元件只在 prop2
+          發生變化時才進行繪製,其他 props 無論發生什麼變化,都不會觸發重新繪製。
+        </p>
+        <p>
+          onlyUpdateForKeys 背後的原理是在高階元件中呼叫 shouldComponentUpdate
+          方法,並在該方法中比較物件由完整的 props 轉為傳入的指定 props。可以翻閱 recompose
+          源碼進行原理了解。
+        </p>
+        <h4>避開 inline function 反模式</h4>
+        <p>
+          需要注意一個「反模式」。當使用 render 方法時,要留意 render
+          方法內建立的函數或陣列等,它們可能是顯性產生的,也可能是隱式產生的。這些新產生的函數或陣列在達到一定數量時會造成一定的效能負擔。同時
+          render
+          方法經常被反覆執行多次,也就是說總有新的函數或陣列被建立,這樣會造成記憶體無意義負擔。
+        </p>
+        <p>對效能比較人性化的做法通常是,只建立一次自訂函數,而非每次繪製時都建立一次,程式如下。</p>
+        <pre><code class="language-js">
+render() {
+  return &lt;MyInput onChange={this.props.update.bind(this)} /&gt;;
+}
+        </code></pre>
+        <p>或可以使用以下操作。</p>
+        <pre><code class="language-js">
+render() {
+  return &lt;MyInput onChange={()=> this.props.update()} /&gt;;
+}
+        </code></pre>
+        <p>
+          對於在 render 方法內產生新的陣列或其他類類型資料的情况,也存在相似的問題,例如下面的程式。
+        </p>
+        <pre><code class="language-js">
+render() {
+  return &lt;SubComponent items={this.props.items || [] }/&gt;
+}
+        </code></pre>
+        <p>這樣做會在每次繪製 this.props.items 不存在時建立一個空陣列。對此，更好的做法如下。</p>
+        <pre><code class="language-js">
+const EMPTY_ARRAY = []
+render() {
+  return &lt;SubComponent items={this.props.items || EMPTY_ARRAY}/&gt;
+}
+        </code></pre>
+        <p>
+          這些副作用對效能的影響都微乎其微,它們並不是效能最佳化的元兇。但是了解這些內容對於撰寫高品質的程式還是有幫助，後續會針對這種情況進行架構層面上的啟發式探索。
+        </p>
+        <h4>使用 PureComponent 確保開發性能</h4>
+        <p>
+          PureComponent 大致與 Component 相同,唯一不同的地方是 PureComponent
+          會自動幫助開發者使用shouldComponentUpdate 生命週期方法，也就是說， 當元件 state 或 props
+          發生化時,正常的 Component 都會自動進行重新繪製,在這種情況下 shouldComponentUpdate 會預傳回
+          true。但是， Component 會先進行比較,即比較前後的 state 和 props
+          是否相等。需要注意這種比較是淺比較。如何了解所謂的淺比較呢?以下是一段典型淺比較程式。
+        </p>
+        <pre><code class="language-js">
+function shallowEqual (objA: mixed, objB: mixed) {
+  if (is(objA, objB)) {
+    return true;
+  }
 
+  if(typeof objA !== 'object' l1 objA === null || typeof objB !== 'object' II objB === null) {
+    return false;
+  }
+
+  const keysA = Object.keys(objA);
+  const keysB = Object.keys(objB);
+
+  if(keysA.length !== keysB.length) {
+    return false;
+  }
+
+  for (let i = 0; i < keysA.length; itt) {
+    if (!hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])){
+      return false;
+    }
+  }
+  return true;
+}
+        </code></pre>
+        <p>基於以上程式,歸納出使用 PureComponent 時需要注意的細節,如下。</p>
+        <ul>
+          <li>
+            既然是淺比較,也就是說在比較 props 和 state 時,如果比較物件是 Javascript
+            基本類型,則會對其值是否相等進行判斷;如果比較物件是 JavaScript 參考類型,如 object 或
+            array ，則會判斷其參考是否相同，而不會對值進行比較。
+          </li>
+          <li>開發者需要避免共用(mutate)帶來的問題。</li>
+        </ul>
+        <p>
+          如果在一個父元件中對 object 進行了 mutate 操作,且子元件依賴此資料，並採用了 PureComponent
+          宣告,那子元件將無法進行更新。儘管 props 中的某一項值
+          發生了變化,但是由於它的參考並沒有發生變化,PureComponent 的 shouldComponentUpdate 會傳回
+          false。更好的做法是在更新 props 或 state 時,傳回一個新的物件或陣列。
+        </p>
+        <h4>分析一個真實案例</h4>
+        <p>
+          設想一下,如果應用元件非常複雜,含有一個具有很長列表的元件,且只是其中一個子元件發生了變化,那麼使用
+          PureComponent 進行比較,有選擇性地進行繪製,一定比對所有清單項目都重新繪製划算很多。
+        </p>
+        <p>
+          看一個案例:簡單實現一個採用 PureComponent 和不採用 PureComponent
+          的效能差別比較試驗。假如在頁面中需要繪製非常多的使用者資訊,所有的使用者資訊都被維護在一個
+          user 陣列中,陣列的每一項為一個 JavaScript 物件,表示一個使用者的基本資訊,那麼可以使用 User
+          元件繪製每一個使用者的資訊內容,範例如下。
+        </p>
+        <pre><code class="language-js">
+import User from './User'
+const Users = ({users}) =>&lt;div&gt;{Users.map(user => &lt;User {...user} /&gt;)}&lt;/div&gt;
+        </code></pre>
+        <p>
+          這樣做存在的問題是 users 陣列作為 Users 元件的 props 如果 users 陣列的第K項發變化, users
+          陣列便產生變化, Users 元件重新繪製會導致所有的 User 元件都進行繪製。對於某個 User
+          元件,如果第K項並沒有發生變化,這個 User 元件就不需要重新繪製,但也不得不進行必要的繪製。
+        </p>
+        <p>在測試中,繪製了一個有 200 項資料的陣列,程式如下。</p>
+
+        <pre><code class="language-js">
+const arraySize = 200;
+const getUsers = () =>
+Array(arraySize)
+.fill(1)
+.map((_, index) => ({
+  name: 'John Doe',
+  hobby: 'Painting',
+  age: index === 0 ? Math.random() * 100 : 50
+}))
+        </code></pre>
+        <p>
+          注意,這裡在 getUsers 方法中對 age 屬性進行了判斷,確保每次呼叫時， getUser
+          傳回的陣列只有第一項的 age 屬性值不同,其餘的全部為50。在測試元件的componentDidUpdate
+          中確保陣列將觸發 400 次重新繪製,並且每次只改變陣列的第一項 age
+          屬性,其他的均保持不變,程式如下。
+        </p>
+        <pre><code class="language-js">
+const repeats = 400;
+componentDidUpdate (){
+  ++this.renderCount;
+  this.dt += performance.now() - this.startTime;
+  if (this.renderCount  repeats === 0) {
+    if (this.componentUnderTestIndex > -1) {
+      this.dts[componentsToTest [this.componentUnderTestIndex]] = this.dt;
+      console.log('dt',
+      componentsToTest [this.componentUnderTest Index] ,
+      this.dt);
+    }
+    ++this.componentUnderTestIndex;
+    this.dt = 0;
+    this.componentUnderTest= componentsToTest[this.componentUnderTestIndex];
+  }
+  if(this.componentUnderTest) {
+    setTimeout(() => {
+      this.startTime = performance.now();
+      this.setState({ users: getUsers()})
+    }, 0);
+  } else {
+    alert(`
+      Bender Performance ArraySize: ${arraySize} Repeats: ${repeats}
+      Functional: ${Math.round(this.dts.Functional)} ms
+      pureComponent: ${Math.round(this.dts.PureComponent)} ms
+      Component: ${Math.round(this.dts.Component)} ms
+    `);
+  }
+}
+        </code></pre>
+        <p>下面對3種元件宣告方式進行比較。</p>
+        <p>1.函數式方式,程式如下。</p>
+        <pre><code class="language-js">
+export const Functional = ({ name, age, hobby }) => (
+  &lt;div&gt;
+    &lt;span&gt;{name}&lt;/span&gt;
+    &lt;span&gt;{age}&lt;/span&gt;
+    &lt;span&gt;{hobby}&lt;/span&gt;
+  &lt;/div&gt;
+)
+        </code></pre>
+        <p>2.PureComponent 方式,程式如下。</p>
+        <pre><code class="language-js">
+export class PureComponent extends React. PureComponent {
+  render() {
+    const { name, age, hobby } = this.props;
+    return (
+      &lt;div&gt;
+        &lt;span&gt;{name}&lt;/span&gt;
+        &lt;span&gt;{age}&lt;/span&gt;
+        &lt;span&gt;{hobby}&lt;/span&gt;
+      &lt;/div&gt;
+    )
+  }
+}
+        </code></pre>
+        <p>3.經典 class 方式,程式如下。</p>
+        <pre><code class="language-js">
+export class Component extends React.Component{
+  render() {
+    const { name, age, hobby } = this.props;
+    return (
+      &lt;div&gt;
+        &lt;span&gt;{name}&lt;/span&gt;
+        &lt;span&gt;{age}&lt;/span&gt;
+        &lt;span&gt;{hobby}&lt;/span&gt;
+      &lt;/div&gt;
+    )
+  }
+}
         </code></pre>
         <pre><code class="language-js">
 
