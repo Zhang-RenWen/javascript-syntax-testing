@@ -33,516 +33,251 @@
         <nav></nav>
       </aside>
       <article>
-        <h2 id="1-9-2">1-9-2 演算法設計</h2>
-        <h3>Linear Search 線性搜尋</h3>
-        <p>實作思路：</p>
-        <p>
-          土法煉鋼從頭到尾一個一個搜尋一集合中的目標元素，直到找到目標元素停止或是搜索到最後一個元素仍然沒有匹配的元素結做結束。
-        </p>
-
+        <h2 id="1-9-2">1-9-2 Complexity and Big O Notation</h2>
+        <h3>Comparing Algorithms</h3>
+        <p>下列範例說明僅只是因為算法不同在相同的執行環境卻有性能上的差異。</p>
         <pre><code class="language-js">
-function linearSearch(array, targetElement) {
-  for (let index = 0;index &lt; array.length;index++) {
-    if (targetElement === array[index]) {
-      return index;
-    }
+// 1 + 2 + 3 + ... + n = sum
+
+function fun1(n) {
+  let sum = 0;
+  for (let i = 1; i &lt;= n; i++) {
+    sum += i;
   }
-  return -1;
-}
-        </code></pre>
-        <table>
-          <thead>
-            <tr>
-              <th>複雜度</th>
-              <th>Big O值</th>
-              <th>說明</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>最差時間複雜度</th>
-              <td>O(n)</td>
-              <td>直到走訪到最後一個元素才找到或該集合不包含此元素</td>
-            </tr>
-            <tr>
-              <th>最佳時間複雜度</th>
-              <td>O(1)</td>
-              <td>第一個走訪到的元素就是目標元素。</td>
-            </tr>
-            <tr>
-              <th>平均時間複雜度</th>
-              <td>O(n)</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>Binary Search 二分搜尋演算法</h3>
-        <p>實作思路：</p>
-        <p>
-          假設有一個從小到大排序過的集合，設定集合中間的索引為基準，將集合分成兩半，另外再列出集合索引的最大值及最小值。
-        </p>
-        <p>如果這個數字大於中間值的元素表示目標在集合右側，反之則在左側。</p>
-        <p>
-          如果在右側就將最小值由中間值代換，反之則將中間值代換為最大值，代換完成再另外找中間的索引繼續下一輪動作。
-        </p>
-        <p>效率會比 Linear Search 來得好，只不過使用條件必須是在有排序的集合上。</p>
-        <pre><code class="language-js">
-
-function binarySearch(arr, n) {
-  let min = 0;
-  let max = arr.length - 1;
-  let step = 0;
-
-  while (min &lt;= max) {
-    step++;
-    let middle = Math.floor((max + min) / 2);
-    if (n > arr[middle]) {
-      min = middle + 1;
-    } else if (n &lt; arr[middle]) {
-      max = middle - 1;
-    } else if (n === arr[middle]) {
-      console.log("Found number " + n + " at position " + middle);
-      console.log("Found it after " + step + " steps.");
-      return middle;
-    }
-  }
-
-  console.log("Cannot find number " + n);
-  return -1;
-}
-        </code></pre>
-        <table>
-          <thead>
-            <tr>
-              <th>複雜度</th>
-              <th>Big O值</th>
-              <th>說明</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>最差時間複雜度</th>
-              <td>O(log n)</td>
-              <td>直到走訪到最後一個元素才找到或該集合不包含此元素</td>
-            </tr>
-            <tr>
-              <th>最佳時間複雜度</th>
-              <td>O(1)</td>
-              <td>元素正好在集合的正中間的索引上。</td>
-            </tr>
-            <tr>
-              <th>平均時間複雜度</th>
-              <td>O(log n)</td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>設計概念1 Counter</h3>
-        <p>尋找兩集合中共相似之處可以使用的概念。</p>
-        <p>Counter 案例1-尋找共同元素</p>
-        <pre><code class="language-js">
-const array1 = [1,3,5,6,7,8]
-const array2 = [1,4,5,9,7,8,10]
-function intersection(array1,array2){
-  let result = []
-  let array3 = array1.concat(array2)
-  let counter = {}
-
-  for(let i = 0; i &lt; array3.length; i++){
-    if(!counter[array3[i]] ){
-      counter[array3[i]] = 1
-    }else{
-      counter[array3[i]]++
-    }
-  }
-
-  for(key in counter){
-    if(counter[key]===2){
-      result.push(key)
-    }
-  }
-
-  return result
-},       
-        </code></pre>
-        <p>Counter 案例2-尋找2個字串中，不管排列組合，比較是否使用相同的字母。</p>
-        <pre><code class="language-js"> 
-function sameFrequency(str1,str2){
-  let array1 = str1.split('')
-  let array2 = str2.split('')
-  if(array1.length != array2.length)false
-
-  let counter1 = {}
-  let counter2 = {}
-  let result = true
-
-  array1.forEach(letter){
-    if(!counter1[letter]){
-      counter1[letter] = 1
-    }else{
-      counter1[letter]++
-    }
-  }
-  array2.forEach(letter){
-    if(!counter2[letter]){
-      counter2[letter] = 1
-    }else{
-      counter2[letter]++
-    }
-  }
-  for(letter in counter1){
-    if(!counter2[letter])false
-    if( counter1[letter]!==counter2[letter]){
-      result = false
-    }
-  }
-  return result
+  return sum;
 }
 
-sameFrequency('abbc','aabc') // false
-sameFrequency('abba','abab') // true
-sameFrequency('aasdebasdf','adfeebed') // false
-
-        </code></pre>
-        <h3>設計概念2 Pointer</h3>
-        <p>直接看案例：</p>
-        <p>
-          現在有一個需求，寫出一個方法，從集合中找出所有兩個為一對的數字,每一對數字的平均為選定的目標數字。
-        </p>
-        <p>
-          像這樣
-          <code>averagePair([-11,0,1,2,3,9,14,17,21],1.5)</code>
-          回傳
-          <code>[[-11,14],[0,3],[1,2]]</code>
-        </p>
-        <p>實作思路：將陣列由小到大排序後，由陣列的第一個和最後一個數字開始操作。</p>
-        <p>
-          (-11+21)/2 = 5 >
-          1.5。結果不成對，接著從最後一個數字往回找，也就是17，然後再運算一次。(-11+17)/2 = 3 >
-          1.5。結果還是不成對，接著找到 14。 (-11+14)/2 = 1.5 = 1.5。找到一組後將 [-11
-          ,14]挑出來繼續找尋。 (0+9)/2 = 4.5 > 1.5 ..... 依此類推。
-        </p>
-        <pre><code class="language-js"> 
-function averagePair(array,target){
-  let result =[]
-  let pointer1 = 0
-  let pointer2 = array.length -1
-
-  for(var i=0; i &lt; array.length-1; i++){
-    if(pointer2-pointer1&gt;0){// 避免重複
-      const element1 = array[pointer1]
-      const element2 = array[pointer2]
-      if((element1+element2)/2!==target){ 
-        pointer2--
-      }else{
-        result.push([element1,element2])
-        pointer1++
-        pointer2--
-      }
-    } 
-  }
-  return result
+function fun2(n) {
+  return ((1 + n) * n) / 2;
 }
 
 
+let time1 = window.performance.now();
+fun1(10000000);
+let time2 = window.performance.now();
+
+let timeDiff1 = (time2 - time1) / 1000;
+console.log(`It takes ${timeDiff1} seconds to run fun1.`);
+// Approximately 0.01723
+
+let time3 = window.performance.now();
+fun2(10000000);
+let time4 = window.performance.now();
+
+let timeDiff2 = (time4 - time3) / 1000;
+console.log(`It takes ${timeDiff2} seconds to run fun2.`);
+// Approximately 0.000065
         </code></pre>
         <p>
-          Pointer 案例2：現在有一個需求，寫一個方法判斷一個輸入的字串使否是'迴文
-          palindrome'(英文語系中正讀反讀一模一樣，都能通的詞句)。像這樣：
+          當我們在比較兩個不同演算法的時候主要考量兩個點-時間和空間。時間就如上範例所示比較時間的快慢，空間則是使用電腦多少記憶體。在分析時要排除硬體軟體效能的變因故產生出關鍵指標-「時間複雜度」、「空間複雜度」。
         </p>
-        <pre><code class="language-js"> 
-palindrome("tacocat"); // true
-palindrome("amanaplanacanalpanama"); // true
-palindrome("asdfsafeaw"); // false
-        </code></pre>
-        <p>同樣以 Pointer 概念實作方式如下：</p>
+        <h3>Complexity</h3>
+        <ul>
+          <li>加、減、乘、除、比較，都算作一個 Operation</li>
+          <li>給定一個 Input size 衡量一個演算法中用到多少 Operations</li>
+          <li>通常會用一個函式代號 f(n) 去表示 input size 和 複雜度總和。</li>
+        </ul>
         <pre><code class="language-js">
-function palindrome(str) {
-  let left = 0;
-  let right = str.length - 1;
-  while (left &lt;= right) {
-    console.log(str[left], str[right]);
-    if (str[left] == str[right]) {
-      left++;
-      right--;
-    } else {
-      console.log(false);
-      return false;
+  function(n){
+    for (let i = 0; i &lt; 3 * n; i++) {
+      console.log("Hello");
     }
-  }
-
-  console.log(true);
-  return true;
-}
-        </code></pre>
-        <p>
-          Pointer
-          案例3：現在有一個需求，寫一個方法判斷第二個字串是否刪掉幾個字之後在順序不變的情況下可以轉變成第一個字串。像這樣：
-        </p>
-        <pre><code class="language-js"> 
-isSubsequence("hello", "hello Dear"); // true 刪掉 ' Dear'
-isSubsequence("book", "brooklyn"); // true 刪掉 'r' 'lyn'
-isSubsequence("abc", "bac"); // false (order matters)
-        </code></pre>
-        <pre><code class="language-js">
-function isSubsequence(str1, str2) {
-  if (str1.length == 0) {
-    console.log(true);
-    return true;
-  }
-
-  let pointer1 = 0;
-  let pointer2 = 0;
-
-  while (pointer2 &lt; str2.length) {
-    if (str1[pointer1] == str2[pointer2]) {
-      pointer1++;
-    }
-    if (pointer1 >= str1.length) {
-      console.log(true);
-      return true;
-    }
-    pointer2++;
-  }
-
-  console.log(false);
-  return false;
-} </code></pre>
-        <h3>Pointer 案例4：Sliding Window 演算法</h3>
-        <p>
-          指定一個小於集合
-          <code>length</code>
-          的 size,將一組集合每連續 size 個元素分成一組子集合，依序將所有子集合列舉出來。
-        </p>
-        <p>舉個例子：</p>
-        <pre><code class="language-js"> 
-// 有一組集合：[a,b,c,d,e,f,g]
-// 子集合 size 指定為 3
-// 結果如下
-// [a,b,c]
-//   [b,c,d]
-//     [c,d,e]
-//       [d,e,f]
-//         [e,f,g]
-
-        </code></pre>
-        <p>下列例子除了列舉子集合之外，額外將個別子集合都加總計，並計算最大、最小值。</p>
-        <pre><code class="language-js">
-function maxSum(arr, size) {
-  if (size > arr.length) {
-    return null;
-  }
-
-  let maxValue = 0;
-  for (let i = 0; i &lt; size; i++) {
-    maxValue += arr[i];
-  }
-
-  let temValue = maxValue;
-  for (let j = size; j &lt; arr.length; j++) {
-    temValue = temValue + arr[j] - arr[j - size];
-    if (temValue > maxValue) {
-      maxValue = temValue;
-    }
-  }
-
-  console.log(maxValue);
-  return maxValue;
-}
-
-function minSum(arr, size) {
-  let min_value = Infinity;
-
-  if (size > arr.length) {
-    return null;
-  }
-
-  for (let i = 0; i &lt;= arr.length - size; i++) {
-    let attempt = 0;
-    for (let j = i; j &lt; i + size; j++) {
-      attempt += arr[j];
-    }
-    if (attempt &lt; min_value) {
-      min_value = attempt;
-    }
-  }
-
-  console.log(min_value);
-  return min_value;
-}
-
-
-maxSum([2, 7, 3, 0, 6, 1, -5, -12, -11], 2); // 12
-minSum([2, 7, 3, 0, 6, 1, -5, -12, -11], 3); // -28
-        </code></pre>
-        <h3>Pointer 案例4：案例: Min Sub Array</h3>
-        <p>
-          製作一個名叫 minSubArray 的
-          <code>function</code>
-          ，該函式要從一個母集合中找出
-          <code>length</code>
-          最短且元素加總大於等於指定數字的一個子集合。找不到就回傳數字 0 。如下案例演示：
-        </p>
-        <pre><code class="language-js">
-minSubArray([1,2,3,4,5,6,10],10) // [10] min length 1 
-minSubArray([1,2,3,4,5,6],10) // [5,6] min length 2
-        </code></pre>
-        <p>實作方式：</p>
-        <pre><code class="language-js">
-function minSubArray(arr, sum) {
-  let start = 0;
-  let end = 0;
-  let total = 0;
-  let minLength = Infinity;
-
-  while (start &lt; arr.length) {
-    if (total &lt; sum && end &lt; arr.length) {
-      total += arr[end];
-      end++;
-    } else if (total >= sum) {
-      let currentLength = end - start;
-      if (minLength > currentLength) {
-        minLength = currentLength;
-      }
-      total -= arr[start];
-      start++;
-    } else if (end >= arr.length) {
-      break;
-    }
-  }
-
-  if (minLength === Infinity) {
-    console.log("Cannot find subarray that can sum up to the given number");
-    return 0;
-  } else {
-    console.log(minLength);
-    return minLength;
-  }
-}
-
-minSubArray([8, 1, 6, 15, 3, 16, 5, 7, 14, 30, 12], 70);
-        </code></pre>
-        <h3>Pointer 案例5：案例: Unique Letter Substring</h3>
-        <p>
-          製作名叫 uniqueLetterString 的
-          <code>function</code>
-          。在順序不變的情況下，截出最短的且字母不重複的子字串。
-        </p>
-        <pre><code class="language-js">
-uniqueLetterString('HatingJOJOIsaJOJOReferenceIs') // 8 'HatingJO'
-        </code></pre>
-        <p>實作方式如下：</p>
-        <pre><code class="language-js">
-function uniqueLetterString(str) {
-  let start = 0;
-  let end = 0;
-  let counter = {};
-  let maxLength = -Infinity;
-
-  while (end &lt; str.length) {
-    console.log(counter);
-    if (counter[str[end]]) {
-      counter[str[start]]--;
-      start++;
-    } else {
-      counter[str[end]] = 1;
-      end++;
-      if (end - start > maxLength) {
-        maxLength = end - start;
-      }
-    }
-  }
-
-  if (maxLength == -Infinity) {
-    console.log("Cannot find unique letters substring.");
-    return null;
-  }
-
-  console.log(maxLength);
-  return maxLength;
-}
-        </code></pre>
-        <h3>Pointer 案例6：案例: Largest Product 最大乘積</h3>
-        <p>
-          製作名叫 largestProduct 的
-          <code>function</code>
-          。在順序不變的情況下，從輸入的有 1000 個數字的集合中找出一個子集合，子集合內為母集合中 4
-          個相鄰且乘積數最大的陣列。
-        </p>
-        <p>實作方式如下：</p>
-        <pre><code class="language-js">
-function largestProduct(n) {
-  let currentProduct;
-  let maxProduct = -Infinity;
-  let left = 0;
-  let right = n - 1;
-
-  while (right &lt; thousandDigits.length) {
-    currentProduct = 1;
-    for (let i = left; i &lt;= right; i++) {
-      currentProduct *= thousandDigits[i];
-    }
-    if (currentProduct > maxProduct) {
-      maxProduct = currentProduct;
-    }
-    right++;
-    left++;
-  }
-
-  console.log(maxProduct);
-  return maxProduct;
-}
   
-        </code></pre>
-        <h3>設計概念3 Recursion 遞迴</h3>
-        <p>
-          一個
-          <code>function</code>
-          自己執行自己。
-        </p>
-        <h3>Recursion 案例1 Fibonacci Sequence 費波南西數列</h3>
-        <p>
-          製作名叫 fibonacciSequence 的
-          <code>function</code>
-          。使之列舉出前 n 項費波南西數列。
-        </p>
-        <pre><code class="language-js">
-function fibonacciSequence(n) {
-  if (n == 0) {
-    return 0;
-  } else if (n == 1) {
-    return 1;
-  } else {
-    return fs(n - 1) + fs(n - 2);
-  }
-}
-
-for (let i = 0; i &lt; 15; i++) {
-  console.log(fibonacciSequence(i));
-}  
-        </code></pre>
-        <h3>Recursion 案例2 RArray of Arrays</h3>
-        <p>
-          在製作 menu
-          或者要在有嵌套巢狀資料結構中找到或迭代等操作時經常用到。以下例子為將一個巢狀陣列中所有的元素抽取出來製作一個非巢狀的陣列。
-        </p>
-        <pre><code class="language-js"> 
-function collector(arr1) {
-  let result = [];
-  helper(arr1);
-  return result;
-
-  function helper(arr2) {
-    for (let i = 0; i &lt; arr2.length; i++) {
-      if (Array.isArray(arr2[i])) {
-        helper(arr2[i]);
-      } else {
-        result.push(arr2[i]);
+    for (let i = 0; i &lt; n; i++) {
+      for (let j = 0; j &lt; n; j++) {
+        console.log("Hello");
       }
     }
+  
+    console.log("Hello");
+    console.log("Hello");
+    console.log("Hello");
+    console.log("Hello");
   }
-}
+ 
+example(2);
+
+//  f(n)= n²+ 3n + 4
         </code></pre>
+        <h3>用複雜度的概念分析第一個範例</h3>
+        <pre><code class="language-js">
+function fun1(n) {
+  let sum = 0;
+  for (let i = 1; i &lt;= n; i++) {
+    sum += i;
+  }
+  return sum;
+}
+//  f(n)= 3n
+
+function fun2(n) {
+  return ((1 + n) * n) / 2;
+}
+//  f(n) = 3
+        </code></pre>
+        <p>
+          將上面案例中兩個
+          <code>function</code>
+          的複雜度函式製作成xy座標軸平面圖將會看到在 n 值小的時候兩者並無顯著複雜度的區別,然而隨著 n
+          值越大兩者的複雜度差距則會越大。
+        </p>
+        <h3>Big O Notation</h3>
+        <p>
+          Big O 是一種描述 一個演算法 的 input n 越大則相對應的時間複雜度 f(n)
+          會如何變化的工具，展示複雜度的趨勢，需要探討演算法使用過後最壞的情況是如何？。
+        </p>
+        <p>如果不了解 Big O 的概念則無法有效去優化演算法。</p>
+        <h4>計算 Big O</h4>
+        <ul>
+          <li>忽略 constant 常數</li>
+          <li>忽略 小運算項</li>
+          <li>忽略 log 的底數</li>
+        </ul>
+        <p>例題1：時間複雜度為f(n) = 3n 演算法的 Big O 值為何？答案： O(n)</p>
+        <p>例題2：時間複雜度為f(n) = 13n^3+6n+7 演算法的 Big O 值為何？答案： O(n³)</p>
+        <p>例題3：時間複雜度為f(n) = 4log₂n 演算法的 Big O 值為何？答案： O(log n)</p>
+        <p>例題4：時間複雜度為f(n) = 5 演算法的 Big O 值為何？答案： O(1)</p>
+        <h4>常見演算法的 Big O 值</h4>
+        <p>由好到壞依序為：</p>
+        <ol>
+          <li>✔️ O(1)</li>
+          <li>✔️ O(log n)</li>
+          <li>✔️ O(n)</li>
+          <li>✔️ O(n log n)</li>
+          <li>✖️ O(n²)</li>
+          <li>✖️ O(n³)</li>
+        </ol>
+        <h3>深入解析 Big O 定義</h3>
+        <p>
+          function f(n) = O(g(n))。 iff(if and only if) ∃ (存在) C , n₀ . S.T.(使之受限於) 0 ≤ f(n)
+          ≤ C∙g(n) ,(則) ∀ (對所有) n ≥ n₀
+        </p>
+        <p>
+          上面一段數學定義說的是：假如存在某實數 C , n₀， 使之受限於 0 ≤ f(n) ≤ C∙g(n), 對於所有的 n
+          ≥ n₀。就可以說 function f(n) = O(g(n))。
+        </p>
+        <p>看起來不太直觀，我們可以舉一個例子並且畫一個座標平面圖說明：</p>
+        <p>
+          先進入
+          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
+        </p>
+        <p>假定有一個實數 C = 7 , g(n) = n</p>
+        <p>輸入第一個演算法：f(x) = 3x +6</p>
+        <p>輸入第二個演算法：g(x) = 7x</p>
+        <p>可以得出交會點 (1.5 , 10.5)</p>
+        <p>由此可得知 n₀ = 1.5</p>
+        <p>對於所有的橫軸 n ≥ n₀ 條件下，所有 C∙g(n) 的值會 ≥ f(n)</p>
+        <p>也因為我們找到了 n₀ , 結論推導： f(n) = O(g(n)) = O(n)</p>
+        <p>將算法換成 BigO 表示則 f(x) = 3x + 6 = f(n) = 3n+6</p>
+        <p>第二個例子：</p>
+        <p>假定有一個常數 C = 1 , g(n) = n²</p>
+        <p>輸入第一個演算法：f(x) = 3x +6</p>
+        <p>輸入第二個演算法：g(x) = 7x</p>
+        <p>由此可得知 n₀ = 4.372</p>
+        <p>對於所有的橫軸 n ≥ n₀ 條件下，所有 C∙g(n) 的值會 ≥ f(n)</p>
+        <p>也因為我們找到了 n₀ , 結論推導： f(n) = O(g(n)) = O(n²)</p>
+        <p>由此可以看出 Big O 求的是一個演算法最糟的情況。</p>
+        <h3>深入解析 Big Omega Ω 定義</h3>
+        <p>
+          function f(n) = Ω(g(n))。 iff(if and only if) ∃ (存在) C , n₀ . S.T.(使之受限於) 0 ≤ f(n)
+          ≤ C∙g(n) ,(則) ∀ (對所有) n ≥ n₀
+        </p>
+        <p>
+          上面一段數學定義說的是：假如存在某實數 C , n₀ ， 使之受限於 f(n) ≥ C∙g(n) ≥ 0, 對於所有的
+          n ≥ n₀。就可以說 function f(n) = Ω(g(n))
+        </p>
+        <p>看起來一樣不太直觀，我們可以舉一個例子並且畫一個座標平面圖說明：</p>
+        <p>
+          先進入
+          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
+        </p>
+        <p>假定有一個實數 C = 1 , g(n) = log n</p>
+        <p>輸入第一個演算法：f(x) = 3x +6</p>
+        <p>輸入第二個演算法：g(x) = log x</p>
+        <p>可以看出 f(x) 的圖形一直位於 g(x) 的上方。</p>
+        <p>由於沒有焦點，所以假定 n₀ = 0</p>
+        <p>對於所有的橫軸 n ≥ n₀ 條件下，所有 C∙g(n) 的值會 ≤ f(n)</p>
+        <p>所以可以得出結論： f(n) = Ω(g(n)) = Ω(log n)</p>
+        <p>由此可以看出 Big Omega Ω 跟 Big O 概念相反。Big Omega Ω 求的是一個演算法優化的極限。</p>
+        <p>第二個例子：</p>
+        <p>假定有一個常數 C = 1 , g(n) = n</p>
+        <p>輸入第一個演算法：f(x) = 3x +6</p>
+        <p>輸入第二個演算法：g(x) = x</p>
+        <p>可以得出交會點 (0 , 6)</p>
+        <p>由此可得知 n₀ = 0</p>
+        <p>對於所有的橫軸 n ≥ n₀ 的條件下，所有 C∙g(n) 的值會 ≤ f(n)</p>
+        <p>
+          結論推導：因為 f(n) = Ω(g(n)) = Ω(n)，所以在 f(n) = 3n + 6 條件下可以找到一個 C 值使得f(n)
+          = Ω(n) ,f(n) = Ω(log n)，或者 f(n) = Ω(1)。
+        </p>
+        <h3>深入解析 Big Theta θ 定義</h3>
+        <p>
+          function f(n) = θ(g(n))。 iff(if and only if) ∃ (存在) C₁ ,C₂ , n₀ . S.T.(使之受限於) 0 ≤
+          C₁∙g(n) ≤ f(n) ≤ C₂∙g(n) ,(則) ∀ (對所有) n ≥ n₀
+        </p>
+        <p>
+          上面一段數學定義說的是：假如存在某實數 C₁ ,C₂ , n₀， 使之受限於 0 ≤ C₁∙g(n) ≤ f(n) ≤
+          C₂∙g(n)。就可以說 function f(n) = θ(g(n))
+        </p>
+        <p>看起來一樣不太直觀，我們可以舉一個例子並且畫一個座標平面圖說明：</p>
+        <p>
+          先進入
+          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
+        </p>
+        <p>假定有實數 C₁= 1 ,C₂ = 10 , g(n) = n</p>
+        <p>輸入第一個演算法：f(x) = 3x +6</p>
+        <p>輸入第二個演算法：g(x) = x</p>
+        <p>輸入第三個演算法：g(x) = 10x</p>
+        <p>看圖可以發現當 x ≥ 0.857 時，f(n) = 3x +6 會介於 g(x) = x、 g(x) = 10x 之間。</p>
+        <p>有滿足定義條件，故可以說 f(n) 的 Big Theta 為 θ(n)。</p>
+        <h3>Javascript 中 Object Array 的 Big O</h3>
+        <h4>Object</h4>
+        <p>
+          JS 中 Object 已經默認被轉換為 hash table 的型態，因為 hash table 的 Big O
+          值比較好。以下列舉操作 JS Object 動作所對應的 Big O 值。
+        </p>
+        <ul>
+          <li>Insertion - O(1)</li>
+          <li>Removal - O(1)</li>
+          <li>Searching(find key) - O(1)</li>
+          <li>Accessing(find value) - O(1)</li>
+        </ul>
+        <h4>Array</h4>
+        <ul>
+          <li>
+            Insertion -
+            <ul>
+              <li>push() - O(1)</li>
+              <li>unshift - O(n)</li>
+            </ul>
+          </li>
+          <li>
+            Removal -
+            <ul>
+              <li>pop() - O(1)</li>
+              <li>shift - O(n)</li>
+            </ul>
+          </li>
+          <li>Searching - O(n)</li>
+          <li>Accessing - O(1)</li>
+        </ul>
+        <pre><code class="language-js">
+let n = 10
+let arr =[1,2,3,4,5]
+
+for(let i =0; i&lt;n;i++){
+  arr.push(i) // O(1)
+} // O(n)
+
+for(let i =0; i&lt;n;i++){
+  arr.unshift(i) // O(n)
+} // O(n²)
+
+
+        </code></pre>
+        <p>
+          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
+        </p>
       </article>
     </main>
   </body>
