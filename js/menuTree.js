@@ -136,7 +136,7 @@ export const menu = [
           },
           {
             id: '1-4-3',
-            title: '1-4-3 架構與效能: React & Vue3 🚧',
+            title: '1-4-3 架構與效能: React',
             href: '1-4-3.html'
           },
           {
