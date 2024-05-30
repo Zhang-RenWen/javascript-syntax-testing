@@ -153,7 +153,7 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-5-1',
-            title: '1-5-1 設計模式導論 🚧',
+            title: '1-5-1 設計模式導論',
             href: '1-5-1.html'
           }
         ]
