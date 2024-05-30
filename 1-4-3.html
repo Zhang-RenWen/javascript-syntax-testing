@@ -497,6 +497,240 @@ React.createElement (
   )
 )
         </code></pre>
+        <h4>在執行時期程式中刪除 propTypes</h4>
+        <p>
+          propTypes 供了許多驗證工具,用來幫助確定 React 元件中 props 資料的有效性。但是，React 在
+          v15.5 後就移除了 propTypes, 現在使用 prop-types 函數庫來代替它。
+        </p>
+        <p>
+          propTypes 對於業務開發非常有用,幫助彌補了 JavaScript
+          資料類型檢查的不足。但是,線上程式中的propTypes 是多餘的。因此，在行時期程式中刪除
+          propTypes 就變得比較有必要了。
+        </p>
+        <h4>在執行時期程式中去除內聯函數</h4>
+        <p>
+          第三個最佳化場景是這樣的:當元件記憶體在函數宣告的邏輯(舉例來說,使用箭頭函數或使用 bind
+          宣告函數)
+          或閉包變數時,元件每更新一次,都產生一個新的函數或閉包變數。將這種不必要的函數稱為內聯函數。
+        </p>
+        <p>
+          舉例來說,在下面這段程式中, transformedData 和onClick
+          對應的匿名函數都會隨著元件繪製重新產生一個全新的參考。
+        </p>
+        <pre><code class="language-js">
+export default ({ data, sortComparator, filterPredicate, history }) => {
+  const transformedData = data
+  .filter(filterPredicate)
+  .sort(sortComparator)
+
+  return (
+    &lt;div&gt;
+      &lt;button
+      className="back-btn"
+      onClick={()=> history.pop()}
+      /&gt;
+        &lt;ul className="data-list"&gt;
+          {transformedData.map(({ id, value }) => (
+            &lt;Item value={value}&gt;
+          ))}
+        &lt;/ul&gt;
+    &lt;/div&gt;
+  )
+}
+        </code></pre>
+        <p>
+          反覆產生這些內聯函數或資料,對 React
+          執行時期效能或多或少會有一點影響,也給垃圾回收帶來了壓力。
+        </p>
+        <p>
+          專案中,可以透過外掛程式對內聯函數或變數進行記憶體持久化處理來減少以上影響。最後,經過預先編譯最佳化的程式如下。
+        </p>
+        <pre><code class="language-js">
+let _anonymousFnComponent
+
+export default ({ data, sortComparator, filterPredicate, history }) => {
+  const transformedData = React.useMemo(
+    ()=> data.filter(filterPredicate).sort(sortComparator),
+    [data, data.filter, filterPredicate, sortComparator]
+  )
+  return React.createElement( _anonymousFnComponent = _anonymousFnComponent ||
+  (()=> {
+    const onClick2 = React.useCallback(
+      ()=>history.pop(),
+      [history, history.pop]
+    )
+
+    return (
+      &lt;div&gt;
+        &lt;button className="back-btn" onClick={_onClick2} /&gt;
+          &lt;ul className="data-list"&gt;
+            {transformedData.map(({ id, value }) =>
+              React.createElement (
+                // ...
+              )
+            )}
+          &lt;/ul&gt;
+      &lt;/div&gt;
+    )
+  }), null)
+}
+        </code></pre>
+        <p>
+          範例使用了 React 的新特性 useMemo 和 useCallback 將這些變數包裹。useMemo 和 useCallback
+          都在元件第一次繪製時執行,之後會在其依賴的變數,也就是 useMemo 和 useCallback
+          的第二個參數陣列內的數值發生變化時再次執行;這兩個 hook 都會傳回快取的值, useMemo
+          傳回快取的變數， useCallback 傳回快取的函數。
+        </p>
+        <p>
+          transformedData 在資料來源 data、data.filter、filterPredicate、sortComparator
+          發生變化時才會更新,並重新產生一份 transformedData, 函數繪製時，只要依賴的
+          data、data.filter、filterPredicate、sortComparator 不變,就不會重新產生
+          transformedData,而是使用快取的值。 onClick 也使用了 useCallback 將函數參考持久化儲存，和
+          useMemo的道理一樣。
+        </p>
+        <h4>使用無狀態元件</h4>
+        <p>
+          函數式元件未來比 class 元件別元件有更好的效能,並且 不管是從效能、可組合性還是 TS
+          契合度上,函數都優於 class。
+        </p>
+        <p>下面的實例中,會使符合條件的 class 宣告元件在預先編譯段自動轉化為函數式元件。</p>
+        <p>目標是將一個典型的 class 元件改寫為一個函數式元件,程式如下。</p>
+        <pre><code class="language-js">
+class MyComponent extends React.Component (
+  static propTypes = {
+    className: React.PropTypes.string.isRequired
+  }
+  render() {
+    return (
+      &lt;div className={this.props.className}&gt;
+        &lt;span&gt;Hello World&lt;/span&gt;
+      &lt;/div&gt;
+    )
+  }
+)
+        </code></pre>
+        <p>在預先編譯階段,以上程式會被最佳化為以下內容。</p>
+        <pre><code class="language-js">
+const MyComponent = props =>
+  &lt;div className={props.className}&gt;
+    &lt;span&gt;Hello World&lt;/span&gt;
+  &lt;/div&gt;
+
+MyComponent.propTypes = {
+  className: React.PropTypes.string.isRequired
+}
+        </code></pre>
+        <p>這裡詳細實現一下 Babel 外掛程式,程式如下。其中會有一些 AST 的內容。</p>
+        <pre><code class="language-js">
+
+module.exports = function({ types: t }) {
+  return {
+    visitor: {
+      Class (path) {
+        const state = {
+          renderMethod: null,
+          properties:[],
+          thisProps: [],
+          isPure: true
+        }
+        path.traverse(bodyVisitor, state)
+        let replacement = []
+        state.thisProps.forEach(function(thisProp){
+          thisProp.replaceWith(t.identifier('props'))
+          thisProp.replaceWith(t.identifier('props'))
+        })
+        replacement.push(
+          t.functionDeclaration (
+            id,
+            [t.identifier('props')],
+            state, renderMethod.node.body
+          )
+        )
+        state.properties,forEach (prop => {
+          replacement.push(t.expressionStatement (
+            t.assignmentExpression ('=' ,
+             t.MemberExpression(id, prop.node.key),
+             prop.node.value
+            )
+          ))
+        })
+        if (t.isExpression(path.node)) {
+          replacement.push(t.returnStatement(id))
+          replacement = t.callExpression(
+            t.functionExpression(null, [],
+            t.blockStatement(replacement)
+            ),
+            []
+          )
+        }
+        path.replaceWithMultiple (
+          replacement
+        )
+      }
+   }
+  }
+  const bodyVisitor = {
+    ClassMethod(path) {
+      if (path.node.key.name === 'render') {
+        this.renderMethod = path
+      } else {
+        this.isPure = false
+        path.stop()
+      }
+    },
+    ClassProperty(path) {
+      const name = path.node.key.name
+      if (path.node.static &&
+        name === 'propTypes' ||
+        name === 'defaultProps'
+      ) {
+        this.properties.push(path)
+      } else {
+        this.isPure = false
+        this.isPure = false
+      }
+    },
+    MemberExpression(path) {
+      this.thisProps.push(path)
+    },
+    JSXIdentifier(path) {
+      if (path.node.name === 'ref') {
+        this.isPure = false
+        path.stop()
+      }
+    }
+  }
+}  
+        </code></pre>
+        <p>對於以上程式,需要先明確,什麼樣的 class 元件具備轉換成函數式元件的條件?</p>
+        <p>
+          元件不能具有 this.state 參考,元件中不能出任何生命週期方法,也不能出現 createRef
+          ,因為這些特性在函數式元件中不存在。
+        </p>
+        <p>
+          滿足這樣的條件後,再在 JSX 轉換過程中進行元件取代:首先透過 AST
+          進行檢查，在檢查過程中找到符合條件的class 元件,用 isPure
+          來標記是否符合條件,同時在檢查時將每一個符合條件的 class 元件的 render 方法儲存，作
+          為轉換函數式元件的傳回值;儲存 propType 和 defaultProps 靜態屬性，以便
+          之後掛載到函數元件的函數屬性上;同時將 this.props 用法轉為 props，props
+          會作為函數式元件的參數出現,最後再按照上述規則修改 AST,新的 AST 相關
+          元件節點就會產生函數式元件。
+        </p>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
