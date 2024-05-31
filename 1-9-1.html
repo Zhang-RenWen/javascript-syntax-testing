@@ -521,25 +521,145 @@ search(item) {
         </ul>
         <p>根據其特性實現二元搜尋樹時，應該先建置一個節點類別,如下所示。</p>
         <pre><code class="language-js">
-
+class Node{
+  constructor(data) {
+    this.left = null
+    this.right = null
+    this.value = data
+  }
+}
         </code></pre>
+        <p>接著,按照慣例實現二元搜尋樹的以下方法。</p>
+        <ul>
+          <li>insertNode:根據一個父節點插入一個子節點。</li>
+          <li>insert:插入一個新節點。</li>
+          <li>removeNode:根據一個父節移除一個子節點。</li>
+          <li>remove:移除一個節點。</li>
+          <li>findMinNode:取得子節點的最小值。</li>
+          <li>searchNode:根據一個節點找子節點。</li>
+          <li>search:尋找節點。</li>
+          <li>preOrder:前序検查。</li>
+          <li>InOrder:中序檢查。</li>
+          <li>PostOrder:後續檢查。</li>
+        </ul>
+        <p>下面來實現樹結構的各種方法，insertNode 和 insert 方法的程式如下。</p>
         <pre><code class="language-js">
-
+insertNode (root, newNode) {
+  if (newNode.value &lt; root.value) {
+    (root.left) ? root.left= newNode : this.insertNode(root.left,newNode)
+  } else {
+    (!root.right) ? root.right =newNode : this.insertNode(root.right,newNode)
+  }
+}
+insert (value) {
+  let newNode = new Node(value)
+  if (!this.root) {
+    this.root = newNode
+  } else {
+    this.insertNode(this.root, newNode)
+  }
+}
         </code></pre>
+        <p>
+          insertNode方法先判斷目標父的值,如果插入節點的值更小,則放到父節點的左邊,接著遞迴呼this.insertNode(root.left,newNode);
+          如果插入節點的值更大,則放到父節點的右邊。
+        </p>
+        <p>insert 方法中多了建置 Node 節點實例這一步,而 removeNode 和 remove 方法 的程式如下。</p>
         <pre><code class="language-js">
-
+removeNode(root, value) {
+  if(!root) {
+    return null
+  }
+  if (value &lt; root.value) {
+    root.left = this.removeNode(root.left, value)
+    return root
+  } else if (value > root.value) {
+    root.right = tis.removeNode(root.right, value)
+    return root
+  } else {
+    //找到需要刪除的節點
+    //如果目前 root 節點無左右子節點
+    if (!root.left && !root.right) {
+      root = null
+      return root
+    }
+    // 只有左節點
+    if (root.left && !root.right) {
+      root = root.left
+      return root
+    }
+    // 只有右節點
+    else if (root,right) {
+      root = root.right
+      return root
+    }
+    // 有左右兩個子節點
+    let minRight = this.findMinNode(root.right)
+    root.value = minRight.value
+    root.right = this.removeNode(root.right, minRight.value)
+    return root
+  }
+}
+remove (value) {
+  if (this.root) {
+    this.removeNode(this.root, value)
+  }
+}
         </code></pre>
+        <p>上述程式可能最需要思考的就是要刪除的節點含有左右兩個子節點的情況。</p>
+        <p>
+          當需要刪除的節點(目標節點)含有左右兩個子節點時,因為要把目前節點刪除,所以就需要找到合適的補位節點,這個補位節點一定在該目標節點的右側樹中,因為這樣才能確保補位節點的值一定大於該目標節點的左側樹所有節點的值,而該目標節點的左側樹不需要調整;同時,為了確保補位節點的值一定要小於該目標節點的右側樹節點的值,要找到的補位節點應該是該目標節點的右側樹中值最小的那個節點。下面借助
+          this.fndMinNode 方法實現這個過程。
+        </p>
         <pre><code class="language-js">
-
+findMinNode (root) {
+  if (!root.left) {
+    return root
+  } else {
+    return this.findMinNode(root.left)
+  }
+}
         </code></pre>
+        <p>該方法會不斷進行遞迴,直到找到最左側的葉子節點。</p>
+        <p>尋找節點的方法(searchNode 和 search) 的實現程式如下。</p>
         <pre><code class="language-js">
-
+searchNode(root, value) {
+  if (!root) {
+    return null
+  }
+  if (value < root.value) {
+    return this.searchNode(root.left, value)
+  }else if (value > root.value) {
+    return this.searchNode(root.right, value)
+  }
+  return root
+}
+search(value) {
+  if (!this.root) {
+    return false
+  }
+  return Boolean(this.searchNode(this.root, value))
+}
         </code></pre>
+        <p>前序檢查程式如下。</p>
         <pre><code class="language-js">
-
+preOrder(root) {
+  if (root) {
+    console.log(root.value)
+    this.preOrder(root.left)
+    this.preOrder(root.right)
+  }
+}
         </code></pre>
+        <p>中序檢查的範例程式如下。</p>
         <pre><code class="language-js">
-
+inOrder(root) {
+  if (root) {
+    this.inOrder(root.left)
+    console,log(root.value)
+    this.inOrder(root.right)
+  }
+}
         </code></pre>
         <pre><code class="language-js">
 
