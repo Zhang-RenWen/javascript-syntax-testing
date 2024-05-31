@@ -33,251 +33,516 @@
         <nav></nav>
       </aside>
       <article>
-        <h2 id="1-9-1">1-9-1 Complexity and Big O Notation</h2>
-        <h3>Comparing Algorithms</h3>
-        <p>下列範例說明僅只是因為算法不同在相同的執行環境卻有性能上的差異。</p>
+        <h2 id="1-9-1">1-9-1 資料結構</h2>
+        <p>
+          資料結構是電腦中組織和儲存資料的特定方式,目的是方便且高效率地對資料進行存取和修改。一方面,資料結構表述了資料之間的關係,以及操作資料的一系列方法,資料又是程式的基本單元,因此無論是哪種語言、哪個領域,都離不開資料結構:另一方面,資料結構是演算法的基礎,其本身包含了演算法的部分內容。也就是說,想要掌握演算法,先有一個牢固的資料結構基礎是必要條件。
+        </p>
+        <p>
+          前端領域也到處表現資料結構的應用,尤其是隨需求的複雜度上升,前端工程師越來越離不開資料結構。React、Vue
+          些設計的架構,上線文件編輯系統、大型管理系統,甚至一個簡單的檢索需求,都離不開資料結構的支援。是否掌握了這個困難是進階的重要考量。
+        </p>
+        <p>資料結構分為以下8大類。</p>
+        <ul>
+          <li>陣列:Array</li>
+          <li>堆疊:Stack</li>
+          <li>佇列:Queue</li>
+          <li>結串列:LinkedList</li>
+          <li>樹:Tree</li>
+          <li>圖:Graph</li>
+          <li>字典樹:Trie</li>
+          <li>雜湊表(雜湊表):Hash Table</li>
+        </ul>
+        <h3>堆疊和佇列</h3>
+        <p>
+          堆疊和佇列是一種操作受限的線性結構,它們非常簡單,雖然 JavaScript
+          並沒有原生內建這樣的資料結構,但是可以輕鬆地將它們模擬出來。
+        </p>
+        <p>堆疊的實現遵循後進先出(Last,First Out LIFO) 原則,範例程式如下：</p>
         <pre><code class="language-js">
-// 1 + 2 + 3 + ... + n = sum
-
-function fun1(n) {
-  let sum = 0;
-  for (let i = 1; i &lt;= n; i++) {
-    sum += i;
+class Stack {
+  constructor(...args) {
+    this.stack = {...args}
   }
-  return sum;
+  // Modifiers
+  push(...items) {
+    return this.stack.push(... items)
+  }
+  pop() {
+    return this.stack.pop()
+  }
+  peek() {
+    // Element access
+    return this.isEmpty()
+    ? undefined
+    : this.stack[this. size () - 1]
+  }
+  // Capacity
+  isEmpty() {
+    return this.size() == 0
+  }
+  size() {
+    return this.stack.length
+  }
 }
-
-function fun2(n) {
-  return ((1 + n) * n) / 2;
+        </code></pre>
+        <p>佇列的實現遵循先進先出(First in, First out FIFO )原則,範例程式如下：</p>
+        <pre><code class="language-js">
+class Queue {
+  constructor(. ..args) {
+    this.queue = [...args]
+  }
+  // Modifiers
+  enqueue(...items) {
+    return this.queue.push(... items)
+  }
+  dequeue () {
+    return this.queue.shift()
+  }
+  // Element access 
+  front() {
+    return this.isEmpty()
+    ? undefined
+    : this.queue[0]
+  }
+  back () {
+    return this.isEmpty()
+    ? undefined
+    : this.queue[this.size() - 1]
+  }
+  // Capacity
+  isEmpty() {
+    return this.size() == 0
+  }
+  size() {
+    return this.queue.length
+  }
 }
+        </code></pre>
+        <p>堆疊和佇列的實際應用場景比比皆是,例如下面這些。</p>
+        <ul>
+          <li>瀏覽器的歷史記錄,因為回復總是回復到上一個最近的頁面,所以它需要遵循堆疊的原則。</li>
+          <li>與瀏覽器的歷史記錄類似,任何 undo/redo 都是以堆疊為基礎的實現。</li>
+          <li>在程式中,廣泛應用遞迴產生的呼叫堆疊同樣也是堆疊思想的表現。</li>
+          <li>同上,瀏覽器在拋出例外時,通常都會拋出呼叫堆疊資訊。</li>
+          <li>在電腦科學領域中的應用也比較廣泛,如進位轉換、括號比對、堆疊混洗、運算式求值等。</li>
+          <li>
+            佇列的應用更為直觀,所謂的巨任務/微任務都是佇列, 不管是什麼類型的任務,都是先進先執行。
+          </li>
+          <li>
+            在後端中的應用也比較廣泛,如訊息佇列(RabbitMQ、ActiveMQ
+            等)，這種佇列能造成延遲緩衝的功效。
+          </li>
+        </ul>
+        <p>
+          總結以上，不管是堆疊還是佇列,都是用陣列來模擬的。陣列是最基本的資料結構,但是它的價值是驚人的。這裡稍微提一下,React
+          中 hook 從本質上看可以簡單地被看作陣列。
+        </p>
+        <h3>鏈結串列</h3>
+        <p>
+          堆疊和佇列都可以用陣列實現,鏈結串列同樣和陣列一樣,都是按照一定的順序儲存元素的,不同的地方在於鏈結串列不能像陣列一樣透過索引對元素進行存取,而是透過每個元素指向其下一個元素的方式進行存取。
+        </p>
+        <p>
+          直觀上可得出這樣一個結論:鏈結串列不需要一段連續的儲存空間,「指向下一個元素」的方式能夠更大限度地利用記憶體。
+        </p>
+        <p>根據以上結論可以繼續歸納出鏈結串列的優點,如下。</p>
+        <ul>
+          <li>鏈結串列的插入和刪除操作的時間複雜度是常數級的,只需要改變相關節點的指標指向即可。</li>
+          <li>鏈結串列可以像陣列一樣循序存取元素，尋找元素的時間複雜度是線性的。</li>
+        </ul>
+        <p>下面來看一看鏈結串列的應用場景。</p>
+        <p>
+          React 的核心演算法 Fiber 就是透過串列實現的。 React 最早使用堆疊協調(stack
+          reconciler)排程演算法。堆疊協調排程演算法最大的問題在於它是像函數呼叫堆疊一樣,遞迴地自頂向下地進行
+          diff 和 render
+          相關操作的,在堆疊協調排程演算法執行的過程中,該排程演算法始終佔據瀏覽器主執行緒。也就是說在此期間,使用者的互動所觸發的版面配置行為、動畫執行任務都不會被立即回應,進一步影響使用者體驗。
+        </p>
+        <p>
+          因此,React Fiber 將繪製更新過程進行了拆解,簡單說,就是每次檢查虛擬 DOM
+          的一小部分,在檢查間隙會檢查是否還有時間繼續執行下一個虛擬 DOM
+          樹上的某個分支任務,同時觀察是否有更優先的任務需要回應,如果沒有時間執行下一個虛擬 DOM
+          上的某個分支任務,有更高優先順序的任務,React
+          就會讓出主執行緒,直到主執行緒不忙的時候繼續執行那個分支任務。
+        </p>
+        <p>
+          所以,React
+          Fiber其實很簡單,將堆疊協調過程分成區塊,一次執行一區塊,執行完一區塊之後需要將結果儲存起來,根據是否還有空閒的回應時間
+          (requestIdleCallback)來決定下一步策略。當所有的區塊都已經執行完畢後,就進入提交階段,這個階段需要更新
+          DOM,整個過程是一口氣同步完成的。
+        </p>
+        <p>
+          React Fiber 是專門用於 React
+          元件堆疊呼叫的重新實現,可以隨意中斷呼叫堆疊並手動操作呼叫堆疊,也就是說一個 Fiber
+          就是一個虛擬堆疊幀,其結構如下所示。
+        </p>
+        <pre><code class="language-js">
+function FiberNode(
+  tag: WorkTag,
+  pendingProps: mixed,
+  key: null | string,
+  mode: TypeOfMode,
+){
+  // Instance
+  // ...
+  this.tag = tag;
+  // Fiber
+  this.return = null;
+  this.child = null;
+  this.sibling = null;
+  this.index = 0;
 
+  this.ref = null;
 
-let time1 = window.performance.now();
-fun1(10000000);
-let time2 = window.performance.now();
-
-let timeDiff1 = (time2 - time1) / 1000;
-console.log(`It takes ${timeDiff1} seconds to run fun1.`);
-// Approximately 0.01723
-
-let time3 = window.performance.now();
-fun2(10000000);
-let time4 = window.performance.now();
-
-let timeDiff2 = (time4 - time3) / 1000;
-console.log(`It takes ${timeDiff2} seconds to run fun2.`);
-// Approximately 0.000065
+  this pendingProps = pendingProps;
+  this.memoizedProps = null;
+  this.updateQueue = null;
+  this.memoizedState = null;
+  this.dependencies = null;
+  // Effects
+  // ...
+  this.alternate = null;
+}
         </code></pre>
         <p>
-          當我們在比較兩個不同演算法的時候主要考量兩個點-時間和空間。時間就如上範例所示比較時間的快慢，空間則是使用電腦多少記憶體。在分析時要排除硬體軟體效能的變因故產生出關鍵指標-「時間複雜度」、「空間複雜度」。
+          這麼看,Fiber 就是一個物件,透過 parent、children、sibling, 同時,parent、children、sibling
+          又都是 Fiber 結構,FiberNode.alternate 這個屬性用來儲存上一次繪製的結果,事實上整個 Fiber
+          模式就是一個鏈結串列。React
+          也借此從依賴於內建堆疊同步遞迴模型,變為具有鏈結串列和指標的非同步模型了。
         </p>
-        <h3>Complexity</h3>
-        <ul>
-          <li>加、減、乘、除、比較，都算作一個 Operation</li>
-          <li>給定一個 Input size 衡量一個演算法中用到多少 Operations</li>
-          <li>通常會用一個函式代號 f(n) 去表示 input size 和 複雜度總和。</li>
-        </ul>
+        <p>實際的繪製過程如下。</p>
         <pre><code class="language-js">
-  function(n){
-    for (let i = 0; i &lt; 3 * n; i++) {
-      console.log("Hello");
+function renderNode(node) {
+  // 判斷是否需要繪製該節點,如果 props 發生變化,則呼叫 render
+  if (node.memoizedProps !== node.pendingProps) {
+    render(node)
+  }
+  // 是否有子節點,如果有則進行子節點繪
+  if (node.child !== null) {
+    return node.child
+    // 是否有兄弟節點,如果有則進行兄弟節點繪製
+  } else if (node.sibling !== null){
+    return node.sibling
+    // 沒有子節點和兄弟節點
+  }else if (node.return !== null){
+    return node. return
+  } else {
+    return null
+  }
+}
+
+function workloop(root) {
+  nextNode = root
+  while (nextNode !== null && (no other high priority task)) {
+    nextNode = renderNode (nextNode)
+  }
+}
+        </code></pre>
+        <p>
+          注意,在 workloop 中, while 的條件是 nextNode!==null &&(no other high priority
+          task)，這是描述 Fiber
+          工作原理的關鍵虛擬程式碼。以上只是簡略的虛體程式碼用於說明鏈接串列的資料結構，並沒有介紹
+          requestAnimationFame(callback)和 requestIdleCallback(callback)
+          的實現，這裏重點是體會鏈結串列資料結構的思想。
+        </p>
+        <h3>鏈結串列實現</h3>
+        <p>實現鏈結串列首先串進行分類,常見的有單向鏈接串列和雙向鏈結串列。</p>
+        <p>有了節點類別,下面來初步實現雙向鏈結串列類別</p>
+        <ul>
+          <li>
+            單向鏈結串列:單向鏈結串列是維護一系列節點的資料結構,其特點是每個節點都包含資料,同時包含指向鏈結串列中下一個節點的指標。
+          </li>
+          <li>
+            雙向鏈結串列:與單向鏈結串列不同,雙向鏈結串列的特點是每個節點除了包含其資料,還包含分別指向其前驅節點和後繼節點的指標。
+          </li>
+        </ul>
+        <p>(單向案例要另外找)</p>
+        <p>根據雙向鏈結串列的特點,實現一個節點建構函數(節點類別)的程式如下。</p>
+        <pre><code class="language-js">
+  class DoublyLinkedList {
+    constructor() {
+      // 雙向鏈結串列的開頭
+      this.head = null
+      // 雙向鏈結串列的結尾
+      this.tail = null
     }
-  
-    for (let i = 0; i &lt; n; i++) {
-      for (let j = 0; j &lt; n; j++) {
-        console.log("Hello");
+  // ...
+  }
+        </code></pre>
+        <p>接下來,需要實現雙向鏈結串列原型中的一些方法,這些方法包含以下幾種。</p>
+        <ul>
+          <li>add:在鏈結串列尾部增加一個新的節點。</li>
+          <li>addAt:在鏈結串列指定位置增加一個新的節點。</li>
+          <li>remove:刪除鏈結串列指定資料項目節點。</li>
+          <li>removeAt:刪除鏈結串列指定位置節點。</li>
+          <li>reverse:翻轉鏈結串列。</li>
+          <li>swap:交換兩個節點資料。</li>
+          <li>isEmpty:查詢鏈結串列是否為空。</li>
+          <li>length:查詢鏈結串列長度。</li>
+          <li>traverse:檢查鏈結串列。</li>
+          <li>find:尋找某個節點的索引。</li>
+        </ul>
+        <p>來逐一實現鏈結串列的各種方法，add方法的程式如下。</p>
+        <pre><code class="language-js">
+add(item) {
+  // 產生實體一個節點
+  let node = new Node(item)
+
+  // 如果目前鏈結串列還沒有頭
+  if(!this.head) {
+    this.head = node
+    this.tail = node
+  }
+  //如果目前鏈結串列已經有了頭,則只需要在尾部加上該節點
+  else {
+    node.prev = this.tail
+    this.tail.next = node
+    this.tail = node
+  }
+}
+        </code></pre>
+        <p>addAt 方法的程式如下。</p>
+        <pre><code class="language-js">
+addAt(index, item) {
+  let current = this.head
+
+  let counter = 1
+  let node = new Node(item)
+
+  //如果在頭部插入
+  if (index === 0) {
+    this.head.prev = node
+    node.next = this.head
+    this.head = node
+  }
+  //如果在非頭部插入,則需要從頭開始找尋插入位置
+  else {
+    while(current) {
+      current = current.next
+      if( counter === index) {
+        node.prev = current.prev
+        current.prev.next = node
+        node.next = current
+        current.prev = node
+      }
+      counter++
+    }
+  }
+}
+        </code></pre>
+        <p>remove 方法的程式如下。</p>
+        <pre><code class="language-js">
+remove(item) {
+  let current = this.head
+  while (current) {
+    //找到了目標節點
+    if (current.data === item ) {
+      //目標鏈結串列只有目前目標項,即目標節點既是鏈結串列頭又是鏈結串列尾
+      if (current == this.head && current == this.tail) {
+        this.head = null
+        this.tail = null
+      }
+      //目標節點為鏈結串列頭
+      else if (current == this.head ) {
+        this.head = this.head.next
+        this.head.prev = null
+      }
+      //目標節點為鏈結串列尾
+      else if (current == this.tail ) {
+        this.tail = this.tail.prev;
+        this.tail.next = null;
+      }
+      //目標節點在鏈結串列首尾之間,即中部
+      else {
+        current.prev.next = current.next;
+        current.next.prev = current.prev;
       }
     }
+    current = current.next
+  }
+}
+        </code></pre>
+        <p>removeAt方法的程式如下。</p>
+        <pre><code class="language-js">
+removeAt (index) {
+  // 都是從頭開始檢查
+  let current = this.head
+  let counter = 1
+
+  //删除鏈結串列頭部
+  if (index === 0 ) {
+    this.head = this.head.next
+    this.head.prev = null
+  }
+  else {
+    while(current) {
+      current = current.next
+      //如果目標節點在鏈結串列尾部
+      if (current == this.tail) {
+        this.tail = this.tail.prev
+        this.tail.next = null
+      }
+      else if (counter === index) {
+        current.prev.next = current.next
+        current.next.prev = current.prev
+        break
+      }
+      counter++
+    }
+  }
+}
+        </code></pre>
+        <p>reverse 方法的程式如下。</p>
+        <pre><code class="language-js">
+reverse() {
+  let current = this.head
+  let prev = null
+  while (current) {
+    let next = current.next
+    //前後倒置
+    current.next = prev
+    current.prev = next
+    prev = current
+    current = next
+  }
+  this.tail = this.head
+  this.head = prev
+}
+        </code></pre>
+        <p>swap方法(用於交換兩個節點的資料值)的程式如下。</p>
+        <pre><code class="language-js">
+swap(index1, index2) {
+  // 使 index1 始終小於 index2 ,方便後面尋找交換
+  if (index1 > index2) {
+    return this.swap(index2, index1)
+  }
+  let current = this.head
+  let counter = 0
+  let firstNode
   
-    console.log("Hello");
-    console.log("Hello");
-    console.log("Hello");
-    console.log("Hello");
+  while(current !== null) {
+    // 找到第一個節點,並儲存起來
+    if (counter === index1 ){
+      firstNode = current
+    }
+    //找到第二個節點,並進行資料交換
+    else if (counter === index2) {
+      // ES 提供了更簡潔的交換資料的方法,這裡用傳統方式實現更為直觀
+      let temp = current.data
+      current.data = firstNode.data
+      firstNode.data = temp
+    }
+    current = current.next
+    counter++
   }
- 
-example(2);
-
-//  f(n)= n²+ 3n + 4
+  return true
+}
         </code></pre>
-        <h3>用複雜度的概念分析第一個範例</h3>
+        <p>isEmpty 方法的程式如下。</p>
         <pre><code class="language-js">
-function fun1(n) {
-  let sum = 0;
-  for (let i = 1; i &lt;= n; i++) {
-    sum += i;
+isEmpty () {
+  return this.length() &lt; 1
+}
+        </code></pre>
+        <p>isEmpty 方法使用了 length 方法實現，length 方法的程式如下。</p>
+        <pre><code class="language-js">
+length() {
+  let current = this.head
+  let counter = 0
+  while(current !== null) {
+    counter++
+    current = current.next
   }
-  return sum;
+  return current
 }
-//  f(n)= 3n
-
-function fun2(n) {
-  return ((1 + n) * n) / 2;
-}
-//  f(n) = 3
         </code></pre>
-        <p>
-          將上面案例中兩個
-          <code>function</code>
-          的複雜度函式製作成xy座標軸平面圖將會看到在 n 值小的時候兩者並無顯著複雜度的區別,然而隨著 n
-          值越大兩者的複雜度差距則會越大。
-        </p>
-        <h3>Big O Notation</h3>
-        <p>
-          Big O 是一種描述 一個演算法 的 input n 越大則相對應的時間複雜度 f(n)
-          會如何變化的工具，展示複雜度的趨勢，需要探討演算法使用過後最壞的情況是如何？。
-        </p>
-        <p>如果不了解 Big O 的概念則無法有效去優化演算法。</p>
-        <h4>計算 Big O</h4>
-        <ul>
-          <li>忽略 constant 常數</li>
-          <li>忽略 小運算項</li>
-          <li>忽略 log 的底數</li>
-        </ul>
-        <p>例題1：時間複雜度為f(n) = 3n 演算法的 Big O 值為何？答案： O(n)</p>
-        <p>例題2：時間複雜度為f(n) = 13n^3+6n+7 演算法的 Big O 值為何？答案： O(n³)</p>
-        <p>例題3：時間複雜度為f(n) = 4log₂n 演算法的 Big O 值為何？答案： O(log n)</p>
-        <p>例題4：時間複雜度為f(n) = 5 演算法的 Big O 值為何？答案： O(1)</p>
-        <h4>常見演算法的 Big O 值</h4>
-        <p>由好到壞依序為：</p>
-        <ol>
-          <li>✔️ O(1)</li>
-          <li>✔️ O(log n)</li>
-          <li>✔️ O(n)</li>
-          <li>✔️ O(n log n)</li>
-          <li>✖️ O(n²)</li>
-          <li>✖️ O(n³)</li>
-        </ol>
-        <h3>深入解析 Big O 定義</h3>
-        <p>
-          function f(n) = O(g(n))。 iff(if and only if) ∃ (存在) C , n₀ . S.T.(使之受限於) 0 ≤ f(n)
-          ≤ C∙g(n) ,(則) ∀ (對所有) n ≥ n₀
-        </p>
-        <p>
-          上面一段數學定義說的是：假如存在某實數 C , n₀， 使之受限於 0 ≤ f(n) ≤ C∙g(n), 對於所有的 n
-          ≥ n₀。就可以說 function f(n) = O(g(n))。
-        </p>
-        <p>看起來不太直觀，我們可以舉一個例子並且畫一個座標平面圖說明：</p>
-        <p>
-          先進入
-          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
-        </p>
-        <p>假定有一個實數 C = 7 , g(n) = n</p>
-        <p>輸入第一個演算法：f(x) = 3x +6</p>
-        <p>輸入第二個演算法：g(x) = 7x</p>
-        <p>可以得出交會點 (1.5 , 10.5)</p>
-        <p>由此可得知 n₀ = 1.5</p>
-        <p>對於所有的橫軸 n ≥ n₀ 條件下，所有 C∙g(n) 的值會 ≥ f(n)</p>
-        <p>也因為我們找到了 n₀ , 結論推導： f(n) = O(g(n)) = O(n)</p>
-        <p>將算法換成 BigO 表示則 f(x) = 3x + 6 = f(n) = 3n+6</p>
-        <p>第二個例子：</p>
-        <p>假定有一個常數 C = 1 , g(n) = n²</p>
-        <p>輸入第一個演算法：f(x) = 3x +6</p>
-        <p>輸入第二個演算法：g(x) = 7x</p>
-        <p>由此可得知 n₀ = 4.372</p>
-        <p>對於所有的橫軸 n ≥ n₀ 條件下，所有 C∙g(n) 的值會 ≥ f(n)</p>
-        <p>也因為我們找到了 n₀ , 結論推導： f(n) = O(g(n)) = O(n²)</p>
-        <p>由此可以看出 Big O 求的是一個演算法最糟的情況。</p>
-        <h3>深入解析 Big Omega Ω 定義</h3>
-        <p>
-          function f(n) = Ω(g(n))。 iff(if and only if) ∃ (存在) C , n₀ . S.T.(使之受限於) 0 ≤ f(n)
-          ≤ C∙g(n) ,(則) ∀ (對所有) n ≥ n₀
-        </p>
-        <p>
-          上面一段數學定義說的是：假如存在某實數 C , n₀ ， 使之受限於 f(n) ≥ C∙g(n) ≥ 0, 對於所有的
-          n ≥ n₀。就可以說 function f(n) = Ω(g(n))
-        </p>
-        <p>看起來一樣不太直觀，我們可以舉一個例子並且畫一個座標平面圖說明：</p>
-        <p>
-          先進入
-          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
-        </p>
-        <p>假定有一個實數 C = 1 , g(n) = log n</p>
-        <p>輸入第一個演算法：f(x) = 3x +6</p>
-        <p>輸入第二個演算法：g(x) = log x</p>
-        <p>可以看出 f(x) 的圖形一直位於 g(x) 的上方。</p>
-        <p>由於沒有焦點，所以假定 n₀ = 0</p>
-        <p>對於所有的橫軸 n ≥ n₀ 條件下，所有 C∙g(n) 的值會 ≤ f(n)</p>
-        <p>所以可以得出結論： f(n) = Ω(g(n)) = Ω(log n)</p>
-        <p>由此可以看出 Big Omega Ω 跟 Big O 概念相反。Big Omega Ω 求的是一個演算法優化的極限。</p>
-        <p>第二個例子：</p>
-        <p>假定有一個常數 C = 1 , g(n) = n</p>
-        <p>輸入第一個演算法：f(x) = 3x +6</p>
-        <p>輸入第二個演算法：g(x) = x</p>
-        <p>可以得出交會點 (0 , 6)</p>
-        <p>由此可得知 n₀ = 0</p>
-        <p>對於所有的橫軸 n ≥ n₀ 的條件下，所有 C∙g(n) 的值會 ≤ f(n)</p>
-        <p>
-          結論推導：因為 f(n) = Ω(g(n)) = Ω(n)，所以在 f(n) = 3n + 6 條件下可以找到一個 C 值使得f(n)
-          = Ω(n) ,f(n) = Ω(log n)，或者 f(n) = Ω(1)。
-        </p>
-        <h3>深入解析 Big Theta θ 定義</h3>
-        <p>
-          function f(n) = θ(g(n))。 iff(if and only if) ∃ (存在) C₁ ,C₂ , n₀ . S.T.(使之受限於) 0 ≤
-          C₁∙g(n) ≤ f(n) ≤ C₂∙g(n) ,(則) ∀ (對所有) n ≥ n₀
-        </p>
-        <p>
-          上面一段數學定義說的是：假如存在某實數 C₁ ,C₂ , n₀， 使之受限於 0 ≤ C₁∙g(n) ≤ f(n) ≤
-          C₂∙g(n)。就可以說 function f(n) = θ(g(n))
-        </p>
-        <p>看起來一樣不太直觀，我們可以舉一個例子並且畫一個座標平面圖說明：</p>
-        <p>
-          先進入
-          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
-        </p>
-        <p>假定有實數 C₁= 1 ,C₂ = 10 , g(n) = n</p>
-        <p>輸入第一個演算法：f(x) = 3x +6</p>
-        <p>輸入第二個演算法：g(x) = x</p>
-        <p>輸入第三個演算法：g(x) = 10x</p>
-        <p>看圖可以發現當 x ≥ 0.857 時，f(n) = 3x +6 會介於 g(x) = x、 g(x) = 10x 之間。</p>
-        <p>有滿足定義條件，故可以說 f(n) 的 Big Theta 為 θ(n)。</p>
-        <h3>Javascript 中 Object Array 的 Big O</h3>
-        <h4>Object</h4>
-        <p>
-          JS 中 Object 已經默認被轉換為 hash table 的型態，因為 hash table 的 Big O
-          值比較好。以下列舉操作 JS Object 動作所對應的 Big O 值。
-        </p>
-        <ul>
-          <li>Insertion - O(1)</li>
-          <li>Removal - O(1)</li>
-          <li>Searching(find key) - O(1)</li>
-          <li>Accessing(find value) - O(1)</li>
-        </ul>
-        <h4>Array</h4>
-        <ul>
-          <li>
-            Insertion -
-            <ul>
-              <li>push() - O(1)</li>
-              <li>unshift - O(n)</li>
-            </ul>
-          </li>
-          <li>
-            Removal -
-            <ul>
-              <li>pop() - O(1)</li>
-              <li>shift - O(n)</li>
-            </ul>
-          </li>
-          <li>Searching - O(n)</li>
-          <li>Accessing - O(1)</li>
-        </ul>
+        <p>length 方法透過檢查結串列傳回鏈結串列長度。</p>
+        <p>traverse 方法的程式如下。</p>
         <pre><code class="language-js">
-let n = 10
-let arr =[1,2,3,4,5]
-
-for(let i =0; i&lt;n;i++){
-  arr.push(i) // O(1)
-} // O(n)
-
-for(let i =0; i&lt;n;i++){
-  arr.unshift(i) // O(n)
-} // O(n²)
-
-
+traverse (fn) {
+  let current = this.head
+  while(current !== null) {
+    fn(current)
+    current = current.next
+  }
+  return true
+}
         </code></pre>
         <p>
-          <a href="https://www.desmos.com/calculator?lang=zh-TW" target="_blank">繪圖計算機</a>
+          有了上面 length 方法的檢查實現， traverse 方法也就不難了解了，它接收一個檢查執行函數,在
+          while 循環中進行呼叫。
         </p>
+        <p>最後，search方法的程式如下。</p>
+        <pre><code class="language-js">
+search(item) {
+  let current = this.head
+  let counter = 0
+  while( current ) {
+    if( current.data == item ) {
+      return counter
+    }
+    current = current.next
+    counter++
+  }
+  return false
+}
+        </code></pre>
+        <p>
+          至此就實現了所有 DoublyLinkedList
+          類別向鏈結串列的方法。仔細分析一下整個實現過程可以發現,雙向鏈結串列的實現並不複雜,在手寫過程中需要開發者做到「心中有表」,考慮到目前節點的
+          next 和 prev 設定值,其在邏輯實現上還是很簡單的。
+        </p>
+        <p>
+          掌握了這些內容,再回想一下鏈結串列的應用,以及 React Fiber
+          的設計和實現,也許一切就都變得不再神秘。
+        </p>
+        <h3>樹</h3>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
       </article>
     </main>
   </body>

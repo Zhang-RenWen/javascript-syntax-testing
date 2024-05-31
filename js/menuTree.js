@@ -126,7 +126,7 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-4-1',
-            title: '1-4-1 效能監控和錯誤收集與上報',
+            title: '1-4-1 效能監控和錯誤收集與回報',
             href: '1-4-1.html'
           },
           {
@@ -136,7 +136,7 @@ export const menu = [
           },
           {
             id: '1-4-3',
-            title: '1-4-3 架構與效能: React & Vue3 🚧',
+            title: '1-4-3 架構與效能: React',
             href: '1-4-3.html'
           },
           {
@@ -153,8 +153,28 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-5-1',
-            title: '1-5-1 設計模式 🚧',
-            href: '1-5.html#1-5-1'
+            title: '1-5-1 設計模式導論',
+            href: '1-5-1.html'
+          },
+          {
+            id: '1-5-3',
+            title: '1-5-3 建立型模式 🚧',
+            href: '1-5-3.html'
+          },
+          {
+            id: '1-5-4',
+            title: '1-5-4 結構型模式 🚧',
+            href: '1-5-4.html'
+          },
+          {
+            id: '1-5-5',
+            title: '1-5-5 行為型模式 🚧',
+            href: '1-5-5.html'
+          },
+          {
+            id: '1-5-6',
+            title: '1-5-6 函數式程式設計 🚧',
+            href: '1-5-6.html'
           }
         ]
       },
@@ -210,7 +230,7 @@ export const menu = [
           },
           {
             id: '1-6-10',
-            title: '1-6-10 標準化工具管理團隊 🚧',
+            title: '1-6-10 標準化工具管理團隊',
             href: '1-6-10.html'
           },
           {
@@ -250,23 +270,28 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-9-1',
-            title: '1-9-1 Complexity and Big O Notation',
+            title: '1-9-1 資料結構 🚧',
             href: '1-9-1.html'
           },
           {
             id: '1-9-2',
-            title: '1-9-2 演算法設計',
+            title: '1-9-2 Complexity and Big O Notation',
             href: '1-9-2.html'
           },
           {
             id: '1-9-3',
-            title: '1-9-3 Sorting Algorithms 排序演算法 初階',
+            title: '1-9-3 演算法設計',
             href: '1-9-3.html'
           },
           {
             id: '1-9-4',
-            title: '1-9-4 Sorting Algorithms 排序演算法 進階',
+            title: '1-9-4 Sorting Algorithms 排序演算法 初階',
             href: '1-9-4.html'
+          },
+          {
+            id: '1-9-5',
+            title: '1-9-5 Sorting Algorithms 排序演算法 進階',
+            href: '1-9-5.html'
           }
         ]
       },
