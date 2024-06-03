@@ -1002,35 +1002,266 @@ edit/${base64}`
           不回復到A，進行重新建置。解決想法就是使用一個拓撲圖,根據拓撲圖按照一定的順序進行檢查和編譯建置。
         </p>
         <h3>雜湊表</h3>
+        <p>
+          雜湊表是一種 key-value
+          形式儲存資料的資料結構,可以把雜湊表了解為一種進階陣列,這種陣列的索引可以是很大的整數、浮數、字串,甚至是結構。這種資料結構非常有用,
+          JavaScript 中 Map、Set、WeakMap、WeakSet 在 JavaScript v8 版本中都是透過雜湊表實現的,在
+          LRU Cache、資料庫索引等很多場景中也能看到雜湊表的身影。
+        </p>
+        <p>雜湊表並不僅是一種技術,從某種意義上講,它甚至是一種思想。</p>
+        <p>
+          現在要儲存 key 為 6、2019、2333333 的 3 組資料,如果用陣列來儲存,則至少需要一個長度為
+          2333333 的陣列做件事情,這種做法顯然存在大量空間浪費。
+        </p>
+        <p>
+          也可以像 圖1 所示的那樣，準備一個長度為 10 的桶陣列(buck array),將每一個
+          key透過一個雜湊函數(hash function)對映到桶陣列中,將 key
+          對應的值直接存入即可。可以看到,這種方式只需要使用一個長度為 10
+          的陣列,而且尋找和插入的時間複雜度都是O(1)。這就是雜湊表的核心思想。
+        </p>
+        <p>圖1</p>
+        <img src="./assets/image/1-9-1/1.jpg" alt="" />
+        <p>雜湊表中的幾個概念如下。</p>
+        <ul>
+          <li>桶(bucket)：用來直接儲存或間接指向一個資料。</li>
+          <li>桶陣列(bucket array)：由桶組成的陣列。</li>
+          <li>雜湊函數(hash function)：將 key 轉為桶陣列索引的函數。</li>
+        </ul>
+        <p>
+          上面的實例比較簡單,如果繼續在之前的基礎上儲存一個key 為 9 的資料,那麼透過 9%10 計算得出的
+          key 也索引為 9 的 bucket上,此時有兩個不同的 key 落在了同一個 bucket
+          上,這一現象被稱為雜湊衝突。
+        </p>
+        <p>雜湊衝突在理論上是不可避免的,主要可以從以下兩個方面進行最佳化。</p>
+        <ul>
+          <li>精心設計桶陣列長度及雜湊函數,盡可能降低衝突的機率。</li>
+          <li>發生衝突時,能對衝突進行排解。</li>
+        </ul>
+        <p>
+          假設需要儲存的元素個數為 N
+          ,直接用陣列進行儲存需要的陣列長度為R,而用雜湊表儲存需要的桶陣列長度為M,則一定存在以下關係:N
+          &lt;M&lt;&lt;R,只有這樣,雜湊表才能既保持操作的高效又能節省空間。
+        </p>
+        <p>
+          其中, N 和 M 的比值被稱為雜湊表載入因數,當載入因數超過一定的設定值時,就需要對桶陣列擴充並
+          rehash。
+        </p>
+        <p>理想的雜湊函數遵循以下設計原則。</p>
+        <ul>
+          <li>確定: 同一 key 總是被對映至同一位址。</li>
+          <li>高效: 插入/尋找/刪除具有 O(1)時間複雜度。</li>
+          <li>滿射: 盡可能充分地覆蓋整個桶陣列空間。</li>
+          <li>均勻: key 對映到桶列陣各個位置的機率儘量接近。</li>
+        </ul>
+        <p>常用的雜湊函數如下。</p>
+        <h4>1.除餘法</h4>
+        <p>除餘法對應的程式如下。</p>
         <pre><code class="language-js">
-
+hash(key) = key % M
         </code></pre>
+        <p>這種方法會直接對 key 按桶陣列的長度取餘數 ,但存在以下缺陷。</p>
+        <ul>
+          <li>
+            存在不動點 ：無論桶陣列長度 M
+            取何值,總有hash(0)=0，這與任何元素都有均等的機率被對映到任何位置的原則相違背。
+          </li>
+          <li>零階均勻：[0,R) 的關鍵碼被平均分配至 M 個桶,但相鄰關鍵碼的雜湊地址也必相鄰。</li>
+        </ul>
+        <h4>2. MAD ( Multiply-Add-Divide) 法</h4>
+        <p>MAD 法對應的程式如下。</p>
         <pre><code class="language-js">
-
+hash(key) = (a x key + b) % M
         </code></pre>
+        <p>
+          與除餘法相比,MAD 法引用的數可以被作偏移量,能夠用於有效地消除不動點,另一個變數 a
+          則扮演著步進值的角色,也就是說,原本相鄰的關鍵碼在經過雜湊處理後步進值為
+          a,進一步不再繼續相鄰。
+        </p>
+        <h4>3.平方取中法(Mid-Square)</h4>
+        <p>取 key^2 的中間許多位組成以下位址。</p>
         <pre><code class="language-js">
-
+hash(123)=512 // 保留 key^2=123^2=15219 的中間3位
+hash(1234567)=556 // 1234567^2 =1524155677489
         </code></pre>
+        <p>
+          可以將一個數的平方運算分解為一系列的左移操作及許多次加法,每個數字都是由原關鍵碼中的許多個數字經求和獲得的,因此兩側的數字由更少的原數字求和而得,越是置中的數字,越是由更多的原數字累積而得,因此截取置中的許多個數字可使原關鍵碼的各個數字都能對最後結果產生影響，進一步實現更好的均勻性。
+        </p>
+        <h4>4.多項式法</h4>
+        <p>
+          在實際應用中,key不一定都是整數形式,因此常常需要一個前置處理將其轉雜湊碼(hash
+          code),然後才可以將其進一步處理為桶陣列的索引位址。整個過程可以描述為key --> hash code
+          -->bucket addr, 多項式法就是一種有效的將字串 key 轉為 hash code 的方法。對於一個度為 n
+          的字串,相關的雜湊函數計算過程如下。
+        </p>
         <pre><code class="language-js">
-
+hash(x0 x1 ... xn-1) = x0 * a^(n-1) + x1 * a^(n-2) ... + xn-2* a + xn-1
+// 如果對上面的法不是很了解,可以看一下下面這種相等寫法
+(...((x0* a +x1) * a+x2) *a+ ... xn-2) * a+ xn-1)
         </code></pre>
+        <p>實際的專案中採用以下這種近似多項式的快速做法,程式如下</p>
         <pre><code class="language-js">
-
+function hash(key) {
+  let h =0
+  for (let n = key.length, i = 0; i != n; itt) {
+    h=(h&lt;&lt;5|h&gt;&gt;27)
+    h += key[i].charCodeAt()
+  }
+  return h >>> 0
+}
         </code></pre>
+        <p>
+          透過一個循環依次處理字串的每一個字元，將每個字元轉為整數後累加，在累加之前對原有的累積值按照
+          h&lt;&lt;5|h>>27 這樣的規則做一個數位轉換。
+        </p>
+        <p>上述過程可以簡單地用圖2 來表現。</p>
+        <p>圖2</p>
+        <img src="./assets/image/1-9-1/2.jpg" alt="" />
+        <p>這一累加過程實際上是對以上多項式計算的近似演算法,只不過這裡消除了相對耗時的乘法運算。</p>
+        <p>
+          還有很多實現雜湊函數的方法,如折疊法、位互斥法、(偽)隨機數法...等等,每種方法都有各自的特點及應用場
+          景。
+        </p>
+        <p>總之,雜湊函數產生的關鍵碼越是隨機,越是沒有規律就越好。</p>
+        <p>主要的處理雜湊表衝突的方法有開鏈法和探測法。</p>
+        <h4>開鏈法(linked-list chaining/separate chaining)</h4>
+        <p>
+          每個桶中儲存一個指標,將衝突的 key
+          以鏈結串列的形式組織起來，這種處理方式最大的優點是能解決任意次數的衝突,但缺點也很明题,最極端的情況是當所有的
+          key 資料都落在一個桶中時,雜湊表將退化為一個鏈結串列，尋找、插入和刪除的複雜度都將變為
+          O(n)。
+        </p>
+        <h4>探測法(open addressing/closed hashing)</h4>
+        <p>
+          探測法的所有衝突都會在一塊連續的空間中獲得解決,而不用像開鏈法那樣申請額外的空間。當存入一個
+          key 時,所有的桶都會按照某種歐先順序關係排成一個序列,從本該屬於該 key
+          的桶出發,順序檢視每一個桶，直到找到可用的桶。每個 key
+          對應的這樣的序列,被稱為試探序列或尋找鏈。在尋找 key
+          時,沿尋找鏈尋找有兩種結果,一種是在桶中找到查詢的
+          key,也就是尋找成功;還有一種是找到了一個空桶,也就是尋找失敗,說明沒有這個key。
+        </p>
+        <p>
+          最簡單的試探序列的產生方法叫作線性試探(linear
+          probing)，實際的做法是一旦發生衝突,就試探後一個緊鄰的桶單元,直到成功或失敗。這種做法的優點是無須附加的(指標、鏈結串列等)空間,缺也很明顯,就是以往的
+          衝突會導致後續的衝突。線性試探的程式如下。
+        </p>
         <pre><code class="language-js">
-
+[hash(key) + 1] % M
+[hash(key) + 2] % M
+[hash(key) + 3] % M
+...
         </code></pre>
+        <p>
+          線性試探的問題根源在於大部分的試探位置都集中在某一個相對較小的局部，因此最佳化線性試探的方式就是適當地拉開各次探測間距，平方試探(
+          Quadratic Probing)
+          就是以這一最佳化想法為基礎的實作方式。所謂平方試探,就是以平方數為距離,確定下一試探桶單元。
+        </p>
         <pre><code class="language-js">
-
+[hash(key) + 1^2] % M
+[hash(key) + 2^2] % M
+[hash(key) + 3^2] % M
+...
         </code></pre>
+        <p>
+          相對於線性試探,平方試探的確可以在快速地緩解資料聚集的現象，在尋找戀上,各桶之間的間距線性遞增。
+        </p>
+        <h3>雜湊表的實作</h3>
+        <p>用 JavaScript 模擬實現一下雜湊表,這裡採用開鏈法 解決雜湊衝突。實作方式程式如下。</p>
         <pre><code class="language-js">
+// 單在鏈結串列節點
+class ForwardListNode {
+  constructor(key, value) {
+    this.key = key
+    this.value = value
+    this.next = null
+  }
+}
 
-        </code></pre>
-        <pre><code class="language-js">
+class Hashtable{
+  constructor(bucketSize = 97) {
+    this._bucketSize = bucketSize
+    this._size = 0
+    this._buckets = new Array(this._bucketSize)
+  }
 
-        </code></pre>
-        <pre><code class="language-js">
+  hash(key) {
+    let h = 0
+    for (let n = key.length, i = 0; i != n; i++) {
+      h=(h&lt;&lt;5|h>>27)
+      h t= key[i].charCodeAt()
+    }
+    return (h >>> 0) %  this._bucketSize
+  }
 
+  // Modifiers
+  put(key, value){
+    let index = this.hash(key);
+    let node = new ForwardListNode(key, value)
+
+    if (!this._buckets[index]) {
+      // 如果桶是空的,則直接把新節點放入桶中
+      this._buckets[index] = node
+    } else {
+      // 如果桶不為空,則在鏈結串列標頭插入新節點
+      node next = this._buckets[index]
+      this._buckets[index] = node
+    }
+    this._size++
+    return index
+  }
+
+  delete(key){
+    let index =this.hash(key)
+    if(!this._buckets[index]){
+      return false
+    }
+
+    // 增加一個虛擬頭節點,以便後面進行刪除操作
+    let dummy = new ForwardListNode(null, null)
+    dummy.next = this._buckets[index]
+    let cur = dummy.next, pre = dummy
+    while (cur) {
+      if (cur.key === key) {
+        // 從鏈結串列中刪除該節點
+        pre.next = cur.next
+        cur = pre.next
+        this._size--
+      } else {
+        pre = cur
+        cur = cur.next
+      }
+    }
+    this._buckets[index] = dummy.next
+    return true
+  }
+
+  // Lookup
+  find(key) {
+    let index = this.hash(key);
+    // 如果對應的桶為空,則說明不存在此 key
+    if (!this._buckets[index]) {
+      return null
+    }
+    // 檢查對應桶的鏈結串列
+    let p = this._buckets[index]
+    while (p) {
+      // 找到 key
+      if (p.key === key) {
+        return p.value
+      }
+      p = p.next
+    }
+    return null
+  }
+
+  // Capacity
+  size() {
+    return this._size
+  }
+
+  isEmpty() {
+    return this._size == 0
+  }
+}
         </code></pre>
       </article>
     </main>
