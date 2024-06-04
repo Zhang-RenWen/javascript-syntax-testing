@@ -327,7 +327,7 @@ const curry = (fn, length) => {
 }
         </code></pre>
         <p>
-          這裡利用了 fn.length 來取得函數預期需要的參數個數,並利用b ind方法綁定參數。如果不想使用
+          這裡利用了 fn.length 來取得函數預期需要的參數個數,並利用 bind方法綁定參數。如果不想使用
           bind 方法,可以另一種正常的想法,即對每次呼叫時產生的參數進行儲存,程式如下。
         </p>
         <pre><code class="language-js">
@@ -352,48 +352,248 @@ const curry = fn =>
         <p>
           實現原理就是,先用閉包把傳入參數儲存起來,當傳入參數執行函數時,就開始執行函數。其實際步驟如下。
         </p>
+        <ul>
+          <li>先逐步接收參數,並進行儲存,以供後續使用。</li>
+          <li>先不進行函數計算,延後執行。</li>
+          <li>在符合條件時,根據已儲存的參數進行統一計算。</li>
+        </ul>
+        <h4>反柯里化</h4>
+        <p>
+          反柯里化與柯里化正好相反。反柯里化旨在大函數的適用性,使特定物件所擁有的功能函數可以被任意物件所使用。
+        </p>
+        <p>
+          說到特定物件所擁有的功能函數可以被任意物件所使用,有經驗的開發者可能會想到用於類型判斷的Object.prototype.toString.call(target),其對應場景的使
+          用方式如下。
+        </p>
+        <pre><code class="language-js">
+const foo = () => ({})
+const bar = ''
+Object.prototype.toString.call(foo) === '[object Function]'
+// true
+Object.prototype.toString.call(bar) === '[object String]'
+// true
+        </code></pre>
+        <p>另一個相似的場景是使用 UI 元件 Toast 的場景,對應的程式如下。</p>
+        <pre><code class="language-js">
+function Toast (options) {
+  this.message = ''
+}
+
+Toast.prototype = {
+  showMessage: function () {
+    console.log(this.message)
+  }
+}
+        </code></pre>
+        <p>這樣的程式使得所有 Toast 實例都能夠使用 showMessage 方法,使用方法如下。</p>
+        <pre><code class="language-js">
+new Toast({}).showMessage()
+        </code></pre>
+        <p>假如有以下變數物件,</p>
+        <pre><code class="language-js">
+const obj = {
+message: 'uncurry test'
+}
+        </code></pre>
+        <p>如果想使用 Toast 原型上的 showMessage 方法,則方式如下。這也是使用反柯理化的場景。</p>
+        <pre><code class="language-js">
+uncurryShowMessage = unCurry(Toast.prototype.showMessage)
+unCurryShowMessage(obj)
+        </code></pre>
+        <h4>反柯里化實現</h4>
+        <p>
+          分析一下 unCurry 方法的是一個希望被其他物件所呼叫 暫且被稱為 fn，unCurry
+          方法執行後會傳回一個新的函數,該函數的第一個參數是預期要執行方法的物件(obj),後面的參數是執行這個方法時需要傳遞的參數。
+        </p>
+        <pre><code class="language-js">
+function unCurry(fn) {
+  return function () {
+    var obj = [].shift.call(arguments)
+    return fn.apply(obj, arguments)
+  }
+}
+        </code></pre>
+        <p>將以上程式改為 ES6 的寫法,如下所示。</p>
+        <pre><code class="language-js">
+const unCurry = fn => (...args) => fn.call(...args)
+        </code></pre>
+        <p>以上是 unCurry 方法的實現。也可以將 unCurry 方法掛載到函數原型上。</p>
+        <pre><code class="language-js">
+Function.prototype.uncurry = !Function.prototype.uncurry || function(){
+  const self = this
+  return function () {
+    return Function.prototype.call.apply(self, arguments)
+  }
+}
+        </code></pre>
+        <p>
+          這裏不太好了解的點在於 Function.prototype.call.apply(self,arguments)
+          將它拆開來看一下,也許就非常清晰了。
+        </p>
+        <ul>
+          <li>
+            第一步,Function.prototype.call.apply(self,arguments) 可以被看成 Fn.apply(self,
+            arguments),執行 Fn 函數時,this 指向了 self。而根據程式，self 是呼叫 unCurry
+            的函數,執行結果就是 Fn(arguments),只不過 綁定在 self 上了。
+          </li>
+          <li>
+            第二步,解析 callFn(arguments)，callFn 指的是 Function.prototype.call，call
+            方法的第一個參數是用來指定 this 的,因此 callFn(arguments) 相當於 callFn(arguments[0],
+            arguments[n - 1])。
+          </li>
+        </ul>
+        <p>
+          因此,執行 Function.prototype.call.apply(self,arguments)最後就相當於執行
+          callFn(arguments[0],arguments[n-1),也就是說,在反柯里化後獲得的函數中,第一個參數是用來決定
+          this 指向的,也就是需要應用的目標物件,剩下的參數是函數執行所需要的參數。
+        </p>
+        <p>當然,可以借助 bind 實現反柯里化。</p>
+        <pre><code class="language-js">
+Function.prototype.unCurry = function(){
+  return this.call.bind(this)
+}
+        </code></pre>
+        <p>借助bind,call/apply 的實現過程會得相對抽象,可以根據範例嘗試了解。</p>
+        <h3>偏函數</h3>
+        <p>
+          了解了柯里化，偏函數(或叫作偏應用 partial application )
+          就很容易了解了。如果說柯里化是將一個多參數函數轉換成多個單參數函數,也就是將 n 元函數轉換成
+          n 個一元函數,那麼偏函數就是將一個多參函數轉換成一個具有固定參數的函數,即將一個 n
+          元函數轉換成一個 n-k 元函數。
+        </p>
+        <ul>
+          <li>柯里化:n=n*1</li>
+          <li>偏函數:n=n/k*k</li>
+        </ul>
+        <p>偏函數的程式如下。</p>
+        <pre><code class="language-js">
+const partial = (in, ...rest) => (...args) => fn(...rest, ...args)
+        </code></pre>
+        <p>使用 bind 的實現版本如下。</p>
+        <pre><code class="language-js">
+const partial = (fn, ...args) => fn.bind(null, ...args)
+        </code></pre>
+        <h4>函子</h4>
+        <p>
+          函子,大部分沒有深入了解過函數式程式設計的開發者可能對此陌生,而函子確實是一個很重要的函數式程式設計思想。目前,社群介紹並不算多,所以下面就來介紹一下。
+        </p>
+        <p>先從鏈式呼叫說起,看一下以下程式。</p>
+        <pre><code class="language-js">
+const addHelloPrefix = str => `Hello : ${str}`
+const addByeSuffix = str => `${str}, bye!`
+        </code></pre>
+        <p>
+          addHelloPrefix 和 addByeSuffix
+          分別給所接收到的字串增加了固定的字串字首和副檔名,可以透過以下方式使用它們。
+        </p>
+        <pre><code class="language-js">
+addByeSuffix(addHelloPrefix('lucas'))
+// "Hello : lucas, bye!"
+        </code></pre>
+        <p>鏈式呼叫以下程式,則顯示出錯。因為字串並不存在 addHelloPrefix 方法,所以會呼叫失敗。</p>
+        <p>
+          如果 'lucas' 這樣的字串是一個複雜類型,或是一個類別,也許問題就能解決，下面實現了 Person
+          類別。
+        </p>
+        <pre><code class="language-js">
+class Person {
+  constructor(value) {
+    this.value = value
+  }
+  addHelloPrefix() {
+    return `Hello : ${this.value}`
+  }
+  addByeSuffix() {
+    return `${this.value}, bye`
+  }
+}
+        </code></pre>
+        <p>
+          目前宣告並不足完鏈式呼叫,鏈式呼叫關鍵是呼叫 addHelloPrefix 和 addByeSuffix
+          方法後,這方法仍然傳回該類別實例，而非字串,因此需要將以上程式改為以下形式。
+        </p>
+        <pre><code class="language-js">
+class Person{
+  constructor(value) {
+    this.value = value
+  }
+  addHelloPrefix() {
+    return new Person('Hello : S(this.value)')
+  }
+  addByeSuffix() {
+    return new Person(`${this.value}, bye`)
+  }
+}
+        </code></pre>
+        <p>執行以下程式。</p>
+        <pre><code class="language-js">
+new Person('lucas').addHelloPrefix().addByeSuffix()
+// {value: "Hello : lucas, bye"}
+        </code></pre>
+        <p>距離目標更近了些。試圖將上述操作變得完全通用，因 此下面定義一個 Functor 類別。</p>
+        <pre><code class="language-js">
+class Functor {
+  constructor(value) {
+    this.value = value
+  }
+  static of(value) {
+    return new Functor (value)
+  }
+  apply(fn) {
+    return Functor.of(fn(this.value))
+  }
+}
+        </code></pre>
+        <p>
+          將 Functor 了解為函子雛形,看一下它做了什麼: Functor 照慣例接收資料;同時定義了 Functor
+          的靜態方法 of ，這方法用來傳回一個 Functor 實例物件 ; apply 方法接收一個 fn,使用
+          fn對目前實例的 value 進行計算,獲得新的 value 將其交給靜態方法 of，最後獲得新 value
+          對應的實例。
+        </p>
+        <p>這樣一來,執行以下程式,</p>
+        <pre><code class="language-js">
+Functor.of('lucas').apply(addHelloPrefix).apply(addByeSuffix)
+        </code></pre>
+        <p>仍然會獲得以下結果。</p>
+        <pre><code class="language-js">
+{value: "Hello : lucas, bye!"}
+        </code></pre>
+        <p>下面對函子進行一下歸納。</p>
+        <ul>
+          <li>可以將函子了解為一個容器,這個容器中含有值 this.value</li>
+          <li>函子具有 apply方法,該方法將容器中的每一個值應用到另一個容器上</li>
+          <li>上述中的「應用到另一個容器上」,是指使用 Functor.of 方法得新的實例。</li>
+          <li>
+            所有運算都是透過函子來完成的,這樣一來,所有運算就不是直接針對值進行的,而是針對這個值的容器―函子進行的。
+          </li>
+          <li>這樣確保了值的不可變性。</li>
+          <li>函數式程式設計有個約定、函子需要擁有一個 of 方法產生新的容器。</li>
+        </ul>
+        <h3>Maybe 函子</h3>
+        <p>為了確保安全,需要將函子中的空值過濾掉,方法如下。</p>
         <pre><code class="language-js">
 
+class Maybe {
+  constructor(value) {
+    this.value = value
+  }
+  static of(value) {
+    return new Maybe(value)
+  }
+  apply(fn) {
+    return this.value ? Maybe.of(fn(this.value)) : new Maybe(null)
+  }
+}
         </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
-        <pre><code class="language-js">
-
-        </code></pre>
+        <p>
+          apply 方法會對目前值 this.value 進行判斷,如果目前值為不可為空，則傳回
+          Maybe.of(fn(this.value)) 呼叫,否則直接傳回Maybe(null)。
+        </p>
+        <p>
+          這就是簡單的 Maybe
+          函子。不同類型的函子可以完成不同的功能,但共同點是,每個函子都不會直接去操作需要處理的資料(沒有直接改寫
+          this.value 的操作),而是透過 apply 介面使用 fn ,並最後傳回一個新的函子。
+        </p>
       </article>
     </main>
   </body>
