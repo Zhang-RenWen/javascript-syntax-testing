@@ -33,8 +33,221 @@
         <nav></nav>
       </aside>
       <article>
-        <h2 id="1-5">1-5 設計模式</h2>
-        <h3></h3>
+        <h2 id="1-5-6">1-5-6 設計模式</h2>
+        <h3>函數式和高品質函數</h3>
+        <p>用函數式程式取代針對程序式的程式有以下好處。</p>
+        <ul>
+          <li>
+            表達力更加清晰,因為一切都是函數,因此透過函數進行合理的命名，及對函數進行原子拆分,能夠一眼看出來程式在做什麼。
+          </li>
+          <li>
+            利於重複使用,因為一切都是函數,而函數本身就具有天然的重複使用特質，所以以函數為基礎的程式也具備這種能力。
+          </li>
+          <li>
+            利於維護,純函數和和冪等性可以確保輸入相同,輸出就相同,在維護或偵錯程式時能夠更加專注,減少因為共用帶來的潛在問題。
+          </li>
+        </ul>
+        <h4>純函數</h4>
+        <p>之前提到過，如果一個函數的輸入參數確定，輸出結果是唯一確定的，那麼它就是純函數。</p>
+        <p>
+          純函數不能修改外部變數，以避免造成副作用，不能呼叫
+          Math.radom()方法及發送非同步請求等，因為這些操作都不具有確定性。
+        </p>
+        <p>
+          根據定義，我們知道純函數的特點是無狀態、無副作用、無關時序且具備冪等性（無論呼叫多少次，結果都相同）。下面來看一個範例，如下。
+        </p>
+        <pre><code class="language-js">
+let array = [1, 2, 3,4]
+
+// array 的 slice 方法屬於純函數方法，它不對陣列本身操作
+// array 的 splice 方法不屬於純函數方法，它對陣列本身操作
+
+const minusCount = () => {
+  window.count--
+}
+// minusCount 不是純函數，它依賴並改變外部變數，具有副作用
+
+const setHtml = (node, html) => {
+  node.innerHtml = html
+}
+
+// setHtml不是純函數，同上
+        </code></pre>
+        <h4>高階函數</h4>
+        <p>
+          高階函數表現了函數是第一等公民的思想，它是指這樣一種函數：該函數接收一個函數作為參數，傳回另外一個函數。
+          沒錯，它和高階元件的概念有些類似。為什麼會有這麼一個堅異的高階函數呢？來看一個實例：fillerLowerThan10
+          這個函數接收一個陣列作為參數，它會挑選出陣列中數值小於 10
+          的項，所有符合條件的項會組成一個新陣列並被傳 回，如下。
+        </p>
+        <pre><code class="language-js">
+const filterLowerThan10 = array => {
+  let result = []
+  for (let i = 0, length = array.length; i < length; i++) {
+    let currentValue = array[i]
+    if (currentValue &lt;10) result.push(currentValue)
+  }
+  return result
+}
+        </code></pre>
+        <p>
+          再來看另外一個需求:挑出陣列中的非數值項,所有符合條件項會組一個新陣列並被傳回,程式如下。
+        </p>
+        <pre><code class="language-js">
+const filterNaN = array => {
+  let result = []
+  for (let i = O, length = array.length; i < length; itt) {
+    let currentValue = array[i]
+    if (isNaN(currentValue)) result.push(currentValue)
+  }
+  return result
+}
+        </code></pre>
+        <p>
+          這是很基本的針對過程程式設計的程式。這兩段程式不夠優雅的地方是, filterLowerThan10 和
+          filterNaN 中都存在檢查邏輯和 for 迴圈。檢查邏輯和 for
+          迴圈本質上都是檢查一個列表,並用指定的條件過濾列表。可以使用 filter
+          函數來實現需求，並進行某種程度的改造,用函數式的思想將檢查和篩選解耦，程式如下。
+        </p>
+        <pre><code class="language-js">
+const lowerThan10 = value => value < 10
+[12, 3, 4, 89].filter(lowerThan10)
+
+[12, 'sd', null, undefined, {}].filter(isNaN)
+        </code></pre>
+        <p>以上程式的寫法非常簡單,算是幫助入門函數式的一種寫法。</p>
+        <p>
+          另一個高階函數的典型應用場景是函數傳回值快取。舉例來說,可以實現一個 memorize
+          函數,對函數傳回值進行快取,以減少函數實際執行的負擔,程式如下。
+        </p>
+        <pre><code class="language-js">
+const memorize = fn => {
+  let cacheMap = {}
+  return function(...args) {
+    const cacheKey = args.join('_')
+    if (cacheKey in cacheMap) {
+      return cache[cacheKey]
+    } else {
+      return cacheMap[cacheKey] = fn.apply(this || {}, args)
+    }
+  }
+}
+        </code></pre>
+        <p>高階函數可以和裝飾器相結合,下面的範例程式實現了對裝飾器進行一定次數的呼叫,如下。</p>
+        <pre><code class="language-js">
+class MyClass {
+  @callLimit getSum() {}
+}
+        </code></pre>
+        <p>callLimit 裝飾器的實現程式如下。</p>
+        <pre><code class="language-js">
+function callLimit(limitCallCount = 1, level = 'warn') {
+  // 記錄呼叫次數
+  let count = 0
+  return function(target, name, descriptor) {
+    // 記錄原始函數
+    var fn = descriptor.value
+    // 改寫新函數
+    descriptor.value = function(...args) {
+      if (count < limitCallCount) {
+        count++
+        return fn.apply(this || {}, args)
+      }
+      if(console[level]) console[level](name, 'call limit')
+      console.warn(name, 'call limit')
+    }
+  }
+}
+        </code></pre>
+        <p>嚴格來說,這不是一個高階函數的使用場景,但卻表現了類似思想。</p>
+        <h4>組合</h4>
+        <p>
+          場景繼續延伸,如果輸入的參數比較複雜,想過濾出小於 10 的項，那就需要確保陣列中的每一項都是
+          number 類型的,相關程式如下。
+        </p>
+        <pre><code class="language-js">
+[12, 'sd', null, undefined, {}, 23, 45, 3, 6].filter(value=> !isNaN(value) && value!== null).filter(lowerThan10)
+        </code></pre>
+        <p>
+          這樣的做法得益於 JavaScript filter
+          對函數式支援的人性化,其中用到的鏈式呼叫也在某種程度上實現了組合。
+        </p>
+        <p>更常見的實現組合的做法是使用 compose方法對程式邏輯組合,其優勢如下所示。</p>
+        <ul>
+          <li>具有單一功能的小函數更好維護。</li>
+          <li>透過組合,將單一功能的小函數串聯起來,完成複雜的功能。</li>
+          <li>重複使用性更好,強制寫入更少。</li>
+        </ul>
+        <h4>point free</h4>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
