@@ -270,7 +270,7 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-9-1',
-            title: '1-9-1 資料結構 🚧',
+            title: '1-9-1 資料結構',
             href: '1-9-1.html'
           },
           {
