@@ -170,6 +170,135 @@
         <h3>快取實戰</h3>
         <h4>啟動項目</h4>
         <p>首先建立專案,程式如下。</p>
+        <pre><code class="language-bash">
+mkdir cache
+npm init
+        </code></pre>
+        <p>透過以上程式獲得 package.json 檔案,同時在檔案中宣告相關依賴,程式如下。</p>
+        <pre><code class="language-js">
+{
+  "name": "cache",
+  "version" : "1.0.0",
+  "description": "Cache demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "keywords" : [
+    "cache",
+    "node"
+  ],
+  "devDependencies": {
+    "@babel/core": "latest",
+    "@babel/preset-env": "latest",
+    "@babel/register": "latest",
+    "koa": "latest",
+    "koa-conditional-get" : "^2.0.0",
+    "koa-etag": "^3.0.0",
+    "koa-static": "latest"
+  },
+  "dependencies" : {
+    "nodemon": "latest"
+  },
+  "license": "ISC"
+}
+        </code></pre>
+        <p>使用 nodemon 啟動項目,同時編輯 .babelrc 檔案中內容,設定 babel 如下。</p>
+        <pre><code class="language-js">
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets"; {
+          "node"; "current"
+        }
+      }
+    ]
+  ]
+}
+
+        </code></pre>
+        <p>在 cache/static 目錄下,建立 index.html 和一張測試圖片 web.png。</p>
+        <pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge" /&gt;
+    &lt;title&gt;前端開發核心知識進階&lt;/title&gt;
+    &lt;style&gt;
+    .cache img {
+      display: block;
+      width: 100%;
+    }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div class="cache"&gt;
+      &lt;img src="./web.png" /&gt;
+    &lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+        </code></pre>
+        <p>看一下核心指令檔 index.js, 其中的程式其實就是一個簡單的 Node.js 服務。</p>
+        <pre><code class="language-js">
+require('@babel/register');
+require('./cache.js');
+cache. js :
+import Koa from 'koa'
+import path from 'path'
+import resource from 'koa-static'
+const app = new Koa()
+const host = 'localhost'
+const port = 6666
+app.use (resource(path.join(__dirname, './static')))
+app.listen(port, () => {
+  console.log(`server is listen in ${host}:${port}`)
+})
+        </code></pre>
+        <p>執行 npm run star,可以獲得如 圖4 所示的畫面。</p>
+        <p>圖4</p>
+        <img src="./assets/image/1-4-4/4.jpg" alt="" />
+        <h4>應用快取</h4>
+        <p>下面來嘗試加入一些快取。首先根據強快取機制,在回應標頭上加入相關欄位,如下所示。</p>
+        <pre><code class="language-js">
+import Koa from 'koa'
+import path from 'path'
+import resource from 'koa-static'
+const app = new Koa()
+const host = 'localhost'
+const port = 5999
+app.use(async (ctx, next) => {
+  ctx.set ({
+    'Cache-Control'; 'max-age=5000'
+  })
+  await next()
+})
+app.use(resource(path.join(__dirname, './static')))
+app.listen(port, () => {
+console.log(`server is listen in ${host}:${port}`);
+})
+        </code></pre>
+        <p>加入Cache-Control 標頭並將 max-age 值設定為 5000 後,頁面獲得的回應如圖5 所示。</p>
+        <p>圖5</p>
+        <img src="./assets/image/1-4-4/5.jpg" alt="" />
+        <p>再次更新頁面,獲得了200 OK(from memory cache)的標記,如圖6 所示。</p>
+        <p>圖6</p>
+        <img src="./assets/image/1-4-4/6.jpg" alt="" />
+        <p>
+          當關掉瀏覽器,再次開啟頁面後,又會獲得200 0K(from disk cache) 的標記，如圖7
+          所示。記憶體快取已經隨著 關閉瀏覽器而清除,這裡顯示的內容是從硬碟中取到的快取。
+        </p>
+        <p>圖7</p>
+        <img src="./assets/image/1-4-4/7.jpg" alt="" />
+        <pre><code class="language-js">
+
+        </code></pre>
+        <pre><code class="language-js">
+
+        </code></pre>
         <pre><code class="language-js">
 
         </code></pre>
