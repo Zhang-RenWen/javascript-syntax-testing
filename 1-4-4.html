@@ -293,14 +293,74 @@ console.log(`server is listen in ${host}:${port}`);
         </p>
         <p>圖7</p>
         <img src="./assets/image/1-4-4/7.jpg" alt="" />
+        <p>嘗試將 max-age 的值改為5s, 5s 後再次更新頁面,發現快取已經故障。</p>
+        <p>
+          下面來試驗一下協商快取。初始 package.json 檔案中已經引用了 koa-etag 和 koa-conditional-get
+          這兩個套件依賴。
+        </p>
+        <p>將 cache.js 檔案中的內容改為如下所示的樣子。</p>
+
         <pre><code class="language-js">
 
+import Koa from 'koa'
+import path from 'path'
+import resource from 'koa-static'
+import conditional from 'koa-conditional-get'
+import etag from 'koa-etag'
+const app = new Koa()
+const host = 'localhost'
+const port = 5999
+app.use(conditional())
+app.use(etag())
+app.use(resource(path.join(__dirname, './static')))
+app.listen(port, () => {
+  console.log(`server is listen in ${host}:${port}`)
+})
         </code></pre>
+        <p>快取設定很簡單,在偵錯欄中,看到了協商快取的請求標頭,如圖8 所示。</p>
+        <p>
+          再次更新瀏覽器,這次在請求標頭中發現了 If-None-Match,內容與上一次的回應標頭中的相同,如圖9
+          所示。
+        </p>
+        <p>圖9</p>
+        <p>因為圖片並沒有生變化,所以獲得 304 回應標頭,如圖10</p>
+        <p>圖10</p>
+        <p>
+          這裡主要使用了 Koa 函數庫,如果使用原生的 Node.js,可以參考下面的程式,該段程式主要實現了
+          if-modified-since/last-modified 標頭。
+        </p>
         <pre><code class="language-js">
 
+http.createServer((req, res) => {
+  let { pathname } = url.parse(req.url, true)
+  let absolutePath = path.join(__dirname, pathname)
+  fs.stat(path. join(__dirname, pathname), (err, stat) => {
+    //路徑不存在
+    if(err) {
+      res.statusCode = 404
+      res.end('Not Fount')
+      return
+    }
+    if(stat.isFile()){
+      res.setHeader('Last-Modified', stat.ctime.toGMTString())
+      if(req.headers['if-modified-since'] === stat.ctime.toMTString()){
+        res.statusCode = 304
+        res.end()
+        return
+      }
+    fs.createReadStream(absolutePath).pipe(res)
+    }
+  })
+})
         </code></pre>
+        <h4>原始程式深入</h4>
+        <p>上面應用 etag 使用了 koa-etag 套件,現在就來了解一下套件的實現,原始程式如下。</p>
         <pre><code class="language-js">
 
+var calculate = require('etag');
+var Stream = require('stream');
+var fs = require('mz/fs');
+module.exports = etag;
         </code></pre>
         <pre><code class="language-js">
 
