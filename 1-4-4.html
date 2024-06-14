@@ -361,9 +361,322 @@ var calculate = require('etag');
 var Stream = require('stream');
 var fs = require('mz/fs');
 module.exports = etag;
-        </code></pre>
-        <pre><code class="language-js">
 
+function etag (options) {
+  return function etag(ctx, next) {
+    return next()
+    .then(() => getResponseEntity(ctx))
+    .then(entity => setEtag(ctx, entity, options)) ;
+  }
+}
+
+function getResponseEntity (ctx, options) {
+  // no body
+  var body = ctx.body;
+  if (!body || ctx.response.get('ETag')) return;
+
+  // type
+  var status = ctx.status / 100 | 0;
+
+  // 2xx
+  if (2 != status) return;
+  if (body instanceof Stream) {
+    if (!body.path) return;
+    return fs.stat(body. path) catch(noop) ;
+  } else if (('string' === typeof body) || Buffer.isBuffer(body)) {
+    return body;
+  } else {
+    return JSON.stringify(body) ;
+  }
+}
+
+function setEtag(ctx,entity, options){
+  if (!entity) return;
+  ctx.response.etag = calculate (entity, options) ;
+}
+
+function noop () {}
+
+
+        </code></pre>
+        <p>
+          整個 etag 套件就是一個中介軟體，它首先呼叫 getResponseEntity 方法取得回應體，然後根據 body
+          呼叫了 setEtag 方法，根據回應內容產生了一個 etag 結果。最後在產生 etag
+          結果的計算過程中又利用了 etag 這個套件。
+        </p>
+        <p>下面就來看一下 etag 套件。</p>
+        <a href="https://github.com/jshttp/etag/blob/master/index.js">etag</a>
+        <pre><code class="language-js">
+/*!
+ * etag
+ * Copyright(c) 2014-2016 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+'use strict'
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = etag
+
+/**
+ * Module dependencies.
+ * @private
+ */
+
+var crypto = require('crypto')
+var Stats = require('fs').Stats
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var toString = Object.prototype.toString
+
+/**
+ * Generate an entity tag.
+ *
+ * @param {Buffer|string} entity
+ * @return {string}
+ * @private
+ */
+
+function entitytag (entity) {
+  if (entity.length === 0) {
+    // fast-path empty
+    return '"0-2jmj7l5rSw0yVb/vlWAYkK/YBwk"'
+  }
+
+  // compute hash of entity
+  var hash = crypto
+    .createHash('sha1')
+    .update(entity, 'utf8')
+    .digest('base64')
+    .substring(0, 27)
+
+  // compute length of entity
+  var len = typeof entity === 'string'
+    ? Buffer.byteLength(entity, 'utf8')
+    : entity.length
+
+  return '"' + len.toString(16) + '-' + hash + '"'
+}
+
+/**
+ * Create a simple ETag.
+ *
+ * @param {string|Buffer|Stats} entity
+ * @param {object} [options]
+ * @param {boolean} [options.weak]
+ * @return {String}
+ * @public
+ */
+
+function etag (entity, options) {
+  if (entity == null) {
+    throw new TypeError('argument entity is required')
+  }
+
+  // support fs.Stats object
+  var isStats = isstats(entity)
+  var weak = options && typeof options.weak === 'boolean'
+    ? options.weak
+    : isStats
+
+  // validate argument
+  if (!isStats && typeof entity !== 'string' && !Buffer.isBuffer(entity)) {
+    throw new TypeError('argument entity must be string, Buffer, or fs.Stats')
+  }
+
+  // generate entity tag
+  var tag = isStats
+    ? stattag(entity)
+    : entitytag(entity)
+
+  return weak
+    ? 'W/' + tag
+    : tag
+}
+
+/**
+ * Determine if object is a Stats object.
+ *
+ * @param {object} obj
+ * @return {boolean}
+ * @api private
+ */
+
+function isstats (obj) {
+  // genuine fs.Stats
+  if (typeof Stats === 'function' && obj instanceof Stats) {
+    return true
+  }
+
+  // quack quack
+  return obj && typeof obj === 'object' &&
+    'ctime' in obj && toString.call(obj.ctime) === '[object Date]' &&
+    'mtime' in obj && toString.call(obj.mtime) === '[object Date]' &&
+    'ino' in obj && typeof obj.ino === 'number' &&
+    'size' in obj && typeof obj.size === 'number'
+}
+
+/**
+ * Generate a tag for a stat.
+ *
+ * @param {object} stat
+ * @return {string}
+ * @private
+ */
+
+function stattag (stat) {
+  var mtime = stat.mtime.getTime().toString(16)
+  var size = stat.size.toString(16)
+
+  return '"' + size + '-' + mtime + '"'
+}
+        </code></pre>
+        <p>
+          etag 套件中的 etag 方法接收一個 entity 作為第一個參數， entity 可以是 string 類型、 buffer
+          類型，也可以是 stats 類型。如果是 stats 類型，那麽 etag 的產生
+          方法會與另外兩種類型的產生方法有所不同，程式如下。
+        </p>
+        <pre><code class="language-js">
+var mtime = stat.mtime.getTime().toString(16)
+var size = stat.size.toString(16)
+return '"' + size + '-' + mtime + '"'
+        </code></pre>
+        <p>以上程式主要根據 stats 類型的 entity 的 mtime 和 size 特徵來拼成一個 etag 產生方法。</p>
+        <p>
+          對於正常的 string 類型和 buffer 類型，etag 產生方法依賴了內建的 crypto 套件，主要根據
+          entity 產生 hash，而 hash 的產生主要依賴了 sha1 加密方法，如下所示。
+        </p>
+        <pre><code class="language-js">
+var hash = crypto
+.createHash('sha1')
+.update(entity, 'utf8')
+.digest('base64')
+        </code></pre>
+
+        <p>了解了這些，如果面試官再問「etag 的產生方法」的相關問題，就能夠有一定底氣來回答了。</p>
+        <h3>實現一個驗證快取的輪子</h3>
+        <p>分析完 etag 這個套件，嘗試自己造一個輪子，即自己開發一個套件。</p>
+        <p>
+          這個輪子需要實現驗證快取是否可用的功能，它接收請求標頭和回應標頭，並根據這兩個頭部傳回一個布林值，表示快取是否可用。預計這個套件的使用方式如下。
+        </p>
+        <pre><code class="language-js">
+var reqHeaders = {'if-none-match':'"foo"'}
+var resHeaders = { 'etag':'"bar"'}
+isFresh(reqHeaders, resHeaders)
+// => false
+var reqHeaders = { 'if-none-match': '"foo"' }
+var resHeaders = { 'etag': '"foo"' }
+isFresh (reqHeaders, resHeaders)
+// => true
+        </code></pre>
+        <p>在業務端，可以直接透過以下程式使用該套件。</p>
+        <pre><code class="language-js">
+var isFresh = require ('is-fresh')
+var http = require ('http')
+var server = http.createServer(function (reg, res) {
+  if(isFresh(reg.headers,{
+    'etag':res.getHeader('ETag'),
+    'last-modified': res.getHeader('Last-Modified')
+  })){
+    res.statusCode = 304
+    res.end()
+    return
+  }
+  res.statusCode = 200
+  res.end('hello, world!')
+})
+server.listen(3000)
+        </code></pre>
+        <p>
+          實現該函數庫的前提是先了解快取的基礎，知曉快取的優先順序。應該先驗證
+          cache-control，然後驗證 if-none-match，最後驗證 if-modified-since。
+          了解了這些，實現起來就不難了，程式如下所示。
+        </p>
+        <pre><code class="language-js">
+var CACHE_CONTROL_NO_CACHE_REGEXP = /(?:^|,)\s*?no-cache\s*?(?:,|$)/
+function fresh(reqHeaders, resHeaders){
+  // fields
+  var modifiedSince = reqHeaders['if-modified-since']
+  var noneMatch = reqHeaders['if-none-match']
+
+  if (!modifiedSince && !noneMatch) {
+    return false
+  }
+
+  var cacheControl = reqHeaders['cache-control']
+  if (cacheControl && CACHE_CONTROL_NO_CACHE_REGEXP.test(cacheControl)){
+    return false
+  }
+
+  // if-none-match
+  if (noneMatch && noneMatch !== '*') {
+    var etag = resHeaders['etag']
+    if (!etag) {
+      return false
+    }
+    var etagStale = true
+    var matches = parseTokenList(noneMatch)
+    for (var i = 0; i < matches.length; it+) {
+      var match = matches[i]
+      if (match === etag || match === 'W/' + etag || 'W/' + match === etag) {
+        etagStale = false
+        break
+      }
+    }
+    if (etagStale) {
+      return false
+    }
+  }
+
+  // if-modified-since
+  if (modifiedSince) {
+    var lastModified = resHeaders['last-modified']
+    var modifiedStale = !lastModified || ! (parseHttpDate (lastModified) <= parseHttpDate(modifiedSince))
+    if (modifiedStale) {
+      return false
+    }
+  }
+  return true
+}
+
+function parseHttpDate (date) {
+  var timestamp = date && Date.parse(date)
+  return typeof timestamp === 'number' ? timestamp : NaN
+}
+
+function parseTokenList (str) {
+  var end = 0
+  var list = []
+  var start = 0
+  for (var i = 0, len = str.length; i < len; i++) {
+    switch (str. charCodeAt (i)) {
+      case 0x20: /*  */
+        if (start === end) {
+          start = end = i + 1
+        }
+        break
+
+      case 0x2c: /* , */
+        list.push(str.substring(start, end))
+        start = end = i + 1
+        break 
+      
+      default;
+        end = i + 1
+        break
+    }
+  }
+  list.push(str. substring (start, end))
+  return list
+}
         </code></pre>
         <pre><code class="language-js">
 
