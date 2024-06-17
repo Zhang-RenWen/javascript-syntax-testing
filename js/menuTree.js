@@ -141,7 +141,7 @@ export const menu = [
           },
           {
             id: '1-4-4',
-            title: '1-4-4 快取政策 🚧',
+            title: '1-4-4 快取政策',
             href: '1-4.4.html'
           }
         ]
@@ -347,13 +347,25 @@ export const menu = [
         id: '1-18',
         title: '1-18 網路架構 🚧',
         href: '1-18.html',
-        anchorMenu: []
+        anchorMenu: [
+          {
+            id: '1-18-1',
+            title: '1-18-1  HTTP ',
+            href: '1-18-1.html'
+          }
+        ]
       },
       {
         id: '1-19',
         title: '1-19 資安政策 🚧',
         href: '1-19.html',
-        anchorMenu: []
+        anchorMenu: [
+          {
+            id: '1-19-1',
+            title: '1-19-1 資安實作建議',
+            href: '1-19-1.html'
+          }
+        ]
       }
     ]
   },
