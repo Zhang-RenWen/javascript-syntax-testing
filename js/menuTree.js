@@ -141,8 +141,8 @@ export const menu = [
           },
           {
             id: '1-4-4',
-            title: '1-4-4 快取政策',
-            href: '1-4.4.html'
+            title: '1-4-4 快取政策 🚧',
+            href: '1-4-4.html'
           }
         ]
       },
@@ -232,16 +232,6 @@ export const menu = [
             id: '1-6-10',
             title: '1-6-10 標準化工具管理團隊',
             href: '1-6-10.html'
-          },
-          {
-            id: '1-6-11',
-            title: '1-6-11 權限 🚧',
-            href: '1-6-11.html'
-          },
-          {
-            id: '1-6-12',
-            title: '1-6-12 JWT 登入 🚧',
-            href: '1-6-12.html'
           }
         ]
       },
@@ -350,20 +340,25 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-18-1',
-            title: '1-18-1  HTTP ',
+            title: '1-18-1 HTTP ',
             href: '1-18-1.html'
           }
         ]
       },
       {
         id: '1-19',
-        title: '1-19 資安政策 🚧',
+        title: '1-19 資安議題 🚧',
         href: '1-19.html',
         anchorMenu: [
           {
             id: '1-19-1',
             title: '1-19-1 資安實作建議',
             href: '1-19-1.html'
+          },
+          {
+            id: '1-19-2',
+            title: '1-19-2 JWT 登入',
+            href: '1-19-2.html'
           }
         ]
       }
