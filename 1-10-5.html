@@ -33,7 +33,7 @@
         <nav></nav>
       </aside>
       <article>
-        <h2 id="1-9-5">1-9-5 Sorting Algorithms 排序演算法 進階</h2>
+        <h2 id="1-10-5">1-10-5 Sorting Algorithms 排序演算法 進階</h2>
         <h3>Merge Sort</h3>
         <p>原則1 當在合併一個已經排序好的陣列時，演算法的時間複雜度為 O(n)</p>
         <p>原則2 分而治之(divide and conquer)</p>
@@ -192,6 +192,119 @@ function heapSort() {
           <li>最好情況： O(n log n)</li>
           <li>平均情況： O(n log n)</li>
         </ul>
+        <h3>Quick Sort Algorithm and partition</h3>
+        <p>
+          快速排序的特點就是分治。如何表現分治策略呢？我們首先在陣列中選取一個基準點，將其稱為pivot，根據這個基準點，把比基準點小的陣列值放在基準點左邊，把比基準點大的陣列值放在基準點右邊。這樣一來，基準點的左邊分區的值都小於基準點，右邊分區的值都大於基準點，然後針對左邊分區和右邊分區進行同樣的操作，直到最後排序完成。
+          最簡單的實現如下。
+        </p>
+
+        <pre><code class="language-js">
+let arr = [15, 3, 17, -17, 3.1415, 18, 20, 2, 1, 666];
+
+function partition(p, r) {
+  let x = arr[r]; // pivot
+  let i = p - 1;
+  for (let j = p; j <= r - 1; j++) {
+    if (arr[j] <= x) {
+      i += 1;
+      // swap arr[i] and arr[j]
+      let temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+  }
+  // swap arr[i+1] and arr[r]
+  let temp = arr[i + 1];
+  arr[i + 1] = arr[r];
+  arr[r] = temp;
+
+  return i + 1;
+}
+
+function quickSort(p, r) {
+  if (p < r) {
+    let q = partition(p, r);
+    quickSort(p, q - 1);
+    quickSort(q + 1, r);
+  }
+}
+quickSort(0, arr.length - 1);
+
+console.log(arr);
+// [-17, 1, 2, 3, 3.1415, 15, 17, 18, 20, 666]
+        </code></pre>
+        <p>
+          試想一下，如果我們對一個已經有序的陣列進行排序，剛好每次選擇 pivot
+          時總是選擇第一個或最後一個元素，那麼每次都會有一個數區是空的，遞迴的層數將達到n，最後會導致演算法的時間複雜度退化為O(n²)。因此
+          pivot 的選擇非常重要。
+        </p>
+        <p>
+          在早期的 V8引擎中使用快速排序時，會採用三數取中（median-of-three）的 pivot
+          最佳化方案：除了頭尾兩個元素，再額外選擇一個元素參與基準點的競爭。實際原始程式如下。
+        </p>
+        <pre><code class="language-js">
+var GetThirdIndex = function (a, from, to) {
+  var t_array = new InternalArray();
+  // Use both 'from' and 'to' to determine the pivot candidates.
+  var increment = 200 + ((to - from) & 15) ;
+  var j= 0;
+  from += 1; 
+  to -= 1;
+  for (var i = from; i < to; i += increment) {
+    t_array[j] = [i, a[i]];
+    j++;
+  }
+  t_array.sort (function (a, b) {
+    return compareFn(a[1], b[1]);
+  });
+  var third_index = t_array[t_array.length > 1][0];
+  return third_Index;
+}
+var Quicksort = function Quicksort (a, from, to) {
+  while (true) {
+    if (to - from > 1000) {
+      third index = GetThirdIndex (a, from, to) ;
+    } else {
+      third_index = from + ((to-from)>>1);
+    }
+  }
+  .....
+};
+        </code></pre>
+        <p>由此可以看出，所謂的第三個競爭元素的產生方式如下。</p>
+        <ul>
+          <li>當陣列長度小於等於1000時，選擇折半位置的元素作為目標元素。</li>
+          <li>
+            當陣列長度超過1000時，每隔200~215（非固定，跟著陣列長度而變化）個值就選擇一個元素來確定一批候選元素。接著，在這批候選元素中進行一次排序，將獲得的中位數作為目標元素。
+          </li>
+        </ul>
+        <p>在三數取中的方案中，最後會將3個元素的中位數作為 pivot。</p>
+        <p>上述函式的 BigO 時間複雜度:</p>
+        <ul>
+          <li>最糟情況： O(n²)</li>
+          <li>最好情況： O(n log n)</li>
+          <li>平均情況： O(n log n)</li>
+        </ul>
+        <p></p>
+
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
+        <pre><code class="language-js">
+        </code></pre>
       </article>
     </main>
   </body>
