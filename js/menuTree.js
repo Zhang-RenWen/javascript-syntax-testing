@@ -255,41 +255,41 @@ export const menu = [
       },
       {
         id: '1-9',
-        title: '1-9 資料結構和演算法',
+        title: '1-9 離散數學 🚧',
         href: `./1-9.html`,
-        anchorMenu: [
-          {
-            id: '1-9-1',
-            title: '1-9-1 資料結構',
-            href: '1-9-1.html'
-          },
-          {
-            id: '1-9-2',
-            title: '1-9-2 Complexity and Big O Notation',
-            href: '1-9-2.html'
-          },
-          {
-            id: '1-9-3',
-            title: '1-9-3 演算法設計',
-            href: '1-9-3.html'
-          },
-          {
-            id: '1-9-4',
-            title: '1-9-4 Sorting Algorithms 排序演算法 初階',
-            href: '1-9-4.html'
-          },
-          {
-            id: '1-9-5',
-            title: '1-9-5 Sorting Algorithms 排序演算法 進階',
-            href: '1-9-5.html'
-          }
-        ]
+        anchorMenu: []
       },
       {
         id: '1-10',
-        title: '1-10 離散數學 🚧',
+        title: '1-10 資料結構和演算法',
         href: `./1-10.html`,
-        anchorMenu: []
+        anchorMenu: [
+          {
+            id: '1-10-1',
+            title: '1-10-1 資料結構',
+            href: '1-10-1.html'
+          },
+          {
+            id: '1-10-2',
+            title: '1-10-2 Complexity and Big O Notation',
+            href: '1-10-2.html'
+          },
+          {
+            id: '1-10-3',
+            title: '1-10-3 演算法設計',
+            href: '1-10-3.html'
+          },
+          {
+            id: '1-10-4',
+            title: '1-10-4 Sorting Algorithms 排序演算法 初階',
+            href: '1-10-4.html'
+          },
+          {
+            id: '1-10-5',
+            title: '1-10-5 Sorting Algorithms 排序演算法 進階',
+            href: '1-10-5.html'
+          }
+        ]
       },
       {
         id: '1-11',
