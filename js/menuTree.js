@@ -266,52 +266,52 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-10-1',
-            title: '1-10-1 資料結構',
+            title: '1-10-1 Complexity and Big O Notation',
             href: '1-10-1.html'
           },
           {
             id: '1-10-2',
-            title: '1-10-2 Complexity and Big O Notation',
+            title: '1-10-2 演算法設計',
             href: '1-10-2.html'
           },
           {
             id: '1-10-3',
-            title: '1-10-3 演算法設計',
+            title: '1-10-3 Sorting Algorithms 排序演算法 初階',
             href: '1-10-3.html'
           },
           {
             id: '1-10-4',
-            title: '1-10-4 Sorting Algorithms 排序演算法 初階',
+            title: '1-10-4 Sorting Algorithms 排序演算法 進階',
             href: '1-10-4.html'
           },
           {
             id: '1-10-5',
-            title: '1-10-5 Sorting Algorithms 排序演算法 進階',
+            title: '1-10-5 資料結構',
             href: '1-10-5.html'
           }
         ]
       },
       {
         id: '1-11',
-        title: '1-11 線性代數 🚧',
+        title: '1-11 三角函數 🚧',
         href: `./1-11.html`,
         anchorMenu: []
       },
       {
         id: '1-12',
-        title: '1-12 微積分 🚧',
+        title: '1-12 線性代數 🚧',
         href: `./1-12.html`,
         anchorMenu: []
       },
       {
         id: '1-13',
-        title: '1-13 三角函數 🚧',
+        title: '1-13 微積分 🚧',
         href: `./1-13.html`,
         anchorMenu: []
       },
       {
         id: '1-14',
-        title: '1-14 密碼學 🚧',
+        title: '1-14 數論和密碼學 🚧',
         href: '1-14.html',
         anchorMenu: []
       },
