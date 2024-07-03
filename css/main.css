@@ -148,9 +148,13 @@ ul {
   padding-inline-start: 0rem;
 }
 
-article li {
+article ul li {
   list-style-type: '🔸';
   list-style-position: inside;
+}
+
+article ol {
+  padding-inline-start: 1rem;
 }
 
 article li,
