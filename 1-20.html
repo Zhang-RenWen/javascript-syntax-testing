@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2 id="1-20">1-20 常見面試題</h2>
+        <h3>題意分析</h3>
+        <p>請實現一個 LazyMan，使其按照以下方式呼叫時，獲得相關輸出。</p>
+
+        <pre><code class="language-js">
+LazyNan("Hank")
+// Hi! This is Hank!
+
+LazyMan("Hank").sleep(10).eat("dinner")
+// Hi! This is Hank!
+// 等待10s
+// Wake up after 10
+// Eat dinner~
+
+
+LazyMan("Hank").eat("dinner").eat("supper")
+// Hi This is Hank!
+// Eat dinner~
+// Eat supper~
+
+LazyMan("Hank").sleepFirst(5).eat("supper")
+// 等待 5s
+// Wake up after 5
+// Hi This is Hank!
+// Eat supper
+        </code></pre>
+        <h4>分析如下</h4>
+        <ul>
+          <li>可以把 LazyMan 了解為一個建構函數，在呼叫時輸出參數內容。</li>
+          <li>LazyMan 支援鏈式呼叫。</li>
+          <li>鏈式呼叫過程提供了以下幾個方法：sleepFirst、eat、sleep。</li>
+          <li>其中，eat 方法會輸出與參數相關的內容：Eat +參數。</li>
+          <li>
+            sleep 方法比較特殊，會使鏈式呼叫暫停一定時間後繼續執行，看到這裡也許應該根到
+            setTimeout。
+          </li>
+          <li>
+            sleepFirst 最為特殊，這個方法的優先順序最高；呼叫 sleepFirst
+            之後，鏈式呼叫將暫停一定時間後繼續執行。請再次觀察題幹及最後一個 demo，會發現 sleepFirst
+            的輸出優先順序最高，執行後會使程式先等待Ss再輸出 Walkup after 5，接著輸出 Hi This is
+            Hank！
+          </li>
+        </ul>
+        <h4>解題思路</h4>
+        <ul>
+          <li>首先，可以封裝一些基礎方法，如 log、setTimeout 等。</li>
+          <li>
+            因為 LazyMan 要實現一系列呼叫，且呼叫並不是循序執行的，舉例來說，如果 sleepFirst
+            出現在呼叫鏈中時就被優先執行，而且任務並不全都同步執行，那麼我們應該實現一個任務佇列，這個佇列將排程執行各個任務。
+          </li>
+          <li>
+            因此，每次呼叫 LazyMan
+            或鏈式即時執行，都應該將相關呼叫方法加入住務佇列並儲存起來，以便後續統一排程。
+          </li>
+          <li>
+            在寫入任務佇列時，如果目前方法為 sleepFirst
+            ，則需要將該方法放到佇列的頭部。寫入任務佇列的方法應該是一個 unshift 方法。
+          </li>
+        </ul>
+        <h4>考點如下</h4>
+        <ul>
+          <li>物件導向的思想與設計，包含類別的使用等。</li>
+          <li>對物件方法鏈式呼叫的了解和設計。</li>
+          <li>小部分設計模式的設計。</li>
+          <li>因為存在重複邏輯，所以會考驗到程式的解耦和抽象能力。</li>
+          <li>邏輯的清晰程度及其他程式設計思維。</li>
+        </ul>
+        <h3>解答</h3>
+        <pre><code class="language-js">
+class LazyManGenerator {
+  constructor (name) {
+    this.taskArray = []
+
+    // 初始化任務
+    const task=()=>{
+      console.log( `Hi! This is ${name}`)
+      // 執行完初始化任務後，繼續執行下一個任務
+      this.next()
+    }
+    // 將初始化任務放入任務佇列中
+    this.taskArray.push(task)
+    setTimeout (() => {
+      this.next()
+    },
+    0)
+  }
+
+  next() {
+    // 取出下一個任務並執行
+    const task = this.taskArray.shift()
+    task && task()
+  }
+  
+  sleep(time) {
+    this.sleepTask(time, false)
+    // return this 保持鏈式呼叫
+    return this
+  }
+
+  sleepFirst(time) {
+    this.sleepTask(time, true)
+    return this
+  }
+
+  sleepTask (time, prior) {
+    const task=()=>{
+      setTimeout(()=>{
+        console.log(`Wake up after ${time}`) 
+        this.next()
+      }, time * 1000)
+    }
+    if (prior) {
+      this.taskArray.unshift(task)
+    } else {
+      this.taskArray.push(task)
+    } 
+  }
+  
+  eat (name) {
+    const task = () => {
+      console.log(`Eat ${name}`)
+      this.next()
+    }
+    
+    this.taskArray.push(task)
+    return this
+  }
+}
+
+
+function LazyMan(name) {
+  return new LazyManGenerator(name)
+}
+        </code></pre>
+        <ul>
+          <li>LazyMan 方法傳回一個 LazyManGenerator 建構函數的實例。</li>
+          <li>
+            在 LazyManGenerator 的 constructor 中，使用 taskArray 來儲存任務，同時將初始化任務放入
+            taskArray 中。
+          </li>
+          <li>
+            還是在 LazyManGenerator 的 constructor 中，將對任務的一個執行操作即 next 呼叫放在
+            setTimeout 中，這樣就能夠確保在開始執行任務時，taskArray 陣列中已經填滿了任務。
+          </li>
+          <li>在 next 方法中，取出 taskArray 陣列中的首項進行執行。</li>
+          <li>
+            eat 方法將 eat task 放到 taskArray 陣列中，注意，eat task方法需要呼叫this.next()
+            顯性呼叫下的任務；同時傳回 this，完成鏈式呼叫。
+          </li>
+          <li>
+            sleep 和 sleepFirst 都呼叫了 sleepTask，只是呼叫 sleepTask 時的第二個參數不同。sleepTask
+            的第二個參數表示是否優先執行，如果 prior 為 true，則使用 unshift 將任務插入 taskArray
+            頭部。
+          </li>
+        </ul>
+        <p>
+          主要的思想是針對過程。解答的關鍵在於對 setTimeout 任務佇列要有準確的了解並掌握 return this
+          實現鍵式呼叫的方式。
+        </p>
+        <p>
+          事寶上，sleepTask 應該作為 LazyManGenerator 類別的私有屬性出現，本案例到此只是 ES class
+          的私有屬性暫時沒有被廣泛應用。
+        </p>
+        <h3>流程控制和中介軟體</h3>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
