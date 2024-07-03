@@ -257,7 +257,13 @@ export const menu = [
         id: '1-9',
         title: '1-9 離散數學 🚧',
         href: `./1-9.html`,
-        anchorMenu: []
+        anchorMenu: [
+          {
+            id: '1-9-1',
+            title: '1-9-1 Formal Logic',
+            href: '1-9-1.html'
+          }
+        ]
       },
       {
         id: '1-10',

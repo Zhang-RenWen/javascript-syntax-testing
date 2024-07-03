@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./public/favicon.ico" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title></title>
+    <link rel="stylesheet" href=" https://necolas.github.io/normalize.css/8.0.1/normalize.css" />
+    <link rel="stylesheet" href="./hightlight/default.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/copybutton.css" />
+    <link rel="stylesheet" href="./css/hightlight.css" />
+    <script src="./hightlight/hightlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BEVZJDBC7Z"></script>
+    <script src="./js/gtag.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <span id="toggle-menu"></span>
+          <a href="index.html"></a>
+        </h1>
+      </nav>
+    </header>
+    <main>
+      <aside>
+        <nav></nav>
+      </aside>
+      <article>
+        <h2>1-9-1 Formal Logic</h2>
+        <div class="markdown prose w-full break-words dark:prose-invert light">
+          <h1>Statement(Proposition) And Connective</h1>
+          <p>
+            在離散數學中，"Statement"
+            通常指的是一個可以被判定為真或假的陳述句。這些陳述句是邏輯推理和證明的基礎。以下是一些關於
+            statement 的基本概念：
+          </p>
+          <ol>
+            <li>
+              <p>
+                <strong>命題(Proposition or Statement)</strong>
+                ：這是一個可以被判定為真或假的陳述句。例如：
+              </p>
+              <ul>
+                <li>"2 是一個偶數。"（真）</li>
+                <li>"5 是一個偶數。"（假）</li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <strong>複合命題（Compound Proposition）</strong>
+                ：由一個或多個命題組成的陳述句，並且使用邏輯連接詞（如
+                "和"、"或"、"非"）來組合。例如：
+              </p>
+              <ul>
+                <li>"2 是一個偶數且 3 是一個奇數。"（真）</li>
+                <li>"2 是一個偶數或 5 是一個偶數。"（真）</li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <strong>邏輯連接詞（Logical Connectives）</strong>
+                ：用於構建複合命題的連接詞，包括：
+              </p>
+              <ul>
+                <li>AND (∧)：和</li>
+                <li>OR (∨)：或</li>
+                <li>NOT (¬)(')：非</li>
+                <li>IMPLIES(Implication) (→)：蘊涵</li>
+                <li>Equivalence (↔)：雙向蘊涵</li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <strong>真值表（Truth Table）</strong>
+                ：用來顯示命題在所有可能情況下的真值。例如，對於命題
+                <code>p</code>
+                和
+                <code>q</code>
+                ，可以構建如下的真值表：
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>P</th>
+                    <th>Q</th>
+                    <th>P ∧ Q</th>
+                    <th>P ∨ Q</th>
+                    <th>¬P</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>True</td>
+                    <td>True</td>
+                    <td>True</td>
+                    <td>True</td>
+                    <td>False</td>
+                  </tr>
+                  <tr>
+                    <td>True</td>
+                    <td>False</td>
+                    <td>False</td>
+                    <td>True</td>
+                    <td>False</td>
+                  </tr>
+                  <tr>
+                    <td>False</td>
+                    <td>True</td>
+                    <td>False</td>
+                    <td>True</td>
+                    <td>True</td>
+                  </tr>
+                  <tr>
+                    <td>False</td>
+                    <td>False</td>
+                    <td>False</td>
+                    <td>False</td>
+                    <td>True</td>
+                  </tr>
+                </tbody>
+              </table>
+            </li>
+          </ol>
+          <ul>
+            <li>IMPLIES (P → Q) 的值為真，若 P 則 Q。</li>
+            <li>Equivalence (P ↔ Q) is the same as (P → Q)∧(Q → P)。</li>
+          </ul>
+          <p>這些概念構成了離散數學中對命題邏輯和證明方法的基礎。</p>
+        </div>
+        <div class="markdown prose w-full break-words dark:prose-invert light">
+          <h1>德摩根律 (De Morgan's Law)</h1>
+          <p>
+            德摩根律 (De Morgan's Law) 是邏輯學中的重要定理，用於描述 AND 和 OR
+            運算的否定形式。德摩根律有兩個主要定理：
+          </p>
+          <ol>
+            <li>
+              <p>
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow>
+                          <mi mathvariant="normal">¬</mi>
+                          <mo stretchy="false">(</mo>
+                          <mi>p</mi>
+                          <mo>∧</mo>
+                          <mi>q</mi>
+                          <mo stretchy="false">)</mo>
+                          <mo>≡</mo>
+                          <mo stretchy="false">(</mo>
+                          <mi mathvariant="normal">¬</mi>
+                          <mi>p</mi>
+                          <mo stretchy="false">)</mo>
+                          <mo>∨</mo>
+                          <mo stretchy="false">(</mo>
+                          <mi mathvariant="normal">¬</mi>
+                          <mi>q</mi>
+                          <mo stretchy="false">)</mo>
+                        </mrow>
+                        <annotation encoding="application/x-tex">
+                          \neg (p \land q) \equiv (\neg p) \lor (\neg q)
+                        </annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+              </p>
+              <ul>
+                <li>否定 AND 運算，相當於將每個運算元取否並使用 OR 運算。</li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow>
+                          <mi mathvariant="normal">¬</mi>
+                          <mo stretchy="false">(</mo>
+                          <mi>p</mi>
+                          <mo>∨</mo>
+                          <mi>q</mi>
+                          <mo stretchy="false">)</mo>
+                          <mo>≡</mo>
+                          <mo stretchy="false">(</mo>
+                          <mi mathvariant="normal">¬</mi>
+                          <mi>p</mi>
+                          <mo stretchy="false">)</mo>
+                          <mo>∧</mo>
+                          <mo stretchy="false">(</mo>
+                          <mi mathvariant="normal">¬</mi>
+                          <mi>q</mi>
+                          <mo stretchy="false">)</mo>
+                        </mrow>
+                        <annotation encoding="application/x-tex">
+                          \neg (p \lor q) \equiv (\neg p) \land (\neg q)
+                        </annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+              </p>
+              <ul>
+                <li>否定 OR 運算，相當於將每個運算元取否並使用 AND 運算。</li>
+              </ul>
+            </li>
+          </ol>
+          <p>下面是這兩個定理的真值表，以證明它們的正確性：</p>
+          <h3>
+            德摩根律一：
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi mathvariant="normal">¬</mi>
+                      <mo stretchy="false">(</mo>
+                      <mi>p</mi>
+                      <mo>∧</mo>
+                      <mi>q</mi>
+                      <mo stretchy="false">)</mo>
+                      <mo>≡</mo>
+                      <mo stretchy="false">(</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>p</mi>
+                      <mo stretchy="false">)</mo>
+                      <mo>∨</mo>
+                      <mo stretchy="false">(</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>q</mi>
+                      <mo stretchy="false">)</mo>
+                    </mrow>
+                    <annotation encoding="application/x-tex">
+                      \neg (p \land q) \equiv (\neg p) \lor (\neg q)
+                    </annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>p</th>
+                <th>q</th>
+                <th>p ∧ q</th>
+                <th>¬(p ∧ q)</th>
+                <th>¬p</th>
+                <th>¬q</th>
+                <th>(¬p) ∨ (¬q)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+                <td>False</td>
+                <td>False</td>
+                <td>False</td>
+                <td>False</td>
+              </tr>
+              <tr>
+                <td>True</td>
+                <td>False</td>
+                <td>False</td>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>False</td>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>
+            德摩根律二：
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi mathvariant="normal">¬</mi>
+                      <mo stretchy="false">(</mo>
+                      <mi>p</mi>
+                      <mo>∨</mo>
+                      <mi>q</mi>
+                      <mo stretchy="false">)</mo>
+                      <mo>≡</mo>
+                      <mo stretchy="false">(</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>p</mi>
+                      <mo stretchy="false">)</mo>
+                      <mo>∧</mo>
+                      <mo stretchy="false">(</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>q</mi>
+                      <mo stretchy="false">)</mo>
+                    </mrow>
+                    <annotation encoding="application/x-tex">
+                      \neg (p \lor q) \equiv (\neg p) \land (\neg q)
+                    </annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+          </h3>
+          <table>
+            <thead>
+              <tr>
+                <th>p</th>
+                <th>q</th>
+                <th>p ∨ q</th>
+                <th>¬(p ∨ q)</th>
+                <th>¬p</th>
+                <th>¬q</th>
+                <th>(¬p) ∧ (¬q)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+                <td>False</td>
+                <td>False</td>
+                <td>False</td>
+                <td>False</td>
+              </tr>
+              <tr>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+                <td>False</td>
+                <td>False</td>
+                <td>True</td>
+                <td>False</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+                <td>False</td>
+                <td>False</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>False</td>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>從這些真值表可以看出，德摩根律成立。</p>
+        </div>
+      </article>
+    </main>
+  </body>
+  <script type="module" src="./js/main.js"></script>
+</html>
