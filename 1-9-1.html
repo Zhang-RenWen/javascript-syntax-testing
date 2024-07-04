@@ -35,7 +35,7 @@
       <article>
         <h2>1-9-1 Formal Logic</h2>
         <div class="markdown prose w-full break-words dark:prose-invert light">
-          <h1>Statement(Proposition) And Connective</h1>
+          <h3>Statement(Proposition) And Connective</h3>
           <p>
             在離散數學中，"Statement"
             通常指的是一個可以被判定為真或假的陳述句。這些陳述句是邏輯推理和證明的基礎。以下是一些關於
@@ -135,7 +135,7 @@
           <p>這些概念構成了離散數學中對命題邏輯和證明方法的基礎。</p>
         </div>
         <div class="markdown prose w-full break-words dark:prose-invert light">
-          <h1>德摩根律 (De Morgan's Law)</h1>
+          <h3>德摩根律 (De Morgan's Law)</h3>
           <p>
             德摩根律 (De Morgan's Law) 是邏輯學中的重要定理，用於描述 AND 和 OR
             運算的否定形式。德摩根律有兩個主要定理：
@@ -382,6 +382,2199 @@
             </tbody>
           </table>
           <p>從這些真值表可以看出，德摩根律成立。</p>
+        </div>
+        <h3>
+          證明
+          <span class="katex">
+            <span class="katex-mathml">
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <semantics>
+                  <mrow>
+                    <mi>p</mi>
+                    <mo>→</mo>
+                    <mi>q</mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                </semantics>
+              </math>
+            </span>
+          </span>
+          不等於
+          <span class="katex">
+            <span class="katex-mathml">
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <semantics>
+                  <mrow>
+                    <mi>q</mi>
+                    <mo>→</mo>
+                    <mi>p</mi>
+                  </mrow>
+                  <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                </semantics>
+              </math>
+            </span>
+          </span>
+        </h3>
+        <div class="markdown prose w-full break-words dark:prose-invert light">
+          <p>
+            為了證明
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>→</mo>
+                      <mi>q</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            不等於
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>q</mi>
+                      <mo>→</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            ，我們可以使用真值表來展示這兩個命題在不同情況下的真值結果不同。
+          </p>
+
+          <p>
+            首先，我們構建
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>→</mo>
+                      <mi>q</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            和
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>q</mi>
+                      <mo>→</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            的真值表：
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>p</th>
+                <th>q</th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>q</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>q</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td>True</td>
+                <td>False</td>
+                <td>False</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+                <td>False</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>分析</h3>
+          <p>
+            從真值表中可以看出，當
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow><mi>p</mi></mrow>
+                    <annotation encoding="application/x-tex">p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            和
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow><mi>q</mi></mrow>
+                    <annotation encoding="application/x-tex">q</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            的值如下時：
+          </p>
+          <ol>
+            <li>
+              <p>
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>p</mi></mrow>
+                        <annotation encoding="application/x-tex">p</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 True，
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>q</mi></mrow>
+                        <annotation encoding="application/x-tex">q</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 True：
+              </p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>q</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 True
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>q</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 True
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>p</mi></mrow>
+                        <annotation encoding="application/x-tex">p</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 True，
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>q</mi></mrow>
+                        <annotation encoding="application/x-tex">q</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 False：
+              </p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>q</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 False
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>q</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 True
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>p</mi></mrow>
+                        <annotation encoding="application/x-tex">p</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 False，
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>q</mi></mrow>
+                        <annotation encoding="application/x-tex">q</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 True：
+              </p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>q</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 True
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>q</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 False
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p>
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>p</mi></mrow>
+                        <annotation encoding="application/x-tex">p</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 False，
+                <span class="katex">
+                  <span class="katex-mathml">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <semantics>
+                        <mrow><mi>q</mi></mrow>
+                        <annotation encoding="application/x-tex">q</annotation>
+                      </semantics>
+                    </math>
+                  </span>
+                </span>
+                為 False：
+              </p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>q</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 True
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>q</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  為 True
+                </li>
+              </ul>
+            </li>
+          </ol>
+          <p>
+            可以觀察到在以下兩種情況下，
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>→</mo>
+                      <mi>q</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            與
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>q</mi>
+                      <mo>→</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            的真值結果不同：
+          </p>
+          <ul>
+            <li>
+              當
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow><mi>p</mi></mrow>
+                      <annotation encoding="application/x-tex">p</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 True 而
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow><mi>q</mi></mrow>
+                      <annotation encoding="application/x-tex">q</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 False 時，
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>p</mi>
+                        <mo>→</mo>
+                        <mi>q</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 False，而
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>q</mi>
+                        <mo>→</mo>
+                        <mi>p</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 True。
+            </li>
+            <li>
+              當
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow><mi>p</mi></mrow>
+                      <annotation encoding="application/x-tex">p</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 False 而
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow><mi>q</mi></mrow>
+                      <annotation encoding="application/x-tex">q</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 True 時，
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>p</mi>
+                        <mo>→</mo>
+                        <mi>q</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 True，而
+              <span class="katex">
+                <span class="katex-mathml">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <semantics>
+                      <mrow>
+                        <mi>q</mi>
+                        <mo>→</mo>
+                        <mi>p</mi>
+                      </mrow>
+                      <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                    </semantics>
+                  </math>
+                </span>
+              </span>
+              為 False。
+            </li>
+          </ul>
+          <h3>結論</h3>
+          <p>
+            由此，我們可以得出結論：
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>→</mo>
+                      <mi>q</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            不等於
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>q</mi>
+                      <mo>→</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            ，因為在不同的情況下，它們的真值結果不同。這證明了
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>→</mo>
+                      <mi>q</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \rightarrow q</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            和
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>q</mi>
+                      <mo>→</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">q \rightarrow p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            不是等價的邏輯表達式。
+          </p>
+        </div>
+        <h3>常見重言式 Tautologies</h3>
+        <p>
+          在邏輯學中，重言式（Tautologies）是指在任何情況下都為真的邏輯命題或公式。以下是一些常見的重言式：
+        </p>
+        <div class="markdown prose w-full break-words dark:prose-invert light">
+          <ol>
+            <li>
+              <p><strong>重言律 (Tautology Law)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \lor \neg p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  不管
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  是真還是假，這個命題總是為真。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p><strong>排中律 (Law of Excluded Middle)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \lor \neg p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  任意命題
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  或它的否定總是為真。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p><strong>同一律 (Law of Identity)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \rightarrow p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  任意命題
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  總是蘊涵它自身。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p><strong>雙重否定律 (Double Negation Law)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi mathvariant="normal">¬</mi>
+                            <mo stretchy="false">(</mo>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>≡</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                            \neg (\neg p) \equiv p
+                          </annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  的雙重否定等於
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  本身。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p><strong>吸收律 (Absorption Law)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>p</mi>
+                            <mo>∧</mo>
+                            <mi>q</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>≡</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                            p \lor (p \land q) \equiv p
+                          </annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∧</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mi>q</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>≡</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                            p \land (p \lor q) \equiv p
+                          </annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  任意命題
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  和
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>q</mi></mrow>
+                          <annotation encoding="application/x-tex">q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  總是可以吸收成
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  本身。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p><strong>冪等律 (Idempotent Law)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mi>p</mi>
+                            <mo>≡</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \lor p \equiv p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∧</mo>
+                            <mi>p</mi>
+                            <mo>≡</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \land p \equiv p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  任意命題
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  和自身的或（與）運算等於
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  本身。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p><strong>重言推理律 (Tautological Implication)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mo stretchy="false">(</mo>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>q</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>∨</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>q</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                            <mo stretchy="false">)</mo>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                            (p \rightarrow q) \lor (q \rightarrow p)
+                          </annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  不管
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  和
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>q</mi></mrow>
+                          <annotation encoding="application/x-tex">q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  是真還是假，這個命題總是為真。
+                </li>
+              </ul>
+            </li>
+            <li>
+              <p><strong>分配律 (Distribution Law)</strong></p>
+              <ul>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>q</mi>
+                            <mo>∧</mo>
+                            <mi>r</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>≡</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mi>q</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>∧</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mi>r</mi>
+                            <mo stretchy="false">)</mo>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                            p \lor (q \land r) \equiv (p \lor q) \land (p \lor r)
+                          </annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∧</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>q</mi>
+                            <mo>∨</mo>
+                            <mi>r</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>≡</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>p</mi>
+                            <mo>∧</mo>
+                            <mi>q</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>∨</mo>
+                            <mo stretchy="false">(</mo>
+                            <mi>p</mi>
+                            <mo>∧</mo>
+                            <mi>r</mi>
+                            <mo stretchy="false">)</mo>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                            p \land (q \lor r) \equiv (p \land q) \lor (p \land r)
+                          </annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </li>
+                <li>
+                  任意命題
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  、
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>q</mi></mrow>
+                          <annotation encoding="application/x-tex">q</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  和
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>r</mi></mrow>
+                          <annotation encoding="application/x-tex">r</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                  總是遵循分配律。
+                </li>
+              </ul>
+            </li>
+          </ol>
+          <h3>例子</h3>
+          <h4>例子1：重言律</h4>
+          <span class="katex-display" style="">
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>∨</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \lor \neg p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+          </span>
+          <p>真值表：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">\neg p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>∨</mo>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \lor \neg p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            無論
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow><mi>p</mi></mrow>
+                    <annotation encoding="application/x-tex">p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            是真還是假，
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>∨</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \lor \neg p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            總是為真。
+          </p>
+          <h4>例子2：同一律</h4>
+          <span class="katex-display" style="">
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>→</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \rightarrow p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+          </span>
+          <p>真值表：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi>p</mi>
+                            <mo>→</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">p \rightarrow p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>True</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            無論
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow><mi>p</mi></mrow>
+                    <annotation encoding="application/x-tex">p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            是真還是假，
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi>p</mi>
+                      <mo>→</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">p \rightarrow p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            總是為真。
+          </p>
+          <h4>例子3：雙重否定律</h4>
+          <span class="katex-display" style="">
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+                  <semantics>
+                    <mrow>
+                      <mi mathvariant="normal">¬</mi>
+                      <mo stretchy="false">(</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>p</mi>
+                      <mo stretchy="false">)</mo>
+                      <mo>≡</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">\neg (\neg p) \equiv p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+          </span>
+          <p>真值表：</p>
+          <table>
+            <thead>
+              <tr>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow><mi>p</mi></mrow>
+                          <annotation encoding="application/x-tex">p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">\neg p</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi mathvariant="normal">¬</mi>
+                            <mo stretchy="false">(</mo>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                            <mo stretchy="false">)</mo>
+                          </mrow>
+                          <annotation encoding="application/x-tex">\neg (\neg p)</annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+                <th>
+                  <span class="katex">
+                    <span class="katex-mathml">
+                      <math xmlns="http://www.w3.org/1998/Math/MathML">
+                        <semantics>
+                          <mrow>
+                            <mi mathvariant="normal">¬</mi>
+                            <mo stretchy="false">(</mo>
+                            <mi mathvariant="normal">¬</mi>
+                            <mi>p</mi>
+                            <mo stretchy="false">)</mo>
+                            <mo>≡</mo>
+                            <mi>p</mi>
+                          </mrow>
+                          <annotation encoding="application/x-tex">
+                            \neg (\neg p) \equiv p
+                          </annotation>
+                        </semantics>
+                      </math>
+                    </span>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+                <td>True</td>
+              </tr>
+              <tr>
+                <td>False</td>
+                <td>True</td>
+                <td>False</td>
+                <td>True</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            無論
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow><mi>p</mi></mrow>
+                    <annotation encoding="application/x-tex">p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            是真還是假，
+            <span class="katex">
+              <span class="katex-mathml">
+                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                  <semantics>
+                    <mrow>
+                      <mi mathvariant="normal">¬</mi>
+                      <mo stretchy="false">(</mo>
+                      <mi mathvariant="normal">¬</mi>
+                      <mi>p</mi>
+                      <mo stretchy="false">)</mo>
+                      <mo>≡</mo>
+                      <mi>p</mi>
+                    </mrow>
+                    <annotation encoding="application/x-tex">\neg (\neg p) \equiv p</annotation>
+                  </semantics>
+                </math>
+              </span>
+            </span>
+            總是為真。
+          </p>
+          <p>
+            這些重言式在邏輯推理和證明中非常有用，因為它們提供了確保命題在任何情況下都為真的結構。
+          </p>
+        </div>
+        <h3>基本邏輯定律</h3>
+        <p>以下是一些常見的邏輯定律：</p>
+        <div class="group/conversation-turn relative flex w-full min-w-0 flex-col agent-turn">
+          <div class="flex-col gap-1 md:gap-3">
+            <div class="flex flex-grow flex-col max-w-full">
+              <div
+                data-message-author-role="assistant"
+                data-message-id="51c4239a-5e98-462d-ab8c-bc6da6b0e6e5"
+                dir="auto"
+                class="min-h-[20px] text-message flex flex-col items-start whitespace-pre-wrap break-words [.text-message+&amp;]:mt-5 juice:w-full juice:items-end overflow-x-auto gap-2"
+              >
+                <div class="flex w-full flex-col gap-1 juice:empty:hidden juice:first:pt-[3px]">
+                  <div class="markdown prose w-full break-words dark:prose-invert light">
+                    <ol>
+                      <li>
+                        <p><strong>身份律 (Identity Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mtext>True</mtext>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \land \text{True} \equiv p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mtext>False</mtext>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \lor \text{False} \equiv p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <p><strong>支配律 (Domination Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mtext>True</mtext>
+                                      <mo>≡</mo>
+                                      <mtext>True</mtext>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \lor \text{True} \equiv \text{True}
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mtext>False</mtext>
+                                      <mo>≡</mo>
+                                      <mtext>False</mtext>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \land \text{False} \equiv \text{False}
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <p><strong>雙重否定律 (Double Negation Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi mathvariant="normal">¬</mi>
+                                      <mo stretchy="false">(</mo>
+                                      <mi mathvariant="normal">¬</mi>
+                                      <mi>p</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      \neg (\neg p) \equiv p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <p><strong>冪等律 (Idempotent Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mi>p</mi>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \lor p \equiv p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mi>p</mi>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \land p \equiv p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <p><strong>交換律 (Commutative Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mi>q</mi>
+                                      <mo>≡</mo>
+                                      <mi>q</mi>
+                                      <mo>∨</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \lor q \equiv q \lor p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mi>q</mi>
+                                      <mo>≡</mo>
+                                      <mi>q</mi>
+                                      <mo>∧</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \land q \equiv q \land p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <p><strong>結合律 (Associative Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mi>q</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>∨</mo>
+                                      <mi>r</mi>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>q</mi>
+                                      <mo>∨</mo>
+                                      <mi>r</mi>
+                                      <mo stretchy="false">)</mo>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      (p \lor q) \lor r \equiv p \lor (q \lor r)
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mi>q</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>∧</mo>
+                                      <mi>r</mi>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>q</mi>
+                                      <mo>∧</mo>
+                                      <mi>r</mi>
+                                      <mo stretchy="false">)</mo>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      (p \land q) \land r \equiv p \land (q \land r)
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <p><strong>分配律 (Distributive Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>q</mi>
+                                      <mo>∨</mo>
+                                      <mi>r</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>≡</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mi>q</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>∨</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mi>r</mi>
+                                      <mo stretchy="false">)</mo>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \land (q \lor r) \equiv (p \land q) \lor (p \land r)
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>q</mi>
+                                      <mo>∧</mo>
+                                      <mi>r</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>≡</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mi>q</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>∧</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mi>r</mi>
+                                      <mo stretchy="false">)</mo>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \lor (q \land r) \equiv (p \lor q) \land (p \lor r)
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <p><strong>吸收律 (Absorption Law)</strong></p>
+                        <ul>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mi>q</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \lor (p \land q) \equiv p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                          <li>
+                            <span class="katex">
+                              <span class="katex-mathml">
+                                <math xmlns="http://www.w3.org/1998/Math/MathML">
+                                  <semantics>
+                                    <mrow>
+                                      <mi>p</mi>
+                                      <mo>∧</mo>
+                                      <mo stretchy="false">(</mo>
+                                      <mi>p</mi>
+                                      <mo>∨</mo>
+                                      <mi>q</mi>
+                                      <mo stretchy="false">)</mo>
+                                      <mo>≡</mo>
+                                      <mi>p</mi>
+                                    </mrow>
+                                    <annotation encoding="application/x-tex">
+                                      p \land (p \lor q) \equiv p
+                                    </annotation>
+                                  </semantics>
+                                </math>
+                              </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ol>
+                    <h3>德摩根律 (De Morgan's Laws)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mo stretchy="false">(</mo>
+                                  <mi>p</mi>
+                                  <mo>∧</mo>
+                                  <mi>q</mi>
+                                  <mo stretchy="false">)</mo>
+                                  <mo>≡</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                  <mo>∨</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>q</mi>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  \neg (p \land q) \equiv \neg p \lor \neg q
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mo stretchy="false">(</mo>
+                                  <mi>p</mi>
+                                  <mo>∨</mo>
+                                  <mi>q</mi>
+                                  <mo stretchy="false">)</mo>
+                                  <mo>≡</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                  <mo>∧</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>q</mi>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  \neg (p \lor q) \equiv \neg p \land \neg q
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <h3>否定律 (Negation Law)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi>p</mi>
+                                  <mo>∨</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                  <mo>≡</mo>
+                                  <mtext>True</mtext>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  p \lor \neg p \equiv \text{True}
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi>p</mi>
+                                  <mo>∧</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                  <mo>≡</mo>
+                                  <mtext>False</mtext>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  p \land \neg p \equiv \text{False}
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <h3>逆否命題律 (Law of Contraposition)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi>p</mi>
+                                  <mo>→</mo>
+                                  <mi>q</mi>
+                                  <mo>≡</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>q</mi>
+                                  <mo>→</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  p \rightarrow q \equiv \neg q \rightarrow \neg p
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <h3>雙條件律 (Biconditional Law)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi>p</mi>
+                                  <mo>↔</mo>
+                                  <mi>q</mi>
+                                  <mo>≡</mo>
+                                  <mo stretchy="false">(</mo>
+                                  <mi>p</mi>
+                                  <mo>→</mo>
+                                  <mi>q</mi>
+                                  <mo stretchy="false">)</mo>
+                                  <mo>∧</mo>
+                                  <mo stretchy="false">(</mo>
+                                  <mi>q</mi>
+                                  <mo>→</mo>
+                                  <mi>p</mi>
+                                  <mo stretchy="false">)</mo>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  p \leftrightarrow q \equiv (p \rightarrow q) \land (q \rightarrow
+                                  p)
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <h3>雙重蘊涵律 (Material Implication)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi>p</mi>
+                                  <mo>→</mo>
+                                  <mi>q</mi>
+                                  <mo>≡</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                  <mo>∨</mo>
+                                  <mi>q</mi>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  p \rightarrow q \equiv \neg p \lor q
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <h3>對合律 (Involution Law)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mo stretchy="false">(</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                  <mo stretchy="false">)</mo>
+                                  <mo>≡</mo>
+                                  <mi>p</mi>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  \neg (\neg p) \equiv p
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <h3>否定等價律 (Negation of Equivalents)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mo stretchy="false">(</mo>
+                                  <mi>p</mi>
+                                  <mo>↔</mo>
+                                  <mi>q</mi>
+                                  <mo stretchy="false">)</mo>
+                                  <mo>≡</mo>
+                                  <mo stretchy="false">(</mo>
+                                  <mi>p</mi>
+                                  <mo>∧</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>q</mi>
+                                  <mo stretchy="false">)</mo>
+                                  <mo>∨</mo>
+                                  <mo stretchy="false">(</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>p</mi>
+                                  <mo>∧</mo>
+                                  <mi>q</mi>
+                                  <mo stretchy="false">)</mo>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  \neg (p \leftrightarrow q) \equiv (p \land \neg q) \lor (\neg p
+                                  \land q)
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <h3>條件否定律 (Negation of Conditional)</h3>
+                    <ol>
+                      <li>
+                        <span class="katex">
+                          <span class="katex-mathml">
+                            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                              <semantics>
+                                <mrow>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mo stretchy="false">(</mo>
+                                  <mi>p</mi>
+                                  <mo>→</mo>
+                                  <mi>q</mi>
+                                  <mo stretchy="false">)</mo>
+                                  <mo>≡</mo>
+                                  <mi>p</mi>
+                                  <mo>∧</mo>
+                                  <mi mathvariant="normal">¬</mi>
+                                  <mi>q</mi>
+                                </mrow>
+                                <annotation encoding="application/x-tex">
+                                  \neg (p \rightarrow q) \equiv p \land \neg q
+                                </annotation>
+                              </semantics>
+                            </math>
+                          </span>
+                        </span>
+                      </li>
+                    </ol>
+                    <p>
+                      這些邏輯定律在離散數學和邏輯學中經常使用，用於簡化和證明邏輯表達式的等價性。它們為邏輯推理和證明提供了強有力的工具。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
       </article>
     </main>
