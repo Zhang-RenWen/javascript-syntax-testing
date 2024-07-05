@@ -477,20 +477,225 @@ if (path.toLowerCase().substr(0, route.length) !== route.toLowerCase()) {
           的方式來解決。下一節就來分析 Koa 的洋蔥模型。
         </p>
         <h4>Koa 的洋蔥模型</h4>
+        <p>針對切面程式設計（AOP）。下面以 JavaScript 語言為例，來看一個簡單的範例。</p>
         <pre><code class="language-js">
+Function.prototype.before = function (fn) {
+  const self = this
+  return function (...args) {
+    console.log('')
+    let res = fn.call(this)
+    if (res) {
+      self.apply(this, args)
+    }
+  }
+}
+Function.prototype.after = function (fn) {
+  const self = this
+  return function (...args) {
+    let res = self.apply(this, args)
+    if (res) {
+      fn.call(this)
+    }
+  }
+}
         </code></pre>
+        <p>
+          以上程式在執行某個函數 fn
+          之前，會先執行某段邏輯，而在執行某個函數血之後，再去執行另一段邏輯。這其實表現了一種簡單的中介軟體流程控制。
+          不過，這樣的AOP 有一個問題，就是無法實現非同步模式。
+        </p>
+        <p>
+          那麼，如何實現 Koa
+          的非同步中介軟體模式呢？也就是使某個中介軟體執行到一半時交出執行權，之後再回來繼續執行。下面直接來看一下原始程式，這段原始程式實現了
+          Koa 洋蔥模型中介軟體。
+        </p>
         <pre><code class="language-js">
+function compose (middleware) {
+  if (!Array.isArray(middleware)) throw new TypeError ('Middleware stack must be an array! ')
+
+  for (const fn of middleware) {
+    if (typeof fn!== 'function') throw new TypeError ('Middleware must be composed of functions!')
+  }
+  return function (context, next) {
+    // last called middleware #
+    let index = -1
+    // 一開始的時候傳入為 0，後續會遞增
+    return dispatch(0)
+    function dispatch (i) {
+      // 假如沒有遞增，則說明執行了多次
+      if (i <= index) return Promise.reject(new Error('next() called multiple times'))
+      index = i
+      // 拿到當前的中間件
+      let fn = middleware[i]
+      if (i === middleware.length) fn = next
+      // 當 fn 為空的時候，就會開始執行 next() 後面部分的代碼
+      if (!fn) return Promise.resolve()
+      try {
+        // 執行中間件，留意這兩個參數，都是中間件的傳參，第一個是上下文，第二個是 next 函數
+        // 也就是說執行 next 的時候也就是調用 dispatch 函數的時候
+        return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));
+      } catch (err) {
+        return Promise.reject(err)
+      }
+    }
+  }
+}
         </code></pre>
+        <p>下面重點解讀一下以上程式中的要點。</p>
+        <ul>
+          <li>傳入 compose 中的 middleware 參數必須是陣列，否則會拋出錯誤。</li>
+          <li>middleware 陣列中的每個元素都必須是函數，否則會拋出錯誤。</li>
+          <li>compose 傳回一個函數，以儲存對 middleware 的參考。</li>
+          <li>
+            compose 傳回函數的第一個參數是 context，所有中介軟體的第一個參數就是傳入的 context。
+          </li>
+          <li>compose 傳回函數的第二個參數是 next 函數 next 是實現洋蔥模型的關鍵。</li>
+          <li>index 用來記錄目前執行到第幾個中介軟體。</li>
+          <li>執行第一個中介軟體函數：return dispatch(0)。</li>
+          <li>
+            在 dispatch 函數中，參數 i 如果小於等於index，則說明一個中介軟體中執行了多次
+            next，會進行顯示出錯，由此可見，一個中介軟體函數內部不允許多次呼叫 next 函數。
+          </li>
+          <li>取出中介軟體函數 fn = middleware[i] 。</li>
+          <li>如果 i === middleware.length，則說明執行到了圓心，可以將 next 設定值給 fn。</li>
+          <li>
+            因為 async函數中 await 運算式右邊的值一般是 Promise 類型的，所以這裡會包裹一層 Promise。
+          </li>
+          <li>next 函數是固定的，它可以執行下一個中介軟體函數。</li>
+        </ul>
+        <h4>co 函數庫</h4>
+        <p>
+          談到流提控制，自然少不了大名鼎票的 co 函數庫。co 函數庫是以 ES6 Generator
+          為基礎撰寫的非同步解決方案，因此這裡需要熟練掌握 ES6 Generator 。目前，雖然 co
+          函數庫目前可能不再流行，但是了解其實現對於模擬類 似場景是非常有必要的。
+        </p>
+        <p>這裡不解讀其原始程式，而是實現一個類似的自動執行 Generator 的方案。</p>
         <pre><code class="language-js">
+const runGenerator = (generatorFunc) => {
+  const it = generatorFunc()
+  iterate(it)
+  function iterate(it) {
+    step()
+    function step(arg, isError) {
+      const { value, done } = isError ? it.throw(arg) : it.next(arg)
+      let response
+      if (!done) {
+        if (typeof value === 'function') {
+          response = value()
+        } else {
+          response = value
+        }
+        Promise.resolve(response).then(step, (err = step(err, true)))
+      }
+    }
+  }
+}
+
         </code></pre>
+        <p>下面來重點解讀一下以上程式中的要點。</p>
+        <ul>
+          <li>runGenerator 函數接收一個產生器函數 generatorFunc。</li>
+          <li>執行 generatorFunc 獲得結果，並透過 iterate 函數疊代該產生器結果。</li>
+          <li>
+            在 iterate 函數中執行 step 函數， step 函數的第一個參數 arg 是上一個 yield
+            右運算式求出的值，即下面對應的 response。
+          </li>
+          <li>
+            這裡需要考慮 response 的求值過程，它透過 value 計算得來，value 是 yield
+            右側的值，它有下面幾種情況。
+            <ul>
+              <li>
+                yield new Promise(), value 是一個 Promise 實例，此時 response 就是該 Promise
+                實例執行 resolve 後的值。
+              </li>
+              <li>
+                yield () => {return value} , value 是一個函數，此時 response
+                就是執行該函數後的傳回值。
+              </li>
+              <li>yield value ， value 是一個普通值，此時 response 就是該值。</li>
+            </ul>
+          </li>
+          <li>
+            最後統一利用 Promise.resolve 的特性對 response 進行處理，並遞迴（疊代）呼叫
+            Step，同時利用 Step 函數的 arg 參數為上一個 yield 的左運算式設定值，並傳回下一個 yield
+            右運算式的值。
+          </li>
+        </ul>
+        <p>最後附上 co 的實現及程式註釋，讀者可以比較 runGenerator 和 co 的差異。</p>
         <pre><code class="language-js">
+// https://github.com/tj/co/blob/master/index.js
+
+function co(gen) { // co接收一個 Generator 函數作為參數
+  var ctx = this;
+  var args = slice.call(arguments, 1);
+
+  // we wrap everything in a promise to avoid promise chaining,
+  // which leads to memory leak errors.
+  // see https://github.com/tj/co/issues/180
+  return new Promise(function(resolve, reject) {
+    if (typeof gen === 'function') gen = gen.apply(ctx, args);
+    // 若 gen 為 Generator 函數，則執行該函數
+    if (!gen || typeof gen.next !== 'function') return resolve(gen);
+    // // 若 gen 不是 Generator 函數，則傳回並更新 Promise 狀態
+
+    onFulfilled(); // 將 Generator 函數的 next 方法包裝成 onFulfilled，主要是為了能夠捕捉拋出的異常
+
+    /**
+     * @param {Mixed} res
+     * @return {Promise}
+     * @api private
+     */
+
+    function onFulfilled(res) {
+      var ret;
+      try {
+        ret = gen.next(res);
+      } catch (e) {
+        return reject(e);
+      }
+      next(ret);
+      return null;
+    }
+
+    /**
+     * @param {Error} err
+     * @return {Promise}
+     * @api private
+     */
+
+    function onRejected(err) {
+      var ret;
+      try {
+        ret = gen.throw(err);
+      } catch (e) {
+        return reject(e);
+      }
+      next(ret);
+    }
+
+    /**
+     * Get the next value in the generator,
+     * return a promise.
+     *
+     * @param {Object} ret
+     * @return {Promise}
+     * @api private
+     */
+
+    function next(ret) {
+      if (ret.done) return resolve(ret.value);
+      var value = toPromise.call(ctx, ret.value);
+      if (value && isPromise(value)) return value.then(onFulfilled, onRejected);
+      return onRejected(new TypeError('You may only yield a function, promise, generator, array, or object, '
+        + 'but the following object was passed: "' + String(ret.value) + '"'));
+    }
+  });
+}
         </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
-        <pre><code class="language-js">
-        </code></pre>
+        <p>
+          若對上述程式碼感到陌生，不妨回去重新熟悉 generator 特性：
+          <a href="/1-2-5.html">1-2-5 實作非同步流程</a>
+        </p>
       </article>
     </main>
   </body>
