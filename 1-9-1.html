@@ -2569,7 +2569,250 @@
                     { 𝑃 1 , 𝑃 2 , … , 𝑃 𝑛 } ，結論為 𝐶
                   </li>
                 </ol>
-                <h3>證明有效論證（valid argument）</h3>
+                <h3>deduction 演繹法</h3>
+                <p>
+                  演繹法（Deduction）是從一般原理出發，通過邏輯推理得出特定結論的一種方法。在形式邏輯中，自然演繹法是一種常用的證明技術。以下是如何使用自然演繹法來證明一個論證有效的步驟和具體例子。
+                </p>
+                <h4>自然演繹法的步驟</h4>
+                <ul>
+                  <li>列出前提：寫下所有的前提。</li>
+                  <li>應用推理規則：從前提出發，使用邏輯推理規則逐步推導。</li>
+                  <li>得出結論：通過一系列推理步驟，最終得出結論。</li>
+                </ul>
+                <p>常見的推理規則包括：</p>
+                <ul>
+                  <li>Modus Ponens (MP): 𝑃 → 𝑄 , 𝑃 ⊨ 𝑄</li>
+                  <li>Modus Tollens (MT): 𝑃 → 𝑄 , ¬ 𝑄 ⊨ ¬ 𝑃</li>
+                  <li>P→Q,¬Q⊨¬P 合取導出 (Conjunction Introduction): 𝑃 , 𝑄 ⊨ 𝑃 ∧ 𝑄</li>
+                  <li>合取消去 (Conjunction Elimination): 𝑃 ∧ 𝑄 ⊨ 𝑃 P∧Q⊨P, 𝑃 ∧ 𝑄 ⊨ 𝑄</li>
+                  <li>析取導出 (Disjunction Introduction): 𝑃 ⊨ 𝑃 ∨ 𝑄 P⊨P∨Q</li>
+                  <li>假言三段論 (Hypothetical Syllogism): 𝑃 → 𝑄 , 𝑄 → 𝑅 ⊨ 𝑃 → 𝑅</li>
+                </ul>
+                <h4>自然演繹法的例子</h4>
+                <p>讓我們使用自然演繹法來證明以下論證：</p>
+                <p>命題： ( 𝑃 → 𝑄 ) , ( 𝑄 → 𝑅 ) ⊨ ( 𝑃 → 𝑅 )</p>
+                <p>證明：</p>
+                <ol>
+                  <li>P→Q （前提）</li>
+                  <li>Q→R （前提）</li>
+                  <li>假設 𝑃 （假設，用於條件導出）</li>
+                  <li>根據 (1) 和 (3)， 𝑄 （使用 Modus Ponens，1, 3）</li>
+                  <li>根據 (2) 和 (4)， 𝑅 （使用 Modus Ponens，2, 4）</li>
+                  <li>因此， 𝑃 → 𝑅 （條件導出，3-5）</li>
+                </ol>
+                <p>這證明了 ( 𝑃 → 𝑄 ) , ( 𝑄 → 𝑅 ) ⊨ ( 𝑃 → 𝑅 ) 。</p>
+                <h4>更複雜的例子1</h4>
+                <p>證明 [ ( P ⇒ Q ) ∧ ( Q ⇒ R ) ] ⇒ ( P ⇒ R ) is a tautology</p>
+                <p>證明步驟</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>P</th>
+                      <th>Q</th>
+                      <th>R</th>
+                      <th>P ∧ Q</th>
+                      <th>P ⇒ Q</th>
+                      <th>Q ⇒ R</th>
+                      <th>P ⇒ R</th>
+                      <th>( P ⇒ Q ) ∧ ( Q ⇒ R )</th>
+                      <th>[ ( P ⇒ Q ) ∧ ( Q ⇒ R ) ] ⇒ ( P ⇒ R )</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>
+                  Hence, from the above truth table, we can conclude that [ ( p ⇒ q ) ∧ ( q ⇒ r ) ]
+                  ⇒ ( p ⇒ r ) is a tautology, as it's truth value's are always true.
+                </p>
+                <h4>更複雜的例子2</h4>
+                <p>證明[(P∧Q)→R]⊨[P→(Q→R)] is a tautology</p>
+                <p>證明步驟</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>P</th>
+                      <th>Q</th>
+                      <th>R</th>
+                      <th>P ∧ Q</th>
+                      <th>(P ∧ Q)⇒ R</th>
+                      <th>Q ⇒ R</th>
+                      <th>P⇒(Q ⇒ R)</th>
+                      <th>[[(P∧Q)→R]⊨[P→(Q→R)]</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>F</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                      <td>T</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p>由真值表最後綠底欄的結果可以發現，[(P∧Q)→R]↔[P→(Q→R)] 恆為真。</p>
               </div>
             </div>
           </div>
