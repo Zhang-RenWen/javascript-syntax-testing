@@ -262,6 +262,11 @@ export const menu = [
             id: '1-9-1',
             title: '1-9-1 Formal Logic',
             href: '1-9-1.html'
+          },
+          {
+            id: '1-9-2',
+            title: '1-9-2 ',
+            href: '1-9-2.html'
           }
         ]
       },
