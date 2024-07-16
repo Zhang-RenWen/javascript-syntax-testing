@@ -310,8 +310,13 @@ export const menu = [
         anchorMenu: [
           {
             id: '1-12-1',
-            title: '1-12-1 Linear Equation 線性方程式 🚧',
+            title: '1-12-1 Linear Equation 線性方程式 ',
             href: '1-12-1.html'
+          },
+          {
+            id: '1-12-2',
+            title: '1-12-2 矩陣求解 🚧',
+            href: '1-12-2.html'
           }
         ]
       },
