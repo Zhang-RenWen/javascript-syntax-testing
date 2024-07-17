@@ -265,8 +265,13 @@ export const menu = [
           },
           {
             id: '1-9-2',
-            title: '1-9-2 ',
+            title: '1-9-2 Predicates and Quantifiers',
             href: '1-9-2.html'
+          },
+          {
+            id: '1-9-3',
+            title: '1-9-3 Translation',
+            href: '1-9-3.html'
           }
         ]
       },
