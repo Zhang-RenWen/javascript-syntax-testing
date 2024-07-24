@@ -272,6 +272,11 @@ export const menu = [
             id: '1-9-3',
             title: '1-9-3 Translation',
             href: '1-9-3.html'
+          },
+          {
+            id: '1-9-4',
+            title: '1-9-4 Negation of Expression',
+            href: '1-9-4.html'
           }
         ]
       },
