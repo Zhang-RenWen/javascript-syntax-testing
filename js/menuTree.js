@@ -277,6 +277,11 @@ export const menu = [
             id: '1-9-4',
             title: '1-9-4 Negation of Expression',
             href: '1-9-4.html'
+          },
+          {
+            id: '1-9-5',
+            title: '1-9-5 Predicates Logic',
+            href: '1-9-5.html'
           }
         ]
       },

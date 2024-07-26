@@ -2602,7 +2602,7 @@
                 </ol>
                 <p>這證明了 ( 𝑃 → 𝑄 ) , ( 𝑄 → 𝑅 ) ⊨ ( 𝑃 → 𝑅 ) 。</p>
                 <h4>更複雜的例子1</h4>
-                <p>證明 [ ( P ⇒ Q ) ∧ ( Q ⇒ R ) ] ⇒ ( P ⇒ R ) is a tautology</p>
+                <p>證明 [ ( P → Q ) ∧ ( Q → R ) ] → ( P → R ) is a tautology</p>
                 <p>證明步驟</p>
                 <table>
                   <thead>
@@ -2611,11 +2611,11 @@
                       <th>Q</th>
                       <th>R</th>
                       <th>P ∧ Q</th>
-                      <th>P ⇒ Q</th>
-                      <th>Q ⇒ R</th>
-                      <th>P ⇒ R</th>
-                      <th>( P ⇒ Q ) ∧ ( Q ⇒ R )</th>
-                      <th>[ ( P ⇒ Q ) ∧ ( Q ⇒ R ) ] ⇒ ( P ⇒ R )</th>
+                      <th>P → Q</th>
+                      <th>Q → R</th>
+                      <th>P → R</th>
+                      <th>( P → Q ) ∧ ( Q → R )</th>
+                      <th>[ ( P → Q ) ∧ ( Q → R ) ] → ( P → R )</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -2710,11 +2710,11 @@
                   </tbody>
                 </table>
                 <p>
-                  Hence, from the above truth table, we can conclude that [ ( p ⇒ q ) ∧ ( q ⇒ r ) ]
-                  ⇒ ( p ⇒ r ) is a tautology, as it's truth value's are always true.
+                  Hence, from the above truth table, we can conclude that [ ( p → q ) ∧ ( q → r ) ]
+                  → ( p → r ) is a tautology, as it's truth value's are always true.
                 </p>
                 <h4>更複雜的例子2</h4>
-                <p>證明[(P∧Q)→R]⊨[P→(Q→R)] is a tautology</p>
+                <p>證明[(P∧Q)→R]↔[P→(Q→R)] is a tautology</p>
                 <p>證明步驟</p>
                 <table>
                   <thead>
@@ -2723,10 +2723,10 @@
                       <th>Q</th>
                       <th>R</th>
                       <th>P ∧ Q</th>
-                      <th>(P ∧ Q)⇒ R</th>
-                      <th>Q ⇒ R</th>
-                      <th>P⇒(Q ⇒ R)</th>
-                      <th>[[(P∧Q)→R]⊨[P→(Q→R)]</th>
+                      <th>(P ∧ Q)→ R</th>
+                      <th>Q → R</th>
+                      <th>P→(Q → R)</th>
+                      <th>[[(P∧Q)→R]↔[P→(Q→R)]</th>
                     </tr>
                   </thead>
                   <tbody>
