@@ -66,12 +66,159 @@
           </li>
         </ol>
         <h3>向量的表示</h3>
-
+        <p>
+          向量是數學和物理學中用來表示具有大小和方向的量的基本概念。向量可以在不同的形式下表示，常見的有以下幾種：
+        </p>
+        <ol>
+          <li>
+            幾何表示：
+            <ul>
+              <li>
+                向量通常表示為一條有方向的箭頭，箭頭的長度代表向量的大小（模），箭頭指向的方向代表向量的方向。
+              </li>
+            </ul>
+          </li>
+          <li>
+            坐標表示：
+            <ul>
+              <li>
+                在二維空間中，一個向量可以用坐標表示為 v=(x,y)，其中 x 和 y 是該向量在 x 軸和 y
+                軸上的投影。
+              </li>
+              <li>&nbsp;在三維空間中，向量可以表示為 v=(x,y,z)。</li>
+            </ul>
+          </li>
+          <li>
+            列向量表示：
+            <ul>
+              <li>
+                向量也可以用列向量的形式表示：
+                <div style="display: flex; align-items: center; justify-content: center">
+                  v=
+                  <embed src="./assets/symbols/vectorBrackets_left.svg" />
+                  <div style="display: flex; flex-direction: column">
+                    <span style="line-height: 1rem">x</span>
+                    <span style="line-height: 1rem">y</span>
+                    <span style="line-height: 1rem">z</span>
+                  </div>
+                  <embed src="./assets/symbols/vectorBrackets_right.svg" />
+                </div>
+              </li>
+              <li>這在矩陣運算中非常有用。</li>
+            </ul>
+          </li>
+          <li>
+            極坐標表示：
+            <ul>
+              <li>
+                在極坐標系統中，一個二維向量可以用大小和角度表示：
+                <strong>v=(r,θ)</strong>
+              </li>
+              <li>其中 r 是向量的長度， θ 是與 x 軸的夾角。</li>
+            </ul>
+          </li>
+          <li>
+            線性組合表示：
+            <ul>
+              <li>
+                向量也可以表示為基向量的線性組合。在二維空間中：
+                <strong>v = ae1 + be2</strong>
+              </li>
+              <li>其中 e1 ​ 和 e2 ​ 是基向量， a 和 b 是標量。</li>
+            </ul>
+          </li>
+        </ol>
         <h3>向量的基本運算</h3>
-
+        <p>向量運算是線性代數中的重要部分，主要包括以下幾種運算：</p>
+        <ol>
+          <li>
+            向量加法：
+            <ul>
+              <li>兩個向量 u = (u1 ,u2) 和 v = (v1 ,v2) 的和為： u + v = ( u1 + v1, u2 + v2)</li>
+              <li>在幾何上，這可以用平行四邊形法則來視覺化。</li>
+            </ul>
+          </li>
+          <li>
+            向量減法：
+            <ul>
+              <li>兩個向量 u 和 v 的差為： u - v = (u1 - v1, u2 - v2)</li>
+            </ul>
+          </li>
+          <li>
+            標量乘法：
+            <ul>
+              <li>將向量 v = ( v1 , v2 ) 乘以標量 k 的結果為： kv = ( kv1 , kv2 )</li>
+            </ul>
+          </li>
+        </ol>
         <h3>向量的性質</h3>
-
-        <h3>向量的內積外積</h3>
+        <p>
+          向量具有多種重要的性質，這些性質在數學和物理中扮演著關鍵角色。以下是一些基本的向量性質：
+        </p>
+        <ol>
+          <li>
+            加法的交換律：
+            <ul>
+              <li>對於任意兩個向量 u 和 v： u+v = v+u</li>
+            </ul>
+          </li>
+          <li>
+            加法的結合律：
+            <ul>
+              <li>對於任意三個向量 u、 v 和 w： (u+v)+w=u+(v+w)</li>
+            </ul>
+          </li>
+          <li>
+            存在零向量：
+            <ul>
+              <li>存在一個特殊的向量 0，使得對於任何向量 v： v+0 = v</li>
+            </ul>
+          </li>
+          <li>
+            存在負向量：
+            <ul>
+              <li>對於每個向量 v，存在一個負向量 -v，使得： v+(-v)=0</li>
+            </ul>
+          </li>
+          <li>
+            標量乘法的分配律：
+            <ul>
+              <li>對於任意標量 k 和向量 u、 v： k(u+v)=ku+kv</li>
+            </ul>
+          </li>
+          <li>
+            標量乘法的結合律：
+            <ul>
+              <li>對於任意標量 k、m 和向量 v ： k(mv)=(km)v</li>
+            </ul>
+          </li>
+          <li>
+            標量乘法的單位元素：
+            <ul>
+              <li>對於任何向量 v： 1⋅v = v</li>
+            </ul>
+          </li>
+          <li>
+            向量的模：
+            <ul>
+              <li>向量的模（或大小）滿足三角不等式： |u+v|≤|u|+|v|</li>
+            </ul>
+          </li>
+          <li>
+            正交性：
+            <ul>
+              <li>如果兩個向量的點積為零，即： u⋅v=0</li>
+              <li>那麼這兩個向量是正交的。</li>
+            </ul>
+          </li>
+          <li>
+            向量的線性獨立性：
+            <ul>
+              <li>如果一組向量無法用其他向量的線性組合來表示，則稱這組向量是線性獨立的。</li>
+            </ul>
+          </li>
+        </ol>
+        <h3>向量的內積外積與模</h3>
       </article>
     </main>
   </body>
