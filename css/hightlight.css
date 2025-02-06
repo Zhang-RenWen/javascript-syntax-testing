@@ -147,6 +147,13 @@ pre code.hljs {
   left: 0;
 }
 
+.hljs-tag .hljs-name {
+  color: #9b9b9b;
+}
+.hljs-tag .hljs-attr {
+  color: #9cdcfe;
+}
+
 /* error-code */
 .hljs.error-code {
   background: var(--hljs-main-error-bg-color);
