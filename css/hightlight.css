@@ -202,3 +202,8 @@ pre .correct-code ~ .btnIcon {
   background: var(--hljs-main-correct-bg-color);
   color: var(--hljs-code-line-color);
 }
+
+/* json settings */
+.language-json.hljs .hljs-punctuation {
+  color: rgba(189, 183, 175, 0.67);
+}
