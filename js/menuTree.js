@@ -113,26 +113,6 @@ export const menu = [
             href: '1-3-1.html'
           },
           {
-            id: '1-3-2',
-            title: '1-3-2 XMLHttpRequest 🚧',
-            href: '1-3-2.html'
-          },
-          {
-            id: '1-3-3',
-            title: '1-3-3 伺服器發送事件（SSE） 🚧',
-            href: '1-3-3.html'
-          },
-          {
-            id: '1-3-4',
-            title: '1-3-4 WebSocket 🚧',
-            href: '1-3-4.html'
-          },
-          {
-            id: '1-3-5',
-            title: '1-3-5 WebRTC 🚧',
-            href: '1-3-5.html'
-          },
-          {
             id: '1-3-111',
             title: '1-3-111 window 物件 🚧',
             href: '1-3-111.html'
@@ -475,6 +455,26 @@ export const menu = [
             id: '1-18-13',
             title: '1-18-13 HTTP-2.0 🚧',
             href: '1-18-13.html'
+          },
+          {
+            id: '1-18-14',
+            title: '1-18-14 XMLHttpRequest 🚧',
+            href: '1-18-14.html'
+          },
+          {
+            id: '1-18-15',
+            title: '1-18-15 伺服器發送事件（SSE） 🚧',
+            href: '1-18-15.html'
+          },
+          {
+            id: '1-18-16',
+            title: '1-18-16 WebSocket 🚧',
+            href: '1-18-16.html'
+          },
+          {
+            id: '1-18-17',
+            title: '1-18-17 WebRTC 🚧',
+            href: '1-18-17.html'
           }
         ]
       },
