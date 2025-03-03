@@ -458,7 +458,7 @@ export const menu = [
           },
           {
             id: '1-18-14',
-            title: '1-18-14 XMLHttpRequest 🚧',
+            title: '1-18-14 XMLHttpRequest',
             href: '1-18-14.html'
           },
           {
