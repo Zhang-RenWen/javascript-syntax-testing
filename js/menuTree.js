@@ -448,7 +448,7 @@ export const menu = [
           },
           {
             id: '1-18-12',
-            title: '1-18-12 HTTP-1.x 🚧',
+            title: '1-18-12 HTTP-1.x',
             href: '1-18-12.html'
           },
           {
