@@ -453,7 +453,7 @@ export const menu = [
           },
           {
             id: '1-18-13',
-            title: '1-18-13 HTTP-2.0 🚧',
+            title: '1-18-13 HTTP-2.0',
             href: '1-18-13.html'
           },
           {
