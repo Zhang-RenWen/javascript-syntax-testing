@@ -2428,29 +2428,19 @@ pc.ondatachannel = handleChannel;  // 5
           字串裡頭，將 SCTP 關聯的參數給公布出來：
         </p>
         <pre><code class="language-bash">
-#（..略...）
-m=application 1 DTLS/SCTP 5000 // 1
-c=IN IP4 0.0.0.0  // 2
+#(...略...)
+m=application 1 DTLS/SCTP 5000 # 1
+c=IN IP4 0.0.0.0  # 2
 a=mid:data
-a=fmtp:5000
-protocol=webrtc-datachannel;streams=10  // 3
-#( …略...)
+a=fmtp:5000 protocol=webrtc-datachannel;streams=10  # 3
+#(...略...)
           </code></pre>
 
-        <ul>
-          <li>
-            <strong>1.</strong>
-            發佈要透過 DTLS 來使用 SCTP 的意圖。
-          </li>
-          <li>
-            <strong>2.</strong>
-            「0.0.0.0」候選者表明要使用涓流 ICE。
-          </li>
-          <li>
-            <strong>3.</strong>
-            搭配多達 10 個並行串流的方式，來透過 SCTP 進行傳輸的 DataChannel 協定。
-          </li>
-        </ul>
+        <ol>
+          <li>發佈要透過 DTLS 來使用 SCTP 的意圖。</li>
+          <li>「0.0.0.0」候選者表明要使用涓流 ICE。</li>
+          <li>搭配多達 10 個並行串流的方式，來透過 SCTP 進行傳輸的 DataChannel 協定。</li>
+        </ol>
 
         <p>
           就像之前所談過的那樣，
@@ -2462,19 +2452,19 @@ protocol=webrtc-datachannel;streams=10  // 3
         </p>
 
         <pre><code class="language-js">
-          var signalingChannel = new SignalingChannel();
-          var pc = new RTCPeerConnection(iceConfig);
-          
-          var dc = pc.createDataChannel("namedChannel", {reliable: false}); 
-          
-          var mediaConstraints = { // 2
-              mandatory: {
-                  OfferToReceiveAudio: false,
-                  OfferToReceiveVideo: false
-              }
-          };
-          
-          pc.createOffer(function(offer) { ... }, null, mediaConstraints); // 3
+var signalingChannel = new SignalingChannel();
+var pc = new RTCPeerConnection(iceConfig);
+
+var dc = pc.createDataChannel("namedChannel", {reliable: false}); 
+
+var mediaConstraints = { // 2
+    mandatory: {
+        OfferToReceiveAudio: false,
+        OfferToReceiveVideo: false
+    }
+};
+
+pc.createOffer(function(offer) { ... }, null, mediaConstraints); // 3
           </code></pre>
 
         <ul>
@@ -2536,7 +2526,7 @@ protocol=webrtc-datachannel;streams=10  // 3
         </p>
 
         <div class="border-block">
-          <h4>外部通道協商作業</h4>
+          <h3>外部通道協商作業</h3>
 
           <p>
             <code>DataChannel</code>
@@ -2595,7 +2585,7 @@ signalingChannel.onmessage = function(msg) {
             物件來為你處理協商作業即可。不過，這項作業程序可以有所幫助的場合，是在有許多參與對等節點的情況下，此時，信號處理伺服器可以產生出相同的描述資訊，並同時將它分佈給所有的參與者。
           </p>
         </div>
-        <h3>設定訊息次序與可靠性</h3>
+        <h4>設定訊息次序與可靠性</h4>
 
         <p>
           <code>DataChannel</code>
@@ -2767,7 +2757,7 @@ if (dc.reliable) {
           對等節點之間的封包遺失率（packet-loss
           rates）和延遲時間都是不可預知的，並且會根據當時的網路狀況而有所變化。因此，對於重傳次數或逾時時間的部分，並沒有唯一或理想的設定值。若要透過一個不可靠的通道來達成最佳結果的話，那就只能盡可能讓訊息尺寸不要過大。
         </p>
-        <h3>WebRTC 使用案例與效能</h3>
+        <h4>WebRTC 使用案例與效能</h4>
         <p>
           低延對等傳輸的實作過程，是個不尋常的工程挑戰：這當中需要涉及到 NAT
           穿越和連線性檢查、信號處理、安全性、擁塞控制，以及其他相關細節。WebRTC
@@ -2828,7 +2818,7 @@ if (dc.reliable) {
           在取的音訊和視訊串流時，請務必將視訊限制設定好，以符合實際的使用情況；相關細節請參考《搭配
           getUserMedia 來取得音訊和視訊》。
         </p>
-        <h3>多方架構</h3>
+        <h4>多方架構</h4>
         <p>
           一個含有雙向 HD
           媒體串流的單一對等式連線可能很容易就會耗盡使用者的頻寬。因此，「多方應用程式」(multiparty
