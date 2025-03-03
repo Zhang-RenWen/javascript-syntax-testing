@@ -473,7 +473,7 @@ export const menu = [
           },
           {
             id: '1-18-17',
-            title: '1-18-17 WebRTC 🚧',
+            title: '1-18-17 WebRTC',
             href: '1-18-17.html'
           }
         ]
