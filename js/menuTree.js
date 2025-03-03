@@ -458,17 +458,17 @@ export const menu = [
           },
           {
             id: '1-18-14',
-            title: '1-18-14 XMLHttpRequest 🚧',
+            title: '1-18-14 XMLHttpRequest',
             href: '1-18-14.html'
           },
           {
             id: '1-18-15',
-            title: '1-18-15 伺服器發送事件（SSE） 🚧',
+            title: '1-18-15 伺服器發送事件（SSE） ',
             href: '1-18-15.html'
           },
           {
             id: '1-18-16',
-            title: '1-18-16 WebSocket 🚧',
+            title: '1-18-16 WebSocket',
             href: '1-18-16.html'
           },
           {
