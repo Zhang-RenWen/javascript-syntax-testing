@@ -468,7 +468,7 @@ export const menu = [
           },
           {
             id: '1-18-16',
-            title: '1-18-16 WebSocket 🚧',
+            title: '1-18-16 WebSocket',
             href: '1-18-16.html'
           },
           {
