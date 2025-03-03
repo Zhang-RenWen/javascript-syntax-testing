@@ -146,7 +146,7 @@ export const menu = [
           },
           {
             id: '1-4-5',
-            title: '1-4-5 HTTP-網頁效能入門 🚧',
+            title: '1-4-5 HTTP-網頁效能入門',
             href: '1-4-5.html'
           },
           {
@@ -438,17 +438,17 @@ export const menu = [
           },
           {
             id: '1-18-10',
-            title: '1-18-10 HTTP-概述 🚧',
+            title: '1-18-10 HTTP-概述',
             href: '1-18-10.html'
           },
           {
             id: '1-18-11',
-            title: '1-18-11 HTTP-發展史 🚧',
+            title: '1-18-11 HTTP-發展史',
             href: '1-18-11.html'
           },
           {
             id: '1-18-12',
-            title: '1-18-12 HTTP-1.x 🚧',
+            title: '1-18-12 HTTP-1.x',
             href: '1-18-12.html'
           },
           {
